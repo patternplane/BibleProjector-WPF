@@ -20,9 +20,20 @@ namespace BibleProjector_WPF
     /// </summary>
     public partial class MainWindow : Window
     {
+        Database db;
+        Powerpoint ppt;
+
         public MainWindow()
         {
+            db = new Database();
+            ppt = new Powerpoint();
+
             InitializeComponent();
+        }
+
+        public void programOut()
+        {
+            db.Disconnect();
         }
     }
 }
