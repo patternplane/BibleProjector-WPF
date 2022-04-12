@@ -23,6 +23,11 @@
             <!--성경-->
             <TabItem Header="성경">
                 <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="17*"/>
+                        <RowDefinition Height="499*"/>
+                        <RowDefinition Height="15*"/>
+                    </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="33*"/>
                         <ColumnDefinition Width="257*"/>
@@ -35,25 +40,58 @@
                         <ColumnDefinition Width="204*"/>
                         <ColumnDefinition Width="20*"/>
                     </Grid.ColumnDefinitions>
-                    <ListBox Grid.Column="1" >
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Button Width="80" Height="30" Content="{Binding}"></Button>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                    <ListBox Grid.Column="2" >
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Button Width="80" Height="30" Content="{Binding}"></Button>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                        test
-                    </ListBox>
 
-                    <ListBox Grid.Column="4"></ListBox>
-                    <ListBox Grid.Column="6"></ListBox>
-                    <Grid Grid.Column="8">
+                    <!--구약 책 선택버튼-->
+                    <Border Grid.Row="1" Grid.Column="1" BorderThickness="1" BorderBrush="#FFABADB3">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" >
+                            <ItemsControl x:Name="Bible_OldTestButtons_ItemsControl">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel VerticalAlignment="Top" HorizontalAlignment="Left" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Button 
+                                            Content="{Binding Path=BookTitle}"
+                                            Tag="{Binding Path=BookNumber}"
+                                            Click="BibleButton_Click"
+                                            Width="80"
+                                            Height="25"
+                                            Margin="5,5,0,0"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                    </ScrollViewer>
+                    </Border>
+
+                    <!--신약 책 선택버튼-->
+                    <Border Grid.Row="1" Grid.Column="2" BorderThickness="1" BorderBrush="#FFABADB3">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" >
+                            <ItemsControl x:Name="Bible_NewTestButtons_ItemsControl">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel VerticalAlignment="Top" HorizontalAlignment="Left" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Button 
+                                            Content="{Binding Path=BookTitle}"
+                                            Tag="{Binding Path=BookNumber}"
+                                            Click="BibleButton_Click"
+                                            Width="80"
+                                            Height="25"
+                                            Margin="5,5,0,0"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Border>
+
+                    <ListBox Grid.Row="1" Grid.Column="4" x:Name="Bible_Chapter_ListBox"></ListBox>
+                    <ListBox Grid.Row="1" Grid.Column="6" x:Name="Bible_Verse_ListBox"></ListBox>
+                    <Grid Grid.Row="1" Grid.Column="8" >
                         <Grid.RowDefinitions>
                             <RowDefinition Height="86*"/>
                             <RowDefinition Height="11*"/>
