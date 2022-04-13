@@ -35,6 +35,9 @@ namespace BibleProjector_WPF
         // 절 번호 리스트
         BindingList<int> VerseNumberList;
 
+        // 현재 선택된 데이터
+        ViewModel.BibleSelectData VM_BibleSelectData;
+
         public MainWindow()
         {
             db = new Database();
@@ -52,8 +55,12 @@ namespace BibleProjector_WPF
 
         void BibleInitialize()
         {
+            VM_BibleSelectData = new ViewModel.BibleSelectData(db);
+
             SetBibleButtons();
             SetBibleChapterVerse();
+
+            Bible_CurrentDisplayTextBoxies_Grid.DataContext = VM_BibleSelectData;
         }
 
         //========================================= 성경 ============================================
@@ -83,16 +90,52 @@ namespace BibleProjector_WPF
 
             Bible_Chapter_ListBox.ItemsSource = ChapterNumberList;
             Bible_Verse_ListBox.ItemsSource = VerseNumberList;
+
+            Bible_Chapter_ListBox.SelectionChanged += ChapterListBox_SelectedChanged;
+            Bible_Verse_ListBox.SelectionChanged += VerseListBox_SelectedChanged;
         }
 
         // 성경선택버튼 조작
-
         void BibleButton_Click(object sender, RoutedEventArgs e)
         {
             string BibleNumber = ((Button)sender).Tag.ToString().PadLeft(2, '0');
+
+            ChapterNumberList.Clear();
+            for (int i = 1, chapterCount = db.getChapterCount(BibleNumber); i <= chapterCount; i++)
+                ChapterNumberList.Add(i);
+            VerseNumberList.Clear();
+
+            VM_BibleSelectData.Book = BibleNumber;
+            VM_BibleSelectData.Chapter = "";
+            VM_BibleSelectData.Verse = "";
         }
 
-        //
+        // 성경 장 선택 조작
+        void ChapterListBox_SelectedChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListBox chapterListbox = (ListBox)sender;
+            if (chapterListbox.SelectedIndex != -1)
+            {
+                string chapterNumber = (chapterListbox.SelectedIndex + 1).ToString("000");
+                VM_BibleSelectData.Chapter = chapterNumber;
+                VM_BibleSelectData.Verse = "";
+
+                VerseNumberList.Clear();
+                for (int i = 1, verseCount = db.getVerseCount(VM_BibleSelectData.Book + chapterNumber); i <= verseCount; i++)
+                    VerseNumberList.Add(i);
+            }
+        }
+
+        // 성경 절 선택 조작
+        void VerseListBox_SelectedChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListBox verseListbox = (ListBox)sender;
+            if (verseListbox.SelectedIndex != -1)
+            {
+                string verseNumber = (verseListbox.SelectedIndex + 1).ToString("000");
+                VM_BibleSelectData.Verse = verseNumber;
+            }
+        }
     }
 
 }

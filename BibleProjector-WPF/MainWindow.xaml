@@ -21,7 +21,7 @@
         <TabControl Grid.Row="1" Grid.Column="1">
 
             <!--성경-->
-            <TabItem Header="성경">
+            <TabItem Header="성경" x:Name="BibleTap">
                 <Grid Grid.Row="1">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="17*"/>
@@ -29,10 +29,10 @@
                         <RowDefinition Height="15*"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="33*"/>
-                        <ColumnDefinition Width="257*"/>
-                        <ColumnDefinition Width="237*"/>
-                        <ColumnDefinition Width="25*"/>
+                        <ColumnDefinition Width="18*"/>
+                        <ColumnDefinition Width="261*"/>
+                        <ColumnDefinition Width="261*"/>
+                        <ColumnDefinition Width="12*"/>
                         <ColumnDefinition Width="85*"/>
                         <ColumnDefinition Width="26*"/>
                         <ColumnDefinition Width="81*"/>
@@ -43,13 +43,13 @@
 
                     <!--구약 책 선택버튼-->
                     <Border Grid.Row="1" Grid.Column="1" BorderThickness="1" BorderBrush="#FFABADB3">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto" >
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" >
                             <ItemsControl x:Name="Bible_OldTestButtons_ItemsControl">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapPanel VerticalAlignment="Top" HorizontalAlignment="Left" />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel VerticalAlignment="Top" HorizontalAlignment="Left" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <Button 
@@ -62,7 +62,7 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-                    </ScrollViewer>
+                        </ScrollViewer>
                     </Border>
 
                     <!--신약 책 선택버튼-->
@@ -93,13 +93,25 @@
                     <ListBox Grid.Row="1" Grid.Column="6" x:Name="Bible_Verse_ListBox"></ListBox>
                     <Grid Grid.Row="1" Grid.Column="8" >
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="86*"/>
-                            <RowDefinition Height="11*"/>
-                            <RowDefinition Height="52*"/>
-                            <RowDefinition Height="57*"/>
-                            <RowDefinition Height="254*"/>
-                            <RowDefinition Height="71*"/>
+                            <RowDefinition Height="31*"/>
+                            <RowDefinition Height="60*"/>
+                            <RowDefinition Height="49*"/>
+                            <RowDefinition Height="53*"/>
+                            <RowDefinition Height="239*"/>
+                            <RowDefinition Height="67*"/>
                         </Grid.RowDefinitions>
+                        <Grid x:Name="Bible_CurrentDisplayTextBoxies_Grid">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="109*"/>
+                                <ColumnDefinition Width="11*"/>
+                                <ColumnDefinition Width="40*"/>
+                                <ColumnDefinition Width="11*"/>
+                                <ColumnDefinition Width="33*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Text="{Binding Book_Display}" IsReadOnly="True"></TextBox>
+                            <TextBox Grid.Column="2" Text="{Binding Chapter}" IsReadOnly="True"></TextBox>
+                            <TextBox Grid.Column="4" Text="{Binding Verse}" IsReadOnly="True"></TextBox>
+                        </Grid>
                     </Grid>
                 </Grid>
             </TabItem>
