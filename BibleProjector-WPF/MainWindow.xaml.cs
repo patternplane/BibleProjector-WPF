@@ -114,7 +114,7 @@ namespace BibleProjector_WPF
         void ChapterListBox_SelectedChanged(object sender, SelectionChangedEventArgs e)
         {
             ListBox chapterListbox = (ListBox)sender;
-            if (chapterListbox.SelectedIndex != -1)
+            if (chapterListbox.SelectedIndex != -1 && chapterListbox.IsMouseCaptured)
             {
                 string chapterNumber = (chapterListbox.SelectedIndex + 1).ToString("000");
                 VM_BibleSelectData.Chapter = chapterNumber;
@@ -130,7 +130,7 @@ namespace BibleProjector_WPF
         void VerseListBox_SelectedChanged(object sender, SelectionChangedEventArgs e)
         {
             ListBox verseListbox = (ListBox)sender;
-            if (verseListbox.SelectedIndex != -1)
+            if (verseListbox.SelectedIndex != -1 && verseListbox.IsMouseCaptured)
             {
                 string verseNumber = (verseListbox.SelectedIndex + 1).ToString("000");
                 VM_BibleSelectData.Verse = verseNumber;
