@@ -89,7 +89,6 @@ namespace BibleProjector_WPF
 
         public void programOut()
         {
-            Database.Disconnect();
             module.ProgramData.saveProgramData();
         }
 
