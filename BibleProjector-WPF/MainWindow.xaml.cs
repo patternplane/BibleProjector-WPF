@@ -25,6 +25,11 @@ namespace BibleProjector_WPF
         // 프로그램 모듈
         Powerpoint ppt;
 
+        // 교독문
+
+        // 교독문 리스트
+        BindingList<String> ReadingList;
+
         // 성경
 
         // 신구약 버튼들
@@ -52,6 +57,7 @@ namespace BibleProjector_WPF
             InitializeComponent();
 
             BibleInitialize();
+            ReadingInitialize();
         }
 
         void BibleInitialize()
@@ -69,6 +75,11 @@ namespace BibleProjector_WPF
             BibleReserveListBox.DisplayMemberPath = "DisplayData";
         }
 
+        void ReadingInitialize()
+        {
+            SetReadingList();
+        }
+
         // =================================================== 프로그램 종료 처리 ======================================================
 
         public void programOut()
@@ -77,7 +88,17 @@ namespace BibleProjector_WPF
             module.ProgramData.saveProgramData();
         }
 
-        //========================================= 성경 ============================================
+        // ========================================= 교독문 ============================================
+
+        // ======================================== 세팅
+
+        void SetReadingList()
+        {
+            ReadingList = new BindingList<string>(Database.getReadingTitles());
+            ReadingListBox.ItemsSource = ReadingList;
+        }
+
+        // ========================================= 성경 ============================================
 
         // ======================================== 세팅
 
@@ -89,7 +110,7 @@ namespace BibleProjector_WPF
             NewTestButtons = new BindingList<BibleTitleData>();
             Bible_NewTestButtons_ItemsControl.ItemsSource = NewTestButtons;
 
-            BibleTitleData[] titleData = Database.getBibleTitleData();
+            BibleTitleData[] titleData = Database.getBibleTitlesData();
 
             for (int i = 0; i < 39; i++)
                 OldTestButtons.Add(titleData[i]);

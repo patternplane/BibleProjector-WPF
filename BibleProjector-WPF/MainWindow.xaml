@@ -171,8 +171,8 @@
                             <RowDefinition Height="13*"/>
                             <RowDefinition Height="79*"/>
                         </Grid.RowDefinitions>
-                        <ListBox Grid.Row="0"></ListBox>
-                        <Button Grid.Row="2"></Button>
+                        <ListBox Grid.Row="0" x:Name="ReadingListBox"></ListBox>
+                        <Button Grid.Row="2">선택된 교독문 출력하기</Button>
                     </Grid>
                     <!--찬양곡 Grid-->
                     <Grid Grid.Row="1" Grid.Column="3">
