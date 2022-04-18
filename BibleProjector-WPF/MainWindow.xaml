@@ -30,13 +30,13 @@
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="18*"/>
-                        <ColumnDefinition Width="261*"/>
-                        <ColumnDefinition Width="261*"/>
-                        <ColumnDefinition Width="12*"/>
-                        <ColumnDefinition Width="85*"/>
-                        <ColumnDefinition Width="26*"/>
-                        <ColumnDefinition Width="81*"/>
-                        <ColumnDefinition Width="24*"/>
+                        <ColumnDefinition Width="267*"/>
+                        <ColumnDefinition Width="267*"/>
+                        <ColumnDefinition Width="20*"/>
+                        <ColumnDefinition Width="80*"/>
+                        <ColumnDefinition Width="17*"/>
+                        <ColumnDefinition Width="80*"/>
+                        <ColumnDefinition Width="19*"/>
                         <ColumnDefinition Width="204*"/>
                         <ColumnDefinition Width="20*"/>
                     </Grid.ColumnDefinitions>
@@ -94,12 +94,12 @@
                     <Grid Grid.Row="1" Grid.Column="8" >
                         <Grid.RowDefinitions>
                             <RowDefinition Height="31*"/>
-                            <RowDefinition Height="60*"/>
-                            <RowDefinition Height="49*"/>
-                            <RowDefinition Height="53*"/>
-                            <RowDefinition Height="239*"/>
+                            <RowDefinition Height="13*"/>
+                            <RowDefinition Height="366*"/>
+                            <RowDefinition Height="22*"/>
                             <RowDefinition Height="67*"/>
                         </Grid.RowDefinitions>
+
                         <Grid x:Name="Bible_CurrentDisplayTextBoxies_Grid">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="109*"/>
@@ -112,6 +112,37 @@
                             <TextBox Grid.Column="2" Text="{Binding Chapter}" IsReadOnly="True"></TextBox>
                             <TextBox Grid.Column="4" Text="{Binding Verse}" IsReadOnly="True"></TextBox>
                         </Grid>
+
+                        <!--성경 예약부분-->
+                        <Grid Grid.Row="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="55*"/>
+                                <RowDefinition Height="259*"/>
+                                <RowDefinition Height="52*"/>
+                            </Grid.RowDefinitions>
+                            <Button Grid.Row="0" x:Name="BibleReserveAddButton">성경구절 예약</Button>
+                            <ListBox Grid.Row="1" SelectionMode="Extended" ScrollViewer.VerticalScrollBarVisibility="auto" 
+                                 x:Name="BibleReserveListBox">
+                            </ListBox>
+                            <Grid Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="37*"/>
+                                    <ColumnDefinition Width="7*"/>
+                                    <ColumnDefinition Width="58*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Button Grid.Row="0" x:Name="BibleReserveItemUpButton">▲</Button>
+                                    <Button Grid.Row="1" x:Name="BibleReserveItemDownButton">▼</Button>
+                                </Grid>
+                                <Button Grid.Column="2" x:Name="BibleReserveDeleteButton">선택항목 삭제</Button>
+                            </Grid>
+                        </Grid>
+
+                        <Button Grid.Row="6">선택된 구절 출력</Button>
                     </Grid>
                 </Grid>
             </TabItem>

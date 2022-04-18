@@ -13,9 +13,6 @@ namespace BibleProjector_WPF.ViewModel
 {
     class BibleSelectData : INotifyPropertyChanged
     {
-        // database
-        Database db;
-
         // 현재 선택된 데이터
         private string Book_in;
         public string Book
@@ -27,7 +24,7 @@ namespace BibleProjector_WPF.ViewModel
                 if (Book_in.CompareTo("") == 0)
                     Book_Display = "";
                 else
-                    Book_Display = db.getTitle(Book_in);
+                    Book_Display = Database.getTitle(Book_in);
             }
         }
         private string Book_Display_in;
@@ -37,12 +34,12 @@ namespace BibleProjector_WPF.ViewModel
         private string Verse_in;
         public string Verse { get { return Verse_in; } set { Verse_in = value; NotifyPropertyChanged(); } }
 
-
-        public BibleSelectData(Database db)
+        public BibleSelectData()
         {
-            this.db = db;
+            Book = "";
+            Chapter = "";
+            Verse = "";
         }
-
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged( string propertyName = "")
