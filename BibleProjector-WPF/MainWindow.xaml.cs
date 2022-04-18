@@ -82,6 +82,11 @@ namespace BibleProjector_WPF
 
         // =================================================== 프로그램 종료 처리 ======================================================
 
+        ~MainWindow()
+        {
+            programOut();
+        }
+
         public void programOut()
         {
             Database.Disconnect();
