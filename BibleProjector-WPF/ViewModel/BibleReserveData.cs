@@ -51,7 +51,38 @@ namespace BibleProjector_WPF.ViewModel
 
         public BibleReserveData()
         {
-            BibleReserveList = module.ProgramData.BibleReserveList;
+            BibleReserveList = getBibleReserveList(module.ProgramData.getBibleReserveData(this));
+        }
+
+        // 데이터 받아올 때 입력 규격
+        BindingList<BibleReserveContent> getBibleReserveList(string fileContent)
+        {
+            BindingList<BibleReserveContent> BibleReserveList = new BindingList<BibleReserveContent>();
+
+            string[] data;
+            foreach (string token in fileContent.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                data = token.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                BibleReserveList.Add(new BibleReserveContent(data[0], data[1], data[2]));
+            }
+
+            return BibleReserveList;
+        }
+
+        // 데이터 저장할 때 출력 규격
+        public string getSaveData()
+        {
+            StringBuilder str = new StringBuilder(50).Clear();
+            foreach (BibleReserveContent item in BibleReserveList)
+            {
+                str.Append(item.Book);
+                str.Append(" ");
+                str.Append(item.Chapter);
+                str.Append(" ");
+                str.Append(item.Verse);
+                str.Append("\r\n");
+            }
+            return str.ToString();
         }
     }
 }

@@ -51,13 +51,13 @@ namespace BibleProjector_WPF
         public MainWindow()
         {
             Database.DatabaseInitailize();
-            module.ProgramData.getProgramData();
             ppt = new Powerpoint();
 
             InitializeComponent();
 
             BibleInitialize();
             ReadingInitialize();
+            LyricInitialize();
         }
 
         void BibleInitialize()
