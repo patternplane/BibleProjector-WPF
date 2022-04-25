@@ -1,0 +1,131 @@
+﻿<UserControl x:Class="BibleProjector_WPF.LyricControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BibleProjector_WPF"
+             mc:Ignorable="d" Height="469.874" Width="310.875">
+    <Grid  x:Name="LyricControlMain">
+        <TabControl>
+            <!--곡 선택-->
+            <TabItem Header="곡 선택">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="7*"/>
+                        <RowDefinition Height="30*"/>
+                        <RowDefinition Height="9*"/>
+                        <RowDefinition Height="40*"/>
+                        <RowDefinition Height="9*"/>
+                        <RowDefinition Height="40*"/>
+                        <RowDefinition Height="9*"/>
+                        <RowDefinition Height="309*"/>
+                        <RowDefinition Height="25*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="18*"/>
+                        <ColumnDefinition Width="228*"/>
+                        <ColumnDefinition Width="17*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Row="1" Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="211*"/>
+                            <ColumnDefinition Width="14*"/>
+                            <ColumnDefinition Width="70*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <ComboBox Grid.Column="0" 
+                                  IsEditable="true" 
+                                  IsTextSearchEnabled="false"
+                                  ItemsSource="{Binding SearchList}" 
+                                  DisplayMemberPath="display"
+                                  Text="{Binding SearchText}"
+                                  SelectedValue="{Binding currentSearchData}"
+                                  IsDropDownOpen="{Binding isSearchResultShow}">
+                        </ComboBox>
+                        <Button Grid.Column="2" Content="검색하기" Click="SearchButton_Click"/>
+                    </Grid>
+
+                    <Grid Grid.Row="3" Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="211*"/>
+                            <ColumnDefinition Width="14*"/>
+                            <ColumnDefinition Width="70*"/>
+                        </Grid.ColumnDefinitions>
+                        <ComboBox Grid.Column="0" ItemsSource="{Binding LyricList}" DisplayMemberPath="title"
+                                  SelectedItem="{Binding currentLyric}"
+                                  x:Name="LyricComboBox">
+                        </ComboBox>
+                        <Button Grid.Column="2" Content="곡 삭제" IsEnabled="{Binding isDeleteButtonEnable}"
+                            Click="DeleteButton_Click"/>
+                    </Grid>
+
+                    <TextBox Grid.Row="5" Grid.Column="1" HorizontalScrollBarVisibility="auto"
+                             Text="{Binding currentLyricTitle, UpdateSourceTrigger=PropertyChanged}" 
+                             LostFocus="TitleTextBox_LostFocus">
+                    </TextBox>
+
+                    <TextBox 
+                        Grid.Row="7" 
+                        Grid.Column="1" 
+                        AcceptsReturn="True" 
+                        HorizontalScrollBarVisibility="Auto" 
+                        VerticalScrollBarVisibility="auto" 
+                        Text="{Binding currentLyricContent, UpdateSourceTrigger=PropertyChanged}"
+                        LostFocus="ContentTextBox_LostFocus">
+                    </TextBox>
+                </Grid>
+            </TabItem>
+
+            <!--곡 추가-->
+            <TabItem Header="곡 추가" >
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="10*"/>
+                        <RowDefinition Height="30*"/>
+                        <RowDefinition Height="14*"/>
+                        <RowDefinition Height="41*"/>
+                        <RowDefinition Height="14*"/>
+                        <RowDefinition Height="267*"/>
+                        <RowDefinition Height="21*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="18*"/>
+                        <ColumnDefinition Width="228*"/>
+                        <ColumnDefinition Width="17*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Row="1" Grid.Column="1" Content="추가" IsEnabled="{Binding isAddButtonEnable}"
+                            Click="AddButton_Click"/>
+
+                    <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding AddLyricTitle}"/>
+
+                    <TextBox 
+                        Grid.Row="5" 
+                        Grid.Column="1" 
+                        AcceptsReturn="True" 
+                        HorizontalScrollBarVisibility="Auto" 
+                        VerticalScrollBarVisibility="auto"
+                        Text="{Binding AddLyricContent}"/>
+                </Grid>
+            </TabItem>
+
+            <!--곡 예약-->
+            <TabItem Header="예약">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="18*"/>
+                        <RowDefinition Height="509*"/>
+                        <RowDefinition Height="20*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="22*"/>
+                        <ColumnDefinition Width="200*"/>
+                        <ColumnDefinition Width="25*"/>
+                    </Grid.ColumnDefinitions>
+                    <ListBox Grid.Row="1" Grid.Column="1"></ListBox>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

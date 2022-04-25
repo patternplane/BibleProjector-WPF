@@ -55,10 +55,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="LyricControl.xaml.cs">
+      <DependentUpon>LyricControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="module\ProgramData.cs" />
+    <Compile Include="module\StringFixer.cs" />
+    <Compile Include="module\StringKMP.cs" />
     <Compile Include="ViewModel\BibleCurrentSelectingData.cs" />
     <Compile Include="ViewModel\BibleReserveData.cs" />
     <Compile Include="ViewModel\BibleSelectData.cs" />
+    <Compile Include="ViewModel\LyricViewModel.cs" />
+    <Page Include="LyricControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

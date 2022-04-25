@@ -57,7 +57,6 @@ namespace BibleProjector_WPF
 
             BibleInitialize();
             ReadingInitialize();
-            LyricInitialize();
         }
 
         void BibleInitialize()

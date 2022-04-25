@@ -14,6 +14,7 @@ namespace BibleProjector_WPF.module
     {
         // 데이터를 가진 객체에 접근하기 위한 참조변수들
         static ViewModel.BibleReserveData VM_BibleReserve;
+        static ViewModel.LyricViewModel VM_LyricViewModel;
 
         // =========================================== 파일 경로 =========================================== 
 
@@ -29,13 +30,28 @@ namespace BibleProjector_WPF.module
         static public void saveProgramData()
         {
             saveBibleReserveData();
+            saveLyricData();
         }
 
         static void saveBibleReserveData()
         {
-            StreamWriter file = new StreamWriter(BIBLE_RESERVE_DATA);
+            StreamWriter file = new StreamWriter(BIBLE_RESERVE_DATA, false);
             file.Write(VM_BibleReserve.getSaveData());
             file.Close();
+        }
+
+        static void saveLyricData()
+        {
+            StreamWriter file = new StreamWriter(LYRIC_DATA, false);
+            file.Write(VM_LyricViewModel.getSaveData());
+            file.Close();
+            
+            /*
+            catch (Exception e)
+            {
+                MessageBox.Show("가사 저장 실패!\n오류 : " + e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            */
         }
 
         // =========================================== 별도 메소드 =========================================== 
@@ -52,12 +68,14 @@ namespace BibleProjector_WPF.module
                 di.Create();
 
             StringBuilder fileContent = new StringBuilder(50);
-            StreamReader file = new StreamReader(filePath);
             fileContent.Clear();
 
             if ((new FileInfo(filePath)).Exists)
+            {
+                StreamReader file = new StreamReader(filePath);
                 fileContent.Append(file.ReadToEnd());
-            file.Close();
+                file.Close();
+            }
 
             return fileContent.ToString();
         }
@@ -70,7 +88,8 @@ namespace BibleProjector_WPF.module
 
         public static string getLyricData(ViewModel.LyricViewModel lyricViewModel)
         {
-            return null;
+            VM_LyricViewModel = lyricViewModel;
+            return getDataFromFile(LYRIC_DATA);
         }
     }
 }
