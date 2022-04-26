@@ -229,12 +229,12 @@ namespace BibleProjector_WPF.ViewModel
         {
             if (needCheckNewLine_title)
             {
-                currentLyricTitle = module.StringFixer.makeCorrectNewline(currentLyricTitle);
+                currentLyricTitle = module.StringModifier.makeCorrectNewline(currentLyricTitle);
                 needCheckNewLine_title = false;
             }
             if (needCheckNewLine_Content)
             {
-                currentLyricContent = module.StringFixer.makeCorrectNewline(currentLyricContent);
+                currentLyricContent = module.StringModifier.makeCorrectNewline(currentLyricContent);
                 needCheckNewLine_Content = false;
             }
             
