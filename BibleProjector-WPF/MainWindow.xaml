@@ -94,8 +94,8 @@
                     <Grid Grid.Row="1" Grid.Column="8" >
                         <Grid.RowDefinitions>
                             <RowDefinition Height="31*"/>
-                            <RowDefinition Height="13*"/>
-                            <RowDefinition Height="366*"/>
+                            <RowDefinition Height="15*"/>
+                            <RowDefinition Height="364*"/>
                             <RowDefinition Height="22*"/>
                             <RowDefinition Height="67*"/>
                         </Grid.RowDefinitions>
@@ -142,13 +142,13 @@
                             </Grid>
                         </Grid>
 
-                        <Button Grid.Row="6">선택된 구절 출력</Button>
+                        <Button Grid.Row="4">선택된 구절 출력</Button>
                     </Grid>
                 </Grid>
             </TabItem>
 
             <!--교독문, 찬양곡, 외부ppt-->
-            <TabItem Header="그 외">
+            <TabItem Header="예배 자료">
                 <Grid Grid.Row="3">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="22*"/>
