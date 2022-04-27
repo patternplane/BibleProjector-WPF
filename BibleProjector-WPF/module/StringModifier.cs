@@ -57,57 +57,85 @@ namespace BibleProjector_WPF.module
         /// <param name="charPerLine">줄별 문자 수</param>
         /// <param name="linePerPage">페이지별 줄 수</param>
         /// <returns>재단된 문자열 페이지</returns>
-        static public string[] makeStringPage(string origin, int charPerLine ,int linePerPage)
+        static public string[] makeStringPage(string origin, int charPerLine, int linePerPage)
         {
             origin = origin.Trim();
             List<string> pages = new List<string>(10);
-            StringBuilder line = new StringBuilder(50);
+            StringBuilder page = new StringBuilder(50);
+            StringBuilder newWord = new StringBuilder(50);
             int currentChar = 0;
+            int newCharCount = 0;
             int currentLine = 0;
-            // 글자를 한자 한자 읽어가면서
-            //          공백이면 패스 (갯수 세면서
-            //          단어 나오면 단어 끝까지 패스 (갯수 세면서
-            //      만약 문자 수가 다 찼으면 새 라인 생성
-            //      만약 끝났거나 줄 수가 다 찼으면 페이지 생성
-            // 끝났으면 종료, 아니면 위를 반복
-            for (int i = 0; i < origin.Length; i++)
+            int blankLength = 0;
+            bool newLine = true;
+
+            // 1. 공백과 단어를 하나 읽어들임
+            // 2. 문자값 초과라면 저 단어는 승인목록에 안넣음
+            // 3. 현재 승인목록들을 한 라인으로 만들기
+            // 4. 라인이 다 찼다면 한 페이지 생성
+            // 5. 승인목록에 방금 거절한 승인값 추가
+            // 2. 초과가 아니라면 저 단어도 승인목록에 넣음
+            for (int i = 0; i < origin.Length;)
             {
-                for (; i < origin.Length && char.IsWhiteSpace(origin[i]); i++)
+                if (newWord.Length == 0)
                 {
-                    line.Append(origin[i]);
-                    currentChar++;
-                }
-                for (; i < origin.Length && !char.IsWhiteSpace(origin[i]); i++)
-                {
-                    line.Append(origin[i]);
-                    if (origin[i] >= 0 && origin[i] < 128)
-                        currentChar++;
-                    else
-                        currentChar += 2;
+                    for (; i < origin.Length && char.IsWhiteSpace(origin[i]); i++)
+                    {
+                        newWord.Append(origin[i]);
+                        newCharCount++;
+                        blankLength++;
+                    }
+                    for (; i < origin.Length && !char.IsWhiteSpace(origin[i]); i++)
+                    {
+                        newWord.Append(origin[i]);
+                        if (origin[i] >= 0 && origin[i] < 128)
+                            newCharCount++;
+                        else
+                            newCharCount += 2;
+                    }
                 }
 
-                if (i == origin.Length) {
-                    pages.Add(line.ToString());
-                    break;
-                }
-                else if (currentChar >= charPerLine)
+                if (newLine)
                 {
-                    if (currentLine == linePerPage)
+                    page.Append(newWord.ToString(blankLength, newWord.Length - blankLength));
+                    newWord.Clear();
+                    currentChar += newCharCount - blankLength;
+                    blankLength = 0;
+                    newCharCount = 0;
+                    newLine = false;
+                }
+                else if (currentChar + newCharCount > charPerLine)
+                {
+                    currentLine++;
+                    if (currentLine >= linePerPage)
                     {
-                        pages.Add(line.ToString());
-                        line.Clear();
-                        currentChar = 0;
-                        currentLine = 1;
+                        pages.Add(page.ToString());
+                        page.Clear();
+                        currentLine = 0;
                     }
                     else
-                    {
-                        line.Append("\r\n");
-                        currentChar = 0;
-                        currentLine++;
-                    }
-                    for (; i < origin.Length && char.IsWhiteSpace(origin[i]); i++) ;
+                        page.Append("\r\n");
+                    currentChar = 0;
+                    newLine = true;
+                }
+                else
+                {
+                    page.Append(newWord.ToString());
+                    newWord.Clear();
+                    blankLength = 0;
+                    currentChar += newCharCount;
+                    newCharCount = 0;
                 }
             }
+            if (newWord.Length > 0)
+            {
+                if (newLine)
+                    page.Append(newWord.ToString(blankLength, newWord.Length - blankLength));
+                else
+                    page.Append(newWord.ToString());
+            }
+            if (page.Length > 0)
+                pages.Add(page.ToString());
 
             return pages.ToArray();
         }
