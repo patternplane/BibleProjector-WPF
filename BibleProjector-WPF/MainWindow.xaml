@@ -224,6 +224,42 @@
                     </Grid>
                 </Grid>
             </TabItem>
+
+            <TabItem Header="설정">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="67*"/>
+                        <RowDefinition Height="119*"/>
+                        <RowDefinition Height="345*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="119*"/>
+                        <ColumnDefinition Width="226*"/>
+                        <ColumnDefinition Width="647*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Row="1" Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="10*"/>
+                            <RowDefinition Height="45*"/>
+                            <RowDefinition Height="9*"/>
+                            <RowDefinition Height="46*"/>
+                            <RowDefinition Height="9*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="23*"/>
+                            <ColumnDefinition Width="138*"/>
+                            <ColumnDefinition Width="60*"/>
+                            <ColumnDefinition Width="12*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Row="1" Grid.Column="1" Content="슬라이드별 줄 수"></Label>
+                        <TextBox Grid.Row="1" Grid.Column="2" Text="5"></TextBox>
+                        <Label Grid.Row="3" Grid.Column="1" Content="문장별 글자 수&#10;(한글:2 / 영어,공백:1)"></Label>
+                        <TextBox Grid.Row="3" Grid.Column="2" Text="15"></TextBox>
+                    </Grid>
+                </Grid>
+            </TabItem>
         </TabControl>
     </Grid>
 </Window>

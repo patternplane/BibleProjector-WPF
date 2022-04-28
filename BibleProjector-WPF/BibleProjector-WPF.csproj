@@ -62,6 +62,7 @@
       <DependentUpon>LyricControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="module\ProgramData.cs" />
+    <Compile Include="module\ProgramOption.cs" />
     <Compile Include="module\StringModifier.cs" />
     <Compile Include="module\StringKMP.cs" />
     <Compile Include="ViewModel\BibleControlViewModel.cs" />

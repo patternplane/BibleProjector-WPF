@@ -52,6 +52,7 @@ namespace BibleProjector_WPF
         {
             Database.DatabaseInitailize();
             ppt = new Powerpoint();
+            module.ProgramOption.Initialize();
 
             InitializeComponent();
 

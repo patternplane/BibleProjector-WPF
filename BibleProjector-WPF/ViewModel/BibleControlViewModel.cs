@@ -40,7 +40,13 @@ namespace BibleProjector_WPF.ViewModel
             setCurrentBibleInfo(bible_display, chapter, verse);
 
             BiblePages = null;
-            BiblePages = module.StringModifier.makeStringPage(); // 구절을 어느 규격으로 재단할지 설정값도 반영해야함.
+            BiblePages = new BindingList<string>(
+                module.StringModifier.makeStringPage(
+                    Database.getBible(Kjjeul)
+                    ,module.ProgramOption.Bible_CharPerLine
+                    ,module.ProgramOption.Bible_LinePerSlide
+                    )
+                );
             setBibleSlide_BibleChapter(bible_display, chapter);
             CurrentPageIndex = 0;
 
