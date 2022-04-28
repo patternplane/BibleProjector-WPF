@@ -23,6 +23,11 @@ namespace BibleProjector_WPF.module
         /// <param name="b"></param>
         /// <returns></returns>
         public delegate bool StringCompare(char a, char b);
+            
+        static public bool DefaultStringCompaerFunc(char a, char b)
+        {
+            return (a == b);
+        }
 
         /// <summary>
         /// KMP - 전처리 테이블 제작 함수

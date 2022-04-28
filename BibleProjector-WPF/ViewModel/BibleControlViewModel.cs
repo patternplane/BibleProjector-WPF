@@ -8,7 +8,7 @@ using System.ComponentModel;
 
 namespace BibleProjector_WPF.ViewModel
 {
-    class BibleControlViewModel
+    class BibleControlViewModel : INotifyPropertyChanged
     {
         // ================================================ 세팅 ================================================
 
@@ -50,6 +50,8 @@ namespace BibleProjector_WPF.ViewModel
             setBibleSlide_BibleChapter(bible_display, chapter);
             CurrentPageIndex = 0;
 
+            SlideShowRun();
+
             isDisplayShow = true;
             isTextShow = true;
         }
@@ -88,17 +90,19 @@ namespace BibleProjector_WPF.ViewModel
         public string CurrentBibleInfo { get; set; }
 
         // 성경 페이지 리스트박스
-        public BindingList<string> BiblePages { get; set; }
+        private BindingList<string> BiblePages_in;
+        public BindingList<string> BiblePages { get { return BiblePages_in; } set { BiblePages_in = value; NotifyPropertyChanged(); } }
         private int CurrentPageIndex_in;
         public int CurrentPageIndex { get { return CurrentPageIndex_in; } set { CurrentPageIndex_in = value;
                 if (CurrentPageIndex_in != -1)
                 {
                     // 페이지 변경 처리
                     if (CurrentPageIndex_in == 0)
-                        setBibleSlide_VerseContent(bibleContent:BiblePages[CurrentPageIndex_in]);
+                        setBibleSlide_VerseContent(bibleContent:BiblePages[CurrentPageIndex_in], verse: verse);
                     else
-                        setBibleSlide_VerseContent(bibleContent: BiblePages[CurrentPageIndex_in], verse:verse);
+                        setBibleSlide_VerseContent(bibleContent: BiblePages[CurrentPageIndex_in]);
                 }
+                NotifyPropertyChanged();
             } }
 
         // ================================================ 속성 메소드 ================================================
@@ -134,41 +138,53 @@ namespace BibleProjector_WPF.ViewModel
 
         // ================================================ 동작 ================================================
 
+        void SlideShowRun()
+        {
+            Powerpoint.Bible_SlideShowRun();
+        }
+
         void setBibleSlide_VerseContent(string bibleContent,int verse = -1)
         {
-            // verse가 -1이면 절부분은 숨기기
+            if (verse == -1)
+                Powerpoint.Bible_Change_VerseContent("", bibleContent);
+            else
+                Powerpoint.Bible_Change_VerseContent(verse.ToString(), bibleContent);
         }
 
         void setBibleSlide_BibleChapter(string bible, int chapter)
         {
-
+            Powerpoint.Bible_Change_BibleChapter(bible, chapter.ToString());
         }
 
         void hideText()
         {
-
+            Powerpoint.Bible_HideText();
         }
 
         void ShowText()
         {
-            if (CurrentPageIndex == 0)
-                // 절 보이기
-                ;
-            else
-                // 절 숨기기
-                ;
+            Powerpoint.Bible_ShowText();
         }
 
         void offDisplay()
         {
-
+            Powerpoint.Bible_OffDisplay();
         }
 
         void onDisplay()
         {
-            // 화면 키고
+            Powerpoint.Bible_OnDisplay();
+        }
 
-            ShowText();
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string propertyName = "")
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
     }
 }

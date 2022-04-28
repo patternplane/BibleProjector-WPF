@@ -142,7 +142,7 @@
                             </Grid>
                         </Grid>
 
-                        <Button Grid.Row="4">선택된 구절 출력</Button>
+                        <Button Grid.Row="4" Click="BibleOutputButton_Click">선택된 구절 출력</Button>
                     </Grid>
                 </Grid>
             </TabItem>

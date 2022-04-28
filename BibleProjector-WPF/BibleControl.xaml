@@ -21,7 +21,7 @@
             <ColumnDefinition Width="26*"/>
         </Grid.ColumnDefinitions>
 
-        <ListBox Grid.Row="1" Grid.Column="1" VerticalContentAlignment="Stretch" ScrollViewer.CanContentScroll="False"
+        <ListBox Grid.Row="1" Grid.Column="1" VerticalContentAlignment="Stretch" ScrollViewer.CanContentScroll="False" Focusable="False"
                  ItemsSource="{Binding BiblePages}"
                  SelectedIndex="{Binding CurrentPageIndex}">
             <ListBox.ItemTemplate>

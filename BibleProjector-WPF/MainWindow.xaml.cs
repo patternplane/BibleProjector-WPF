@@ -22,9 +22,6 @@ namespace BibleProjector_WPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        // 프로그램 모듈
-        Powerpoint ppt;
-
         // 교독문
 
         // 교독문 리스트
@@ -46,12 +43,17 @@ namespace BibleProjector_WPF
         // 예약 정보
         ViewModel.BibleReserveData VM_BibleReserveData;
 
+
+
+        // 컨트롤
+        BibleControl Ctrl_Bible = null;
+
         // =================================================== 프로그램 시작 처리 ======================================================
 
         public MainWindow()
         {
             Database.DatabaseInitailize();
-            ppt = new Powerpoint();
+            Powerpoint.Initialize();
             module.ProgramOption.Initialize();
 
             InitializeComponent();
@@ -90,6 +92,14 @@ namespace BibleProjector_WPF
         public void programOut()
         {
             module.ProgramData.saveProgramData();
+            Powerpoint.FinallProcess();
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            if (Ctrl_Bible != null)
+                Ctrl_Bible.ForceClose();
+            base.OnClosing(e);
         }
 
         // ========================================= 교독문 ============================================
@@ -247,7 +257,7 @@ namespace BibleProjector_WPF
                 VM_BibleReserveData.BibleReserveList.Add(new ViewModel.BibleReserveData.BibleReserveContent(VM_BibleCurrentSelectingData.Book, VM_BibleCurrentSelectingData.Chapter, VM_BibleCurrentSelectingData.Verse));
         }
 
-        void BibleReserveDeleteButton_Click (object sender, RoutedEventArgs e)
+        void BibleReserveDeleteButton_Click(object sender, RoutedEventArgs e)
         {
             int count = BibleReserveListBox.SelectedItems.Count;
             if (count == 0)
@@ -279,7 +289,7 @@ namespace BibleProjector_WPF
 
             if (startidx != 0)
             {
-                VM_BibleReserveData.BibleReserveList.Insert(startidx + count,VM_BibleReserveData.BibleReserveList[startidx - 1]);
+                VM_BibleReserveData.BibleReserveList.Insert(startidx + count, VM_BibleReserveData.BibleReserveList[startidx - 1]);
                 VM_BibleReserveData.BibleReserveList.Remove(VM_BibleReserveData.BibleReserveList[startidx - 1]);
             }
         }
@@ -340,6 +350,21 @@ namespace BibleProjector_WPF
                 VM_BibleSelectData.Verse = item.Verse;
             }
         }
-    }
 
+        // ======================================== 성경 출력 처리
+
+        void BibleOutputButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (VM_BibleSelectData.Verse.CompareTo("") != 0)
+            {
+                if (Ctrl_Bible == null)
+                    Ctrl_Bible = new BibleControl(VM_BibleSelectData.Book + VM_BibleSelectData.Chapter + VM_BibleSelectData.Verse);
+                else
+                    Ctrl_Bible.ShowBible(VM_BibleSelectData.Book + VM_BibleSelectData.Chapter + VM_BibleSelectData.Verse);
+                Ctrl_Bible.Show();
+            }
+            else
+                MessageBox.Show("출력할 성경구절을 선택해주세요!","성경 선택되지 않음",MessageBoxButton.OK,MessageBoxImage.Error);
+        }
+    }
 }

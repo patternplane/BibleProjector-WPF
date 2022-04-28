@@ -27,6 +27,11 @@ namespace BibleProjector_WPF
             this.DataContext = VM_BibleControl = new ViewModel.BibleControlViewModel(Kjjeul);
         }
 
+        public void ShowBible (string Kjjeul)
+        {
+            VM_BibleControl.showBible(Kjjeul);
+        }
+
         // ================================================ 이벤트 처리 ================================================ 
 
         void Window_KeyDown(object sender, KeyEventArgs e)
@@ -52,6 +57,28 @@ namespace BibleProjector_WPF
         void NextPageButton_Click(object sender, RoutedEventArgs e)
         {
             VM_BibleControl.RunNextPage();
+        }
+
+        // ========================================== 윈도우 처리 =====================================
+
+        private bool AllowClose = false;
+
+        public void ForceClose()
+        {
+            AllowClose = true;
+            this.Close();
+        }
+
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            if (AllowClose)
+                e.Cancel = false;
+            else
+            {
+                this.Hide();
+                e.Cancel = true;
+            }
+            base.OnClosing(e);
         }
     }
 }
