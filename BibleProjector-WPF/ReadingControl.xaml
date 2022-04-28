@@ -1,11 +1,11 @@
-﻿<Window x:Class="BibleProjector_WPF.BibleControl"
+﻿<Window x:Class="BibleProjector_WPF.ReadingControl"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BibleProjector_WPF"
         mc:Ignorable="d"
-        Title="성경" Height="336.375" Width="533.438"
+        Title="교독문" Height="336.375" Width="533.438"
         KeyDown="Window_KeyDown">
     <Grid>
         <Grid.RowDefinitions>
@@ -22,7 +22,7 @@
         </Grid.ColumnDefinitions>
 
         <ListBox Grid.Row="1" Grid.Column="1" VerticalContentAlignment="Stretch" ScrollViewer.CanContentScroll="False" Focusable="False"
-                 ItemsSource="{Binding BiblePages}"
+                 ItemsSource="{Binding ReadingPages}"
                  SelectedIndex="{Binding CurrentPageIndex}"
                  SelectionChanged="PageListBox_SelectionChanged">
             <ListBox.ItemTemplate>
@@ -67,8 +67,8 @@
                     <RowDefinition Height="44*"/>
                     <RowDefinition Height="11*"/>
                 </Grid.RowDefinitions>
-                <Label Grid.Row="1" Content="현재 위치 : "></Label>
-                <TextBox Grid.Row="2" Focusable="False" Text="{Binding CurrentBibleInfo}"></TextBox>
+                <Label Grid.Row="1" Content="교독문 : "></Label>
+                <TextBox Grid.Row="2" Focusable="False" Text="{Binding CurrentReadingInfo}"></TextBox>
             </Grid>
 
             <Grid Grid.Column="6">

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BibleProjector_WPF"
         mc:Ignorable="d"
-        Title="Presenter" Height="612.79" Width="1053.488">
+        Title="예배자막" Height="612.79" Width="1053.488">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="10*"/>
@@ -172,7 +172,7 @@
                             <RowDefinition Height="79*"/>
                         </Grid.RowDefinitions>
                         <ListBox Grid.Row="0" x:Name="ReadingListBox"></ListBox>
-                        <Button Grid.Row="2">선택된 교독문 출력하기</Button>
+                        <Button Grid.Row="2" Click="ReadingOutputButton_Click">선택된 교독문 출력하기</Button>
                     </Grid>
                     <!--찬양곡 Grid-->
                     <Grid Grid.Row="1" Grid.Column="3">

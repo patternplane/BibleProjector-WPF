@@ -15,21 +15,21 @@ using System.Windows.Shapes;
 namespace BibleProjector_WPF
 {
     /// <summary>
-    /// BibleControl.xaml에 대한 상호 작용 논리
+    /// ReadingControl.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class BibleControl : Window
+    public partial class ReadingControl : Window
     {
-        private ViewModel.BibleControlViewModel VM_BibleControl;
+        private ViewModel.ReadingControlViewModel VM_ReadingControl;
 
-        public BibleControl(string Kjjeul)
+        public ReadingControl(int ReadingNumber)
         {
             InitializeComponent();
-            this.DataContext = VM_BibleControl = new ViewModel.BibleControlViewModel(Kjjeul);
+            this.DataContext = VM_ReadingControl = new ViewModel.ReadingControlViewModel(ReadingNumber);
         }
 
-        public void ShowBible (string Kjjeul)
+        public void ShowReading (int ReadingNumber)
         {
-            VM_BibleControl.showBible(Kjjeul);
+            VM_ReadingControl.showReading(ReadingNumber);
         }
 
         // ================================================ 이벤트 처리 ================================================ 
@@ -40,24 +40,25 @@ namespace BibleProjector_WPF
             {
                 case Key.Up:
                 case Key.Right:
-                    VM_BibleControl.RunNextPage();
+                    VM_ReadingControl.RunNextPage();
                     break;
                 case Key.Down:
                 case Key.Left:
-                    VM_BibleControl.RunPreviousPage();
+                    VM_ReadingControl.RunPreviousPage();
                     break;
             }
         }
 
         void PreviousPageButton_Click(object sender, RoutedEventArgs e)
         {
-            VM_BibleControl.RunPreviousPage();
+            VM_ReadingControl.RunPreviousPage();
         }
 
         void NextPageButton_Click(object sender, RoutedEventArgs e)
         {
-            VM_BibleControl.RunNextPage();
+            VM_ReadingControl.RunNextPage();
         }
+
         void PageListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ((ListBoxItem)(((ListBox)sender).ItemContainerGenerator.ContainerFromItem(((ListBox)sender).SelectedItem)))?.Focus();

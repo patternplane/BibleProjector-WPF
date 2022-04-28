@@ -55,6 +55,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ReadingControl.xaml.cs">
+      <DependentUpon>ReadingControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="BibleControl.xaml.cs">
       <DependentUpon>BibleControl.xaml</DependentUpon>
     </Compile>
@@ -65,11 +68,16 @@
     <Compile Include="module\ProgramOption.cs" />
     <Compile Include="module\StringModifier.cs" />
     <Compile Include="module\StringKMP.cs" />
+    <Compile Include="ViewModel\ReadingControlViewModel.cs" />
     <Compile Include="ViewModel\BibleControlViewModel.cs" />
     <Compile Include="ViewModel\BibleCurrentSelectingData.cs" />
     <Compile Include="ViewModel\BibleReserveData.cs" />
     <Compile Include="ViewModel\BibleSelectData.cs" />
     <Compile Include="ViewModel\LyricViewModel.cs" />
+    <Page Include="ReadingControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="BibleControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

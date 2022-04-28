@@ -47,6 +47,7 @@ namespace BibleProjector_WPF
 
         // 컨트롤
         BibleControl Ctrl_Bible = null;
+        ReadingControl Ctrl_Reading = null;
 
         // =================================================== 프로그램 시작 처리 ======================================================
 
@@ -99,6 +100,8 @@ namespace BibleProjector_WPF
         {
             if (Ctrl_Bible != null)
                 Ctrl_Bible.ForceClose();
+            if (Ctrl_Reading != null)
+                Ctrl_Reading.ForceClose();
             base.OnClosing(e);
         }
 
@@ -366,5 +369,22 @@ namespace BibleProjector_WPF
             else
                 MessageBox.Show("출력할 성경구절을 선택해주세요!","성경 선택되지 않음",MessageBoxButton.OK,MessageBoxImage.Error);
         }
+
+        // ======================================== 교독문 처리
+
+        void ReadingOutputButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (ReadingListBox.SelectedIndex != -1)
+            {
+                if (Ctrl_Reading == null)
+                    Ctrl_Reading = new ReadingControl(ReadingListBox.SelectedIndex);
+                else
+                    Ctrl_Reading.ShowReading(ReadingListBox.SelectedIndex);
+                Ctrl_Reading.Show();
+            }
+            else
+                MessageBox.Show("출력할 교독문을 선택해주세요!", "교독문 선택되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
     }
 }
