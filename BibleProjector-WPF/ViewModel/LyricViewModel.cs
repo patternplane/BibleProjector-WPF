@@ -202,6 +202,7 @@ namespace BibleProjector_WPF.ViewModel
                     refreshSearchItem(newLyric, lastSearchPattern);
                     SearchText = lastSearchPattern;
                 }
+                currentLyric = newLyric;
             }
         }
 
