@@ -21,15 +21,15 @@ namespace BibleProjector_WPF
     {
         private ViewModel.SongControlViewModel VM_SongControl;
 
-        public SongControl(string Kjjeul)
+        public SongControl(string[][][] songData,string path)
         {
             InitializeComponent();
-            this.DataContext = VM_SongControl = new ViewModel.SongControlViewModel("test",new string[] { });
+            this.DataContext = VM_SongControl = new ViewModel.SongControlViewModel(songData, path);
         }
 
-        public void ShowSong (string Kjjeul)
+        public void ShowSong (string[][][] songData, string path)
         {
-            VM_SongControl.showSong(Kjjeul);
+            VM_SongControl.showSong(songData,path);
         }
 
         // ================================================ 이벤트 처리 ================================================ 

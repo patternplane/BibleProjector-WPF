@@ -12,59 +12,37 @@ namespace BibleProjector_WPF.ViewModel
     {
         // ================================================ 세팅 ================================================
 
-        public SongControlViewModel(string title, string[] content)
+        public SongControlViewModel(string[][][] songData, string path)
         {
-            showSong(Kjjeul);
+            // 반드시 songData는 모든 슬라이드마다 0. 제목, 1. 가사 일 것!
+            // songData 규격 : [커맨드(0)냐 내용(1)이냐][정보 종류][슬라이드 번호]
+            showSong( songData,  path);
         }
 
-        public void showSong()
+        public void showSong(string[][][] songData, string path)
         {
-            this.Kjjeul = Kjjeul;
-            newBibleSetting();
+            this.currentPPTPath = path;
+            this.songData = songData;
+            newSongSetting();
         }
 
-        private void showBible_next()
+        private void newSongSetting()
         {
-            Kjjeul = Database.getBibleIndex_Next(Kjjeul);
-            newBibleSetting();
-        }
-
-        private void showBible_previous()
-        {
-            Kjjeul = Database.getBibleIndex_Previous(Kjjeul);
-            newBibleSetting();
-        }
-
-        private void newBibleSetting()
-        {
-            setCurrentSongInfo("test");
+            setCurrentSongInfo(songData[1][0][0]);
 
             SongPages = null;
-            SongPages = new BindingList<string>(
-                module.StringModifier.makeStringPage(
-                    Database.getBible(Kjjeul)
-                    ,module.ProgramOption.Bible_CharPerLine
-                    ,module.ProgramOption.Bible_LinePerSlide
-                    )
-                );
-            setBibleSlide_BibleChapter(bible_display, chapter);
+            SongPages = new BindingList<string>(songData[1][1]);
             CurrentPageIndex = 0;
 
+            SetSongData(songData);
             SlideShowRun();
 
             isDisplayShow = true;
             isTextShow = true;
         }
 
-        string Kjjeul_in;
-        string Kjjeul { get { return Kjjeul_in; } set { Kjjeul_in = value;
-                bible_display = Database.getTitle(Kjjeul_in.Substring(0, 2));
-                chapter = int.Parse(Kjjeul_in.Substring(2, 3));
-                verse = int.Parse(Kjjeul_in.Substring(5, 3));
-            } }
-        string bible_display = null;
-        int chapter = -1;
-        int verse = -1;
+        string[][][] songData;
+        string currentPPTPath;
 
         // ================================================ 속성 ================================================
 
@@ -95,13 +73,8 @@ namespace BibleProjector_WPF.ViewModel
         private int CurrentPageIndex_in;
         public int CurrentPageIndex { get { return CurrentPageIndex_in; } set { CurrentPageIndex_in = value;
                 if (CurrentPageIndex_in != -1)
-                {
                     // 페이지 변경 처리
-                    if (CurrentPageIndex_in == 0)
-                        ;//setBibleSlide_VerseContent(bibleContent:SongPages[CurrentPageIndex_in], verse: verse);
-                    else
-                        ;//setBibleSlide_VerseContent(bibleContent: SongPages[CurrentPageIndex_in]);
-                }
+                    ChangePage(CurrentPageIndex_in);
                 NotifyPropertyChanged();
             } }
 
@@ -128,42 +101,39 @@ namespace BibleProjector_WPF.ViewModel
 
         // ================================================ 동작 ================================================
 
+        void SetSongData(string[][][] songData)
+        {
+            Powerpoint.Song.SetSongData(currentPPTPath,songData);
+        }
+
         void SlideShowRun()
         {
-            //Powerpoint.Song_SlideShowRun();
+            Powerpoint.Song.SlideShowRun(currentPPTPath);
         }
 
-        void setBibleSlide_Content(string bibleContent,int verse = -1)
+        void ChangePage(int page)
         {
-            if (verse == -1)
-                ;//Powerpoint.Song_Change_VerseContent("", bibleContent);
-            else
-                ;// Powerpoint.Song_Change_VerseContent(verse.ToString(), bibleContent);
-        }
-
-        void setBibleSlide_BibleChapter(string bible, int chapter)
-        {
-            //Powerpoint.Song_Change_BibleChapter(bible, chapter.ToString());
+            Powerpoint.Song.ChangePage(currentPPTPath, page);
         }
 
         void hideText()
         {
-            //Powerpoint.Song_HideText();
+            Powerpoint.Song.HideText(currentPPTPath);
         }
 
         void ShowText()
         {
-            //Powerpoint.Song_ShowText();
+            Powerpoint.Song.ShowText(currentPPTPath);
         }
 
         void offDisplay()
         {
-            //Powerpoint.Song_OffDisplay();
+            Powerpoint.Song.OffDisplay(currentPPTPath);
         }
 
         void onDisplay()
         {
-            //Powerpoint.Song_OnDisplay();
+            Powerpoint.Song.OnDisplay(currentPPTPath);
         }
 
 
