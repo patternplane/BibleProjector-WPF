@@ -262,59 +262,69 @@ namespace BibleProjector_WPF
 
         void BibleReserveDeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            int count = BibleReserveListBox.SelectedItems.Count;
-            if (count == 0)
+            if (BibleReserveListBox.SelectedItems.Count == 0)
                 return;
 
-            int startidx = BibleReserveListBox.Items.IndexOf(BibleReserveListBox.SelectedItems[0]);
+            List<int> itemindex = new List<int>(10);
             foreach (object item in BibleReserveListBox.SelectedItems)
-            {
-                if (startidx > BibleReserveListBox.Items.IndexOf(item))
-                    startidx = BibleReserveListBox.Items.IndexOf(item);
-            }
+                itemindex.Add(BibleReserveListBox.Items.IndexOf(item));
+            itemindex.Sort();
 
-            for (; count > 0; count--)
-                VM_BibleReserveData.BibleReserveList.Remove(VM_BibleReserveData.BibleReserveList[startidx]);
+            for (int i = itemindex.Count-1; i >= 0 ; i--)
+                VM_BibleReserveData.BibleReserveList.Remove(VM_BibleReserveData.BibleReserveList[itemindex[i]]);
         }
 
         void BibleReserveItemUpButton_Click(object sender, RoutedEventArgs e)
         {
-            int count = BibleReserveListBox.SelectedItems.Count;
-            if (count == 0)
+            if (BibleReserveListBox.SelectedItems.Count == 0)
                 return;
 
-            int startidx = BibleReserveListBox.Items.IndexOf(BibleReserveListBox.SelectedItems[0]);
+            List<int> itemindex = new List<int>(10);
             foreach (object item in BibleReserveListBox.SelectedItems)
-            {
-                if (startidx > BibleReserveListBox.Items.IndexOf(item))
-                    startidx = BibleReserveListBox.Items.IndexOf(item);
-            }
+                itemindex.Add(BibleReserveListBox.Items.IndexOf(item));
+            itemindex.Sort();
 
-            if (startidx != 0)
+            if (itemindex[0] == 0)
+                return;
+
+            int i = 0;
+            int moveItem;
+            int desIndex;
+            while ( i < itemindex.Count)
             {
-                VM_BibleReserveData.BibleReserveList.Insert(startidx + count, VM_BibleReserveData.BibleReserveList[startidx - 1]);
-                VM_BibleReserveData.BibleReserveList.Remove(VM_BibleReserveData.BibleReserveList[startidx - 1]);
+                moveItem = itemindex[i] - 1;
+                desIndex = itemindex[i];
+                for (;i < itemindex.Count && desIndex == itemindex[i]; i++, desIndex++);
+
+                VM_BibleReserveData.BibleReserveList.Insert(desIndex, VM_BibleReserveData.BibleReserveList[moveItem]);
+                VM_BibleReserveData.BibleReserveList.RemoveAt(moveItem);
             }
         }
 
         void BibleReserveItemDownButton_Click(object sender, RoutedEventArgs e)
         {
-            int count = BibleReserveListBox.SelectedItems.Count;
-            if (count == 0)
+            if (BibleReserveListBox.SelectedItems.Count == 0)
                 return;
 
-            int startidx = BibleReserveListBox.Items.IndexOf(BibleReserveListBox.SelectedItems[0]);
+            List<int> itemindex = new List<int>(10);
             foreach (object item in BibleReserveListBox.SelectedItems)
-            {
-                if (startidx > BibleReserveListBox.Items.IndexOf(item))
-                    startidx = BibleReserveListBox.Items.IndexOf(item);
-            }
+                itemindex.Add(BibleReserveListBox.Items.IndexOf(item));
+            itemindex.Sort();
 
-            if (startidx + count != VM_BibleReserveData.BibleReserveList.Count)
+            if (itemindex.Last() == VM_BibleReserveData.BibleReserveList.Count -1 )
+                return;
+
+            int i = itemindex.Count-1;
+            int moveItem;
+            int desIndex;
+            while (i >= 0)
             {
-                ViewModel.BibleReserveData.BibleReserveContent item = VM_BibleReserveData.BibleReserveList[startidx + count];
-                VM_BibleReserveData.BibleReserveList.Remove(item);
-                VM_BibleReserveData.BibleReserveList.Insert(startidx, item);
+                moveItem = itemindex[i] + 1;
+                desIndex = itemindex[i];
+                for (i--; i >= 0 && desIndex == itemindex[i]; i--, desIndex--);
+
+                VM_BibleReserveData.BibleReserveList.Insert(desIndex, VM_BibleReserveData.BibleReserveList[moveItem]);
+                VM_BibleReserveData.BibleReserveList.RemoveAt(moveItem + 1);
             }
         }
 

@@ -62,76 +62,83 @@ namespace BibleProjector_WPF
 
         void ReserveUp_Click(object sender, RoutedEventArgs e)
         {
-            int count = LyricReserveListBox.SelectedItems.Count;
-            if (count == 0)
+            if (LyricReserveListBox.SelectedItems.Count == 0)
                 return;
 
-            int startidx = LyricReserveListBox.Items.IndexOf(LyricReserveListBox.SelectedItems[0]);
+            List<int> itemindex = new List<int>(10);
             foreach (object item in LyricReserveListBox.SelectedItems)
-            {
-                if (startidx > LyricReserveListBox.Items.IndexOf(item))
-                    startidx = LyricReserveListBox.Items.IndexOf(item);
-            }
+                itemindex.Add(LyricReserveListBox.Items.IndexOf(item));
+            itemindex.Sort();
 
-            if (startidx != 0)
+            if (itemindex[0] == 0)
+                return;
+
+            int i = 0;
+            int moveItem;
+            int desIndex;
+            while (i < itemindex.Count)
             {
-                VM_LyricViewModel.LyricReserveList.Insert(startidx + count, VM_LyricViewModel.LyricReserveList[startidx - 1]);
-                VM_LyricViewModel.LyricReserveList.Remove(VM_LyricViewModel.LyricReserveList[startidx - 1]);
+                moveItem = itemindex[i] - 1;
+                desIndex = itemindex[i];
+                for (; i < itemindex.Count && desIndex == itemindex[i]; i++, desIndex++) ;
+
+                VM_LyricViewModel.LyricReserveList.Insert(desIndex, VM_LyricViewModel.LyricReserveList[moveItem]);
+                VM_LyricViewModel.LyricReserveList.RemoveAt(moveItem);
             }
         }
         void ReserveDown_Click(object sender, RoutedEventArgs e)
         {
-            int count = LyricReserveListBox.SelectedItems.Count;
-            if (count == 0)
+            if (LyricReserveListBox.SelectedItems.Count == 0)
                 return;
 
-            int startidx = LyricReserveListBox.Items.IndexOf(LyricReserveListBox.SelectedItems[0]);
+            List<int> itemindex = new List<int>(10);
             foreach (object item in LyricReserveListBox.SelectedItems)
-            {
-                if (startidx > LyricReserveListBox.Items.IndexOf(item))
-                    startidx = LyricReserveListBox.Items.IndexOf(item);
-            }
+                itemindex.Add(LyricReserveListBox.Items.IndexOf(item));
+            itemindex.Sort();
 
-            if (startidx + count != VM_LyricViewModel.LyricReserveList.Count)
+            if (itemindex.Last() == VM_LyricViewModel.LyricReserveList.Count - 1)
+                return;
+
+            int i = itemindex.Count - 1;
+            int moveItem;
+            int desIndex;
+            while (i >= 0)
             {
-                ViewModel.LyricViewModel.LyricReserve item = VM_LyricViewModel.LyricReserveList[startidx + count];
-                VM_LyricViewModel.LyricReserveList.Remove(item);
-                VM_LyricViewModel.LyricReserveList.Insert(startidx, item);
+                moveItem = itemindex[i] + 1;
+                desIndex = itemindex[i];
+                for (i--; i >= 0 && desIndex == itemindex[i]; i--, desIndex--) ;
+
+                VM_LyricViewModel.LyricReserveList.Insert(desIndex, VM_LyricViewModel.LyricReserveList[moveItem]);
+                VM_LyricViewModel.LyricReserveList.RemoveAt(moveItem + 1);
             }
         }
 
         void ReserveDelete_Click(object sender, RoutedEventArgs e)
         {
-            int count = LyricReserveListBox.SelectedItems.Count;
-            if (count == 0)
+            if (LyricReserveListBox.SelectedItems.Count == 0)
                 return;
 
-            int startidx = LyricReserveListBox.Items.IndexOf(LyricReserveListBox.SelectedItems[0]);
+            List<int> itemindex = new List<int>(10);
             foreach (object item in LyricReserveListBox.SelectedItems)
-            {
-                if (startidx > LyricReserveListBox.Items.IndexOf(item))
-                    startidx = LyricReserveListBox.Items.IndexOf(item);
-            }
+                itemindex.Add(LyricReserveListBox.Items.IndexOf(item));
+            itemindex.Sort();
 
-            for (; count > 0; count--)
-                VM_LyricViewModel.LyricReserveList.Remove(VM_LyricViewModel.LyricReserveList[startidx]);
+            for (int i = itemindex.Count - 1; i >= 0; i--)
+                VM_LyricViewModel.LyricReserveList.Remove(VM_LyricViewModel.LyricReserveList[itemindex[i]]);
         }
 
         void ReserveAdd_Click(object sender, RoutedEventArgs e)
         {
-            int count = LyricListBox.SelectedItems.Count;
-            if (count == 0)
+            if (LyricListBox.SelectedItems.Count == 0)
                 return;
 
-            int startidx = LyricListBox.Items.IndexOf(LyricListBox.SelectedItems[0]);
+            List<int> itemindex = new List<int>(10);
             foreach (object item in LyricListBox.SelectedItems)
-            {
-                if (startidx > LyricListBox.Items.IndexOf(item))
-                    startidx = LyricListBox.Items.IndexOf(item);
-            }
+                itemindex.Add(LyricListBox.Items.IndexOf(item));
+            itemindex.Sort();
 
-            for (int i = 0; i < count; i++)
-                VM_LyricViewModel.LyricReserveList.Add(new ViewModel.LyricViewModel.LyricReserve( VM_LyricViewModel.LyricList[startidx + i]));
+            foreach (int i in itemindex)
+                VM_LyricViewModel.LyricReserveList.Add(new ViewModel.LyricViewModel.LyricReserve(VM_LyricViewModel.LyricList[i]));
         }
     }
 }
