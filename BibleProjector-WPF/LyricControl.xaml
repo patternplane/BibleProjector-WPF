@@ -191,7 +191,7 @@
                 <RowDefinition Height="242*"/>
                 <RowDefinition Height="12*"/>
             </Grid.RowDefinitions>
-            <Button Grid.Row="1" Content="출력" >
+            <Button Grid.Row="1" Content="출력" Click="LyricShowButton_Click">
             </Button>
         </Grid>
         <Grid Grid.Row="2">

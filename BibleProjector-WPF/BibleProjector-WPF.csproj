@@ -71,6 +71,7 @@
     <Compile Include="module\ProgramOption.cs" />
     <Compile Include="module\StringModifier.cs" />
     <Compile Include="module\StringKMP.cs" />
+    <Compile Include="ViewModel\SongControlViewModel.cs" />
     <Compile Include="ViewModel\ReadingControlViewModel.cs" />
     <Compile Include="ViewModel\BibleControlViewModel.cs" />
     <Compile Include="ViewModel\BibleCurrentSelectingData.cs" />

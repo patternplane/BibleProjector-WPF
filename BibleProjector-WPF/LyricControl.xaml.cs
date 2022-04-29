@@ -23,7 +23,11 @@ namespace BibleProjector_WPF
         // ViewModel
         ViewModel.LyricViewModel VM_LyricViewModel;
 
-        // ============================================= 세팅 ============================================= 
+        // 컨트롤
+        SongControl Ctrl_Song = null;
+
+        // ============================================= 세팅 및 종료 ============================================= 
+
 
         public LyricControl()
         {
@@ -31,31 +35,51 @@ namespace BibleProjector_WPF
             LyricControlMain.DataContext = VM_LyricViewModel = new ViewModel.LyricViewModel();
         }
 
+        ~LyricControl()
+        {
+            if (Ctrl_Song != null)
+                Ctrl_Song.ForceClose();
+        }
+
         // ============================================= 이벤트 ============================================= 
 
-        public void SearchButton_Click(object sender, RoutedEventArgs e)
+        void SearchButton_Click(object sender, RoutedEventArgs e)
         {
             VM_LyricViewModel.RunSearch();
         }
 
-        public void AddButton_Click(object sender, RoutedEventArgs e)
+        void AddButton_Click(object sender, RoutedEventArgs e)
         {
             VM_LyricViewModel.RunAdd();
         }
 
-        public void DeleteButton_Click(object sender, RoutedEventArgs e)
+        void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
             VM_LyricViewModel.RunDelete();
         }
 
-        public void TitleTextBox_LostFocus(object sender, RoutedEventArgs e)
+        void TitleTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             VM_LyricViewModel.RunCompleteModify();
         }
 
-        public void ContentTextBox_LostFocus(object sender, RoutedEventArgs e)
+        void ContentTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             VM_LyricViewModel.RunCompleteModify();
+        }
+
+        void LyricShowButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (VM_LyricViewModel.SelectedLyric != null)
+            {
+                if (Ctrl_Song == null) ;
+                //Ctrl_Song = new SongControl(VM_LyricViewModel.SelectedLyric);
+                else;
+                //Ctrl_Song.ShowBible(VM_LyricViewModel.SelectedLyric);
+                Ctrl_Song.Show();
+            }
+            else
+                MessageBox.Show("출력할 찬양곡을 선택해주세요!", "찬양곡 선택되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         // ============================================= 예약 특수처리 ============================================= 
