@@ -140,40 +140,40 @@ namespace BibleProjector_WPF.ViewModel
 
         void SlideShowRun()
         {
-            Powerpoint.Bible_SlideShowRun();
+            Powerpoint.Bible.SlideShowRun();
         }
 
         void setBibleSlide_VerseContent(string bibleContent,int verse = -1)
         {
             if (verse == -1)
-                Powerpoint.Bible_Change_VerseContent("", bibleContent);
+                Powerpoint.Bible.Change_VerseContent("", bibleContent);
             else
-                Powerpoint.Bible_Change_VerseContent(verse.ToString(), bibleContent);
+                Powerpoint.Bible.Change_VerseContent(verse.ToString(), bibleContent);
         }
 
         void setBibleSlide_BibleChapter(string bible, int chapter)
         {
-            Powerpoint.Bible_Change_BibleChapter(bible, chapter.ToString());
+            Powerpoint.Bible.Change_BibleChapter(bible, chapter.ToString());
         }
 
         void hideText()
         {
-            Powerpoint.Bible_HideText();
+            Powerpoint.Bible.HideText();
         }
 
         void ShowText()
         {
-            Powerpoint.Bible_ShowText();
+            Powerpoint.Bible.ShowText();
         }
 
         void offDisplay()
         {
-            Powerpoint.Bible_OffDisplay();
+            Powerpoint.Bible.OffDisplay();
         }
 
         void onDisplay()
         {
-            Powerpoint.Bible_OnDisplay();
+            Powerpoint.Bible.OnDisplay();
         }
 
 

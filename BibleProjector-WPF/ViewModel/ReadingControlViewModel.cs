@@ -101,37 +101,37 @@ namespace BibleProjector_WPF.ViewModel
 
         void SlideShowRun()
         {
-            Powerpoint.Reading_SlideShowRun();
+            Powerpoint.Reading.SlideShowRun();
         }
 
         void setReadingSlide_Content(string ReadingContent)
         {
-            Powerpoint.Reading_Change_Content(ReadingContent);
+            Powerpoint.Reading.Change_Content(ReadingContent);
         }
 
         void setReadingSlide_Title(string title)
         {
-            Powerpoint.Reading_Change_Title(title);
+            Powerpoint.Reading.Change_Title(title);
         }
 
         void hideText()
         {
-            Powerpoint.Reading_HideText();
+            Powerpoint.Reading.HideText();
         }
 
         void ShowText()
         {
-            Powerpoint.Reading_ShowText();
+            Powerpoint.Reading.ShowText();
         }
 
         void offDisplay()
         {
-            Powerpoint.Reading_OffDisplay();
+            Powerpoint.Reading.OffDisplay();
         }
 
         void onDisplay()
         {
-            Powerpoint.Reading_OnDisplay();
+            Powerpoint.Reading.OnDisplay();
         }
 
 
