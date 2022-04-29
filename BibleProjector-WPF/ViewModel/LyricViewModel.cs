@@ -356,7 +356,7 @@ namespace BibleProjector_WPF.ViewModel
                     return null;
                 }
 
-            return (new SingleLyric(title, content));
+            return (new SingleLyric(module.StringModifier.makeCorrectNewline(title), module.StringModifier.makeCorrectNewline(content)));
         }
 
         bool deleteLyric(SingleLyric item)
