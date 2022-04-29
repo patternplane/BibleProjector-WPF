@@ -50,6 +50,49 @@ namespace BibleProjector_WPF.module
         }
 
         /// <summary>
+        /// 문자열을 페이지별 줄 수에 맞춰 재단합니다.
+        /// </summary>
+        /// <param name="origin">원본 문자열</param>
+        /// <param name="linePerPage">페이지별 줄 수</param>
+        /// <returns></returns>
+        static public string[] makePageWithLines(string origin, int linePerPage)
+        {
+            List<string> pages = new List<string>(10);
+
+            int startIndex = 0;
+            int currentLine = 0;
+            int i = 0;
+            while (true)
+            {
+                if (i == origin.Length)
+                {
+                    if (startIndex != i)
+                        pages.Add(origin.Substring(startIndex, i - startIndex));
+                    else if (pages.Count == 0)
+                        pages.Add("");
+                    break;
+                }
+                else if (origin[i] == '\r')
+                {
+                    currentLine++;
+                    if (currentLine >= linePerPage)
+                    {
+                        pages.Add(origin.Substring(startIndex, i - startIndex));
+                        currentLine = 0;
+                        i += 2;
+                        startIndex = i;
+                    }
+                    else
+                        i += 2;
+                }
+                else
+                    i++;
+            }
+
+            return pages.ToArray();
+        }
+
+        /// <summary>
         /// 문자열을 재단합니다.<br/>
         /// 줄별 문자의 갯수(단어 한 덩어리를 굳이 자르지는 않습니다)와 페이지별 줄 수를 입력받습니다.
         /// </summary>
