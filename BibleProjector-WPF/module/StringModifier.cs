@@ -137,6 +137,9 @@ namespace BibleProjector_WPF.module
             if (page.Length > 0)
                 pages.Add(page.ToString());
 
+            if (pages.Count == 0)
+                pages.Add("");
+
             return pages.ToArray();
         }
     }
