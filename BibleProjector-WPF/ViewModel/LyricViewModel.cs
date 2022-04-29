@@ -14,6 +14,7 @@ namespace BibleProjector_WPF.ViewModel
     {
         // 파일 입출력시 구분자
         private const string SEPARATOR = "∂";
+        private const string RESERVER = "∇";
         // 검색창 기본 텍스트
         private const string DEFAUL_SEARCH_TEXT = "(가사 또는 제목으로 검색)";
 
@@ -21,15 +22,14 @@ namespace BibleProjector_WPF.ViewModel
 
         public LyricViewModel()
         {
-            LyricList = getLyricData();
-
+            getData();
             /*
             if (LyricList == null)
                 MessageBox.Show("가사 불러오기 실패!\n프로그램을 종료 후 다시 시작해주세요.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             */
         }
 
-        BindingList<SingleLyric> getLyricData()
+        void getData()
         {
             List<SingleLyric> PrimitiveLyricList = new List<SingleLyric>();
 
@@ -44,9 +44,61 @@ namespace BibleProjector_WPF.ViewModel
                     PrimitiveLyricList.Add(new SingleLyric(line[0], line[1]));
             }
 
+            List<LyricReserve> PrimitiveReserveList = getReserveData();
+            foreach (LyricReserve r in PrimitiveReserveList)
+                r.lyric = PrimitiveLyricList[r.lyricNumber];
+
             PrimitiveLyricList.Sort(delegate (SingleLyric a, SingleLyric b) { return a.title.CompareTo(b.title); });
 
-            return (new BindingList<SingleLyric>(PrimitiveLyricList));
+            LyricList = (new BindingList<SingleLyric>(PrimitiveLyricList));
+            LyricReserveList = (new BindingList<LyricReserve>(PrimitiveReserveList));
+        }
+
+        List<LyricReserve> getReserveData()
+        {
+            List<LyricReserve> PrimitiveReserveList = new List<LyricReserve>();
+
+            string rawData = module.ProgramData.getLyricReserveData().TrimEnd();
+
+            LyricReserve reserveData;
+            foreach (string data in rawData.Split(new string[] { SEPARATOR }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                reserveData = new LyricReserve(null);
+                reserveData.lyricNumber = int.Parse(data);
+                PrimitiveReserveList.Add(reserveData);
+            }
+
+            return PrimitiveReserveList;
+        }
+
+        // ============================================ 종료 및 저장 ==============================================
+
+        public string getSaveData_Lyric()
+        {
+            StringBuilder str = new StringBuilder(50).Clear();
+
+            foreach (SingleLyric lyric in LyricList)
+            {
+                str.AppendLine(lyric.title);
+                str.Append(lyric.content);
+                str.AppendLine(SEPARATOR);
+            }
+
+            return str.ToString();
+        }
+
+        public string getSaveData_Reserve()
+        {
+
+            StringBuilder str = new StringBuilder(50).Clear();
+
+            foreach (LyricReserve r in LyricReserveList)
+            {
+                str.Append(LyricList.IndexOf(r.lyric));
+                str.Append(SEPARATOR);
+            }
+
+            return str.ToString();
         }
 
         // ============================================ 속성 ==============================================
@@ -61,7 +113,7 @@ namespace BibleProjector_WPF.ViewModel
 
         // 가사 선택값
         private SingleLyric currentLyric_in;
-        public SingleLyric currentLyric { get { return currentLyric_in; } set { currentLyric_in = value;
+        public SingleLyric currentLyric { get { return currentLyric_in; } set { currentLyric_in = value; SelectedLyric = currentLyric_in;
                 isChangingLyric_title = true;
                 isChangingLyric_content = true;
                 if (currentLyric_in == null)
@@ -176,6 +228,49 @@ namespace BibleProjector_WPF.ViewModel
 
         // 곡 추가 가사
         public string AddLyricContent { get; set; } = "";
+
+        // 예약 단위
+        public class LyricReserve : INotifyPropertyChanged
+        {
+            static int ReserveGenCount = 0;
+            public LyricReserve(SingleLyric lyric)
+            {
+                this.personalNumber = ReserveGenCount++;
+                this.lyric = lyric;
+            }
+            public int personalNumber;
+            public int lyricNumber;
+            private SingleLyric lyric_in;
+            public SingleLyric lyric { get { return lyric_in; }  set { lyric_in = value; NotifyPropertyChanged(); } }
+
+            public event PropertyChangedEventHandler PropertyChanged;
+            private void NotifyPropertyChanged(string propertyName = "")
+            {
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                }
+            }
+        }
+        // 예약 리스트
+        public BindingList<LyricReserve> LyricReserveList { get; set; }
+        // 현재 (출력)선택값
+        private LyricReserve LyricReserveSelection_in;
+        public LyricReserve LyricReserveSelection { get { return LyricReserveSelection_in; } set { LyricReserveSelection_in = value;
+                if (LyricReserveSelection_in != null)
+                    SelectedLyric = LyricReserveSelection_in.lyric;
+                else
+                    SelectedLyric = null;
+            } }
+
+        // 출력 곡 선택값
+        private SingleLyric SelectedLyric_in;
+        public SingleLyric SelectedLyric { get { return SelectedLyric_in; } set
+            {
+                SelectedLyric_in = value;
+                NotifyPropertyChanged();
+            }
+        }
 
         // ============================================ 이벤트에 쓰일 함수 ==============================================
 
@@ -393,19 +488,6 @@ namespace BibleProjector_WPF.ViewModel
             }
         }
 
-        public string getSaveData()
-        {
-            StringBuilder str = new StringBuilder(50).Clear();
-
-            foreach (SingleLyric lyric in LyricList)
-            {
-                str.AppendLine(lyric.title);
-                str.Append(lyric.content);
-                str.AppendLine(SEPARATOR);
-            }
-
-            return str.ToString();
-        }
 
 
         public event PropertyChangedEventHandler PropertyChanged;

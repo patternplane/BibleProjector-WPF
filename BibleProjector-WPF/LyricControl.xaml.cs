@@ -57,5 +57,81 @@ namespace BibleProjector_WPF
         {
             VM_LyricViewModel.RunCompleteModify();
         }
+
+        // ============================================= 예약 특수처리 ============================================= 
+
+        void ReserveUp_Click(object sender, RoutedEventArgs e)
+        {
+            int count = LyricReserveListBox.SelectedItems.Count;
+            if (count == 0)
+                return;
+
+            int startidx = LyricReserveListBox.Items.IndexOf(LyricReserveListBox.SelectedItems[0]);
+            foreach (object item in LyricReserveListBox.SelectedItems)
+            {
+                if (startidx > LyricReserveListBox.Items.IndexOf(item))
+                    startidx = LyricReserveListBox.Items.IndexOf(item);
+            }
+
+            if (startidx != 0)
+            {
+                VM_LyricViewModel.LyricReserveList.Insert(startidx + count, VM_LyricViewModel.LyricReserveList[startidx - 1]);
+                VM_LyricViewModel.LyricReserveList.Remove(VM_LyricViewModel.LyricReserveList[startidx - 1]);
+            }
+        }
+        void ReserveDown_Click(object sender, RoutedEventArgs e)
+        {
+            int count = LyricReserveListBox.SelectedItems.Count;
+            if (count == 0)
+                return;
+
+            int startidx = LyricReserveListBox.Items.IndexOf(LyricReserveListBox.SelectedItems[0]);
+            foreach (object item in LyricReserveListBox.SelectedItems)
+            {
+                if (startidx > LyricReserveListBox.Items.IndexOf(item))
+                    startidx = LyricReserveListBox.Items.IndexOf(item);
+            }
+
+            if (startidx + count != VM_LyricViewModel.LyricReserveList.Count)
+            {
+                ViewModel.LyricViewModel.LyricReserve item = VM_LyricViewModel.LyricReserveList[startidx + count];
+                VM_LyricViewModel.LyricReserveList.Remove(item);
+                VM_LyricViewModel.LyricReserveList.Insert(startidx, item);
+            }
+        }
+
+        void ReserveDelete_Click(object sender, RoutedEventArgs e)
+        {
+            int count = LyricReserveListBox.SelectedItems.Count;
+            if (count == 0)
+                return;
+
+            int startidx = LyricReserveListBox.Items.IndexOf(LyricReserveListBox.SelectedItems[0]);
+            foreach (object item in LyricReserveListBox.SelectedItems)
+            {
+                if (startidx > LyricReserveListBox.Items.IndexOf(item))
+                    startidx = LyricReserveListBox.Items.IndexOf(item);
+            }
+
+            for (; count > 0; count--)
+                VM_LyricViewModel.LyricReserveList.Remove(VM_LyricViewModel.LyricReserveList[startidx]);
+        }
+
+        void ReserveAdd_Click(object sender, RoutedEventArgs e)
+        {
+            int count = LyricListBox.SelectedItems.Count;
+            if (count == 0)
+                return;
+
+            int startidx = LyricListBox.Items.IndexOf(LyricListBox.SelectedItems[0]);
+            foreach (object item in LyricListBox.SelectedItems)
+            {
+                if (startidx > LyricListBox.Items.IndexOf(item))
+                    startidx = LyricListBox.Items.IndexOf(item);
+            }
+
+            for (int i = 0; i < count; i++)
+                VM_LyricViewModel.LyricReserveList.Add(new ViewModel.LyricViewModel.LyricReserve( VM_LyricViewModel.LyricList[startidx + i]));
+        }
     }
 }

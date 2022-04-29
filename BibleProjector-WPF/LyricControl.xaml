@@ -139,7 +139,8 @@
 
                         <Label Grid.Row="1" Grid.Column="0" Content="곡 목록" VerticalAlignment="Center" Height="26" Margin="0,64,0,63" ></Label>
                         <ListBox Grid.Row="1" Grid.Column="1"
-                             ItemsSource="{Binding LyricList}" DisplayMemberPath="title" SelectionMode="Extended"></ListBox>
+                             ItemsSource="{Binding LyricList}" DisplayMemberPath="title" SelectionMode="Extended"
+                                 x:Name="LyricListBox"></ListBox>
                         <Grid Grid.Row="2" Grid.Column="1">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="6*"/>
@@ -151,11 +152,15 @@
                                 <ColumnDefinition Width="79*"/>
                                 <ColumnDefinition Width="61*"/>
                             </Grid.ColumnDefinitions>
-                            <Button Grid.Row="1" Grid.Column="1" Content="▼"></Button>
+                            <Button Grid.Row="1" Grid.Column="1" Content="▼" Click="ReserveAdd_Click"></Button>
                         </Grid>
 
                         <Label Grid.Row="3" Grid.Column="0" Content="예약된&#10;목록" VerticalAlignment="Center" Height="42" Margin="0,78"  ></Label>
-                        <ListBox Grid.Row="3" Grid.Column="1" SelectionMode="Extended"></ListBox>
+                        <ListBox Grid.Row="3" Grid.Column="1" SelectionMode="Extended"
+                                 ItemsSource="{Binding LyricReserveList}"
+                                 DisplayMemberPath="lyric.title"
+                                 SelectedItem="{Binding LyricReserveSelection}"
+                                 x:Name="LyricReserveListBox"></ListBox>
                         <Grid Grid.Row="4" Grid.Column="1">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="61*"/>
@@ -171,10 +176,10 @@
                                     <RowDefinition/>
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
-                                <Button Content="▲"></Button>
-                                <Button Grid.Row="1" Content="▼"></Button>
+                                <Button Content="▲" Click="ReserveUp_Click"></Button>
+                                <Button Grid.Row="1" Content="▼" Click="ReserveDown_Click"></Button>
                             </Grid>
-                            <Button Grid.Column="2" Content="항목 삭제"></Button>
+                            <Button Grid.Column="2" Content="항목 삭제" Click="ReserveDelete_Click"></Button>
                         </Grid>
                     </Grid>
                 </TabItem>
@@ -198,7 +203,7 @@
             <Label Grid.Column="0" >
                 현재 곡 :
             </Label>
-            <TextBox Grid.Column="1" IsReadOnly="True" Text="{Binding currentLyric.title}"></TextBox>
+            <TextBox Grid.Column="1" IsReadOnly="True" Text="{Binding SelectedLyric.title}"></TextBox>
         </Grid>
     </Grid>
 </UserControl>
