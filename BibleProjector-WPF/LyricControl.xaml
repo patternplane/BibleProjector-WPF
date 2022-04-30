@@ -187,11 +187,17 @@
         </Grid>
         <Grid Grid.Row="0" Grid.Column="2" >
             <Grid.RowDefinitions>
-                <RowDefinition Height="243*"/>
-                <RowDefinition Height="242*"/>
-                <RowDefinition Height="12*"/>
+                <RowDefinition Height="103*"/>
+                <RowDefinition Height="41*"/>
+                <RowDefinition Height="55*"/>
+                <RowDefinition Height="24*"/>
+                <RowDefinition Height="222*"/>
+                <RowDefinition Height="11*"/>
             </Grid.RowDefinitions>
-            <Button Grid.Row="1" Content="출력" Click="LyricShowButton_Click">
+            <Label Grid.Row="1" Content="슬라이드별&#10;줄 수 :"></Label>
+            <TextBox Grid.Row="2" Text="{Binding LinePerSlideText}"
+                     KeyDown="LinePerSlideTextBox_KeyDown"></TextBox>
+            <Button Grid.Row="4" Content="출력" Click="LyricShowButton_Click">
             </Button>
         </Grid>
         <Grid Grid.Row="2">

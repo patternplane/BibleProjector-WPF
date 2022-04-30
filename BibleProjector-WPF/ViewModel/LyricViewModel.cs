@@ -272,6 +272,15 @@ namespace BibleProjector_WPF.ViewModel
             }
         }
 
+        // 슬라이드별 줄 수 
+        private string LinePerSlideText_in = "1";
+        public int LinePerSlide { get; private set; } = 1;
+        public string LinePerSlideText { get { return LinePerSlideText_in; } set { LinePerSlideText_in = value;
+                LinePerSlideText_in = LinePerSlideText_in.Replace(" ","");
+                LinePerSlide = int.Parse(LinePerSlideText_in);
+                NotifyPropertyChanged();
+            } }
+
         // ============================================ 이벤트에 쓰일 함수 ==============================================
 
         public void RunSearch()
