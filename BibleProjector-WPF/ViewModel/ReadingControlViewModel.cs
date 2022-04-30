@@ -136,12 +136,14 @@ namespace BibleProjector_WPF.ViewModel
 
         void offDisplay()
         {
-            Powerpoint.Reading.OffDisplay();
+            Powerpoint.Reading.SlideShowHide();
+            //Powerpoint.Reading.OffDisplay();
         }
 
         void onDisplay()
         {
-            Powerpoint.Reading.OnDisplay();
+            Powerpoint.Reading.SlideShowRun();
+            //Powerpoint.Reading.OnDisplay();
         }
 
 

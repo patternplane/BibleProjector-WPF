@@ -140,12 +140,14 @@ namespace BibleProjector_WPF.ViewModel
 
         void offDisplay()
         {
-            Powerpoint.Song.OffDisplay(currentPPTName);
+            Powerpoint.Song.SlideShowHide(currentPPTName);
+            //Powerpoint.Song.OffDisplay(currentPPTName);
         }
 
         void onDisplay()
         {
-            Powerpoint.Song.OnDisplay(currentPPTName);
+            Powerpoint.Song.SlideShowRun(currentPPTName);
+            //Powerpoint.Song.OnDisplay(currentPPTName);
         }
 
 
