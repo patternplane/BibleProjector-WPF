@@ -28,16 +28,16 @@ namespace BibleProjector_WPF
         public const string TEMP_SONGPPT_PATH = TEMP_PPT_PATH;
         public const string TEMP_DIRECTORY = ".\\temp\\";
 
-        static public void Initialize()
+        static public void Initialize(string BibleFramePath, string ReadingFramePath, string[] SongFramePaths)
         {
             app = new Application();
 
             if (System.IO.Directory.Exists(TEMP_DIRECTORY))
                 System.IO.Directory.Delete(TEMP_DIRECTORY, true);
             System.IO.Directory.CreateDirectory(TEMP_DIRECTORY);
-            Bible.setPresentation(TEMP_PPT_PATH);
-            Reading.setPresentation(TEMP_PPT_PATH);
-            Song.setPresentation(new string[] { TEMP_SONGPPT_PATH });
+            Bible.setPresentation(BibleFramePath);
+            Reading.setPresentation(ReadingFramePath);
+            Song.setPresentation(SongFramePaths);
         }
 
         static public void FinallProcess()
