@@ -15,7 +15,7 @@ namespace BibleProjector_WPF.ViewModel
         public SongControlViewModel(string[][][] songData, string path)
         {
             // 반드시 songData는 모든 슬라이드마다 0. 제목, 1. 가사 일 것!
-            // songData 규격 : [커맨드(0)냐 내용(1)이냐][정보 종류][슬라이드 번호]
+            // songData 규격 : [슬라이드 번호][정보 종류][커맨드(0)냐 내용(1)이냐]
             showSong( songData,  path);
         }
 
@@ -28,10 +28,12 @@ namespace BibleProjector_WPF.ViewModel
 
         private void newSongSetting()
         {
-            setCurrentSongInfo(songData[1][0][0]);
+            setCurrentSongInfo(songData[0][0][1]);
 
             SongPages = null;
-            SongPages = new BindingList<string>(songData[1][1]);
+            SongPages = new BindingList<string>();
+            foreach (string[][] data in songData)
+                SongPages.Add(data[1][1]);
             CurrentPageIndex = 0;
 
             SetSongData(songData);
