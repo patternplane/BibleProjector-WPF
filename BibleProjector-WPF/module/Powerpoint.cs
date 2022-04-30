@@ -26,7 +26,7 @@ namespace BibleProjector_WPF
 
         public const string TEMP_PPT_PATH = @"C:\Users\Sun\Desktop\test.pptx";
         public const string TEMP_SONGPPT_PATH = TEMP_PPT_PATH;
-        public const string TEMP_DIRECTORY = ".\\temp\\";
+        public const string TEMP_DIRECTORY = ".\\programData\\temp\\";
 
         static public void Initialize(string BibleFramePath, string ReadingFramePath, string[] SongFramePaths)
         {
