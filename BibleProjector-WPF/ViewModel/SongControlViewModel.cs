@@ -26,6 +26,11 @@ namespace BibleProjector_WPF.ViewModel
             newSongSetting();
         }
 
+        public void hideSong()
+        {
+            SlideShowHide();
+        }
+
         private void newSongSetting()
         {
             setCurrentSongInfo(songData[0][0][1]);
@@ -111,6 +116,11 @@ namespace BibleProjector_WPF.ViewModel
         void SlideShowRun()
         {
             Powerpoint.Song.SlideShowRun(currentPPTPath);
+        }
+
+        void SlideShowHide()
+        {
+            Powerpoint.Song.SlideShowHide(currentPPTPath);
         }
 
         void ChangePage(int page)

@@ -80,6 +80,7 @@ namespace BibleProjector_WPF
             else
             {
                 this.Hide();
+                VM_BibleControl.hideBible();
                 e.Cancel = true;
             }
             base.OnClosing(e);

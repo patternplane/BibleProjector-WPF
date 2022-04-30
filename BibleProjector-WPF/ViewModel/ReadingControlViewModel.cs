@@ -23,6 +23,11 @@ namespace BibleProjector_WPF.ViewModel
             newReadingSetting();
         }
 
+        public void hideReading()
+        {
+            SlideShowHide();
+        }
+
         private void newReadingSetting()
         {
             setCurrentReadingInfo(ReadingNumber);
@@ -102,6 +107,11 @@ namespace BibleProjector_WPF.ViewModel
         void SlideShowRun()
         {
             Powerpoint.Reading.SlideShowRun();
+        }
+
+        void SlideShowHide()
+        {
+            Powerpoint.Reading.SlideShowHide();
         }
 
         void setReadingSlide_Content(string ReadingContent)

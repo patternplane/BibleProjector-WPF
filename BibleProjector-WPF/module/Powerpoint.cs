@@ -14,6 +14,12 @@ namespace BibleProjector_WPF
 {
     partial class Powerpoint
     {
+
+        [System.Runtime.InteropServices.DllImport("user32")]
+        static extern int ShowWindow(int hwnd, int nCmdShow);
+        const int SW_HIDE = 0;
+        const int SW_SHOW = 5;
+
         static Application app;
 
         // ============================================ 프로그램 시작 / 종료 세팅 ========================================================
@@ -98,6 +104,13 @@ namespace BibleProjector_WPF
                     ppt.SlideShowSettings.ShowType = PpSlideShowType.ppShowTypeKiosk;
                     SlideWindow = ppt.SlideShowSettings.Run();
                 }
+                else
+                    ShowWindow(SlideWindow.HWND, SW_SHOW);
+            }
+
+            static public void SlideShowHide()
+            {
+                ShowWindow(SlideWindow.HWND, SW_HIDE);
             }
 
             static public void Change_VerseContent(string verse, string content)
@@ -205,6 +218,13 @@ namespace BibleProjector_WPF
                     ppt.SlideShowSettings.ShowType = PpSlideShowType.ppShowTypeKiosk;
                     SlideWindow = ppt.SlideShowSettings.Run();
                 }
+                else
+                    ShowWindow(SlideWindow.HWND, SW_SHOW);
+            }
+
+            static public void SlideShowHide()
+            {
+                ShowWindow(SlideWindow.HWND, SW_HIDE);
             }
 
             static public void Change_Content(string content)
@@ -313,6 +333,15 @@ namespace BibleProjector_WPF
                 if ((index = pptFinder(path)) != -1)
                 {
                     ppt[index].SlideShowRun();
+                }
+            }
+
+            static public void SlideShowHide(string path)
+            {
+                int index;
+                if ((index = pptFinder(path)) != -1)
+                {
+                    ppt[index].SlideShowHide();
                 }
             }
 
@@ -457,6 +486,13 @@ namespace BibleProjector_WPF
                     ppt.SlideShowSettings.ShowType = PpSlideShowType.ppShowTypeKiosk;
                     SlideWindow = ppt.SlideShowSettings.Run();
                 }
+                else
+                    ShowWindow(SlideWindow.HWND, SW_SHOW);
+            }
+
+            public void SlideShowHide()
+            {
+                ShowWindow(SlideWindow.HWND, SW_HIDE);
             }
 
             public void ChangeApply(int Page)

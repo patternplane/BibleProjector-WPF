@@ -23,6 +23,11 @@ namespace BibleProjector_WPF.ViewModel
             newBibleSetting();
         }
 
+        public void hideBible()
+        {
+            SlideShowHide();
+        }
+
         private void showBible_next()
         {
             Kjjeul = Database.getBibleIndex_Next(Kjjeul);
@@ -141,6 +146,11 @@ namespace BibleProjector_WPF.ViewModel
         void SlideShowRun()
         {
             Powerpoint.Bible.SlideShowRun();
+        }
+
+        void SlideShowHide()
+        {
+            Powerpoint.Bible.SlideShowHide();
         }
 
         void setBibleSlide_VerseContent(string bibleContent,int verse = -1)

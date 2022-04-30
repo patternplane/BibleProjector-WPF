@@ -81,6 +81,7 @@ namespace BibleProjector_WPF
             else
             {
                 this.Hide();
+                VM_ReadingControl.hideReading();
                 e.Cancel = true;
             }
             base.OnClosing(e);
