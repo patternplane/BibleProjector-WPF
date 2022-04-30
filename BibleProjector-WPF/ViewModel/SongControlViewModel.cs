@@ -29,6 +29,7 @@ namespace BibleProjector_WPF.ViewModel
         private void newSongSetting()
         {
             setCurrentSongInfo(songData[0][0][1]);
+            SetSongData(songData);
 
             SongPages = null;
             SongPages = new BindingList<string>();
@@ -36,7 +37,6 @@ namespace BibleProjector_WPF.ViewModel
                 SongPages.Add(data[1][1]);
             CurrentPageIndex = 0;
 
-            SetSongData(songData);
             SlideShowRun();
 
             isDisplayShow = true;

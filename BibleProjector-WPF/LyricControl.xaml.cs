@@ -24,21 +24,14 @@ namespace BibleProjector_WPF
         ViewModel.LyricViewModel VM_LyricViewModel;
 
         // 컨트롤
-        SongControl Ctrl_Song = null;
+        static public SongControl Ctrl_Song = null;
 
         // ============================================= 세팅 및 종료 ============================================= 
-
 
         public LyricControl()
         {
             InitializeComponent();
             LyricControlMain.DataContext = VM_LyricViewModel = new ViewModel.LyricViewModel();
-        }
-
-        ~LyricControl()
-        {
-            if (Ctrl_Song != null)
-                Ctrl_Song.ForceClose();
         }
 
         // ============================================= 이벤트 ============================================= 
@@ -68,18 +61,49 @@ namespace BibleProjector_WPF
             VM_LyricViewModel.RunCompleteModify();
         }
 
+        string[][][] makeSongData(ViewModel.LyricViewModel.SingleLyric lyric, int linePerPage)
+        {
+            string[] pages = module.StringModifier.makePageWithLines(VM_LyricViewModel.SelectedLyric.content, linePerPage);
+            string[][][] songData = new string[pages.Length][][];
+
+            for(int i = 0; i < pages.Length; i++)
+            {
+                songData[i] = new string[2][];
+
+                songData[i][0] = new string[2];
+                songData[i][0][0] = "/제목";
+                songData[i][0][1] = lyric.title;
+
+                songData[i][1] = new string[2];
+                songData[i][1][0] = "/본문";
+                songData[i][1][1] = pages[i];
+            }
+
+            return songData;
+        }
+
         void LyricShowButton_Click(object sender, RoutedEventArgs e)
         {
             if (VM_LyricViewModel.SelectedLyric != null)
             {
-                if (Ctrl_Song == null) ;
-                //Ctrl_Song = new SongControl(VM_LyricViewModel.SelectedLyric);
-                else;
-                //Ctrl_Song.ShowBible(VM_LyricViewModel.SelectedLyric);
+                if (Ctrl_Song == null)
+                    Ctrl_Song = new SongControl(makeSongData(VM_LyricViewModel.SelectedLyric, VM_LyricViewModel.LinePerSlide),Powerpoint.TEMP_SONGPPT_PATH);
+                else
+                    Ctrl_Song.ShowSong(makeSongData(VM_LyricViewModel.SelectedLyric, VM_LyricViewModel.LinePerSlide), Powerpoint.TEMP_SONGPPT_PATH);
                 Ctrl_Song.Show();
             }
             else
                 MessageBox.Show("출력할 찬양곡을 선택해주세요!", "찬양곡 선택되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        private void LinePerSlideTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if ((e.Key >= Key.D0 && e.Key <= Key.D9) || (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9) || e.Key == Key.Back || e.Key == Key.Delete)
+            {
+                e.Handled = false;
+            }
+            else
+                e.Handled = true;
         }
 
         // ============================================= 예약 특수처리 ============================================= 

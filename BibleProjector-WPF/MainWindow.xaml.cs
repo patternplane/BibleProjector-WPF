@@ -102,6 +102,9 @@ namespace BibleProjector_WPF
                 Ctrl_Bible.ForceClose();
             if (Ctrl_Reading != null)
                 Ctrl_Reading.ForceClose();
+            if (LyricControl.Ctrl_Song != null)
+                LyricControl.Ctrl_Song.ForceClose();
+            
             base.OnClosing(e);
         }
 
