@@ -68,7 +68,7 @@ namespace BibleProjector_WPF
 
             static public void setPresentation(string path)
             {
-                // temp폴더에 ppt파일을 복사하여 그걸로 쓰기
+                System.IO.File.Copy(path, "\\temp\\" + System.IO.Path.GetFileName(path), false);
 
                 Format = new List<string>(3);
                 TextShapes = new List<Shape>(3);
@@ -184,7 +184,7 @@ namespace BibleProjector_WPF
 
             static public void setPresentation(string path)
             {
-                // temp폴더에 ppt파일을 복사하여 그걸로 쓰기
+                System.IO.File.Copy(path, "\\temp\\" + System.IO.Path.GetFileName(path), false);
 
                 Format = new List<string>(3);
                 TextShapes = new List<Shape>(3);
@@ -289,7 +289,6 @@ namespace BibleProjector_WPF
             static public void setPresentation(string[] paths)
             {
                 ppt = new List<SongFormatPPT>();
-                // temp폴더에 ppt파일을 복사하여 그걸로 쓰기
                 foreach (string path in paths)
                     ppt.Add(new SongFormatPPT(path));
             }
@@ -416,7 +415,8 @@ namespace BibleProjector_WPF
 
             public void setPresentation(string path)
             {
-                // temp폴더에 ppt파일을 복사하여 그걸로 쓰기
+                System.IO.File.Copy(path, "\\temp\\" + System.IO.Path.GetFileName(path), false);
+
                 this.path = path;
 
                 ppt = app.Presentations.Open(path, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
