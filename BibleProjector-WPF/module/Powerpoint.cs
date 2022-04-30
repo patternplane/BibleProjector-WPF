@@ -18,13 +18,16 @@ namespace BibleProjector_WPF
 
         // ============================================ 프로그램 시작 / 종료 세팅 ========================================================
 
+        public const string TEMP_PPT_PATH = @"C:\Users\Sun\Desktop\test.pptx";
+        public const string TEMP_SONGPPT_PATH = TEMP_PPT_PATH;
+
         static public void Initialize()
         {
             app = new Application();
 
-            Bible.setPresentation(@"C:\Users\Sun\Desktop\test.pptx");
-            Reading.setPresentation(@"C:\Users\Sun\Desktop\test.pptx");
-            Song.setPresentation();
+            Bible.setPresentation(TEMP_PPT_PATH);
+            Reading.setPresentation(TEMP_PPT_PATH);
+            Song.setPresentation(new string[] { TEMP_SONGPPT_PATH });
         }
 
         static public void FinallProcess()
