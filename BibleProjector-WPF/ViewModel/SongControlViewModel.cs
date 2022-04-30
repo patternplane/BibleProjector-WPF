@@ -12,16 +12,16 @@ namespace BibleProjector_WPF.ViewModel
     {
         // ================================================ 세팅 ================================================
 
-        public SongControlViewModel(string[][][] songData, string path)
+        public SongControlViewModel(string[][][] songData, string FrameFileName)
         {
             // 반드시 songData는 모든 슬라이드마다 0. 제목, 1. 가사 일 것!
             // songData 규격 : [슬라이드 번호][정보 종류][커맨드(0)냐 내용(1)이냐]
-            showSong( songData,  path);
+            showSong( songData, FrameFileName);
         }
 
-        public void showSong(string[][][] songData, string path)
+        public void showSong(string[][][] songData, string FrameFileName)
         {
-            this.currentPPTPath = path;
+            this.currentPPTName = FrameFileName;
             this.songData = songData;
             newSongSetting();
         }
@@ -49,7 +49,7 @@ namespace BibleProjector_WPF.ViewModel
         }
 
         string[][][] songData;
-        string currentPPTPath;
+        string currentPPTName;
 
         // ================================================ 속성 ================================================
 
@@ -110,42 +110,42 @@ namespace BibleProjector_WPF.ViewModel
 
         void SetSongData(string[][][] songData)
         {
-            Powerpoint.Song.SetSongData(currentPPTPath,songData);
+            Powerpoint.Song.SetSongData(currentPPTName,songData);
         }
 
         void SlideShowRun()
         {
-            Powerpoint.Song.SlideShowRun(currentPPTPath);
+            Powerpoint.Song.SlideShowRun(currentPPTName);
         }
 
         void SlideShowHide()
         {
-            Powerpoint.Song.SlideShowHide(currentPPTPath);
+            Powerpoint.Song.SlideShowHide(currentPPTName);
         }
 
         void ChangePage(int page)
         {
-            Powerpoint.Song.ChangePage(currentPPTPath, page);
+            Powerpoint.Song.ChangePage(currentPPTName, page);
         }
 
         void hideText()
         {
-            Powerpoint.Song.HideText(currentPPTPath);
+            Powerpoint.Song.HideText(currentPPTName);
         }
 
         void ShowText()
         {
-            Powerpoint.Song.ShowText(currentPPTPath);
+            Powerpoint.Song.ShowText(currentPPTName);
         }
 
         void offDisplay()
         {
-            Powerpoint.Song.OffDisplay(currentPPTPath);
+            Powerpoint.Song.OffDisplay(currentPPTName);
         }
 
         void onDisplay()
         {
-            Powerpoint.Song.OnDisplay(currentPPTPath);
+            Powerpoint.Song.OnDisplay(currentPPTName);
         }
 
 

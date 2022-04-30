@@ -26,11 +26,15 @@ namespace BibleProjector_WPF
 
         public const string TEMP_PPT_PATH = @"C:\Users\Sun\Desktop\test.pptx";
         public const string TEMP_SONGPPT_PATH = TEMP_PPT_PATH;
+        public const string TEMP_DIRECTORY = ".\\temp\\";
 
         static public void Initialize()
         {
             app = new Application();
 
+            if (System.IO.Directory.Exists(TEMP_DIRECTORY))
+                System.IO.Directory.Delete(TEMP_DIRECTORY, true);
+            System.IO.Directory.CreateDirectory(TEMP_DIRECTORY);
             Bible.setPresentation(TEMP_PPT_PATH);
             Reading.setPresentation(TEMP_PPT_PATH);
             Song.setPresentation(new string[] { TEMP_SONGPPT_PATH });
@@ -68,7 +72,10 @@ namespace BibleProjector_WPF
 
             static public void setPresentation(string path)
             {
-                System.IO.File.Copy(path, "\\temp\\" + System.IO.Path.GetFileName(path), false);
+                string tempPath = TEMP_DIRECTORY + System.IO.Path.GetFileName(path);
+                if (!System.IO.File.Exists(tempPath))
+                    System.IO.File.Copy(path, tempPath, false);
+                path = System.IO.Path.GetFullPath(tempPath);
 
                 Format = new List<string>(3);
                 TextShapes = new List<Shape>(3);
@@ -184,7 +191,10 @@ namespace BibleProjector_WPF
 
             static public void setPresentation(string path)
             {
-                System.IO.File.Copy(path, "\\temp\\" + System.IO.Path.GetFileName(path), false);
+                string tempPath = TEMP_DIRECTORY + System.IO.Path.GetFileName(path);
+                if (!System.IO.File.Exists(tempPath))
+                    System.IO.File.Copy(path, tempPath, false);
+                path = System.IO.Path.GetFullPath(tempPath);
 
                 Format = new List<string>(3);
                 TextShapes = new List<Shape>(3);
@@ -295,9 +305,12 @@ namespace BibleProjector_WPF
 
             static public void refreshPresentation(string path)
             {
-                for(int i = 0; i < ppt.Count; i++)
-                    if (ppt[i].path.CompareTo(path) == 0)
+                for (int i = 0; i < ppt.Count; i++)
+                    if (ppt[i].FramePPTName.CompareTo(System.IO.Path.GetFileName(path)) == 0)
+                    {
                         ppt[i].refreshPresentation(path);
+                        return;
+                    }
             }
 
             static public void close()
@@ -308,82 +321,82 @@ namespace BibleProjector_WPF
 
             // ============================================ 메소드 ============================================ 
 
-            static private int pptFinder(string path)
+            static private int pptFinder(string FramePPTName)
             {
                 for (int i = 0; i < ppt.Count; i++)
-                    if (ppt[i].path.CompareTo(path) == 0)
+                    if (ppt[i].FramePPTName.CompareTo(FramePPTName) == 0)
                         return i;
 
                 return -1;
             }
 
-            static public void SetSongData(string path, string[][][] songData)
+            static public void SetSongData(string FramePPTName, string[][][] songData)
             {
                 int index;
-                if ((index = pptFinder(path)) != -1)
+                if ((index = pptFinder(FramePPTName)) != -1)
                 {
                     ppt[index].SetSongData( songData);
                 }
             }
 
-            static public void SlideShowRun(string path)
+            static public void SlideShowRun(string FramePPTName)
             {
                 int index;
-                if ((index = pptFinder(path)) != -1)
+                if ((index = pptFinder(FramePPTName)) != -1)
                 {
                     ppt[index].SlideShowRun();
                 }
             }
 
-            static public void SlideShowHide(string path)
+            static public void SlideShowHide(string FramePPTName)
             {
                 int index;
-                if ((index = pptFinder(path)) != -1)
+                if ((index = pptFinder(FramePPTName)) != -1)
                 {
                     ppt[index].SlideShowHide();
                 }
             }
 
-            static public void ChangePage(string path, int Page)
+            static public void ChangePage(string FramePPTName, int Page)
             {
                 int index;
-                if ((index = pptFinder(path)) != -1)
+                if ((index = pptFinder(FramePPTName)) != -1)
                 {
                     ppt[index].ChangeApply(Page);
                 }
             }
 
-            static public void HideText(string path)
+            static public void HideText(string FramePPTName)
             {
                 int index;
-                if ((index = pptFinder(path)) != -1)
+                if ((index = pptFinder(FramePPTName)) != -1)
                 {
                     ppt[index].HideText();
                 }
             }
 
-            static public void ShowText(string path)
+            static public void ShowText(string FramePPTName)
             {
                 int index;
-                if ((index = pptFinder(path)) != -1)
+                if ((index = pptFinder(FramePPTName)) != -1)
                 {
                     ppt[index].ShowText();
                 }
             }
 
-            static public void OffDisplay(string path)
+            static public void OffDisplay(string FramePPTName)
             {
                 int index;
-                if ((index = pptFinder(path)) != -1)
+                if ((index = pptFinder(FramePPTName)) != -1)
                 {
                     ppt[index].OffDisplay();
                 }
             }
 
-            static public void OnDisplay(string path)
+            static public void OnDisplay(string FramePPTName)
             {
                 int index;
-                if ((index = pptFinder(path)) != -1)
+                if ((index = pptFinder(FramePPTName)) != -1)
                 {
                     ppt[index].OnDisplay();
                 }
@@ -394,7 +407,7 @@ namespace BibleProjector_WPF
         {
             // ============================================ 필요 변수 ============================================ 
 
-            public string path;
+            public string FramePPTName;
 
             Presentation ppt;
             class TextShape
@@ -415,9 +428,12 @@ namespace BibleProjector_WPF
 
             public void setPresentation(string path)
             {
-                System.IO.File.Copy(path, "\\temp\\" + System.IO.Path.GetFileName(path), false);
+                string tempPath = TEMP_DIRECTORY + System.IO.Path.GetFileName(path);
+                if (!System.IO.File.Exists(tempPath))
+                    System.IO.File.Copy(path, tempPath, false);
+                path = System.IO.Path.GetFullPath(tempPath);
 
-                this.path = path;
+                this.FramePPTName = System.IO.Path.GetFileName(path);
 
                 ppt = app.Presentations.Open(path, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
                 textShapes = new List<TextShape>(5);
