@@ -55,6 +55,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Option.xaml.cs">
+      <DependentUpon>Option.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SongControl.xaml.cs">
       <DependentUpon>SongControl.xaml</DependentUpon>
     </Compile>
@@ -71,6 +74,7 @@
     <Compile Include="module\ProgramOption.cs" />
     <Compile Include="module\StringModifier.cs" />
     <Compile Include="module\StringKMP.cs" />
+    <Compile Include="ViewModel\OptionViewModel.cs" />
     <Compile Include="ViewModel\SongControlViewModel.cs" />
     <Compile Include="ViewModel\ReadingControlViewModel.cs" />
     <Compile Include="ViewModel\BibleControlViewModel.cs" />
@@ -78,6 +82,10 @@
     <Compile Include="ViewModel\BibleReserveData.cs" />
     <Compile Include="ViewModel\BibleSelectData.cs" />
     <Compile Include="ViewModel\LyricViewModel.cs" />
+    <Page Include="Option.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SongControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
