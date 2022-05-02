@@ -33,6 +33,7 @@ namespace BibleProjector_WPF.module
         {
             saveBibleReserveData();
             saveLyricData();
+            saveOptionData();
         }
 
         static void saveBibleReserveData()
