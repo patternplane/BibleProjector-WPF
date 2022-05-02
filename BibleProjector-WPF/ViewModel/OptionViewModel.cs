@@ -135,6 +135,12 @@ namespace BibleProjector_WPF.ViewModel
             }
         }
 
+        public void refreshBibleFrame()
+        {
+            if (BibleFramePath_Text != null)
+                Powerpoint.Bible.refreshPresentation(BibleFramePath_Text);
+        }
+
         public void setReadingFrame()
         {
             if (FD_ReadingFrame.ShowDialog() == System.Windows.Forms.DialogResult.Cancel)
@@ -159,6 +165,11 @@ namespace BibleProjector_WPF.ViewModel
             }
         }
 
+        public void refreshReadingFrame()
+        {
+            if (ReadingFramePath_Text != null)
+                Powerpoint.Reading.refreshPresentation(ReadingFramePath_Text);
+        }
         public void setSongFrame()
         {
             if (FD_SongFrame.ShowDialog() == System.Windows.Forms.DialogResult.Cancel)

@@ -37,9 +37,19 @@ namespace BibleProjector_WPF
             VM_Option.setBibleFrame();
         }
 
+        void BibleFrameRefreshButton_Click(object sender, RoutedEventArgs e)
+        {
+            VM_Option.refreshBibleFrame();
+        }
+
         void ReadingFrameSelectButton_Click(object sender, RoutedEventArgs e)
         {
             VM_Option.setReadingFrame();
+        }
+
+        void ReadingFrameRefreshButton_Click(object sender, RoutedEventArgs e)
+        {
+            VM_Option.refreshReadingFrame();
         }
 
         void SongFrameSelectButton_Click(object sender, RoutedEventArgs e)

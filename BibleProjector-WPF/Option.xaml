@@ -59,23 +59,27 @@
 
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <Label  Grid.Column="0" Content="성경 틀 :" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
+                <Label  Grid.Column="0" Content="성경 틀 :" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="83,5"></Label>
                 <TextBox Grid.Column="1" Text="{Binding BibleFramePath_Text}" IsReadOnly="true"></TextBox>
-                <Button  Grid.Column="2" Content="찾기" Click="BibleFrameSelectButton_Click"></Button>
+                <Button  Grid.Column="2" Content="찾기" Click="BibleFrameSelectButton_Click" ></Button>
+                <Button  Grid.Column="3" Content="새로고침" Click="BibleFrameRefreshButton_Click" ></Button>
             </Grid>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Content="교독문 틀 :" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
                 <TextBox  Grid.Column="1" Text="{Binding ReadingFramePath_Text}" IsReadOnly="true"></TextBox>
                 <Button Grid.Column="2" Content="찾기" Click="ReadingFrameSelectButton_Click"></Button>
+                <Button  Grid.Column="3" Content="새로고침" Click="ReadingFrameRefreshButton_Click" ></Button>
             </Grid>
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
