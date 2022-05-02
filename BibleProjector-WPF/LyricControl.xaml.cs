@@ -82,6 +82,13 @@ namespace BibleProjector_WPF
             return songData;
         }
 
+        // ======================================================= 출력 처리 ======================================================
+
+        void LyricReserveListBox_DoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            LyricShowButton_Click(null, null);
+        }
+
         void LyricShowButton_Click(object sender, RoutedEventArgs e)
         {
             if (VM_LyricViewModel.SelectedLyric != null)
@@ -96,6 +103,8 @@ namespace BibleProjector_WPF
             else
                 MessageBox.Show("출력할 찬양곡을 선택해주세요!", "찬양곡 선택되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
         }
+
+        // ======================================================= 숫자만 기입받는 텍스트박스 처리 ======================================================
 
         private void LinePerSlideTextBox_KeyDown(object sender, KeyEventArgs e)
         {

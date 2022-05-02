@@ -92,7 +92,13 @@
                     </Border>
 
                     <ListBox Grid.Row="1" Grid.Column="4" x:Name="Bible_Chapter_ListBox"></ListBox>
-                    <ListBox Grid.Row="1" Grid.Column="6" x:Name="Bible_Verse_ListBox"></ListBox>
+                    <ListBox Grid.Row="1" Grid.Column="6" x:Name="Bible_Verse_ListBox">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <EventSetter Event="MouseDoubleClick" Handler="Bible_Verse_ListBox_DoubleClick"></EventSetter>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
                     <Grid Grid.Row="1" Grid.Column="8" >
                         <Grid.RowDefinitions>
                             <RowDefinition Height="31*"/>
@@ -127,6 +133,11 @@
                             <Button Grid.Row="0" x:Name="BibleReserveAddButton">성경구절 예약</Button>
                             <ListBox Grid.Row="1" SelectionMode="Extended" ScrollViewer.VerticalScrollBarVisibility="auto" 
                                  x:Name="BibleReserveListBox">
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="ListBoxItem">
+                                        <EventSetter Event="MouseDoubleClick" Handler="BibleReserveListBox_DoubleClick"></EventSetter>
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
                             </ListBox>
                             <Grid Grid.Row="2">
                                 <Grid.ColumnDefinitions>
@@ -173,7 +184,13 @@
                             <RowDefinition Height="13*"/>
                             <RowDefinition Height="79*"/>
                         </Grid.RowDefinitions>
-                        <ListBox Grid.Row="0" x:Name="ReadingListBox"></ListBox>
+                        <ListBox Grid.Row="0" x:Name="ReadingListBox">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <EventSetter Event="MouseDoubleClick" Handler="ReadingListBox_DoubleClick"></EventSetter>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                        </ListBox>
                         <Button Grid.Row="2" Click="ReadingOutputButton_Click">선택된 교독문 출력하기</Button>
                     </Grid>
                     <!--찬양곡 Control-->

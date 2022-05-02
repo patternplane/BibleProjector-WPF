@@ -372,6 +372,16 @@ namespace BibleProjector_WPF
 
         // ======================================== 성경 출력 처리
 
+        void Bible_Verse_ListBox_DoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            BibleOutputButton_Click(null, null);
+        }
+
+        void BibleReserveListBox_DoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            BibleOutputButton_Click(null, null);
+        }
+
         void BibleOutputButton_Click(object sender, RoutedEventArgs e)
         {
             if (module.ProgramOption.BibleFramePath == null)
@@ -389,6 +399,11 @@ namespace BibleProjector_WPF
         }
 
         // ======================================== 교독문 처리
+
+        void ReadingListBox_DoubleClick(object sender, RoutedEventArgs e)
+        {
+            ReadingOutputButton_Click(null, null);
+        }
 
         void ReadingOutputButton_Click(object sender, RoutedEventArgs e)
         {

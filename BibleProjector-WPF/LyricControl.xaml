@@ -22,15 +22,15 @@
                 <TabItem Header="곡 선택">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="7*"/>
-                            <RowDefinition Height="30*"/>
-                            <RowDefinition Height="9*"/>
-                            <RowDefinition Height="40*"/>
-                            <RowDefinition Height="9*"/>
-                            <RowDefinition Height="40*"/>
-                            <RowDefinition Height="9*"/>
-                            <RowDefinition Height="309*"/>
-                            <RowDefinition Height="25*"/>
+                            <RowDefinition Height="6*"/>
+                            <RowDefinition Height="33*"/>
+                            <RowDefinition Height="6*"/>
+                            <RowDefinition Height="34*"/>
+                            <RowDefinition Height="6*"/>
+                            <RowDefinition Height="36*"/>
+                            <RowDefinition Height="8*"/>
+                            <RowDefinition Height="277*"/>
+                            <RowDefinition Height="22*"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="18*"/>
@@ -160,7 +160,13 @@
                                  ItemsSource="{Binding LyricReserveList}"
                                  DisplayMemberPath="lyric.title"
                                  SelectedItem="{Binding LyricReserveSelection}"
-                                 x:Name="LyricReserveListBox"></ListBox>
+                                 x:Name="LyricReserveListBox">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <EventSetter Event="MouseDoubleClick" Handler="LyricReserveListBox_DoubleClick"></EventSetter>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                        </ListBox>
                         <Grid Grid.Row="4" Grid.Column="1">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="61*"/>
