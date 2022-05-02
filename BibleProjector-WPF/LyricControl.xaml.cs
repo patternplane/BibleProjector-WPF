@@ -61,6 +61,8 @@ namespace BibleProjector_WPF
             VM_LyricViewModel.RunCompleteModify();
         }
 
+        // ======================================================= 출력 처리 ======================================================
+
         string[][][] makeSongData(ViewModel.LyricViewModel.SingleLyric lyric, int linePerPage)
         {
             string[] pages = module.StringModifier.makePageWithLines(VM_LyricViewModel.SelectedLyric.content, linePerPage);
@@ -81,8 +83,6 @@ namespace BibleProjector_WPF
 
             return songData;
         }
-
-        // ======================================================= 출력 처리 ======================================================
 
         void LyricReserveListBox_DoubleClick(object sender, MouseButtonEventArgs e)
         {
