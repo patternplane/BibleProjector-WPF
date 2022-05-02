@@ -13,8 +13,8 @@ namespace BibleProjector_WPF.module
 
         // ======================================= 옵션값 =======================================
 
-        static public int Bible_CharPerLine { get; set; } = 5;
-        static public int Bible_LinePerSlide { get; set; } = 20;
+        static public int Bible_CharPerLine { get; set; } = 20;
+        static public int Bible_LinePerSlide { get; set; } = 5;
 
 
         static public string BibleFramePath { get; set; } = null;
