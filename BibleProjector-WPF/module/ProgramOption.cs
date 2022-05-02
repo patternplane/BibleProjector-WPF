@@ -29,9 +29,13 @@ namespace BibleProjector_WPF.module
         static public void Initialize()
         {
             string[] items = module.ProgramData.getOptionData().Split(new string[] { SEPARATOR }, StringSplitOptions.None);
+            if (items.Length == 1)
+                return;
 
-            Bible_CharPerLine = int.Parse(items[0]);
-            Bible_LinePerSlide = int.Parse(items[1]);
+            if (items[0].CompareTo("") != 0)
+                Bible_CharPerLine = int.Parse(items[0]);
+            if (items[1].CompareTo("") != 0)
+                Bible_LinePerSlide = int.Parse(items[1]);
 
             if (items[2].CompareTo("") != 0)
                 BibleFramePath = items[2];
