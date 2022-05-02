@@ -82,12 +82,12 @@
                         <Style TargetType="ToggleButton">
                             <Style.Triggers>
                                 <Trigger Property="IsChecked" Value="True">
-                                    <Setter Property="Content" Value="화면 켜짐"></Setter>
+                                    <Setter Property="Content" Value="화면 끄기"></Setter>
                                     <Setter Property="FontWeight" Value="Bold"></Setter>
                                     <Setter Property="FontSize" Value="17"></Setter>
                                 </Trigger>
                                 <Trigger Property="IsChecked" Value="False">
-                                    <Setter Property="Content" Value="화면 꺼짐"></Setter>
+                                    <Setter Property="Content" Value="화면 켜기"></Setter>
                                     <Setter Property="FontWeight" Value="Normal"></Setter>
                                     <Setter Property="FontSize" Value="15"></Setter>
                                 </Trigger>
@@ -100,12 +100,12 @@
                         <Style TargetType="ToggleButton">
                             <Style.Triggers>
                                 <Trigger Property="IsChecked" Value="True">
-                                    <Setter Property="Content" Value="자막 보임"></Setter>
+                                    <Setter Property="Content" Value="자막 숨기기"></Setter>
                                     <Setter Property="FontWeight" Value="Bold"></Setter>
                                     <Setter Property="FontSize" Value="17"></Setter>
                                 </Trigger>
                                 <Trigger Property="IsChecked" Value="False">
-                                    <Setter Property="Content" Value="자막 숨겨짐"></Setter>
+                                    <Setter Property="Content" Value="자막 보이기"></Setter>
                                     <Setter Property="FontWeight" Value="Normal"></Setter>
                                     <Setter Property="FontSize" Value="15"></Setter>
                                 </Trigger>
