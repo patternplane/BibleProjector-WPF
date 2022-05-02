@@ -24,6 +24,7 @@ namespace BibleProjector_WPF.module
         const string BIBLE_RESERVE_DATA = PROGRAM_DATA_PATH + "\\BibleReserve";
         const string LYRIC_DATA = PROGRAM_DATA_PATH + "\\Lyrics";
         const string LYRIC_RESERVE_DATA = PROGRAM_DATA_PATH + "\\LyricReserve";
+        const string OPTION_DATA = PROGRAM_DATA_PATH + "\\Option";
 
 
         // =========================================== 프로그램 종료시 ===========================================
@@ -57,6 +58,13 @@ namespace BibleProjector_WPF.module
                 MessageBox.Show("가사 저장 실패!\n오류 : " + e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             */
+        }
+
+        static void saveOptionData()
+        {
+            StreamWriter file = new StreamWriter(OPTION_DATA, false);
+            file.Write(module.ProgramOption.getSaveData());
+            file.Close();
         }
 
         // =========================================== 별도 메소드 =========================================== 
@@ -100,6 +108,11 @@ namespace BibleProjector_WPF.module
         public static string getLyricReserveData()
         {
             return getDataFromFile(LYRIC_RESERVE_DATA);
+        }
+
+        public static string getOptionData()
+        {
+            return getDataFromFile(OPTION_DATA);
         }
     }
 }

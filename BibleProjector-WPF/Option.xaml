@@ -42,9 +42,11 @@
                 </Grid.ColumnDefinitions>
 
                 <Label Grid.Row="1" Grid.Column="1" Content="슬라이드별 줄 수"></Label>
-                <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding LinePerSlide_Text}"></TextBox>
+                <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding LinePerSlide_Text}"
+                         KeyDown="NumberTextBox_KeyDown"></TextBox>
                 <Label Grid.Row="3" Grid.Column="1" Content="문장별 글자 수&#10;(한글:2 / 영어,공백:1)"></Label>
-                <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding CharPerLine_Text}"></TextBox>
+                <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding CharPerLine_Text}"
+                         KeyDown="NumberTextBox_KeyDown"></TextBox>
             </Grid>
         </Grid>
 
@@ -82,7 +84,8 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Content="찬양곡 틀 :" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
-                <ListBox Grid.Column="1" x:Name="SongFramePaths_ListBox" SelectionMode="Extended"></ListBox>
+                <ListBox Grid.Column="1" x:Name="SongFramePaths_ListBox" SelectionMode="Extended"
+                         ItemsSource="{Binding SongFramePaths_List}"></ListBox>
                 <Grid Grid.Column="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>

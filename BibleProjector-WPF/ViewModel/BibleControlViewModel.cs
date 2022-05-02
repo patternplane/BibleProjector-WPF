@@ -49,7 +49,7 @@ namespace BibleProjector_WPF.ViewModel
                 module.StringModifier.makeStringPage(
                     Database.getBible(Kjjeul)
                     ,module.ProgramOption.Bible_CharPerLine
-                    ,module.ProgramOption.Bible_LinePerSlide
+                    , module.ProgramOption.Bible_LinePerSlide
                     )
                 );
             setBibleSlide_BibleChapter(bible_display, chapter);

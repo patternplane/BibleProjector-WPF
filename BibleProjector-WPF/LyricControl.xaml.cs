@@ -86,10 +86,11 @@ namespace BibleProjector_WPF
         {
             if (VM_LyricViewModel.SelectedLyric != null)
             {
+                // 곡별 사용할 틀에 대한 설계가 없어 수정되지 않음
                 if (Ctrl_Song == null)
-                    Ctrl_Song = new SongControl(makeSongData(VM_LyricViewModel.SelectedLyric, VM_LyricViewModel.LinePerSlide),Powerpoint.TEMP_SONGPPT_PATH);
+                    Ctrl_Song = new SongControl(makeSongData(VM_LyricViewModel.SelectedLyric, VM_LyricViewModel.LinePerSlide),MainWindow.tempPath);
                 else
-                    Ctrl_Song.ShowSong(makeSongData(VM_LyricViewModel.SelectedLyric, VM_LyricViewModel.LinePerSlide), Powerpoint.TEMP_SONGPPT_PATH);
+                    Ctrl_Song.ShowSong(makeSongData(VM_LyricViewModel.SelectedLyric, VM_LyricViewModel.LinePerSlide), MainWindow.tempPath);
                 Ctrl_Song.Show();
             }
             else

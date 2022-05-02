@@ -24,27 +24,34 @@ namespace BibleProjector_WPF
 
         // ============================================ 프로그램 시작 / 종료 세팅 ========================================================
 
-        public const string TEMP_PPT_PATH = @"C:\Users\Sun\Desktop\test.pptx";
-        public const string TEMP_SONGPPT_PATH = TEMP_PPT_PATH;
-        public const string TEMP_DIRECTORY = ".\\programData\\temp\\";
+        public const string FRAME_TEMP_DIRECTORY = ".\\programData\\FrameTemp\\";
 
-        static public void Initialize(string BibleFramePath, string ReadingFramePath, string[] SongFramePaths)
+        static public void Initialize()
         {
             app = new Application();
 
-            if (System.IO.Directory.Exists(TEMP_DIRECTORY))
-                System.IO.Directory.Delete(TEMP_DIRECTORY, true);
-            System.IO.Directory.CreateDirectory(TEMP_DIRECTORY);
-            Bible.setPresentation(BibleFramePath);
-            Reading.setPresentation(ReadingFramePath);
-            Song.setPresentation(SongFramePaths);
+            if (System.IO.Directory.Exists(FRAME_TEMP_DIRECTORY))
+                System.IO.Directory.Delete(FRAME_TEMP_DIRECTORY, true);
+            System.IO.Directory.CreateDirectory(FRAME_TEMP_DIRECTORY);
+
+            StringBuilder pptFrameError = new StringBuilder(10);
+            if (module.ProgramOption.BibleFramePath == null)
+                pptFrameError.Append("성경 ppt틀\r\n");
+            else
+                Powerpoint.Bible.setPresentation(module.ProgramOption.BibleFramePath);
+            if (module.ProgramOption.ReadingFramePath == null)
+                pptFrameError.Append("성경 ppt틀\r\n");
+            else
+                Powerpoint.Reading.setPresentation(module.ProgramOption.ReadingFramePath);
+            foreach (string path in module.ProgramOption.SongFramePath)
+                Powerpoint.Song.setPresentation(path);
         }
 
         static public void FinallProcess()
         {
             Bible.close();
             Reading.close();
-            Song.close();
+            Song.closeAll();
         }
     }
 
@@ -58,7 +65,7 @@ namespace BibleProjector_WPF
 
             // ============================================ 필요 변수 ============================================ 
 
-            static Presentation ppt;
+            static Presentation ppt = null;
             static SlideShowWindow SlideWindow = null;
             static List<string> Format;
             static List<Shape> TextShapes;
@@ -72,7 +79,7 @@ namespace BibleProjector_WPF
 
             static public void setPresentation(string path)
             {
-                string tempPath = TEMP_DIRECTORY + System.IO.Path.GetFileName(path);
+                string tempPath = FRAME_TEMP_DIRECTORY + System.IO.Path.GetFileName(path);
                 if (!System.IO.File.Exists(tempPath))
                     System.IO.File.Copy(path, tempPath, false);
                 path = System.IO.Path.GetFullPath(tempPath);
@@ -81,6 +88,31 @@ namespace BibleProjector_WPF
                 TextShapes = new List<Shape>(3);
 
                 ppt = app.Presentations.Open(path, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
+                getCommand();
+            }
+
+            static public void refreshPresentation(string path)
+            {
+                Presentation lastppt = ppt;
+                
+                ppt = app.Presentations.Open(path, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
+                getCommand();
+                Change();
+                SlideShowRun();
+
+                lastppt.Close();
+
+                lastppt = ppt;
+
+                setPresentation(path);
+                Change();
+                SlideShowRun();
+
+                lastppt.Close();
+            }
+
+            static void getCommand()
+            {
                 foreach (Shape s in ppt.Slides[1].Shapes)
                     if (s.HasTextFrame != Microsoft.Office.Core.MsoTriState.msoFalse)
                     {
@@ -97,7 +129,8 @@ namespace BibleProjector_WPF
 
             static public void close()
             {
-                ppt.Close();
+                if (ppt != null)
+                    ppt.Close();
             }
 
             // ============================================ 메소드 ============================================ 
@@ -179,7 +212,7 @@ namespace BibleProjector_WPF
 
             // ============================================ 필요 변수 ============================================ 
 
-            static Presentation ppt;
+            static Presentation ppt = null;
             static SlideShowWindow SlideWindow = null;
             static List<string> Format;
             static List<Shape> TextShapes;
@@ -191,7 +224,7 @@ namespace BibleProjector_WPF
 
             static public void setPresentation(string path)
             {
-                string tempPath = TEMP_DIRECTORY + System.IO.Path.GetFileName(path);
+                string tempPath = FRAME_TEMP_DIRECTORY + System.IO.Path.GetFileName(path);
                 if (!System.IO.File.Exists(tempPath))
                     System.IO.File.Copy(path, tempPath, false);
                 path = System.IO.Path.GetFullPath(tempPath);
@@ -200,6 +233,31 @@ namespace BibleProjector_WPF
                 TextShapes = new List<Shape>(3);
 
                 ppt = app.Presentations.Open(path, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
+                getCommand();
+            }
+
+            static public void refreshPresentation(string path)
+            {
+                Presentation lastppt = ppt;
+
+                ppt = app.Presentations.Open(path, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
+                getCommand();
+                Change();
+                SlideShowRun();
+
+                lastppt.Close();
+
+                lastppt = ppt;
+
+                setPresentation(path);
+                Change();
+                SlideShowRun();
+
+                lastppt.Close();
+            }
+
+            static void getCommand()
+            {
                 foreach (Shape s in ppt.Slides[1].Shapes)
                     if (s.HasTextFrame != Microsoft.Office.Core.MsoTriState.msoFalse)
                     {
@@ -214,7 +272,8 @@ namespace BibleProjector_WPF
 
             static public void close()
             {
-                ppt.Close();
+                if (ppt != null)
+                    ppt.Close();
             }
 
             // ============================================ 메소드 ============================================ 
@@ -292,28 +351,30 @@ namespace BibleProjector_WPF
 
             // ============================================ 필요 변수 ============================================ 
 
-            static List<SongFormatPPT> ppt;
+            static List<SongFormatPPT> ppt = new List<SongFormatPPT>();
 
             // ============================================ 세팅 및 종료 ============================================ 
 
-            static public void setPresentation(string[] paths)
+            static public void setPresentation(string path)
             {
-                ppt = new List<SongFormatPPT>();
-                foreach (string path in paths)
-                    ppt.Add(new SongFormatPPT(path));
+                ppt.Add(new SongFormatPPT(path));
             }
 
             static public void refreshPresentation(string path)
             {
-                for (int i = 0; i < ppt.Count; i++)
-                    if (ppt[i].FramePPTName.CompareTo(System.IO.Path.GetFileName(path)) == 0)
-                    {
-                        ppt[i].refreshPresentation(path);
-                        return;
-                    }
+                SongFormatPPT findedSong = ppt.Find(x => x.FramePPTName.CompareTo(System.IO.Path.GetFileName(path)) == 0);
+                if (findedSong != null)
+                    findedSong.refreshPresentation(path);
             }
 
-            static public void close()
+            static public void closeSingle(string path)
+            {
+                SongFormatPPT findedSong = ppt.Find(x => x.FramePPTName.CompareTo(System.IO.Path.GetFileName(path)) == 0);
+                if (findedSong != null)
+                    findedSong.close();
+            }
+
+            static public void closeAll()
             {
                 foreach (SongFormatPPT sf in ppt)
                     sf.close();
@@ -417,6 +478,7 @@ namespace BibleProjector_WPF
             }
             List<TextShape> textShapes;
             string[][][] SongData;
+            int currentPage = -1;
             SlideShowWindow SlideWindow = null;
 
             // ============================================ 세팅 및 종료 ============================================ 
@@ -428,21 +490,45 @@ namespace BibleProjector_WPF
 
             public void setPresentation(string path)
             {
-                string tempPath = TEMP_DIRECTORY + System.IO.Path.GetFileName(path);
+                string tempPath = FRAME_TEMP_DIRECTORY + System.IO.Path.GetFileName(path);
                 if (!System.IO.File.Exists(tempPath))
                     System.IO.File.Copy(path, tempPath, false);
                 path = System.IO.Path.GetFullPath(tempPath);
 
                 this.FramePPTName = System.IO.Path.GetFileName(path);
-
-                ppt = app.Presentations.Open(path, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
                 textShapes = new List<TextShape>(5);
 
+                ppt = app.Presentations.Open(path, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
+                getCommand();
+            }
+
+            public void refreshPresentation(string path)
+            {
+                Presentation lastppt = ppt;
+
+                ppt = app.Presentations.Open(path, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
+                getCommand();
+                ChangeApply(currentPage);
+                SlideShowRun();
+
+                lastppt.Close();
+
+                lastppt = ppt;
+
+                setPresentation(path);
+                ChangeApply(currentPage);
+                SlideShowRun();
+
+                lastppt.Close();
+            }
+
+            void getCommand()
+            {
                 string shapeText;
                 TextShape ts;
                 foreach (Shape s in ppt.Slides[1].Shapes)
-                    if (s.HasTextFrame != Microsoft.Office.Core.MsoTriState.msoFalse 
-                        && module.StringKMP.HasPattern(s.TextFrame.TextRange.Text,"/",module.StringKMP.DefaultStringCompaerFunc))
+                    if (s.HasTextFrame != Microsoft.Office.Core.MsoTriState.msoFalse
+                        && module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "/", module.StringKMP.DefaultStringCompaerFunc))
                     {
                         ts = new TextShape();
                         ts.shape = s;
@@ -459,17 +545,11 @@ namespace BibleProjector_WPF
                             else
                                 while (i < shapeText.Length && shapeText[i] != '/')
                                     i++;
-                            ts.Format.Add(shapeText.Substring(startIndex,i-startIndex));
+                            ts.Format.Add(shapeText.Substring(startIndex, i - startIndex));
                         }
 
                         textShapes.Add(ts);
                     }
-            }
-
-            public void refreshPresentation(string path)
-            {
-                ppt.Close();
-                setPresentation(path);
             }
 
             public void close()
@@ -513,6 +593,7 @@ namespace BibleProjector_WPF
 
             public void ChangeApply(int Page)
             {
+                currentPage = Page;
                 int index;
                 StringBuilder str = new StringBuilder(50);
                 for (int i = 0; i < textShapes.Count; i++)
