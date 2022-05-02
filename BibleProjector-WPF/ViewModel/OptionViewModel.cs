@@ -8,7 +8,7 @@ using System.ComponentModel;
 
 namespace BibleProjector_WPF.ViewModel
 {
-    class OptionViewModel
+    class OptionViewModel : INotifyPropertyChanged
     {
 
         // ========================================== View 연결 속성들 ========================================== 
@@ -21,6 +21,7 @@ namespace BibleProjector_WPF.ViewModel
             set
             {
                 module.ProgramOption.Bible_LinePerSlide = int.Parse(value);
+                NotifyPropertyChanged();
             }
         }
         public string CharPerLine_Text 
@@ -32,6 +33,7 @@ namespace BibleProjector_WPF.ViewModel
             set
             {
                 module.ProgramOption.Bible_CharPerLine = int.Parse(value);
+                NotifyPropertyChanged();
             }
         }
 
@@ -44,6 +46,7 @@ namespace BibleProjector_WPF.ViewModel
             set
             {
                 module.ProgramOption.BibleFramePath = value;
+                NotifyPropertyChanged();
             }
         }
         public string ReadingFramePath_Text
@@ -55,17 +58,19 @@ namespace BibleProjector_WPF.ViewModel
             set
             {
                 module.ProgramOption.ReadingFramePath = value;
+                NotifyPropertyChanged();
             }
         }
-        public List<String> SongFramePaths_List
+        private BindingList<string> SongFramePaths_List_in = new BindingList<string>(module.ProgramOption.SongFramePath);
+        public BindingList<String> SongFramePaths_List
         {
             get
             {
-                return module.ProgramOption.SongFramePath;
+                return SongFramePaths_List_in;
             }
             set
             {
-                module.ProgramOption.SongFramePath = value;
+                SongFramePaths_List_in = value;
             }
         }
 
@@ -170,6 +175,7 @@ namespace BibleProjector_WPF.ViewModel
             if (ReadingFramePath_Text != null)
                 Powerpoint.Reading.refreshPresentation(ReadingFramePath_Text);
         }
+
         public void setSongFrame()
         {
             if (FD_SongFrame.ShowDialog() == System.Windows.Forms.DialogResult.Cancel)
@@ -181,12 +187,10 @@ namespace BibleProjector_WPF.ViewModel
                     return;
             }
             FD_SongFrame.InitialDirectory = System.IO.Path.GetDirectoryName(FD_SongFrame.FileName) + "\\";
+
             string newFilePath = FD_SongFrame.FileName;
-            if (!SongFramePaths_List.Exists(x => x.CompareTo(newFilePath) == 0))
-            {
-                SongFramePaths_List.Add(newFilePath);
-                Powerpoint.Song.setPresentation(newFilePath);
-            }
+            SongFramePaths_List.Add(newFilePath);
+            Powerpoint.Song.setPresentation(newFilePath);
         }
 
         public void deleteSongFrame(int[] itemIndex)
@@ -194,7 +198,18 @@ namespace BibleProjector_WPF.ViewModel
             for (int i = itemIndex.Length - 1; i >= 0; i--)
             {
                 Powerpoint.Song.closeSingle(SongFramePaths_List[itemIndex[i]]);
-                SongFramePaths_List.Remove(SongFramePaths_List[itemIndex[i]]);
+                SongFramePaths_List.RemoveAt(itemIndex[i]);
+            }
+        }
+
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string propertyName = "")
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
     }

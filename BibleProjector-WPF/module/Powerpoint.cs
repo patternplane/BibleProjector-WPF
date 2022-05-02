@@ -374,12 +374,14 @@ namespace BibleProjector_WPF
                 SongFormatPPT findedSong = ppt.Find(x => x.FramePPTName.CompareTo(System.IO.Path.GetFileName(path)) == 0);
                 if (findedSong != null)
                     findedSong.close();
+                ppt.Remove(findedSong);
             }
 
             static public void closeAll()
             {
                 foreach (SongFormatPPT sf in ppt)
                     sf.close();
+                ppt.Clear();
             }
 
             // ============================================ 메소드 ============================================ 
