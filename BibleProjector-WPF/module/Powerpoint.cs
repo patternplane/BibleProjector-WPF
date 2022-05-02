@@ -26,7 +26,7 @@ namespace BibleProjector_WPF
 
         public const string FRAME_TEMP_DIRECTORY = ".\\programData\\FrameTemp\\";
 
-        static public void Initialize()
+        static public string Initialize()
         {
             app = new Application();
 
@@ -40,11 +40,13 @@ namespace BibleProjector_WPF
             else
                 Powerpoint.Bible.setPresentation(module.ProgramOption.BibleFramePath);
             if (module.ProgramOption.ReadingFramePath == null)
-                pptFrameError.Append("성경 ppt틀\r\n");
+                pptFrameError.Append("교독문 ppt틀\r\n");
             else
                 Powerpoint.Reading.setPresentation(module.ProgramOption.ReadingFramePath);
             foreach (string path in module.ProgramOption.SongFramePath)
                 Powerpoint.Song.setPresentation(path);
+
+            return pptFrameError.ToString();
         }
 
         static public void FinallProcess()

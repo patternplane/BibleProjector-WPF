@@ -56,7 +56,9 @@ namespace BibleProjector_WPF
         {
             Database.DatabaseInitailize();
             module.ProgramOption.Initialize();
-            Powerpoint.Initialize();
+            string error = Powerpoint.Initialize();
+            if (error.CompareTo("") != 0)
+                MessageBox.Show("다음을 확인해주세요 : " + error, "ppt틀 등록되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
 
             InitializeComponent();
 
