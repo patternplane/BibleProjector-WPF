@@ -95,9 +95,9 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="31*"/>
                             <RowDefinition Height="15*"/>
-                            <RowDefinition Height="364*"/>
-                            <RowDefinition Height="22*"/>
                             <RowDefinition Height="67*"/>
+                            <RowDefinition Height="22*"/>
+                            <RowDefinition Height="364*"/>
                         </Grid.RowDefinitions>
 
                         <Grid x:Name="Bible_CurrentDisplayTextBoxies_Grid">
@@ -113,8 +113,10 @@
                             <TextBox Grid.Column="4" Text="{Binding Verse}" IsReadOnly="True"></TextBox>
                         </Grid>
 
+                        <Button Grid.Row="2" Click="BibleOutputButton_Click">선택된 구절 출력</Button>
+
                         <!--성경 예약부분-->
-                        <Grid Grid.Row="2">
+                        <Grid Grid.Row="4">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="55*"/>
                                 <RowDefinition Height="259*"/>
@@ -141,8 +143,6 @@
                                 <Button Grid.Column="2" x:Name="BibleReserveDeleteButton">선택항목 삭제</Button>
                             </Grid>
                         </Grid>
-
-                        <Button Grid.Row="4" Click="BibleOutputButton_Click">선택된 구절 출력</Button>
                     </Grid>
                 </Grid>
             </TabItem>
