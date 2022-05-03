@@ -86,6 +86,7 @@ namespace BibleProjector_WPF
             static string currentBible = "";
             static string currentChapter = "";
             static string currentVerse = "";
+            static bool isFirstPage = true;
             static string currentContent = "";
 
             static PptState pptState = PptState.NotUsed;
@@ -95,8 +96,7 @@ namespace BibleProjector_WPF
             static public void setPresentation(string path)
             {
                 string tempPath = FRAME_TEMP_DIRECTORY + System.IO.Path.GetFileName(path);
-                if (!System.IO.File.Exists(tempPath))
-                    System.IO.File.Copy(path, tempPath, false);
+                System.IO.File.Copy(path, tempPath, true);
                 path = System.IO.Path.GetFullPath(tempPath);
 
                 Format = new List<string>(3);
@@ -112,14 +112,16 @@ namespace BibleProjector_WPF
 
                 if (pptState == PptState.NotUsed)
                 {
-                    setPresentation(path);
                     lastppt.Close();
+                    setPresentation(path);
+                    SlideWindow = null;
                 }
                 else if (pptState == PptState.WindowHide)
                 {
+                    lastppt.Close();
                     setPresentation(path);
                     Change();
-                    lastppt.Close();
+                    SlideWindow = null;
                 }
                 else
                 {
@@ -140,8 +142,6 @@ namespace BibleProjector_WPF
 
                     lastppt.Close();
                 }
-
-                SlideWindow = null;
             }
 
             static void getCommand()
@@ -149,10 +149,11 @@ namespace BibleProjector_WPF
                 foreach (Shape s in ppt.Slides[1].Shapes)
                     if (s.HasTextFrame != Microsoft.Office.Core.MsoTriState.msoFalse)
                     {
-                        if (module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "/권", module.StringKMP.DefaultStringCompaerFunc)
-                            || module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "/장", module.StringKMP.DefaultStringCompaerFunc)
-                            || module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "/절", module.StringKMP.DefaultStringCompaerFunc)
-                            || module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "/본문", module.StringKMP.DefaultStringCompaerFunc))
+                        if (module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "{b}", module.StringKMP.DefaultStringCompaerFunc)
+                            || module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "{ch}", module.StringKMP.DefaultStringCompaerFunc)
+                            || module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "{v}", module.StringKMP.DefaultStringCompaerFunc)
+                            || module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "{va}", module.StringKMP.DefaultStringCompaerFunc)
+                            || module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "{c}", module.StringKMP.DefaultStringCompaerFunc))
                         {
                             TextShapes.Add(s);
                             Format.Add(s.TextFrame.TextRange.Text);
@@ -189,10 +190,11 @@ namespace BibleProjector_WPF
                 pptState = PptState.WindowHide;
             }
 
-            static public void Change_VerseContent(string verse, string content)
+            static public void Change_VerseContent(string verse, string content,bool FirstPage)
             {
                 currentVerse = verse;
                 currentContent = content;
+                isFirstPage = FirstPage;
 
                 Change();
             }
@@ -208,12 +210,24 @@ namespace BibleProjector_WPF
             static private void Change()
             {
                 for (int i = 0; i < TextShapes.Count; i++)
-                    TextShapes[i].TextFrame.TextRange.Text =
+                {
+                    if (isFirstPage)
+                        TextShapes[i].TextFrame.TextRange.Text =
                         Format[i]
-                        .Replace("/권", currentBible)
-                        .Replace("/장", currentChapter)
-                        .Replace("/절", currentVerse)
-                        .Replace("/본문", currentContent);
+                            .Replace("{b}", currentBible)
+                            .Replace("{ch}", currentChapter)
+                            .Replace("{va}", currentVerse)
+                            .Replace("{c}", currentContent)
+                            .Replace("{v}", currentVerse);
+                    else
+                        TextShapes[i].TextFrame.TextRange.Text =
+                            Format[i]
+                            .Replace("{b}", currentBible)
+                            .Replace("{ch}", currentChapter)
+                            .Replace("{va}", currentVerse)
+                            .Replace("{c}", currentContent)
+                            .Replace("{v}", "");
+                }
             }
 
             static public void HideText()
@@ -263,8 +277,7 @@ namespace BibleProjector_WPF
             static public void setPresentation(string path)
             {
                 string tempPath = FRAME_TEMP_DIRECTORY + System.IO.Path.GetFileName(path);
-                if (!System.IO.File.Exists(tempPath))
-                    System.IO.File.Copy(path, tempPath, false);
+                System.IO.File.Copy(path, tempPath, true);
                 path = System.IO.Path.GetFullPath(tempPath);
 
                 Format = new List<string>(3);
@@ -280,14 +293,16 @@ namespace BibleProjector_WPF
 
                 if (pptState == PptState.NotUsed)
                 {
-                    setPresentation(path);
                     lastppt.Close();
+                    setPresentation(path);
+                    SlideWindow = null;
                 }
                 else if (pptState == PptState.WindowHide)
                 {
+                    lastppt.Close();
                     setPresentation(path);
                     Change();
-                    lastppt.Close();
+                    SlideWindow = null;
                 }
                 else
                 {
@@ -308,8 +323,6 @@ namespace BibleProjector_WPF
 
                     lastppt.Close();
                 }
-
-                SlideWindow = null;
             }
 
             static void getCommand()
@@ -317,8 +330,8 @@ namespace BibleProjector_WPF
                 foreach (Shape s in ppt.Slides[1].Shapes)
                     if (s.HasTextFrame != Microsoft.Office.Core.MsoTriState.msoFalse)
                     {
-                        if (module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "/제목", module.StringKMP.DefaultStringCompaerFunc)
-                            || module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "/본문", module.StringKMP.DefaultStringCompaerFunc))
+                        if (module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "{t}", module.StringKMP.DefaultStringCompaerFunc)
+                            || module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "{c}", module.StringKMP.DefaultStringCompaerFunc))
                         {
                             TextShapes.Add(s);
                             Format.Add(s.TextFrame.TextRange.Text);
@@ -374,8 +387,8 @@ namespace BibleProjector_WPF
                 for (int i = 0; i < TextShapes.Count; i++)
                     TextShapes[i].TextFrame.TextRange.Text =
                         Format[i]
-                        .Replace("/제목", currentTitle)
-                        .Replace("/본문", currentContent);
+                        .Replace("{t}", currentTitle)
+                        .Replace("{c}", currentContent);
             }
 
             static public void HideText()
@@ -554,8 +567,7 @@ namespace BibleProjector_WPF
             public void setPresentation(string path)
             {
                 string tempPath = FRAME_TEMP_DIRECTORY + System.IO.Path.GetFileName(path);
-                if (!System.IO.File.Exists(tempPath))
-                    System.IO.File.Copy(path, tempPath, false);
+                System.IO.File.Copy(path, tempPath, true);
                 path = System.IO.Path.GetFullPath(tempPath);
 
                 this.FramePPTName = System.IO.Path.GetFileName(path);
@@ -571,14 +583,16 @@ namespace BibleProjector_WPF
 
                 if (pptState == PptState.NotUsed)
                 {
-                    setPresentation(path);
                     lastppt.Close();
+                    setPresentation(path);
+                    SlideWindow = null;
                 }
                 else if (pptState == PptState.WindowHide)
                 {
+                    lastppt.Close();
                     setPresentation(path);
                     ChangeApply(currentPage);
-                    lastppt.Close();
+                    SlideWindow = null;
                 }
                 else
                 {
@@ -599,8 +613,6 @@ namespace BibleProjector_WPF
 
                     lastppt.Close();
                 }
-
-                SlideWindow = null;
             }
 
             public void deletePresentation()

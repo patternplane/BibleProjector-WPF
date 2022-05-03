@@ -100,13 +100,8 @@ namespace BibleProjector_WPF.ViewModel
         private int CurrentPageIndex_in;
         public int CurrentPageIndex { get { return CurrentPageIndex_in; } set { CurrentPageIndex_in = value;
                 if (CurrentPageIndex_in != -1)
-                {
                     // 페이지 변경 처리
-                    if (CurrentPageIndex_in == 0)
-                        setBibleSlide_VerseContent(bibleContent:BiblePages[CurrentPageIndex_in], verse: verse);
-                    else
-                        setBibleSlide_VerseContent(bibleContent: BiblePages[CurrentPageIndex_in]);
-                }
+                    setBibleSlide_VerseContent(BiblePages[CurrentPageIndex_in], verse, CurrentPageIndex_in == 0);
                 NotifyPropertyChanged();
             } }
 
@@ -153,12 +148,9 @@ namespace BibleProjector_WPF.ViewModel
             Powerpoint.Bible.SlideShowHide();
         }
 
-        void setBibleSlide_VerseContent(string bibleContent,int verse = -1)
+        void setBibleSlide_VerseContent(string bibleContent,int verse, bool isFirstPage = false)
         {
-            if (verse == -1)
-                Powerpoint.Bible.Change_VerseContent("", bibleContent);
-            else
-                Powerpoint.Bible.Change_VerseContent(verse.ToString(), bibleContent);
+            Powerpoint.Bible.Change_VerseContent(verse.ToString(), bibleContent, isFirstPage);
         }
 
         void setBibleSlide_BibleChapter(string bible, int chapter)
