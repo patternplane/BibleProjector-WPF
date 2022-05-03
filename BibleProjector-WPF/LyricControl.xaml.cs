@@ -73,11 +73,11 @@ namespace BibleProjector_WPF
                 songData[i] = new string[2][];
 
                 songData[i][0] = new string[2];
-                songData[i][0][0] = "/제목";
+                songData[i][0][0] = "{t}";
                 songData[i][0][1] = lyric.title;
 
                 songData[i][1] = new string[2];
-                songData[i][1][0] = "/본문";
+                songData[i][1][0] = "{c}";
                 songData[i][1][1] = pages[i];
             }
 

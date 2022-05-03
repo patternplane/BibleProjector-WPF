@@ -627,28 +627,41 @@ namespace BibleProjector_WPF
                 string shapeText;
                 TextShape ts;
                 foreach (Shape s in ppt.Slides[1].Shapes)
-                    if (s.HasTextFrame != Microsoft.Office.Core.MsoTriState.msoFalse
-                        && module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "/", module.StringKMP.DefaultStringCompaerFunc))
+                    if (s.HasTextFrame != Microsoft.Office.Core.MsoTriState.msoFalse)
                     {
-                        ts = new TextShape();
-                        ts.shape = s;
-                        ts.Format = new List<string>(5);
-
-                        shapeText = s.TextFrame.TextRange.Text;
-                        int startIndex;
-                        for (int i = 0; i < shapeText.Length;)
+                        int[] index = module.StringKMP.FindPattern(s.TextFrame.TextRange.Text, "{", module.StringKMP.DefaultStringCompaerFunc);
+                        if (index.Length != 0)
                         {
-                            startIndex = i;
-                            if (shapeText[i] == '/')
-                                while (i < shapeText.Length && !char.IsWhiteSpace(shapeText[i]))
-                                    i++;
-                            else
-                                while (i < shapeText.Length && shapeText[i] != '/')
-                                    i++;
-                            ts.Format.Add(shapeText.Substring(startIndex, i - startIndex));
-                        }
+                            shapeText = s.TextFrame.TextRange.Text;
+                            List<string> format = new List<string>(5);
 
-                        textShapes.Add(ts);
+                            int startIndex = 0;
+                            int endIndex = 0;
+                            int i = 0;
+                            for (; i < index.Length; i++)
+                            {
+                                endIndex = index[i];
+                                if (startIndex != endIndex)
+                                    format.Add(shapeText.Substring(startIndex, endIndex - startIndex));
+                                
+                                for (startIndex = endIndex; endIndex < shapeText.Length && shapeText[endIndex] != '}'; endIndex++) ;
+                                if(endIndex == shapeText.Length)
+                                    break;
+                                endIndex++;
+
+                                format.Add(shapeText.Substring(startIndex, endIndex - startIndex));
+                                startIndex = endIndex;
+                            }
+                            if (i != index.Length)
+                                break;
+                            else if (startIndex != shapeText.Length)
+                                format.Add(shapeText.Substring(startIndex, shapeText.Length - startIndex));
+
+                            ts = new TextShape();
+                            ts.shape = s;
+                            ts.Format = format;
+                            textShapes.Add(ts);
+                        }
                     }
             }
 
@@ -699,7 +712,7 @@ namespace BibleProjector_WPF
                     str.Clear();
                     foreach (string s in textShapes[i].Format)
                     {
-                        if (s[0] == '/')
+                        if (s[0] == '{')
                         {
                             if ((index = findChangeTableIndex(s, SongData[Page])) == -1)
                                 str.Append("");
