@@ -85,6 +85,22 @@ namespace BibleProjector_WPF
             VM_Option.deleteSongFrame(itemindex.ToArray());
         }
 
+        void LayoutResetButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("모든 창의 크기를 초기화합니다.", "창 크기 초기화", MessageBoxButton.OKCancel, MessageBoxImage.Hand) != MessageBoxResult.OK)
+                return;
+
+            module.LayoutInfo.removeAllLayoutData();
+
+            MainWindow.ProgramMainWindow.ResetLayout();
+            if (BibleControl.BibleControlAccess != null)
+                BibleControl.BibleControlAccess.ResetLayout();
+            if (ReadingControl.ReadingControlAccess != null)
+                ReadingControl.ReadingControlAccess.ResetLayout();
+            if (SongControl.SongControlAccess != null)
+                SongControl.SongControlAccess.ResetLayout();
+        }
+
         // ========================================= 숫자기입용 텍스트박스 입력 처리 ============================================
 
         private void NumberTextBox_KeyDown(object sender, KeyEventArgs e)

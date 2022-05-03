@@ -19,17 +19,58 @@ namespace BibleProjector_WPF
     /// </summary>
     public partial class BibleControl : Window
     {
+        static public BibleControl BibleControlAccess = null;
+
         private ViewModel.BibleControlViewModel VM_BibleControl;
 
         public BibleControl(string Kjjeul)
         {
+            BibleControlAccess = this;
+
             InitializeComponent();
             this.DataContext = VM_BibleControl = new ViewModel.BibleControlViewModel(Kjjeul);
+            
+            setLayout();
         }
 
         public void ShowBible (string Kjjeul)
         {
             VM_BibleControl.showBible(Kjjeul);
+        }
+
+        void setLayout()
+        {
+            if (module.LayoutInfo.Layout_BibleControl.Width == -1)
+                return;
+
+            this.Width = module.LayoutInfo.Layout_BibleControl.Width;
+            this.Height = module.LayoutInfo.Layout_BibleControl.Height;
+            this.Left = module.LayoutInfo.Layout_BibleControl.x;
+            this.Top = module.LayoutInfo.Layout_BibleControl.y;
+        }
+
+        // =================================================== 윈도우 레이아웃 변경 ======================================================
+
+        public void ResetLayout()
+        {
+            this.Width = 533.438;
+            this.Height = 336.375;
+        }
+
+        void changeSize(object sender, SizeChangedEventArgs e)
+        {
+            module.LayoutInfo.Layout_BibleControl.Width = this.ActualWidth;
+            module.LayoutInfo.Layout_BibleControl.Height = this.ActualHeight;
+            module.LayoutInfo.Layout_BibleControl.x = this.Left;
+            module.LayoutInfo.Layout_BibleControl.y = this.Top;
+        }
+
+        void changeLocate(object sender, EventArgs e)
+        {
+            module.LayoutInfo.Layout_BibleControl.Width = this.ActualWidth;
+            module.LayoutInfo.Layout_BibleControl.Height = this.ActualHeight;
+            module.LayoutInfo.Layout_BibleControl.x = this.Left;
+            module.LayoutInfo.Layout_BibleControl.y = this.Top;
         }
 
         // ================================================ 이벤트 처리 ================================================ 

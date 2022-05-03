@@ -19,17 +19,57 @@ namespace BibleProjector_WPF
     /// </summary>
     public partial class ReadingControl : Window
     {
+        static public ReadingControl ReadingControlAccess = null;
+
         private ViewModel.ReadingControlViewModel VM_ReadingControl;
 
         public ReadingControl(int ReadingNumber)
         {
+            ReadingControlAccess = this;
+
             InitializeComponent();
             this.DataContext = VM_ReadingControl = new ViewModel.ReadingControlViewModel(ReadingNumber);
+            setLayout();
         }
 
         public void ShowReading (int ReadingNumber)
         {
             VM_ReadingControl.showReading(ReadingNumber);
+        }
+
+        void setLayout()
+        {
+            if (module.LayoutInfo.Layout_ReadingControl.Width == -1)
+                return;
+
+            this.Width = module.LayoutInfo.Layout_ReadingControl.Width;
+            this.Height = module.LayoutInfo.Layout_ReadingControl.Height;
+            this.Left = module.LayoutInfo.Layout_ReadingControl.x;
+            this.Top = module.LayoutInfo.Layout_ReadingControl.y;
+        }
+
+        // =================================================== 윈도우 레이아웃 변경 ======================================================
+
+        public void ResetLayout()
+        {
+            this.Width = 533.438;
+            this.Height = 336.375;
+        }
+
+        void changeSize(object sender, SizeChangedEventArgs e)
+        {
+            module.LayoutInfo.Layout_ReadingControl.Width = this.ActualWidth;
+            module.LayoutInfo.Layout_ReadingControl.Height = this.ActualHeight;
+            module.LayoutInfo.Layout_ReadingControl.x = this.Left;
+            module.LayoutInfo.Layout_ReadingControl.y = this.Top;
+        }
+
+        void changeLocate(object sender, EventArgs e)
+        {
+            module.LayoutInfo.Layout_ReadingControl.Width = this.ActualWidth;
+            module.LayoutInfo.Layout_ReadingControl.Height = this.ActualHeight;
+            module.LayoutInfo.Layout_ReadingControl.x = this.Left;
+            module.LayoutInfo.Layout_ReadingControl.y = this.Top;
         }
 
         // ================================================ 이벤트 처리 ================================================ 

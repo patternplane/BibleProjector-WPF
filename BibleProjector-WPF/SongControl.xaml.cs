@@ -19,17 +19,57 @@ namespace BibleProjector_WPF
     /// </summary>
     public partial class SongControl : Window
     {
+        static public SongControl SongControlAccess = null;
+
         private ViewModel.SongControlViewModel VM_SongControl;
 
         public SongControl(string[][][] songData,string path)
         {
+            SongControlAccess = this;
+
             InitializeComponent();
             this.DataContext = VM_SongControl = new ViewModel.SongControlViewModel(songData, System.IO.Path.GetFileName(path));
+            setLayout();
         }
 
         public void ShowSong (string[][][] songData, string path)
         {
             VM_SongControl.showSong(songData, System.IO.Path.GetFileName(path));
+        }
+
+        void setLayout()
+        {
+            if (module.LayoutInfo.Layout_SongControl.Width == -1)
+                return;
+
+            this.Width = module.LayoutInfo.Layout_SongControl.Width;
+            this.Height = module.LayoutInfo.Layout_SongControl.Height;
+            this.Left = module.LayoutInfo.Layout_SongControl.x;
+            this.Top = module.LayoutInfo.Layout_SongControl.y;
+        }
+
+        // =================================================== 윈도우 레이아웃 변경 ======================================================
+
+        public void ResetLayout()
+        {
+            this.Width = 533.438;
+            this.Height = 336.375;
+        }
+
+        void changeSize(object sender, SizeChangedEventArgs e)
+        {
+            module.LayoutInfo.Layout_SongControl.Width = this.ActualWidth;
+            module.LayoutInfo.Layout_SongControl.Height = this.ActualHeight;
+            module.LayoutInfo.Layout_SongControl.x = this.Left;
+            module.LayoutInfo.Layout_SongControl.y = this.Top;
+        }
+
+        void changeLocate(object sender, EventArgs e)
+        {
+            module.LayoutInfo.Layout_SongControl.Width = this.ActualWidth;
+            module.LayoutInfo.Layout_SongControl.Height = this.ActualHeight;
+            module.LayoutInfo.Layout_SongControl.x = this.Left;
+            module.LayoutInfo.Layout_SongControl.y = this.Top;
         }
 
         // ================================================ 이벤트 처리 ================================================ 

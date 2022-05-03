@@ -9,11 +9,13 @@
 
     <Grid x:Name="MainOptionGrid">
         <Grid.RowDefinitions>
-            <RowDefinition Height="26*"/>
-            <RowDefinition Height="100*"/>
-            <RowDefinition Height="76*"/>
-            <RowDefinition Height="277*"/>
-            <RowDefinition Height="52*"/>
+            <RowDefinition Height="8*"/>
+            <RowDefinition Height="97*"/>
+            <RowDefinition Height="14*"/>
+            <RowDefinition Height="226*"/>
+            <RowDefinition Height="17*"/>
+            <RowDefinition Height="72*"/>
+            <RowDefinition Height="16*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="119*"/>
@@ -52,9 +54,9 @@
 
         <Grid Grid.Row="3" Grid.Column="1" >
             <Grid.RowDefinitions>
-                <RowDefinition Height="43*"/>
-                <RowDefinition Height="42*"/>
-                <RowDefinition Height="192*"/>
+                <RowDefinition Height="23*"/>
+                <RowDefinition Height="24*"/>
+                <RowDefinition Height="66*"/>
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0">
@@ -107,8 +109,17 @@
                         <Button  Grid.Row="1" Content="삭제" Click="SongFrameDeleteButton_Click"></Button>
                     </Grid>
                 </Grid>
-
             </Grid>
+        </Grid>
+
+        <Grid Grid.Row="5" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="132*"/>
+                <ColumnDefinition Width="97*"/>
+                <ColumnDefinition Width="440*"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Content="윈도우 크기&#10;초기화하기" VerticalAlignment="Center" HorizontalAlignment="Center"></Label>
+            <Button Grid.Column="1" Content="초기화" Click="LayoutResetButton_Click"></Button>
         </Grid>
     </Grid>
 </UserControl>

@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BibleProjector_WPF"
         mc:Ignorable="d"
-        Title="예배자막" Height="612.79" Width="1053.488">
+        Title="예배자막" Height="612.79" Width="1053.488"
+        LocationChanged="changeLocate"
+        SizeChanged="changeSize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="10*"/>

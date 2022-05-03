@@ -6,7 +6,9 @@
         xmlns:local="clr-namespace:BibleProjector_WPF"
         mc:Ignorable="d"
         Title="찬양가사" Height="336.375" Width="533.438"
-        KeyDown="Window_KeyDown">
+        KeyDown="Window_KeyDown"
+        LocationChanged="changeLocate"
+        SizeChanged="changeSize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="23*"/>

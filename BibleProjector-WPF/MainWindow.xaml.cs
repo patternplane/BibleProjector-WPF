@@ -50,7 +50,31 @@ namespace BibleProjector_WPF
         BibleControl Ctrl_Bible = null;
         ReadingControl Ctrl_Reading = null;
 
-        public static Window ProgramMainWindow;
+        public static MainWindow ProgramMainWindow = null;
+
+        // =================================================== 윈도우 레이아웃 변경 ======================================================
+
+        public void ResetLayout()
+        {
+            this.Width = 1053.488;
+            this.Height = 612.79;
+        }
+
+        void changeSize(object sender, SizeChangedEventArgs e)
+        {
+            module.LayoutInfo.Layout_MainWindow.Width = this.ActualWidth;
+            module.LayoutInfo.Layout_MainWindow.Height = this.ActualHeight;
+            module.LayoutInfo.Layout_MainWindow.x = this.Left;
+            module.LayoutInfo.Layout_MainWindow.y = this.Top;
+        }
+
+        void changeLocate(object sender, EventArgs e)
+        {
+            module.LayoutInfo.Layout_MainWindow.Width = this.ActualWidth;
+            module.LayoutInfo.Layout_MainWindow.Height = this.ActualHeight;
+            module.LayoutInfo.Layout_MainWindow.x = this.Left;
+            module.LayoutInfo.Layout_MainWindow.y = this.Top;
+        }
 
         // =================================================== 프로그램 시작 처리 ======================================================
 
@@ -60,6 +84,7 @@ namespace BibleProjector_WPF
 
             Database.DatabaseInitailize();
             module.ProgramOption.Initialize();
+            module.LayoutInfo.Initialize();
             string error = Powerpoint.Initialize();
             if (error.CompareTo("") != 0)
                 MessageBox.Show("다음을 확인해주세요 : \r\n" + error, "ppt틀 등록되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -68,6 +93,8 @@ namespace BibleProjector_WPF
 
             BibleInitialize();
             ReadingInitialize();
+
+            setLayout();
         }
 
         void BibleInitialize()
@@ -88,6 +115,17 @@ namespace BibleProjector_WPF
         void ReadingInitialize()
         {
             SetReadingList();
+        }
+
+        void setLayout()
+        {
+            if (module.LayoutInfo.Layout_MainWindow.Width == -1)
+                return;
+
+            this.Width = module.LayoutInfo.Layout_MainWindow.Width;
+            this.Height = module.LayoutInfo.Layout_MainWindow.Height;
+            this.Left = module.LayoutInfo.Layout_MainWindow.x;
+            this.Top = module.LayoutInfo.Layout_MainWindow.y;
         }
 
         // =================================================== 프로그램 종료 처리 ======================================================
