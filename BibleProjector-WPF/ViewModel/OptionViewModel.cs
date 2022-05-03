@@ -183,6 +183,12 @@ namespace BibleProjector_WPF.ViewModel
             Powerpoint.Song.setPresentation(newFilePath);
         }
 
+        public void refreshSongFrame(int[] itemIndex)
+        {
+            foreach (int i in itemIndex)
+                Powerpoint.Song.refreshPresentation(SongFramePaths_List[i].Path);
+        }
+
         public void deleteSongFrame(int[] itemIndex)
         {
             for (int i = itemIndex.Length - 1; i >= 0; i--)

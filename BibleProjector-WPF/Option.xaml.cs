@@ -57,6 +57,19 @@ namespace BibleProjector_WPF
             VM_Option.setSongFrame();
         }
 
+        void SongFrameRefreshButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (SongFramePaths_ListBox.SelectedItems.Count == 0)
+                return;
+
+            List<int> itemindex = new List<int>(10);
+            foreach (object item in SongFramePaths_ListBox.SelectedItems)
+                itemindex.Add(SongFramePaths_ListBox.Items.IndexOf(item));
+            itemindex.Sort();
+
+            VM_Option.refreshSongFrame(itemindex.ToArray());
+        }
+
         void SongFrameDeleteButton_Click(object sender, RoutedEventArgs e)
         {
             if (SongFramePaths_ListBox.SelectedItems.Count == 0)
