@@ -193,17 +193,24 @@
         </Grid>
         <Grid Grid.Row="0" Grid.Column="2" >
             <Grid.RowDefinitions>
-                <RowDefinition Height="103*"/>
+                <RowDefinition Height="38*"/>
+                <RowDefinition Height="28*"/>
+                <RowDefinition Height="31*"/>
+                <RowDefinition Height="8*"/>
                 <RowDefinition Height="41*"/>
                 <RowDefinition Height="55*"/>
                 <RowDefinition Height="24*"/>
-                <RowDefinition Height="222*"/>
+                <RowDefinition Height="221*"/>
                 <RowDefinition Height="11*"/>
             </Grid.RowDefinitions>
-            <Label Grid.Row="1" Content="슬라이드별&#10;줄 수 :"></Label>
-            <TextBox Grid.Row="2" Text="{Binding LinePerSlideText}"
+            <Label Grid.Row="1" Content="ppt 틀"></Label>
+            <ComboBox Grid.Row="2" ItemsSource="{Binding SongFrameList}" SelectedItem="{Binding SongFrameSelection}"
+                      DisplayMemberPath="FileName"></ComboBox>
+            
+            <Label Grid.Row="4" Content="슬라이드별&#10;줄 수 :"></Label>
+            <TextBox Grid.Row="5" Text="{Binding LinePerSlideText}"
                      KeyDown="LinePerSlideTextBox_KeyDown"></TextBox>
-            <Button Grid.Row="4" Content="출력" Click="LyricShowButton_Click">
+            <Button Grid.Row="7" Content="출력" Click="LyricShowButton_Click">
             </Button>
         </Grid>
         <Grid Grid.Row="2">

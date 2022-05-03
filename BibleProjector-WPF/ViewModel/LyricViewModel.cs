@@ -140,7 +140,7 @@ namespace BibleProjector_WPF.ViewModel
                 {
                     needCheckNewLine_title = true;
                     if (currentLyric != null)
-                        currentLyric.title = currentLyricTitle_in; 
+                        currentLyric.title = currentLyricTitle_in;
                 }
                 else
                     needCheckNewLine_title = false;
@@ -160,7 +160,7 @@ namespace BibleProjector_WPF.ViewModel
                 {
                     needCheckNewLine_Content = true;
                     if (currentLyric != null)
-                        currentLyric.content = currentLyricContent_in; 
+                        currentLyric.content = currentLyricContent_in;
                 }
                 else
                     needCheckNewLine_Content = false;
@@ -175,7 +175,7 @@ namespace BibleProjector_WPF.ViewModel
         /// <summary>
         /// 곡의 한 단위를 나타냅니다.
         /// </summary>
-        public class SingleLyric :INotifyPropertyChanged
+        public class SingleLyric : INotifyPropertyChanged
         {
             public SingleLyric(string title, string content)
             {
@@ -241,7 +241,7 @@ namespace BibleProjector_WPF.ViewModel
             public int personalNumber;
             public int lyricNumber;
             private SingleLyric lyric_in;
-            public SingleLyric lyric { get { return lyric_in; }  set { lyric_in = value; NotifyPropertyChanged(); } }
+            public SingleLyric lyric { get { return lyric_in; } set { lyric_in = value; NotifyPropertyChanged(); } }
 
             public event PropertyChangedEventHandler PropertyChanged;
             private void NotifyPropertyChanged(string propertyName = "")
@@ -276,10 +276,17 @@ namespace BibleProjector_WPF.ViewModel
         private string LinePerSlideText_in = "1";
         public int LinePerSlide { get; private set; } = 1;
         public string LinePerSlideText { get { return LinePerSlideText_in; } set { LinePerSlideText_in = value;
-                LinePerSlideText_in = LinePerSlideText_in.Replace(" ","");
+                LinePerSlideText_in = LinePerSlideText_in.Replace(" ", "");
                 LinePerSlide = int.Parse(LinePerSlideText_in);
                 NotifyPropertyChanged();
             } }
+
+        // ppt 틀
+        public BindingList<module.ProgramOption.SongFrameFile> SongFrameList { 
+            get { return module.ProgramOption.SongFrameFiles; }
+            set { }
+        } 
+        public module.ProgramOption.SongFrameFile SongFrameSelection {get;set;}
 
         // ============================================ 이벤트에 쓰일 함수 ==============================================
 

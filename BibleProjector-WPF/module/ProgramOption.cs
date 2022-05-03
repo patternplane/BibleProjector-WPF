@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using System.IO;
+using System.ComponentModel;
 
 namespace BibleProjector_WPF.module
 {
@@ -19,8 +20,17 @@ namespace BibleProjector_WPF.module
 
         static public string BibleFramePath { get; set; } = null;
         static public string ReadingFramePath { get; set; } = null;
-        static public List<string> SongFramePath { get; set; } = new List<string>(2);
+        public class SongFrameFile
+        {
+            public string Path { get; set; }
+            public string FileName { get; set; }
+        }
+        static public BindingList<SongFrameFile> SongFrameFiles { get; set; } = new BindingList<SongFrameFile>();
 
+        static public void test(SongFrameFile f)
+        {
+            SongFrameFiles.Add(f);
+        }
 
         // ======================================= 세팅 및 종료 =======================================
 
@@ -31,7 +41,7 @@ namespace BibleProjector_WPF.module
             string[] items = module.ProgramData.getOptionData().Split(new string[] { SEPARATOR }, StringSplitOptions.None);
             if (items.Length == 1)
                 return;
-
+            
             if (items[0].CompareTo("") != 0)
                 Bible_CharPerLine = int.Parse(items[0]);
             if (items[1].CompareTo("") != 0)
@@ -42,7 +52,8 @@ namespace BibleProjector_WPF.module
             if (items[3].CompareTo("") != 0)
                 ReadingFramePath = items[3];
             for (int i = 4; i < items.Length; i++)
-                SongFramePath.Add(items[i]);
+                SongFrameFiles.Add(new SongFrameFile() { Path=items[i] ,FileName = System.IO.Path.GetFileName(items[i]) });
+
         }
 
         static public string getSaveData()
@@ -57,10 +68,10 @@ namespace BibleProjector_WPF.module
             str.Append(BibleFramePath);
             str.Append(SEPARATOR);
             str.Append(ReadingFramePath);
-            foreach (string path in SongFramePath)
+            foreach (SongFrameFile f in SongFrameFiles)
             {
                 str.Append(SEPARATOR);
-                str.Append(path);
+                str.Append(f.Path);
             }
 
             return str.ToString();

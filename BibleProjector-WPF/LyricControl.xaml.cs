@@ -91,17 +91,19 @@ namespace BibleProjector_WPF
 
         void LyricShowButton_Click(object sender, RoutedEventArgs e)
         {
-            if (VM_LyricViewModel.SelectedLyric != null)
+            if (VM_LyricViewModel.SongFrameSelection == null)
+                MessageBox.Show("ppt 틀을 선택해주세요!", "ppt 틀 선택되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
+            else if (VM_LyricViewModel.SelectedLyric == null)
+                MessageBox.Show("출력할 찬양곡을 선택해주세요!", "찬양곡 선택되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
+            else
             {
                 // 곡별 사용할 틀에 대한 설계가 없어 수정되지 않음
                 if (Ctrl_Song == null)
-                    Ctrl_Song = new SongControl(makeSongData(VM_LyricViewModel.SelectedLyric, VM_LyricViewModel.LinePerSlide),module.ProgramOption.SongFramePath[0]);
+                    Ctrl_Song = new SongControl(makeSongData(VM_LyricViewModel.SelectedLyric, VM_LyricViewModel.LinePerSlide),VM_LyricViewModel.SongFrameSelection.Path);
                 else
-                    Ctrl_Song.ShowSong(makeSongData(VM_LyricViewModel.SelectedLyric, VM_LyricViewModel.LinePerSlide), module.ProgramOption.SongFramePath[0]);
+                    Ctrl_Song.ShowSong(makeSongData(VM_LyricViewModel.SelectedLyric, VM_LyricViewModel.LinePerSlide), VM_LyricViewModel.SongFrameSelection.Path);
                 Ctrl_Song.Show();
             }
-            else
-                MessageBox.Show("출력할 찬양곡을 선택해주세요!", "찬양곡 선택되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         // ======================================================= 숫자만 기입받는 텍스트박스 처리 ======================================================

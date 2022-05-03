@@ -13,18 +13,18 @@ namespace BibleProjector_WPF.ViewModel
 
         // ========================================== View 연결 속성들 ========================================== 
 
-        public string LinePerSlide_Text { 
-            get 
+        public string LinePerSlide_Text {
+            get
             {
                 return module.ProgramOption.Bible_LinePerSlide.ToString();
-            } 
+            }
             set
             {
                 module.ProgramOption.Bible_LinePerSlide = int.Parse(value);
                 NotifyPropertyChanged();
             }
         }
-        public string CharPerLine_Text 
+        public string CharPerLine_Text
         {
             get
             {
@@ -37,7 +37,7 @@ namespace BibleProjector_WPF.ViewModel
             }
         }
 
-        public string BibleFramePath_Text 
+        public string BibleFramePath_Text
         {
             get
             {
@@ -61,18 +61,8 @@ namespace BibleProjector_WPF.ViewModel
                 NotifyPropertyChanged();
             }
         }
-        private BindingList<string> SongFramePaths_List_in = new BindingList<string>(module.ProgramOption.SongFramePath);
-        public BindingList<String> SongFramePaths_List
-        {
-            get
-            {
-                return SongFramePaths_List_in;
-            }
-            set
-            {
-                SongFramePaths_List_in = value;
-            }
-        }
+        public BindingList<module.ProgramOption.SongFrameFile> SongFramePaths_List { get { return module.ProgramOption.SongFrameFiles; } set{}
+     }
 
         // ========================================== 일반 속성들 ========================================== 
 
@@ -109,8 +99,8 @@ namespace BibleProjector_WPF.ViewModel
                 return false;
             if (ReadingFramePath_Text != null && ReadingFramePath_Text.CompareTo(path) == 0)
                 return false;
-            foreach (string s in SongFramePaths_List)
-                if (s.CompareTo(path) == 0)
+            foreach (module.ProgramOption.SongFrameFile f in SongFramePaths_List)
+                if (f.Path.CompareTo(path) == 0)
                     return false;
 
             return true;
@@ -189,7 +179,7 @@ namespace BibleProjector_WPF.ViewModel
             FD_SongFrame.InitialDirectory = System.IO.Path.GetDirectoryName(FD_SongFrame.FileName) + "\\";
 
             string newFilePath = FD_SongFrame.FileName;
-            SongFramePaths_List.Add(newFilePath);
+            SongFramePaths_List.Add(new module.ProgramOption.SongFrameFile() { Path= newFilePath , FileName = System.IO.Path.GetFileName(newFilePath)});
             Powerpoint.Song.setPresentation(newFilePath);
         }
 
@@ -197,7 +187,7 @@ namespace BibleProjector_WPF.ViewModel
         {
             for (int i = itemIndex.Length - 1; i >= 0; i--)
             {
-                Powerpoint.Song.closeSingle(SongFramePaths_List[itemIndex[i]]);
+                Powerpoint.Song.closeSingle(SongFramePaths_List[itemIndex[i]].Path);
                 SongFramePaths_List.RemoveAt(itemIndex[i]);
             }
         }
