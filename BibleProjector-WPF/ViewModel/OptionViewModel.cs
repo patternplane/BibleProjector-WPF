@@ -85,8 +85,8 @@ namespace BibleProjector_WPF.ViewModel
 
             FD_BibleFrame.InitialDirectory = FD_ReadingFrame.InitialDirectory = FD_SongFrame.InitialDirectory
                 = ".\\Frame\\";
-            FD_BibleFrame.Multiselect = FD_ReadingFrame.Multiselect = FD_SongFrame.Multiselect
-                = false;
+            FD_BibleFrame.Multiselect = FD_ReadingFrame.Multiselect = false;
+            FD_SongFrame.Multiselect = true;
             FD_BibleFrame.Filter = FD_ReadingFrame.Filter = FD_SongFrame.Filter
                 = "PowerPoint파일(*.ppt,*.pptx,*.pptm)|*.ppt;*.pptx;*.pptm";
         }
@@ -132,7 +132,15 @@ namespace BibleProjector_WPF.ViewModel
 
         public void refreshBibleFrame()
         {
-            if (BibleFramePath_Text != null)
+            if (BibleFramePath_Text == null)
+                return;
+
+            if (!new System.IO.FileInfo(BibleFramePath_Text).Exists)
+            {
+                System.Windows.MessageBox.Show("해당 틀 파일이 존재하지 않습니다!\r\n" + BibleFramePath_Text, "틀 파일 없음", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                BibleFramePath_Text = null;
+            }
+            else
                 Powerpoint.Bible.refreshPresentation(BibleFramePath_Text);
         }
 
@@ -162,7 +170,15 @@ namespace BibleProjector_WPF.ViewModel
 
         public void refreshReadingFrame()
         {
-            if (ReadingFramePath_Text != null)
+            if (ReadingFramePath_Text == null)
+                return;
+
+            if (!new System.IO.FileInfo(ReadingFramePath_Text).Exists)
+            {
+                System.Windows.MessageBox.Show("해당 틀 파일이 존재하지 않습니다!\r\n" + ReadingFramePath_Text, "틀 파일 없음", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                ReadingFramePath_Text = null;
+            }
+            else
                 Powerpoint.Reading.refreshPresentation(ReadingFramePath_Text);
         }
 
@@ -170,23 +186,36 @@ namespace BibleProjector_WPF.ViewModel
         {
             if (FD_SongFrame.ShowDialog() == System.Windows.Forms.DialogResult.Cancel)
                 return;
-            while (!isValidFrameFile(FD_SongFrame.FileName))
-            {
-                System.Windows.MessageBox.Show("이미 사용중인 ppt 틀입니다.", "중복된 파일 등록", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
-                if (FD_SongFrame.ShowDialog() == System.Windows.Forms.DialogResult.Cancel)
-                    return;
-            }
+
             FD_SongFrame.InitialDirectory = System.IO.Path.GetDirectoryName(FD_SongFrame.FileName) + "\\";
 
-            string newFilePath = FD_SongFrame.FileName;
-            SongFramePaths_List.Add(new module.ProgramOption.SongFrameFile() { Path= newFilePath , FileName = System.IO.Path.GetFileName(newFilePath)});
-            Powerpoint.Song.setPresentation(newFilePath);
+
+            foreach (string newFilePath in FD_SongFrame.FileNames)
+                if (isValidFrameFile(newFilePath)) 
+                { 
+                    SongFramePaths_List.Add(new module.ProgramOption.SongFrameFile() { Path = newFilePath, FileName = System.IO.Path.GetFileName(newFilePath) });
+                    Powerpoint.Song.setPresentation(newFilePath);
+                }
         }
 
         public void refreshSongFrame(int[] itemIndex)
         {
-            foreach (int i in itemIndex)
-                Powerpoint.Song.refreshPresentation(SongFramePaths_List[i].Path);
+            StringBuilder nonFrame = new StringBuilder(50);
+
+            for (int i = itemIndex.Length - 1; i >= 0; i--)
+            {
+                if (!new System.IO.FileInfo(SongFramePaths_List[itemIndex[i]].Path).Exists)
+                {
+                    nonFrame.Append("\r\n");
+                    nonFrame.Append(SongFramePaths_List[itemIndex[i]].Path);
+                    Powerpoint.Song.closeSingle(SongFramePaths_List[itemIndex[i]].Path);
+                    SongFramePaths_List.RemoveAt(itemIndex[i]);
+                }
+                else
+                    Powerpoint.Song.refreshPresentation(SongFramePaths_List[itemIndex[i]].Path);
+            }
+            if (nonFrame.Length != 0)
+                System.Windows.MessageBox.Show("해당 틀 파일이 존재하지 않습니다!" + nonFrame.ToString(), "틀 파일 없음", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error); ;
         }
 
         public void deleteSongFrame(int[] itemIndex)

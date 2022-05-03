@@ -430,14 +430,14 @@ namespace BibleProjector_WPF
             {
                 SongFormatPPT findedSong = ppt.Find(x => x.FramePPTName.CompareTo(System.IO.Path.GetFileName(path)) == 0);
                 if (findedSong != null)
-                    findedSong.close();
+                    findedSong.deletePresentation();
                 ppt.Remove(findedSong);
             }
 
             static public void closeAll()
             {
                 foreach (SongFormatPPT sf in ppt)
-                    sf.close();
+                    sf.deletePresentation();
                 ppt.Clear();
             }
 
@@ -603,6 +603,13 @@ namespace BibleProjector_WPF
                 SlideWindow = null;
             }
 
+            public void deletePresentation()
+            {
+                ppt.Close();
+
+                System.IO.File.Delete(System.IO.Path.GetFullPath(FRAME_TEMP_DIRECTORY + FramePPTName));
+            }
+
             void getCommand()
             {
                 string shapeText;
@@ -631,11 +638,6 @@ namespace BibleProjector_WPF
 
                         textShapes.Add(ts);
                     }
-            }
-
-            public void close()
-            {
-                ppt.Close();
             }
 
             // ============================================ 메소드 ============================================

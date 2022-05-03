@@ -48,11 +48,23 @@ namespace BibleProjector_WPF.module
                 Bible_LinePerSlide = int.Parse(items[1]);
 
             if (items[2].CompareTo("") != 0)
-                BibleFramePath = items[2];
+            {
+                System.IO.FileInfo file = new FileInfo(items[2]);
+                if (file.Exists)
+                    BibleFramePath = items[2];
+            }
             if (items[3].CompareTo("") != 0)
-                ReadingFramePath = items[3];
+            {
+                System.IO.FileInfo file = new FileInfo(items[3]);
+                if (file.Exists)
+                    ReadingFramePath = items[3];
+            }
             for (int i = 4; i < items.Length; i++)
-                SongFrameFiles.Add(new SongFrameFile() { Path=items[i] ,FileName = System.IO.Path.GetFileName(items[i]) });
+            {
+                System.IO.FileInfo file = new FileInfo(items[i]);
+                if (file.Exists)
+                    SongFrameFiles.Add(new SongFrameFile() { Path = items[i], FileName = System.IO.Path.GetFileName(items[i]) });
+            }
 
         }
 
