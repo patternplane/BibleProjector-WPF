@@ -43,8 +43,12 @@ namespace BibleProjector_WPF
                 pptFrameError.Append("교독문 ppt틀\r\n");
             else
                 Powerpoint.Reading.setPresentation(module.ProgramOption.ReadingFramePath);
-            foreach (module.ProgramOption.SongFrameFile f in module.ProgramOption.SongFrameFiles)
-                Powerpoint.Song.setPresentation(f.Path);
+            if (module.ProgramOption.SongFrameFiles.Count == 0)
+                pptFrameError.Append("찬양 ppt틀\r\n");
+            else
+                foreach (module.ProgramOption.SongFrameFile f in module.ProgramOption.SongFrameFiles)
+                    Powerpoint.Song.setPresentation(f.Path);
+            
 
             return pptFrameError.ToString();
         }
