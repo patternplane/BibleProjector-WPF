@@ -42,10 +42,8 @@ namespace BibleProjector_WPF.ViewModel
                 SongPages.Add(data[1][1]);
             CurrentPageIndex = 0;
 
-            SlideShowRun();
-
-            isDisplayShow = true;
             isTextShow = true;
+            isDisplayShow = true;
         }
 
         string[][][] songData;
@@ -60,7 +58,9 @@ namespace BibleProjector_WPF.ViewModel
                     onDisplay();
                 else
                     offDisplay();
-            } }
+                NotifyPropertyChanged();
+            } 
+        }
         // 자막 숨기기 토글버튼 - isChecked
         private bool isTextShow_in;
         public bool isTextShow { get { return isTextShow_in; } set { isTextShow_in = value;
@@ -68,6 +68,7 @@ namespace BibleProjector_WPF.ViewModel
                     ShowText();
                 else
                     hideText();
+                NotifyPropertyChanged();
             }
         }
 

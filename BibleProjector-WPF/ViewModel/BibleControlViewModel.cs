@@ -55,10 +55,8 @@ namespace BibleProjector_WPF.ViewModel
             setBibleSlide_BibleChapter(bible_display, chapter);
             CurrentPageIndex = 0;
 
-            SlideShowRun();
-
-            isDisplayShow = true;
             isTextShow = true;
+            isDisplayShow = true;
         }
 
         string Kjjeul_in;
@@ -80,7 +78,9 @@ namespace BibleProjector_WPF.ViewModel
                     onDisplay();
                 else
                     offDisplay();
-            } }
+                NotifyPropertyChanged();
+            } 
+        }
         // 자막 숨기기 토글버튼 - isChecked
         private bool isTextShow_in;
         public bool isTextShow { get { return isTextShow_in; } set { isTextShow_in = value;
@@ -88,6 +88,7 @@ namespace BibleProjector_WPF.ViewModel
                     ShowText();
                 else
                     hideText();
+                NotifyPropertyChanged();
             }
         }
 
