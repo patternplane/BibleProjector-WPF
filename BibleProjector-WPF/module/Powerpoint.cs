@@ -199,9 +199,14 @@ namespace BibleProjector_WPF
                 if (SlideWindow == null)
                 {
                     ppt.SlideShowSettings.ShowType = PpSlideShowType.ppShowTypeKiosk;
-                    SlideWindow = ppt.SlideShowSettings.Run();
                     if (pptTextState == PptTextShow.Hide)
-                        SlideWindow.View.GotoSlide(2);
+                    {
+                        ppt.Slides[1].MoveTo(2);
+                        SlideWindow = ppt.SlideShowSettings.Run();
+                        ppt.Slides[2].MoveTo(1);
+                    }
+                    else
+                        SlideWindow = ppt.SlideShowSettings.Run();
                 }
                 else
                     ShowWindow(SlideWindow.HWND, SW_SHOW);
@@ -395,9 +400,14 @@ namespace BibleProjector_WPF
                 if (SlideWindow == null)
                 {
                     ppt.SlideShowSettings.ShowType = PpSlideShowType.ppShowTypeKiosk;
-                    SlideWindow = ppt.SlideShowSettings.Run();
                     if (pptTextState == PptTextShow.Hide)
-                        SlideWindow.View.GotoSlide(2);
+                    {
+                        ppt.Slides[1].MoveTo(2);
+                        SlideWindow = ppt.SlideShowSettings.Run();
+                        ppt.Slides[2].MoveTo(1);
+                    }
+                    else
+                        SlideWindow = ppt.SlideShowSettings.Run();
                 }
                 else
                     ShowWindow(SlideWindow.HWND, SW_SHOW);
@@ -732,9 +742,14 @@ namespace BibleProjector_WPF
                 if (SlideWindow == null)
                 {
                     ppt.SlideShowSettings.ShowType = PpSlideShowType.ppShowTypeKiosk;
-                    SlideWindow = ppt.SlideShowSettings.Run();
                     if (pptTextState == PptTextShow.Hide)
-                        SlideWindow.View.GotoSlide(2);
+                    {
+                        ppt.Slides[1].MoveTo(2);
+                        SlideWindow = ppt.SlideShowSettings.Run();
+                        ppt.Slides[2].MoveTo(1);
+                    }
+                    else
+                        SlideWindow = ppt.SlideShowSettings.Run();
                 }
                 else
                     ShowWindow(SlideWindow.HWND, SW_SHOW);
