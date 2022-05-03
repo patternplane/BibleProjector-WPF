@@ -74,6 +74,8 @@ namespace BibleProjector_WPF
         {
             if (SongFramePaths_ListBox.SelectedItems.Count == 0)
                 return;
+            if (MessageBox.Show("선택된 찬양곡 ppt틀을 삭제합니다.", "ppt틀 삭제", MessageBoxButton.OKCancel, MessageBoxImage.Hand) != MessageBoxResult.OK)
+                return;
 
             List<int> itemindex = new List<int>(10);
             foreach (object item in SongFramePaths_ListBox.SelectedItems)

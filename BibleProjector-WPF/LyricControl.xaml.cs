@@ -48,6 +48,9 @@ namespace BibleProjector_WPF
 
         void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
+            if (MessageBox.Show("현재 선택된 곡을 삭제합니다.", "찬양곡 삭제", MessageBoxButton.OKCancel, MessageBoxImage.Hand) != MessageBoxResult.OK)
+                return;
+
             VM_LyricViewModel.RunDelete();
         }
 
@@ -179,6 +182,8 @@ namespace BibleProjector_WPF
         void ReserveDelete_Click(object sender, RoutedEventArgs e)
         {
             if (LyricReserveListBox.SelectedItems.Count == 0)
+                return;
+            if (MessageBox.Show("선택된 예약 곡을 삭제합니다.", "찬양곡 예약 삭제", MessageBoxButton.OKCancel, MessageBoxImage.Hand) != MessageBoxResult.OK)
                 return;
 
             List<int> itemindex = new List<int>(10);
