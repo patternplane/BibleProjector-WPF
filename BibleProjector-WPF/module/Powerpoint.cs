@@ -20,6 +20,13 @@ namespace BibleProjector_WPF
         const int SW_HIDE = 0;
         const int SW_SHOW = 5;
 
+        enum PptState
+        {
+            NotUsed = -1,
+            WindowRunning = 0,
+            WindowHide = 1
+        }
+
         static Application app;
 
         // ============================================ 프로그램 시작 / 종료 세팅 ========================================================
@@ -81,6 +88,8 @@ namespace BibleProjector_WPF
             static string currentVerse = "";
             static string currentContent = "";
 
+            static PptState pptState = PptState.NotUsed;
+
             // ============================================ 세팅 및 종료 ========================================================
 
             static public void setPresentation(string path)
@@ -100,21 +109,39 @@ namespace BibleProjector_WPF
             static public void refreshPresentation(string path)
             {
                 Presentation lastppt = ppt;
-                
-                ppt = app.Presentations.Open(path, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
-                getCommand();
-                Change();
-                SlideShowRun();
 
-                lastppt.Close();
+                if (pptState == PptState.NotUsed)
+                {
+                    setPresentation(path);
+                    lastppt.Close();
+                }
+                else if (pptState == PptState.WindowHide)
+                {
+                    setPresentation(path);
+                    Change();
+                    lastppt.Close();
+                }
+                else
+                {
+                    ppt = app.Presentations.Open(path, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
+                    getCommand();
+                    Change();
+                    SlideWindow = null;
+                    SlideShowRun();
 
-                lastppt = ppt;
+                    lastppt.Close();
 
-                setPresentation(path);
-                Change();
-                SlideShowRun();
+                    lastppt = ppt;
 
-                lastppt.Close();
+                    setPresentation(path);
+                    Change();
+                    SlideWindow = null;
+                    SlideShowRun();
+
+                    lastppt.Close();
+                }
+
+                SlideWindow = null;
             }
 
             static void getCommand()
@@ -152,11 +179,14 @@ namespace BibleProjector_WPF
                 }
                 else
                     ShowWindow(SlideWindow.HWND, SW_SHOW);
+
+                pptState = PptState.WindowRunning;
             }
 
             static public void SlideShowHide()
             {
                 ShowWindow(SlideWindow.HWND, SW_HIDE);
+                pptState = PptState.WindowHide;
             }
 
             static public void Change_VerseContent(string verse, string content)
@@ -226,6 +256,8 @@ namespace BibleProjector_WPF
             static string currentTitle = "";
             static string currentContent = "";
 
+            static PptState pptState = PptState.NotUsed;
+
             // ============================================ 세팅 및 종료 ============================================ 
 
             static public void setPresentation(string path)
@@ -246,20 +278,38 @@ namespace BibleProjector_WPF
             {
                 Presentation lastppt = ppt;
 
-                ppt = app.Presentations.Open(path, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
-                getCommand();
-                Change();
-                SlideShowRun();
+                if (pptState == PptState.NotUsed)
+                {
+                    setPresentation(path);
+                    lastppt.Close();
+                }
+                else if (pptState == PptState.WindowHide)
+                {
+                    setPresentation(path);
+                    Change();
+                    lastppt.Close();
+                }
+                else
+                {
+                    ppt = app.Presentations.Open(path, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
+                    getCommand();
+                    Change();
+                    SlideWindow = null;
+                    SlideShowRun();
 
-                lastppt.Close();
+                    lastppt.Close();
 
-                lastppt = ppt;
+                    lastppt = ppt;
 
-                setPresentation(path);
-                Change();
-                SlideShowRun();
+                    setPresentation(path);
+                    Change();
+                    SlideWindow = null;
+                    SlideShowRun();
 
-                lastppt.Close();
+                    lastppt.Close();
+                }
+
+                SlideWindow = null;
             }
 
             static void getCommand()
@@ -295,11 +345,14 @@ namespace BibleProjector_WPF
                 }
                 else
                     ShowWindow(SlideWindow.HWND, SW_SHOW);
+
+                pptState = PptState.WindowRunning;
             }
 
             static public void SlideShowHide()
             {
                 ShowWindow(SlideWindow.HWND, SW_HIDE);
+                pptState = PptState.WindowHide;
             }
 
             static public void Change_Content(string content)
@@ -489,6 +542,8 @@ namespace BibleProjector_WPF
             int currentPage = -1;
             SlideShowWindow SlideWindow = null;
 
+            static PptState pptState = PptState.NotUsed;
+
             // ============================================ 세팅 및 종료 ============================================ 
 
             public SongFormatPPT(string path)
@@ -514,20 +569,38 @@ namespace BibleProjector_WPF
             {
                 Presentation lastppt = ppt;
 
-                ppt = app.Presentations.Open(path, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
-                getCommand();
-                ChangeApply(currentPage);
-                SlideShowRun();
+                if (pptState == PptState.NotUsed)
+                {
+                    setPresentation(path);
+                    lastppt.Close();
+                }
+                else if (pptState == PptState.WindowHide)
+                {
+                    setPresentation(path);
+                    ChangeApply(currentPage);
+                    lastppt.Close();
+                }
+                else
+                {
+                    ppt = app.Presentations.Open(path, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
+                    getCommand();
+                    ChangeApply(currentPage);
+                    SlideWindow = null;
+                    SlideShowRun();
 
-                lastppt.Close();
+                    lastppt.Close();
 
-                lastppt = ppt;
+                    lastppt = ppt;
 
-                setPresentation(path);
-                ChangeApply(currentPage);
-                SlideShowRun();
+                    setPresentation(path);
+                    ChangeApply(currentPage);
+                    SlideWindow = null;
+                    SlideShowRun();
 
-                lastppt.Close();
+                    lastppt.Close();
+                }
+
+                SlideWindow = null;
             }
 
             void getCommand()
@@ -592,11 +665,14 @@ namespace BibleProjector_WPF
                 }
                 else
                     ShowWindow(SlideWindow.HWND, SW_SHOW);
+
+                pptState = PptState.WindowRunning;
             }
 
             public void SlideShowHide()
             {
                 ShowWindow(SlideWindow.HWND, SW_HIDE);
+                pptState = PptState.WindowHide;
             }
 
             public void ChangeApply(int Page)
