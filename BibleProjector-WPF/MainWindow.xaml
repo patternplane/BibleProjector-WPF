@@ -126,24 +126,26 @@
                         </Grid>
 
                         <Button Grid.Row="2" Click="BibleOutputButton_Click">선택된 구절 출력</Button>
-                        
+
                         <!--성경 예약부분-->
                         <Grid Grid.Row="4">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="21*"/>
-                                <RowDefinition Height="58*"/>
-                                <RowDefinition Height="20*"/>
+                                <RowDefinition Height="50*"/>
+                                <RowDefinition Height="13*"/>
+                                <RowDefinition Height="166*"/>
+                                <RowDefinition Height="14*"/>
+                                <RowDefinition Height="54*"/>
                             </Grid.RowDefinitions>
                             <Button Grid.Row="0" x:Name="BibleReserveAddButton">성경구절 예약</Button>
-                            <ListBox Grid.Row="1" SelectionMode="Extended" ScrollViewer.VerticalScrollBarVisibility="auto" 
-                                 x:Name="BibleReserveListBox">
+                            <ListBox Grid.Row="2" SelectionMode="Extended" ScrollViewer.VerticalScrollBarVisibility="auto" 
+                                 x:Name="BibleReserveListBox" >
                                 <ListBox.ItemContainerStyle>
                                     <Style TargetType="ListBoxItem">
                                         <EventSetter Event="MouseDoubleClick" Handler="BibleReserveListBox_DoubleClick"></EventSetter>
                                     </Style>
                                 </ListBox.ItemContainerStyle>
                             </ListBox>
-                            <Grid Grid.Row="2">
+                            <Grid Grid.Row="4">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="37*"/>
                                     <ColumnDefinition Width="7*"/>
