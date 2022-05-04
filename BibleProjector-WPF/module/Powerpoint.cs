@@ -27,6 +27,7 @@ namespace BibleProjector_WPF
         const int HWND_TOP = 0;
         const int SWP_NOMOVE = 0x0002;
         const int SWP_NOSIZE = 0x0001;
+        const int SWP_NOACTIVATE = 0x0010;
 
         enum PptSlideState
         {
@@ -229,8 +230,8 @@ namespace BibleProjector_WPF
             {
                 if (SlideWindow != null && pptState == PptSlideState.WindowShow)
                 {
-                    SetWindowPos(SlideWindow.HWND, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
-                    SetWindowPos(SlideWindow.HWND, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+                    SetWindowPos(SlideWindow.HWND, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
+                    SetWindowPos(SlideWindow.HWND, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
                     //SetWindowPos(SlideWindow.HWND, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
                 }
             }
@@ -465,8 +466,8 @@ namespace BibleProjector_WPF
             {
                 if (SlideWindow != null && pptState == PptSlideState.WindowShow)
                 {
-                    SetWindowPos(SlideWindow.HWND, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
-                    SetWindowPos(SlideWindow.HWND, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+                    SetWindowPos(SlideWindow.HWND, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
+                    SetWindowPos(SlideWindow.HWND, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
                     //SetWindowPos(SlideWindow.HWND, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
                 }
             }
@@ -835,8 +836,8 @@ namespace BibleProjector_WPF
             {
                 if (SlideWindow != null && pptState == PptSlideState.WindowShow)
                 {
-                    SetWindowPos(SlideWindow.HWND, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
-                    SetWindowPos(SlideWindow.HWND, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+                    SetWindowPos(SlideWindow.HWND, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
+                    SetWindowPos(SlideWindow.HWND, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
                     //SetWindowPos(SlideWindow.HWND, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
                 }
             }
