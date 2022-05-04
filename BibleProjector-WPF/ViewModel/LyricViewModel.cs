@@ -273,11 +273,13 @@ namespace BibleProjector_WPF.ViewModel
         }
 
         // 슬라이드별 줄 수 
-        private string LinePerSlideText_in = "1";
-        public int LinePerSlide { get; private set; } = 1;
-        public string LinePerSlideText { get { return LinePerSlideText_in; } set { LinePerSlideText_in = value;
-                LinePerSlideText_in = LinePerSlideText_in.Replace(" ", "");
-                LinePerSlide = int.Parse(LinePerSlideText_in);
+        private string LinePerSlideText_in = "2";
+        public int LinePerSlide { get; private set; } = 2;
+        public string LinePerSlideText { get { return LinePerSlideText_in; } set { LinePerSlideText_in = module.StringModifier.makeOnlyNum(value);
+                if (LinePerSlideText_in.Length == 0)
+                    LinePerSlide = 0;
+                else
+                    LinePerSlide = int.Parse(LinePerSlideText_in);
                 NotifyPropertyChanged();
             } }
 

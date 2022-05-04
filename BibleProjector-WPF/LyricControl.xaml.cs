@@ -112,18 +112,6 @@ namespace BibleProjector_WPF
             }
         }
 
-        // ======================================================= 숫자만 기입받는 텍스트박스 처리 ======================================================
-
-        private void LinePerSlideTextBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if ((e.Key >= Key.D0 && e.Key <= Key.D9) || (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9) || e.Key == Key.Back || e.Key == Key.Delete)
-            {
-                e.Handled = false;
-            }
-            else
-                e.Handled = true;
-        }
-
         // ============================================= 예약 특수처리 ============================================= 
 
         void ReserveUp_Click(object sender, RoutedEventArgs e)

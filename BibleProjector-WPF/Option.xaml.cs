@@ -100,17 +100,5 @@ namespace BibleProjector_WPF
             if (SongControl.SongControlAccess != null)
                 SongControl.SongControlAccess.ResetLayout();
         }
-
-        // ========================================= 숫자기입용 텍스트박스 입력 처리 ============================================
-
-        private void NumberTextBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if ((e.Key >= Key.D0 && e.Key <= Key.D9) || (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9) || e.Key == Key.Back || e.Key == Key.Delete)
-            {
-                e.Handled = false;
-            }
-            else
-                e.Handled = true;
-        }
     }
 }

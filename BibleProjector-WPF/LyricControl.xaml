@@ -208,8 +208,7 @@
                       DisplayMemberPath="FileName"></ComboBox>
             
             <Label Grid.Row="4" Content="슬라이드별&#10;줄 수 :"></Label>
-            <TextBox Grid.Row="5" Text="{Binding LinePerSlideText}"
-                     KeyDown="LinePerSlideTextBox_KeyDown"></TextBox>
+            <TextBox Grid.Row="5" Text="{Binding LinePerSlideText, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             <Button Grid.Row="7" Content="출력" Click="LyricShowButton_Click">
             </Button>
         </Grid>

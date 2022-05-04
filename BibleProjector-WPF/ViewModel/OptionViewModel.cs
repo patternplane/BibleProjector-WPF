@@ -20,7 +20,11 @@ namespace BibleProjector_WPF.ViewModel
             }
             set
             {
-                module.ProgramOption.Bible_LinePerSlide = int.Parse(value);
+                string res = module.StringModifier.makeOnlyNum(value);
+                if (res.Length == 0)
+                    module.ProgramOption.Bible_LinePerSlide = 0;
+                else
+                    module.ProgramOption.Bible_LinePerSlide = int.Parse(res);
                 NotifyPropertyChanged();
             }
         }
@@ -32,7 +36,11 @@ namespace BibleProjector_WPF.ViewModel
             }
             set
             {
-                module.ProgramOption.Bible_CharPerLine = int.Parse(value);
+                string res = module.StringModifier.makeOnlyNum(value);
+                if (res.Length == 0)
+                    module.ProgramOption.Bible_CharPerLine = 0;
+                else
+                    module.ProgramOption.Bible_CharPerLine = int.Parse(res);
                 NotifyPropertyChanged();
             }
         }
