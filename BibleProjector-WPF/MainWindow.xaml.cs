@@ -398,6 +398,8 @@ namespace BibleProjector_WPF
                 VM_BibleSelectData.Book = item.Book;
                 VM_BibleSelectData.Chapter = item.Chapter;
                 VM_BibleSelectData.Verse = item.Verse;
+
+                applyBibleMoving(item.Book,item.Chapter,item.Verse);
             }
         }
 
@@ -416,7 +418,26 @@ namespace BibleProjector_WPF
                 VM_BibleSelectData.Book = item.Book;
                 VM_BibleSelectData.Chapter = item.Chapter;
                 VM_BibleSelectData.Verse = item.Verse;
+
+                applyBibleMoving(item.Book, item.Chapter, item.Verse);
             }
+        }
+
+        // ======================================== 성경 이동 반영 처리
+
+        public void applyBibleMoving(string book, string chapter, string verse)
+        {
+            ChapterNumberList.Clear();
+            for (int i = 1, chapterCount = Database.getChapterCount(book); i <= chapterCount; i++)
+                ChapterNumberList.Add(i);
+            VerseNumberList.Clear();
+
+            VM_BibleSelectData.Book = VM_BibleCurrentSelectingData.Book = book;
+            VM_BibleSelectData.Chapter = VM_BibleCurrentSelectingData.Chapter = "";
+            VM_BibleSelectData.Verse = VM_BibleCurrentSelectingData.Verse = "";
+
+            Bible_Chapter_ListBox.SelectedIndex = int.Parse(chapter) - 1;
+            Bible_Verse_ListBox.SelectedIndex = int.Parse(verse) - 1;
         }
 
         // ======================================== 성경 수정 처리

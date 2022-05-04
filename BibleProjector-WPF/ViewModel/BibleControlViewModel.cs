@@ -31,13 +31,17 @@ namespace BibleProjector_WPF.ViewModel
         private void showBible_next()
         {
             Kjjeul = Database.getBibleIndex_Next(Kjjeul);
-            newBibleSetting();
+            onlyPageSetting();
+
+            MainWindow.ProgramMainWindow.applyBibleMoving(Kjjeul.Substring(0,2), Kjjeul.Substring(2, 3), Kjjeul.Substring(5, 3));
         }
 
         private void showBible_previous()
         {
             Kjjeul = Database.getBibleIndex_Previous(Kjjeul);
-            newBibleSetting();
+            onlyPageSetting();
+
+            MainWindow.ProgramMainWindow.applyBibleMoving(Kjjeul.Substring(0, 2), Kjjeul.Substring(2, 3), Kjjeul.Substring(5, 3));
         }
 
         private void newBibleSetting()
@@ -57,6 +61,22 @@ namespace BibleProjector_WPF.ViewModel
 
             isTextShow = true;
             isDisplayShow = true;
+        }
+
+        private void onlyPageSetting()
+        {
+            setCurrentBibleInfo(bible_display, chapter, verse);
+
+            BiblePages = null;
+            BiblePages = new BindingList<string>(
+                module.StringModifier.makeStringPage(
+                    Database.getBible(Kjjeul)
+                    , module.ProgramOption.Bible_CharPerLine
+                    , module.ProgramOption.Bible_LinePerSlide
+                    )
+                );
+            setBibleSlide_BibleChapter(bible_display, chapter);
+            CurrentPageIndex = 0;
         }
 
         string Kjjeul_in;
