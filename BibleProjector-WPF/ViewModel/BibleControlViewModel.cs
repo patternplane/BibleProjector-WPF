@@ -157,6 +157,11 @@ namespace BibleProjector_WPF.ViewModel
             }
         }
 
+        public void RunTopMost()
+        {
+            Powerpoint.Bible.TopMost();
+        }
+
         // ================================================ 동작 ================================================
 
         void SlideShowRun()

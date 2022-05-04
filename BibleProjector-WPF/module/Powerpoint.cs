@@ -20,6 +20,14 @@ namespace BibleProjector_WPF
         const int SW_HIDE = 0;
         const int SW_SHOW = 5;
 
+        [System.Runtime.InteropServices.DllImport("user32")]
+        public static extern int SetWindowPos(int hwnd, int hWndInsertAfter, int x, int y, int cx, int cy, int wFlags);
+        const int HWND_NOTOPMOST = -2;
+        const int HWND_TOPMOST = -1;
+        const int HWND_TOP = 0;
+        const int SWP_NOMOVE = 0x0002;
+        const int SWP_NOSIZE = 0x0001;
+
         enum PptSlideState
         {
             NotRunning,
@@ -201,6 +209,16 @@ namespace BibleProjector_WPF
             }
 
             // ============================================ 메소드 ============================================ 
+
+            static public void TopMost()
+            {
+                if (SlideWindow != null && pptState == PptSlideState.WindowShow)
+                {
+                    SetWindowPos(SlideWindow.HWND, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+                    SetWindowPos(SlideWindow.HWND, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+                    //SetWindowPos(SlideWindow.HWND, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+                }
+            }
 
             static public void SlideShowRun()
             {
@@ -413,6 +431,16 @@ namespace BibleProjector_WPF
 
             // ============================================ 메소드 ============================================ 
 
+            static public void TopMost()
+            {
+                if (SlideWindow != null && pptState == PptSlideState.WindowShow)
+                {
+                    SetWindowPos(SlideWindow.HWND, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+                    SetWindowPos(SlideWindow.HWND, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+                    //SetWindowPos(SlideWindow.HWND, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+                }
+            }
+
             static public void SlideShowRun()
             {
                 // 슬라이드쇼 점검하는부분 좀 더 개선
@@ -543,6 +571,15 @@ namespace BibleProjector_WPF
                 if ((index = pptFinder(FramePPTName)) != -1)
                 {
                     ppt[index].SetSongData( songData);
+                }
+            }
+
+            static public void TopMost(string FramePPTName)
+            {
+                int index;
+                if ((index = pptFinder(FramePPTName)) != -1)
+                {
+                    ppt[index].TopMost();
                 }
             }
 
@@ -750,6 +787,16 @@ namespace BibleProjector_WPF
             }
 
             // ============================================ 메소드 ============================================
+
+            public void TopMost()
+            {
+                if (SlideWindow != null && pptState == PptSlideState.WindowShow)
+                {
+                    SetWindowPos(SlideWindow.HWND, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+                    SetWindowPos(SlideWindow.HWND, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+                    //SetWindowPos(SlideWindow.HWND, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+                }
+            }
 
             private int findChangeTableIndex(string command, string[][] ChangeTable)
             {

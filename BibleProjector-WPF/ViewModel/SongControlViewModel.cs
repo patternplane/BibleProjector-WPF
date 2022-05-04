@@ -107,6 +107,11 @@ namespace BibleProjector_WPF.ViewModel
                 CurrentPageIndex--;
         }
 
+        public void RunTopMost()
+        {
+            Powerpoint.Song.TopMost(currentPPTName);
+        }
+
         // ================================================ 동작 ================================================
 
         void SetSongData(string[][][] songData)

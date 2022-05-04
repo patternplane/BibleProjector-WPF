@@ -8,7 +8,8 @@
         Title="교독문" Height="336.375" Width="533.438"
         KeyDown="Window_KeyDown"
         LocationChanged="changeLocate"
-        SizeChanged="changeSize">
+        SizeChanged="changeSize"
+        Activated="setSlideTopMost">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="23*"/>

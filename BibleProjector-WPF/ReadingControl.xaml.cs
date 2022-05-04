@@ -104,6 +104,13 @@ namespace BibleProjector_WPF
             ((ListBoxItem)(((ListBox)sender).ItemContainerGenerator.ContainerFromItem(((ListBox)sender).SelectedItem)))?.Focus();
         }
 
+        // ========================================== 윈도우 최상위 ======================================
+
+        void setSlideTopMost(object sender, EventArgs e)
+        {
+            VM_ReadingControl.RunTopMost();
+        }
+
         // ========================================== 윈도우 처리 =====================================
 
         private bool AllowClose = false;

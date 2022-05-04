@@ -29,11 +29,11 @@ namespace BibleProjector_WPF
 
             InitializeComponent();
             this.DataContext = VM_BibleControl = new ViewModel.BibleControlViewModel(Kjjeul);
-            
+
             setLayout();
         }
 
-        public void ShowBible (string Kjjeul)
+        public void ShowBible(string Kjjeul)
         {
             VM_BibleControl.showBible(Kjjeul);
         }
@@ -102,6 +102,13 @@ namespace BibleProjector_WPF
         void PageListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ((ListBoxItem)(((ListBox)sender).ItemContainerGenerator.ContainerFromItem(((ListBox)sender).SelectedItem)))?.Focus();
+        }
+
+        // ========================================== 윈도우 최상위 ======================================
+
+        void setSlideTopMost(object sender, EventArgs e)
+        {
+            VM_BibleControl.RunTopMost();
         }
 
         // ========================================== 윈도우 처리 =====================================
