@@ -110,6 +110,7 @@ namespace BibleProjector_WPF
                 TextShapes = new List<Shape>(3);
 
                 ppt = app.Presentations.Open(path, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
+                checkValidPPT();
                 getCommand();
             }
 
@@ -141,6 +142,7 @@ namespace BibleProjector_WPF
                     SlideWindow = null;
 
                     ppt = app.Presentations.Open(path, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
+                    checkValidPPT();
                     getCommand();
                     Change();
                     if (currentPosition == 1)
@@ -182,6 +184,14 @@ namespace BibleProjector_WPF
                             Format.Add(s.TextFrame.TextRange.Text);
                         }
                     }
+            }
+
+            static void checkValidPPT()
+            {
+                if (ppt.Slides.Count == 0)
+                    ppt.Slides.AddSlide(1, ppt.SlideMaster.CustomLayouts[0]);
+                if (ppt.Slides.Count == 1)
+                    ppt.Slides.AddSlide(2,ppt.Slides[1].CustomLayout);
             }
 
             static public void close()
@@ -314,6 +324,7 @@ namespace BibleProjector_WPF
                 TextShapes = new List<Shape>(3);
 
                 ppt = app.Presentations.Open(path, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
+                checkValidPPT();
                 getCommand();
             }
 
@@ -345,6 +356,7 @@ namespace BibleProjector_WPF
                     SlideWindow = null;
 
                     ppt = app.Presentations.Open(path, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
+                    checkValidPPT();
                     getCommand();
                     Change();
                     if (currentPosition == 1)
@@ -383,6 +395,14 @@ namespace BibleProjector_WPF
                             Format.Add(s.TextFrame.TextRange.Text);
                         }
                     }
+            }
+
+            static void checkValidPPT()
+            {
+                if (ppt.Slides.Count == 1)
+                {
+                    ppt.Slides.AddSlide(2, ppt.Slides[1].CustomLayout);
+                }
             }
 
             static public void close()
@@ -612,6 +632,7 @@ namespace BibleProjector_WPF
                 textShapes = new List<TextShape>(5);
 
                 ppt = app.Presentations.Open(path, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
+                checkValidPPT();
                 getCommand();
             }
 
@@ -643,6 +664,7 @@ namespace BibleProjector_WPF
                     SlideWindow = null;
 
                     ppt = app.Presentations.Open(path, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
+                    checkValidPPT();
                     getCommand();
                     ChangeApply(currentPage);
                     if (currentPosition == 1)
@@ -717,6 +739,14 @@ namespace BibleProjector_WPF
                             textShapes.Add(ts);
                         }
                     }
+            }
+
+            void checkValidPPT()
+            {
+                if (ppt.Slides.Count == 1)
+                {
+                    ppt.Slides.AddSlide(2, ppt.Slides[1].CustomLayout);
+                }
             }
 
             // ============================================ 메소드 ============================================
