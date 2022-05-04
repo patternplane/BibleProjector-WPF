@@ -180,18 +180,33 @@ namespace BibleProjector_WPF
             static void getCommand()
             {
                 foreach (Shape s in ppt.Slides[1].Shapes)
-                    if (s.HasTextFrame != Microsoft.Office.Core.MsoTriState.msoFalse)
+                {
+                    if (s.Type == Microsoft.Office.Core.MsoShapeType.msoGroup)
                     {
-                        if (module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "{b}", module.StringKMP.DefaultStringCompaerFunc)
+                        foreach (Shape s2 in s.GroupItems)
+                            if (s2.HasTextFrame != Microsoft.Office.Core.MsoTriState.msoFalse)
+                            {
+                                getCommand_sub(s2);
+                            }
+                    }
+                    else if (s.HasTextFrame != Microsoft.Office.Core.MsoTriState.msoFalse)
+                    {
+                        getCommand_sub(s);
+                    }
+                }
+            }
+
+            static void getCommand_sub(Shape s)
+            {
+                if (module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "{b}", module.StringKMP.DefaultStringCompaerFunc)
                             || module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "{ch}", module.StringKMP.DefaultStringCompaerFunc)
                             || module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "{v}", module.StringKMP.DefaultStringCompaerFunc)
                             || module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "{va}", module.StringKMP.DefaultStringCompaerFunc)
                             || module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "{c}", module.StringKMP.DefaultStringCompaerFunc))
-                        {
-                            TextShapes.Add(s);
-                            Format.Add(s.TextFrame.TextRange.Text);
-                        }
-                    }
+                {
+                    TextShapes.Add(s);
+                    Format.Add(s.TextFrame.TextRange.Text);
+                }
             }
 
             static void checkValidPPT()
@@ -404,15 +419,30 @@ namespace BibleProjector_WPF
             static void getCommand()
             {
                 foreach (Shape s in ppt.Slides[1].Shapes)
-                    if (s.HasTextFrame != Microsoft.Office.Core.MsoTriState.msoFalse)
+                {
+                    if (s.Type == Microsoft.Office.Core.MsoShapeType.msoGroup)
                     {
-                        if (module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "{t}", module.StringKMP.DefaultStringCompaerFunc)
-                            || module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "{c}", module.StringKMP.DefaultStringCompaerFunc))
-                        {
-                            TextShapes.Add(s);
-                            Format.Add(s.TextFrame.TextRange.Text);
-                        }
+                        foreach (Shape s2 in s.GroupItems)
+                            if (s2.HasTextFrame != Microsoft.Office.Core.MsoTriState.msoFalse)
+                            {
+                                getCommand_sub(s2);
+                            }
                     }
+                    else if (s.HasTextFrame != Microsoft.Office.Core.MsoTriState.msoFalse)
+                    {
+                        getCommand_sub(s);
+                    }
+                }
+            }
+
+            static void getCommand_sub(Shape s)
+            {
+                if (module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "{t}", module.StringKMP.DefaultStringCompaerFunc)
+                            || module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "{c}", module.StringKMP.DefaultStringCompaerFunc))
+                {
+                    TextShapes.Add(s);
+                    Format.Add(s.TextFrame.TextRange.Text);
+                }
             }
 
             static void checkValidPPT()
@@ -737,45 +767,58 @@ namespace BibleProjector_WPF
 
             void getCommand()
             {
-                string shapeText;
-                TextShape ts;
                 foreach (Shape s in ppt.Slides[1].Shapes)
-                    if (s.HasTextFrame != Microsoft.Office.Core.MsoTriState.msoFalse)
+                {
+                    if (s.Type == Microsoft.Office.Core.MsoShapeType.msoGroup)
                     {
-                        int[] index = module.StringKMP.FindPattern(s.TextFrame.TextRange.Text, "{", module.StringKMP.DefaultStringCompaerFunc);
-                        if (index.Length != 0)
-                        {
-                            shapeText = s.TextFrame.TextRange.Text;
-                            List<string> format = new List<string>(5);
-
-                            int startIndex = 0;
-                            int endIndex = 0;
-                            int i = 0;
-                            for (; i < index.Length; i++)
+                        foreach (Shape s2 in s.GroupItems)
+                            if (s2.HasTextFrame != Microsoft.Office.Core.MsoTriState.msoFalse)
                             {
-                                endIndex = index[i];
-                                if (startIndex != endIndex)
-                                    format.Add(shapeText.Substring(startIndex, endIndex - startIndex));
-                                
-                                for (startIndex = endIndex; endIndex < shapeText.Length && shapeText[endIndex] != '}'; endIndex++) ;
-                                if(endIndex == shapeText.Length)
-                                    break;
-                                endIndex++;
-
-                                format.Add(shapeText.Substring(startIndex, endIndex - startIndex));
-                                startIndex = endIndex;
+                                getCommand_sub(s2);
                             }
-                            if (i != index.Length)
-                                break;
-                            else if (startIndex != shapeText.Length)
-                                format.Add(shapeText.Substring(startIndex, shapeText.Length - startIndex));
-
-                            ts = new TextShape();
-                            ts.shape = s;
-                            ts.Format = format;
-                            textShapes.Add(ts);
-                        }
                     }
+                    else if (s.HasTextFrame != Microsoft.Office.Core.MsoTriState.msoFalse)
+                    {
+                        getCommand_sub(s);
+                    }
+                }
+            }
+
+            void getCommand_sub(Shape s)
+            {
+                int[] index = module.StringKMP.FindPattern(s.TextFrame.TextRange.Text, "{", module.StringKMP.DefaultStringCompaerFunc);
+                if (index.Length != 0)
+                {
+                    string shapeText = s.TextFrame.TextRange.Text;
+                    List<string> format = new List<string>(5);
+
+                    int startIndex = 0;
+                    int endIndex = 0;
+                    int i = 0;
+                    for (; i < index.Length; i++)
+                    {
+                        endIndex = index[i];
+                        if (startIndex != endIndex)
+                            format.Add(shapeText.Substring(startIndex, endIndex - startIndex));
+
+                        for (startIndex = endIndex; endIndex < shapeText.Length && shapeText[endIndex] != '}'; endIndex++) ;
+                        if (endIndex == shapeText.Length)
+                            break;
+                        endIndex++;
+
+                        format.Add(shapeText.Substring(startIndex, endIndex - startIndex));
+                        startIndex = endIndex;
+                    }
+                    if (i != index.Length)
+                        return;
+                    else if (startIndex != shapeText.Length)
+                        format.Add(shapeText.Substring(startIndex, shapeText.Length - startIndex));
+
+                    TextShape ts = new TextShape();
+                    ts.shape = s;
+                    ts.Format = format;
+                    textShapes.Add(ts);
+                }
             }
 
             void checkValidPPT()
