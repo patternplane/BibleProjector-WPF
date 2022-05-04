@@ -50,6 +50,9 @@ namespace BibleProjector_WPF
         BibleControl Ctrl_Bible = null;
         ReadingControl Ctrl_Reading = null;
 
+        // 설정 창
+        BibleModifyWindow SubWindow_BibleModify = null;
+
         public static MainWindow ProgramMainWindow = null;
 
         // =================================================== 윈도우 레이아웃 변경 ======================================================
@@ -149,7 +152,9 @@ namespace BibleProjector_WPF
                 Ctrl_Reading.ForceClose();
             if (LyricControl.Ctrl_Song != null)
                 LyricControl.Ctrl_Song.ForceClose();
-            
+            if (SubWindow_BibleModify != null)
+                SubWindow_BibleModify.ForceClose();
+
             base.OnClosing(e);
         }
 
@@ -411,6 +416,25 @@ namespace BibleProjector_WPF
                 VM_BibleSelectData.Book = item.Book;
                 VM_BibleSelectData.Chapter = item.Chapter;
                 VM_BibleSelectData.Verse = item.Verse;
+            }
+        }
+
+        // ======================================== 성경 수정 처리
+
+        void BibleModifyButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (VM_BibleSelectData.Verse.CompareTo("") == 0)
+                MessageBox.Show("수정할 성경구절을 선택해주세요!", "성경 선택되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
+            else
+            {
+                if (SubWindow_BibleModify == null)
+                {
+                    SubWindow_BibleModify = new BibleModifyWindow(VM_BibleSelectData.Book + VM_BibleSelectData.Chapter + VM_BibleSelectData.Verse);
+                    SubWindow_BibleModify.Owner = this;
+                }
+                else
+                    SubWindow_BibleModify.setData(VM_BibleSelectData.Book + VM_BibleSelectData.Chapter + VM_BibleSelectData.Verse);
+                SubWindow_BibleModify.ShowDialog();
             }
         }
 

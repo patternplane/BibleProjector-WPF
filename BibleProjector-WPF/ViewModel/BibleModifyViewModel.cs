@@ -1,0 +1,68 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+using System.ComponentModel;
+
+namespace BibleProjector_WPF.ViewModel
+{
+    class BibleModifyViewModel : INotifyPropertyChanged
+    {
+        // =============================== 속성 =============================
+
+        private string OriginContent_in;
+        public string OriginContent { get { return OriginContent_in; } set { OriginContent_in = value; NotifyPropertyChanged(); } }
+        private string UserModifyContent_in;
+        public string UserModifyContent { get { return UserModifyContent_in; } set { UserModifyContent_in = value; NotifyPropertyChanged(); } }
+
+        // =============================== 세팅 =============================
+
+        string currentKjjeul = null;
+
+        public BibleModifyViewModel(string Kjjeul)
+        {
+            setData(Kjjeul);
+        }
+
+        public void setData(string Kjjeul)
+        {
+            currentKjjeul = Kjjeul;
+
+            UserModifyContent = OriginContent = Database.getBible(currentKjjeul);
+        }
+
+        // ============================ 메서드 ============================ 
+
+        public void save()
+        {
+            if (System.Windows.MessageBox.Show("변경값을 저장합니다.","변경값 저장 확인", System.Windows.MessageBoxButton.OKCancel, System.Windows.MessageBoxImage.Hand) == System.Windows.MessageBoxResult.Cancel)
+                return;
+
+            Database.updateBible(currentKjjeul, UserModifyContent);
+            OriginContent = Database.getBible(currentKjjeul);
+        }
+
+        public void reset()
+        {
+            if (System.Windows.MessageBox.Show("변경을 초기화합니다.", "수정 취소 확인", System.Windows.MessageBoxButton.OKCancel, System.Windows.MessageBoxImage.Hand) == System.Windows.MessageBoxResult.Cancel)
+                return;
+
+            UserModifyContent = Database.getBible(currentKjjeul);
+        }
+
+
+
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string propertyName = "")
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+}

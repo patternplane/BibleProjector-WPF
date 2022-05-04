@@ -56,6 +56,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BibleModifyWindow.xaml.cs">
+      <DependentUpon>BibleModifyWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="module\LayoutInfo.cs" />
     <Compile Include="module\ProgramOption.cs" />
     <Compile Include="Option.xaml.cs">
@@ -76,6 +79,7 @@
     <Compile Include="module\ProgramData.cs" />
     <Compile Include="module\StringModifier.cs" />
     <Compile Include="module\StringKMP.cs" />
+    <Compile Include="ViewModel\BibleModifyViewModel.cs" />
     <Compile Include="ViewModel\OptionViewModel.cs" />
     <Compile Include="ViewModel\SongControlViewModel.cs" />
     <Compile Include="ViewModel\ReadingControlViewModel.cs" />
@@ -84,6 +88,10 @@
     <Compile Include="ViewModel\BibleReserveData.cs" />
     <Compile Include="ViewModel\BibleSelectData.cs" />
     <Compile Include="ViewModel\LyricViewModel.cs" />
+    <Page Include="BibleModifyWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Option.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

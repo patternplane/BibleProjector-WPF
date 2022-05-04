@@ -106,8 +106,10 @@
                             <RowDefinition Height="31*"/>
                             <RowDefinition Height="15*"/>
                             <RowDefinition Height="67*"/>
-                            <RowDefinition Height="22*"/>
-                            <RowDefinition Height="364*"/>
+                            <RowDefinition Height="19*"/>
+                            <RowDefinition Height="297*"/>
+                            <RowDefinition Height="19*"/>
+                            <RowDefinition Height="51*"/>
                         </Grid.RowDefinitions>
 
                         <Grid x:Name="Bible_CurrentDisplayTextBoxies_Grid">
@@ -124,13 +126,13 @@
                         </Grid>
 
                         <Button Grid.Row="2" Click="BibleOutputButton_Click">선택된 구절 출력</Button>
-
+                        
                         <!--성경 예약부분-->
                         <Grid Grid.Row="4">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="55*"/>
-                                <RowDefinition Height="259*"/>
-                                <RowDefinition Height="52*"/>
+                                <RowDefinition Height="21*"/>
+                                <RowDefinition Height="58*"/>
+                                <RowDefinition Height="20*"/>
                             </Grid.RowDefinitions>
                             <Button Grid.Row="0" x:Name="BibleReserveAddButton">성경구절 예약</Button>
                             <ListBox Grid.Row="1" SelectionMode="Extended" ScrollViewer.VerticalScrollBarVisibility="auto" 
@@ -158,6 +160,8 @@
                                 <Button Grid.Column="2" x:Name="BibleReserveDeleteButton">선택항목 삭제</Button>
                             </Grid>
                         </Grid>
+
+                        <Button Grid.Row="6" Content="선택된 구절 수정하기" Click="BibleModifyButton_Click"></Button>
                     </Grid>
                 </Grid>
             </TabItem>
