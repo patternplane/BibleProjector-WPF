@@ -95,7 +95,7 @@ namespace BibleProjector_WPF
         void LyricShowButton_Click(object sender, RoutedEventArgs e)
         {
             if (VM_LyricViewModel.SongFrameSelection == null)
-                MessageBox.Show("ppt 틀을 선택해주세요!", "ppt 틀 선택되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("찬양 출력 틀ppt를 등록해주세요!", "ppt 틀 선택되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
             else if (VM_LyricViewModel.SelectedLyric == null)
                 MessageBox.Show("출력할 찬양곡을 선택해주세요!", "찬양곡 선택되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
             else
