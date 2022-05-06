@@ -22,11 +22,12 @@ namespace BibleProjector_WPF.module
         static public SingleLayoutData Layout_BibleControl = new SingleLayoutData { Width = -1, Height = -1, x = 0, y = 0 };
         static public SingleLayoutData Layout_ReadingControl = new SingleLayoutData { Width = -1, Height = -1, x = 0, y = 0 };
         static public SingleLayoutData Layout_SongControl = new SingleLayoutData { Width = -1, Height = -1, x = 0, y = 0 };
+        static public SingleLayoutData Layout_ExternPPTControl = new SingleLayoutData { Width = -1, Height = -1, x = 0, y = 0 };
 
         static public void Initialize()
         {
             string[] data = module.ProgramData.getLayoutData().Split(new string[] { SEPARATOR},StringSplitOptions.None);
-            if (data.Length != 16)
+            if (data.Length != 20)
                 return;
 
             Layout_MainWindow.Width = double.Parse(data[0]);
@@ -48,6 +49,11 @@ namespace BibleProjector_WPF.module
             Layout_SongControl.Height = double.Parse(data[13]);
             Layout_SongControl.x = double.Parse(data[14]);
             Layout_SongControl.y = double.Parse(data[15]);
+
+            Layout_ExternPPTControl.Width = double.Parse(data[16]);
+            Layout_ExternPPTControl.Height = double.Parse(data[17]);
+            Layout_ExternPPTControl.x = double.Parse(data[18]);
+            Layout_ExternPPTControl.y = double.Parse(data[19]);
         }
 
         static public string getSaveData()
@@ -88,6 +94,15 @@ namespace BibleProjector_WPF.module
             str.Append(Layout_SongControl.x);
             str.Append(SEPARATOR);
             str.Append(Layout_SongControl.y);
+            str.Append(SEPARATOR);
+
+            str.Append(Layout_ExternPPTControl.Width);
+            str.Append(SEPARATOR);
+            str.Append(Layout_ExternPPTControl.Height);
+            str.Append(SEPARATOR);
+            str.Append(Layout_ExternPPTControl.x);
+            str.Append(SEPARATOR);
+            str.Append(Layout_ExternPPTControl.y);
 
             return str.ToString();
         }
@@ -113,6 +128,11 @@ namespace BibleProjector_WPF.module
             Layout_SongControl.Height = -1;
             Layout_SongControl.x = -1;
             Layout_SongControl.y = -1;
+
+            Layout_ExternPPTControl.Width = -1;
+            Layout_ExternPPTControl.Height = -1;
+            Layout_ExternPPTControl.x = -1;
+            Layout_ExternPPTControl.y = -1;
         }
     }
 }

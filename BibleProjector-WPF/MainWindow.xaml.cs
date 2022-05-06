@@ -88,6 +88,7 @@ namespace BibleProjector_WPF
             Database.DatabaseInitailize();
             module.ProgramOption.Initialize();
             module.LayoutInfo.Initialize();
+
             string error = Powerpoint.Initialize();
             if (error.CompareTo("") != 0)
                 MessageBox.Show("다음을 확인해주세요 : \r\n" + error, "ppt틀 등록되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -154,6 +155,8 @@ namespace BibleProjector_WPF
                 LyricControl.Ctrl_Song.ForceClose();
             if (SubWindow_BibleModify != null)
                 SubWindow_BibleModify.ForceClose();
+            if (ExternPPT.Ctrl_ExternPPT != null)
+                ExternPPT.Ctrl_ExternPPT.ForceClose();
 
             base.OnClosing(e);
         }

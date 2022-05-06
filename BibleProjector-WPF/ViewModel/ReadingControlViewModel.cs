@@ -66,10 +66,10 @@ namespace BibleProjector_WPF.ViewModel
             }
         }
 
-        // 현재 성경 위치 표시 - Text
+        // 현재 교독문 위치 표시 - Text
         public string CurrentReadingInfo { get; set; }
 
-        // 성경 페이지 리스트박스
+        // 교독문 페이지 리스트박스
         private BindingList<string> ReadingPages_in;
         public BindingList<string> ReadingPages { get { return ReadingPages_in; } set { ReadingPages_in = value; NotifyPropertyChanged(); } }
         private int CurrentPageIndex_in;

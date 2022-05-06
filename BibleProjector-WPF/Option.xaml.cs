@@ -99,6 +99,8 @@ namespace BibleProjector_WPF
                 ReadingControl.ReadingControlAccess.ResetLayout();
             if (SongControl.SongControlAccess != null)
                 SongControl.SongControlAccess.ResetLayout();
+            if (ExternPPTControl.ExternPPTControlAccess != null)
+                ExternPPTControl.ExternPPTControlAccess.ResetLayout();
         }
     }
 }

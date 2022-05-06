@@ -205,29 +205,7 @@
                     <local:LyricControl Grid.Row="1" Grid.Column="3" Height="auto" Width="auto"></local:LyricControl>
 
                     <!--외부 ppt 등록 Grid-->
-                    <Grid Grid.Row="1" Grid.Column="5">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="16*"/>
-                            <RowDefinition Height="59*"/>
-                            <RowDefinition Height="14*"/>
-                            <RowDefinition Height="308*"/>
-                            <RowDefinition Height="10*"/>
-                            <RowDefinition Height="93*"/>
-                        </Grid.RowDefinitions>
-                        <Grid Grid.Row="1">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="125*"/>
-                                <ColumnDefinition Width="21*"/>
-                                <ColumnDefinition Width="122*"/>
-                            </Grid.ColumnDefinitions>
-                            <Button>
-
-                            </Button>
-                            <Button Grid.Column="2"></Button>
-                        </Grid>
-                        <ListBox Grid.Row="3"></ListBox>
-                        <Button Grid.Row="5"/>
-                    </Grid>
+                    <local:ExternPPT  Grid.Row="1" Grid.Column="5" Height="auto" Width="auto"></local:ExternPPT>
                 </Grid>
             </TabItem>
 

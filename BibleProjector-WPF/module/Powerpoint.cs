@@ -47,6 +47,8 @@ namespace BibleProjector_WPF
         // ============================================ 프로그램 시작 / 종료 세팅 ========================================================
 
         public const string FRAME_TEMP_DIRECTORY = ".\\programData\\FrameTemp\\";
+        public const string EXTERN_TEMP_DIRECTORY = ".\\programData\\ExternPPT\\";
+        public const string EXTERN_THUMBNAIL_DIRECTORY = ".\\programData\\Thumbnails\\";
 
         static public string Initialize()
         {
@@ -57,20 +59,22 @@ namespace BibleProjector_WPF
             System.IO.Directory.CreateDirectory(FRAME_TEMP_DIRECTORY);
 
             StringBuilder pptFrameError = new StringBuilder(10);
+
             if (module.ProgramOption.BibleFramePath == null)
                 pptFrameError.Append("성경 ppt틀\r\n");
             else
                 Powerpoint.Bible.setPresentation(module.ProgramOption.BibleFramePath);
+
             if (module.ProgramOption.ReadingFramePath == null)
                 pptFrameError.Append("교독문 ppt틀\r\n");
             else
                 Powerpoint.Reading.setPresentation(module.ProgramOption.ReadingFramePath);
+
             if (module.ProgramOption.SongFrameFiles.Count == 0)
                 pptFrameError.Append("찬양 ppt틀\r\n");
             else
                 foreach (module.ProgramOption.SongFrameFile f in module.ProgramOption.SongFrameFiles)
                     Powerpoint.Song.setPresentation(f.Path);
-            
 
             return pptFrameError.ToString();
         }
@@ -80,6 +84,7 @@ namespace BibleProjector_WPF
             Bible.close();
             Reading.close();
             Song.closeAll();
+            ExternPPTs.closeAll();
         }
     }
 
@@ -234,8 +239,16 @@ namespace BibleProjector_WPF
 
             static public void close()
             {
-                if (ppt != null)
+                try
+                {
+                    SlideWindow.View.Exit();
+                }
+                catch { }
+                try
+                {
                     ppt.Close();
+                }
+                catch { }
             }
 
             // ============================================ 메소드 ============================================ 
@@ -477,16 +490,24 @@ namespace BibleProjector_WPF
 
             static void checkValidPPT()
             {
+                if (ppt.Slides.Count == 0)
+                    ppt.Slides.AddSlide(1, ppt.SlideMaster.CustomLayouts[0]);
                 if (ppt.Slides.Count == 1)
-                {
                     ppt.Slides.AddSlide(2, ppt.Slides[1].CustomLayout);
-                }
             }
 
             static public void close()
             {
-                if (ppt != null)
+                try
+                {
+                    SlideWindow.View.Exit();
+                }
+                catch { }
+                try
+                {
                     ppt.Close();
+                }
+                catch { }
             }
 
             // ============================================ 메소드 ============================================ 
@@ -805,7 +826,16 @@ namespace BibleProjector_WPF
 
             public void deletePresentation()
             {
-                ppt.Close();
+                try
+                {
+                    SlideWindow.View.Exit();
+                }
+                catch { }
+                try
+                {
+                    ppt.Close();
+                }
+                catch { }
 
                 System.IO.File.Delete(System.IO.Path.GetFullPath(FRAME_TEMP_DIRECTORY + FramePPTName));
             }
@@ -868,10 +898,10 @@ namespace BibleProjector_WPF
 
             void checkValidPPT()
             {
+                if (ppt.Slides.Count == 0)
+                    ppt.Slides.AddSlide(1, ppt.SlideMaster.CustomLayouts[0]);
                 if (ppt.Slides.Count == 1)
-                {
-                    ppt.Slides.AddSlide(2, ppt.Slides[1].CustomLayout);
-                }
+                    ppt.Slides.AddSlide(2,ppt.Slides[1].CustomLayout);
             }
 
             // ============================================ 메소드 ============================================
@@ -969,6 +999,355 @@ namespace BibleProjector_WPF
                     SlideWindow.View.GotoSlide(1);
 
                 pptTextState = PptTextShow.Show;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 외부 ppt
+    /// </summary>
+    partial class Powerpoint
+    {
+        public class ExternPPTs
+        {
+
+            // ============================================ 필요 변수 ============================================ 
+
+            static List<ExternPPT> ppt = new List<ExternPPT>();
+
+            // ============================================ 세팅 및 종료 ============================================ 
+
+            static public void Initialize(string[] paths)
+            {
+                if (System.IO.Directory.Exists(EXTERN_TEMP_DIRECTORY))
+                    System.IO.Directory.Delete(EXTERN_TEMP_DIRECTORY, true);
+                System.IO.Directory.CreateDirectory(EXTERN_TEMP_DIRECTORY);
+
+                if (System.IO.Directory.Exists(EXTERN_THUMBNAIL_DIRECTORY))
+                    System.IO.Directory.Delete(EXTERN_THUMBNAIL_DIRECTORY, true);
+                System.IO.Directory.CreateDirectory(EXTERN_THUMBNAIL_DIRECTORY);
+
+                foreach (string path in paths)
+                    ppt.Add(new ExternPPT(path));
+            }
+
+            static public void setPresentation(string path)
+            {
+                ppt.Add(new ExternPPT(path));
+            }
+
+            static public void refreshPresentation(string path)
+            {
+                ExternPPT findedExternPPT = ppt.Find(x => x.PPTName.CompareTo(System.IO.Path.GetFileName(path)) == 0);
+                if (findedExternPPT != null)
+                    findedExternPPT.refreshPresentation(path);
+            }
+
+            static public void closeSingle(string path)
+            {
+                ExternPPT findedExternPPT = ppt.Find(x => x.PPTName.CompareTo(System.IO.Path.GetFileName(path)) == 0);
+                if (findedExternPPT != null)
+                    findedExternPPT.deletePresentation();
+                ppt.Remove(findedExternPPT);
+            }
+
+            static public void closeAll()
+            {
+                foreach (ExternPPT ep in ppt)
+                    ep.deletePresentation();
+                ppt.Clear();
+            }
+
+            // ============================================ 메소드 ============================================ 
+
+            static private int pptFinder(string PPTName)
+            {
+                for (int i = 0; i < ppt.Count; i++)
+                    if (ppt[i].PPTName.CompareTo(PPTName) == 0)
+                        return i;
+
+                return -1;
+            }
+
+            static public string getThumbnailPath(string PPTName)
+            {
+                int index;
+                if ((index = pptFinder(PPTName)) != -1)
+                {
+                    return ppt[index].getThumbnailPath();
+                }
+
+                return null;
+            }
+
+            static public void TopMost(string PPTName)
+            {
+                int index;
+                if ((index = pptFinder(PPTName)) != -1)
+                {
+                    ppt[index].TopMost();
+                }
+            }
+
+            static public void SlideShowRun(string PPTName)
+            {
+                int index;
+                if ((index = pptFinder(PPTName)) != -1)
+                {
+                    ppt[index].SlideShowRun();
+                    for (int i = 0; i < ppt.Count; i++)
+                        if (i != index)
+                            ppt[i].SlideShowHide();
+                }
+            }
+
+            static public int goToSlide(string PPTName, int slideIndex)
+            {
+                int index;
+                if ((index = pptFinder(PPTName)) != -1)
+                {
+                    return ppt[index].goToSlide(slideIndex);
+                }
+
+                return -1;
+            }
+
+            static public int goNextSlide(string PPTName)
+            {
+                int index;
+                if ((index = pptFinder(PPTName)) != -1)
+                {
+                    return ppt[index].goNextSlide();
+                }
+
+                return -1;
+            }
+
+            static public int goPreviousSlide(string PPTName)
+            {
+                int index;
+                if ((index = pptFinder(PPTName)) != -1)
+                {
+                    return ppt[index].goPreviousSlide();
+                }
+
+                return -1;
+            }
+
+            static public void SlideShowHide(string PPTName)
+            {
+                int index;
+                if ((index = pptFinder(PPTName)) != -1)
+                {
+                    ppt[index].SlideShowHide();
+                }
+            }
+        }
+
+        public class ExternPPT
+        {
+            // ============================================ 필요 변수 ============================================ 
+
+            public string PPTName;
+
+            Presentation ppt;
+            SlideShowWindow SlideWindow = null;
+            int currentSlideNum = 1;
+
+            PptSlideState pptState = PptSlideState.NotRunning;
+
+            // ============================================ 세팅 및 종료 ============================================ 
+
+            public ExternPPT(string path)
+            {
+                setPresentation(path);
+            }
+
+            public void setPresentation(string path)
+            {
+                string tempPath = EXTERN_TEMP_DIRECTORY + System.IO.Path.GetFileName(path);
+                System.IO.File.Copy(path, tempPath, true);
+                path = System.IO.Path.GetFullPath(tempPath);
+
+                this.PPTName = System.IO.Path.GetFileName(path);
+
+                ppt = app.Presentations.Open(path, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
+                checkValidPPT();
+                makeThumbNail();
+            }
+
+            void checkAndClose(Presentation ppt)
+            {
+                foreach (Presentation p in app.Presentations)
+                    if (p == ppt)
+                    {
+                        ppt.Close();
+                        return;
+                    }
+            }
+
+            public void refreshPresentation(string path)
+            {
+                Presentation lastppt = ppt;
+
+                if (pptState == PptSlideState.NotRunning)
+                {
+                    lastppt.Close();
+                    setPresentation(path);
+                }
+                else if (pptState == PptSlideState.WindowHide)
+                {
+                    if (SlideWindow != null)
+                    {
+                        SlideWindow.View.Exit();
+                        SlideWindow = null;
+                    }
+                    checkAndClose(lastppt);
+
+                    setPresentation(path);
+                    goToSlide(currentSlideNum);
+                }
+                else if (pptState == PptSlideState.WindowShow)
+                {
+                    SlideShowWindow lastShowWindow = SlideWindow;
+                    SlideWindow = null;
+
+                    ppt = app.Presentations.Open(path, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
+                    checkValidPPT();
+                    goToSlide(currentSlideNum);
+                    SlideShowRun();
+
+                    lastShowWindow.View.Exit();
+                    checkAndClose(lastppt);
+
+                    lastppt = ppt;
+                    lastShowWindow = SlideWindow;
+                    SlideWindow = null;
+
+                    setPresentation(path);
+                    goToSlide(currentSlideNum);
+                    SlideShowRun();
+
+                    lastShowWindow.View.Exit();
+                    checkAndClose(lastppt);
+                }
+            }
+
+            public void deletePresentation()
+            {
+                deleteThumbNail();
+
+                try
+                {
+                    SlideWindow.View.Exit();
+                }
+                catch { }
+                try
+                {
+                    ppt.Close();
+                }
+                catch { }
+            }
+
+            void checkValidPPT()
+            {
+                if (ppt.Slides.Count == 0)
+                    ppt.Slides.AddSlide(1, ppt.SlideMaster.CustomLayouts[0]);
+            }
+
+            // ============================================ 썸네일 작업 ==========================================
+
+            void deleteThumbNail()
+            {
+                if (System.IO.Directory.Exists(getThumbnailPath()))
+                    System.IO.Directory.Delete(getThumbnailPath(), true);
+            }
+
+            void makeThumbNail()
+            {
+                deleteThumbNail();
+                ppt.SaveAs(getThumbnailPath(), PpSaveAsFileType.ppSaveAsJPG);
+            }
+
+            // ============================================ 메소드 ============================================
+
+            public string getThumbnailPath()
+            {
+                return System.IO.Path.GetFullPath(
+                    EXTERN_THUMBNAIL_DIRECTORY 
+                    + System.IO.Path.GetFileNameWithoutExtension(ppt.Name)
+                    );
+            }
+
+            public void TopMost()
+            {
+                if (SlideWindow != null && pptState == PptSlideState.WindowShow)
+                {
+                    SetWindowPos(SlideWindow.HWND, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
+                    SetWindowPos(SlideWindow.HWND, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
+                    //SetWindowPos(SlideWindow.HWND, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+                }
+            }
+
+            public void SlideShowRun()
+            {
+                // 슬라이드쇼 점검하는부분 좀 더 개선
+                // 슬라이드쇼 끄면 ppt도 꺼지기 때문
+                if (SlideWindow == null)
+                {
+                    ppt.SlideShowSettings.ShowType = PpSlideShowType.ppShowTypeKiosk;
+                    if (currentSlideNum != 1)
+                    {
+                        ppt.Slides[currentSlideNum].MoveTo(1);
+                        SlideWindow = ppt.SlideShowSettings.Run();
+                        ppt.Slides[1].MoveTo(currentSlideNum);
+                    }
+                    else
+                        SlideWindow = ppt.SlideShowSettings.Run();
+                }
+                else
+                    ShowWindow(SlideWindow.HWND, SW_SHOW);
+
+                pptState = PptSlideState.WindowShow;
+            }
+
+            /// <summary>
+            /// 이동한 슬라이드 위치를 반환
+            /// </summary>
+            /// <param name="slideIndex"></param>
+            /// <returns></returns>
+            public int goToSlide(int slideIndex)
+            {
+                if (slideIndex < 1)
+                    currentSlideNum = 1;
+                else if (slideIndex > ppt.Slides.Count)
+                    currentSlideNum = ppt.Slides.Count;
+                else
+                    currentSlideNum = slideIndex;
+
+                if (SlideWindow != null)
+                    SlideWindow.View.GotoSlide(currentSlideNum);
+
+                return currentSlideNum;
+            }
+
+            public int goNextSlide()
+            {
+                return goToSlide(currentSlideNum + 1);
+            }
+
+            public int goPreviousSlide()
+            {
+                return goToSlide(currentSlideNum - 1);
+            }
+
+            public void SlideShowHide()
+            {
+                if (SlideWindow != null)
+                {
+                    ShowWindow(SlideWindow.HWND, SW_HIDE);
+                    pptState = PptSlideState.WindowHide;
+                }
             }
         }
     }

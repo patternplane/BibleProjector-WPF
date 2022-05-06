@@ -59,10 +59,16 @@
     <Compile Include="BibleModifyWindow.xaml.cs">
       <DependentUpon>BibleModifyWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ExternPPT.xaml.cs">
+      <DependentUpon>ExternPPT.xaml</DependentUpon>
+    </Compile>
     <Compile Include="module\LayoutInfo.cs" />
     <Compile Include="module\ProgramOption.cs" />
     <Compile Include="Option.xaml.cs">
       <DependentUpon>Option.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExternPPTControl.xaml.cs">
+      <DependentUpon>ExternPPTControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SongControl.xaml.cs">
       <DependentUpon>SongControl.xaml</DependentUpon>
@@ -80,7 +86,9 @@
     <Compile Include="module\StringModifier.cs" />
     <Compile Include="module\StringKMP.cs" />
     <Compile Include="ViewModel\BibleModifyViewModel.cs" />
+    <Compile Include="ViewModel\ExternPPTViewModel.cs" />
     <Compile Include="ViewModel\OptionViewModel.cs" />
+    <Compile Include="ViewModel\ExternPPTControlViewModel.cs" />
     <Compile Include="ViewModel\SongControlViewModel.cs" />
     <Compile Include="ViewModel\ReadingControlViewModel.cs" />
     <Compile Include="ViewModel\BibleControlViewModel.cs" />
@@ -92,9 +100,17 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ExternPPT.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Option.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ExternPPTControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="SongControl.xaml">
       <Generator>MSBuild:Compile</Generator>
