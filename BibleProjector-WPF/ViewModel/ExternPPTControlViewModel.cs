@@ -75,6 +75,10 @@ namespace BibleProjector_WPF.ViewModel
 
         // 현재 사용중인 ppt 이름
         string currentFileName { get; set; }
+        public bool isSameFileName(string FileName)
+        {
+            return (currentFileName.CompareTo(FileName) == 0);
+        }
 
         // ================================================ 속성 ================================================
 

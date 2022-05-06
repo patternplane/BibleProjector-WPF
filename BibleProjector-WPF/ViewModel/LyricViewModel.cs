@@ -613,7 +613,7 @@ namespace BibleProjector_WPF.ViewModel
             }
         }
 
-        public void RunDelete()
+        public bool RunDelete()
         {
             SingleLyric deleteItem = currentLyric;
             if (deleteLyric(currentLyric))
@@ -625,6 +625,8 @@ namespace BibleProjector_WPF.ViewModel
                     SearchText = lastSearchPattern;
                 }
             }
+
+            return (deleteItem == outedLyric) ;
         }
 
         public void RunSetFromSearchValue()
@@ -653,6 +655,12 @@ namespace BibleProjector_WPF.ViewModel
         public void RunApplyHymnModify()
         {
             VerseContent = module.StringModifier.makeCorrectNewline(VerseContent);
+        }
+
+        SingleLyric outedLyric = null;
+        public void currentLyricOuted()
+        {
+            outedLyric = SelectedLyric;
         }
 
         // ============================================ 메소드 ==============================================

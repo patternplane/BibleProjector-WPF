@@ -230,6 +230,8 @@ namespace BibleProjector_WPF.ViewModel
         {
             for (int i = itemIndex.Length - 1; i >= 0; i--)
             {
+                if (SongControl.SongControlAccess != null)
+                    SongControl.SongControlAccess.DeletingCheckAndClose(System.IO.Path.GetFileName(SongFramePaths_List[itemIndex[i]].Path));
                 Powerpoint.Song.closeSingle(SongFramePaths_List[itemIndex[i]].Path);
                 SongFramePaths_List.RemoveAt(itemIndex[i]);
             }

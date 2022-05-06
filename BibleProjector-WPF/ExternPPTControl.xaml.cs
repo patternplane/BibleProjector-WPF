@@ -23,6 +23,12 @@ namespace BibleProjector_WPF
 
         private ViewModel.ExternPPTControlViewModel VM_ExternPPTControl;
 
+        public void CheckDeletedPPTAndClose(string FileName)
+        {
+            if (VM_ExternPPTControl.isSameFileName(FileName))
+                this.Close();
+        }
+
         public ExternPPTControl(string fileName,int StartSlide)
         {
             ExternPPTControlAccess = this;

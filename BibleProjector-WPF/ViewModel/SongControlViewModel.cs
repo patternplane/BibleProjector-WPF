@@ -57,6 +57,10 @@ namespace BibleProjector_WPF.ViewModel
 
         string[][][] songData;
         string currentPPTName;
+        public bool isSameFrame(string FrameFileName)
+        {
+            return (currentPPTName.CompareTo(FrameFileName) == 0);
+        }
 
         // ================================================ 속성 ================================================
 

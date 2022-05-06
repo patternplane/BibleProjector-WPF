@@ -23,6 +23,12 @@ namespace BibleProjector_WPF
 
         private ViewModel.SongControlViewModel VM_SongControl;
 
+        public void DeletingCheckAndClose(string DeletingFrameFileName)
+        {
+            if (VM_SongControl.isSameFrame(DeletingFrameFileName))
+                this.Close();
+        }
+
         public SongControl(string[][][] songData,string path, bool isHymn)
         {
             SongControlAccess = this;
@@ -98,6 +104,7 @@ namespace BibleProjector_WPF
         {
             VM_SongControl.RunNextPage();
         }
+
         void PageListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ((ListBoxItem)(((ListBox)sender).ItemContainerGenerator.ContainerFromItem(((ListBox)sender).SelectedItem)))?.Focus();

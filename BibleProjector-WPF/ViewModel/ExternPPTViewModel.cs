@@ -112,6 +112,8 @@ namespace BibleProjector_WPF.ViewModel
         {
             for (int j = indexList.Length - 1; j >= 0; j--)
             {
+                if (ExternPPTControl.ExternPPTControlAccess != null)
+                    ExternPPTControl.ExternPPTControlAccess.CheckDeletedPPTAndClose(ExternPPTList[indexList[j]]);
                 Powerpoint.ExternPPTs.closeSingle(Powerpoint.EXTERN_TEMP_DIRECTORY + ExternPPTList[indexList[j]]);
                 ExternPPTList.RemoveAt(indexList[j]);
                 ExternPPTList_fullpath.RemoveAt(indexList[j]);

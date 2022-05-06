@@ -48,7 +48,8 @@ namespace BibleProjector_WPF
             if (MessageBox.Show("현재 선택된 곡을 삭제합니다.", "찬양곡 삭제", MessageBoxButton.OKCancel, MessageBoxImage.Hand) != MessageBoxResult.OK)
                 return;
 
-            VM_LyricViewModel.RunDelete();
+            if (VM_LyricViewModel.RunDelete())
+                Ctrl_Song.Close();
         }
 
         void TitleTextBox_LostFocus(object sender, RoutedEventArgs e)
@@ -104,6 +105,7 @@ namespace BibleProjector_WPF
                         VM_LyricViewModel.SelectedLyric.makeSongData(VM_LyricViewModel.LinePerSlide)
                         , VM_LyricViewModel.SongFrameSelection.Path
                         , VM_LyricViewModel.SelectedLyric.GetType() == typeof(ViewModel.LyricViewModel.SingleHymn));
+                VM_LyricViewModel.currentLyricOuted();
                 Ctrl_Song.Show();
             }
         }
