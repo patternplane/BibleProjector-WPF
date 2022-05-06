@@ -23,18 +23,18 @@ namespace BibleProjector_WPF
 
         private ViewModel.SongControlViewModel VM_SongControl;
 
-        public SongControl(string[][][] songData,string path)
+        public SongControl(string[][][] songData,string path, bool isHymn)
         {
             SongControlAccess = this;
 
             InitializeComponent();
-            this.DataContext = VM_SongControl = new ViewModel.SongControlViewModel(songData, System.IO.Path.GetFileName(path));
+            this.DataContext = VM_SongControl = new ViewModel.SongControlViewModel(songData, System.IO.Path.GetFileName(path), isHymn);
             setLayout();
         }
 
-        public void ShowSong (string[][][] songData, string path)
+        public void ShowSong (string[][][] songData, string path, bool isHymn)
         {
-            VM_SongControl.showSong(songData, System.IO.Path.GetFileName(path));
+            VM_SongControl.showSong(songData, System.IO.Path.GetFileName(path), isHymn);
         }
 
         void setLayout()

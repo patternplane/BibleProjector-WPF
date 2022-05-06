@@ -36,14 +36,11 @@ namespace BibleProjector_WPF
 
         // ============================================= 이벤트 ============================================= 
 
+        // =========================== 곡 선택 탭
+
         void SearchButton_Click(object sender, RoutedEventArgs e)
         {
             VM_LyricViewModel.RunSearch();
-        }
-
-        void AddButton_Click(object sender, RoutedEventArgs e)
-        {
-            VM_LyricViewModel.RunAdd();
         }
 
         void DeleteButton_Click(object sender, RoutedEventArgs e)
@@ -64,28 +61,21 @@ namespace BibleProjector_WPF
             VM_LyricViewModel.RunCompleteModify();
         }
 
-        // ======================================================= 출력 처리 ======================================================
+        // =========================== 곡 추가 탭
 
-        string[][][] makeSongData(ViewModel.LyricViewModel.SingleLyric lyric, int linePerPage)
+        void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            string[] pages = module.StringModifier.makePageWithLines(VM_LyricViewModel.SelectedLyric.content, linePerPage);
-            string[][][] songData = new string[pages.Length][][];
-
-            for(int i = 0; i < pages.Length; i++)
-            {
-                songData[i] = new string[2][];
-
-                songData[i][0] = new string[2];
-                songData[i][0][0] = "{t}";
-                songData[i][0][1] = lyric.title;
-
-                songData[i][1] = new string[2];
-                songData[i][1][0] = "{c}";
-                songData[i][1][1] = pages[i];
-            }
-
-            return songData;
+            VM_LyricViewModel.RunAdd();
         }
+
+        // =========================== 찬송가 탭
+
+        void HymnContentTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            VM_LyricViewModel.RunApplyHymnModify();
+        }
+
+        // ======================================================= 출력 처리 ======================================================
 
         void LyricReserveListBox_DoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -103,11 +93,17 @@ namespace BibleProjector_WPF
                 // 곡별 사용할 틀에 대한 설계가 없어 수정되지 않음
                 if (Ctrl_Song == null)
                 {
-                    Ctrl_Song = new SongControl(makeSongData(VM_LyricViewModel.SelectedLyric, VM_LyricViewModel.LinePerSlide), VM_LyricViewModel.SongFrameSelection.Path);
+                    Ctrl_Song = new SongControl(
+                        VM_LyricViewModel.SelectedLyric.makeSongData(VM_LyricViewModel.LinePerSlide)
+                        , VM_LyricViewModel.SongFrameSelection.Path
+                        , VM_LyricViewModel.SelectedLyric.GetType() == typeof(ViewModel.LyricViewModel.SingleHymn));
                     Ctrl_Song.Owner = MainWindow.ProgramMainWindow;
                 }
                 else
-                    Ctrl_Song.ShowSong(makeSongData(VM_LyricViewModel.SelectedLyric, VM_LyricViewModel.LinePerSlide), VM_LyricViewModel.SongFrameSelection.Path);
+                    Ctrl_Song.ShowSong(
+                        VM_LyricViewModel.SelectedLyric.makeSongData(VM_LyricViewModel.LinePerSlide)
+                        , VM_LyricViewModel.SongFrameSelection.Path
+                        , VM_LyricViewModel.SelectedLyric.GetType() == typeof(ViewModel.LyricViewModel.SingleHymn));
                 Ctrl_Song.Show();
             }
         }
@@ -140,6 +136,7 @@ namespace BibleProjector_WPF
                 VM_LyricViewModel.LyricReserveList.RemoveAt(moveItem);
             }
         }
+
         void ReserveDown_Click(object sender, RoutedEventArgs e)
         {
             if (LyricReserveListBox.SelectedItems.Count == 0)
@@ -185,16 +182,32 @@ namespace BibleProjector_WPF
 
         void ReserveAdd_Click(object sender, RoutedEventArgs e)
         {
-            if (LyricListBox.SelectedItems.Count == 0)
-                return;
+            if (LyricReserveSelectTabControl.SelectedIndex == 0)
+            {
+                if (LyricListBox.SelectedItems.Count == 0)
+                    return;
 
-            List<int> itemindex = new List<int>(10);
-            foreach (object item in LyricListBox.SelectedItems)
-                itemindex.Add(LyricListBox.Items.IndexOf(item));
-            itemindex.Sort();
+                List<int> itemindex = new List<int>(10);
+                foreach (object item in LyricListBox.SelectedItems)
+                    itemindex.Add(LyricListBox.Items.IndexOf(item));
+                itemindex.Sort();
 
-            foreach (int i in itemindex)
-                VM_LyricViewModel.LyricReserveList.Add(new ViewModel.LyricViewModel.LyricReserve(VM_LyricViewModel.LyricList[i]));
+                foreach (int i in itemindex)
+                    VM_LyricViewModel.LyricReserveList.Add(new ViewModel.LyricViewModel.LyricReserve(VM_LyricViewModel.LyricList[i]));
+            }
+            if (LyricReserveSelectTabControl.SelectedIndex == 1)
+            {
+                if (HymnListBox.SelectedItems.Count == 0)
+                    return;
+
+                List<int> itemindex = new List<int>(10);
+                foreach (object item in HymnListBox.SelectedItems)
+                    itemindex.Add(HymnListBox.Items.IndexOf(item));
+                itemindex.Sort();
+
+                foreach (int i in itemindex)
+                    VM_LyricViewModel.LyricReserveList.Add(new ViewModel.LyricViewModel.LyricReserve(VM_LyricViewModel.HymnList[i]));
+            }
         }
     }
 }

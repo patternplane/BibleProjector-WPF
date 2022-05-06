@@ -121,15 +121,59 @@
                     </Grid>
                 </TabItem>
 
+                <!--찬송가-->
+                <TabItem Header="찬송가">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="12*"/>
+                            <RowDefinition Height="35*"/>
+                            <RowDefinition Height="28*"/>
+                            <RowDefinition Height="42*"/>
+                            <RowDefinition Height="9*"/>
+                            <RowDefinition Height="279*"/>
+                            <RowDefinition Height="23*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="18*"/>
+                            <ColumnDefinition Width="228*"/>
+                            <ColumnDefinition Width="17*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid Grid.Row="1" Grid.Column="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="127*"/>
+                                <ColumnDefinition Width="30*"/>
+                                <ColumnDefinition Width="109*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <ComboBox Grid.Column="0"
+                                      ItemsSource="{Binding HymnList}"
+                                      SelectedItem="{Binding HymnSelection}"
+                                      DisplayMemberPath="title">
+
+                            </ComboBox>
+                            <ComboBox Grid.Column="2"
+                                      ItemsSource="{Binding VerseNumList}"
+                                      SelectedItem="{Binding VerseNumSelection}"></ComboBox>
+                        </Grid>
+                        <TextBox Grid.Row="3" Grid.Column="1"
+                                 Text="{Binding CurrentHymnPosition_Text}"></TextBox>
+                        <TextBox Grid.Row="5" Grid.Column="1"
+                                 Text="{Binding VerseContent, UpdateSourceTrigger=PropertyChanged}"
+                                 LostFocus="HymnContentTextBox_LostFocus"></TextBox>
+                    </Grid>
+                </TabItem>
+
                 <!--곡 예약-->
                 <TabItem Header="예약">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="15*"/>
-                            <RowDefinition Height="149*"/>
-                            <RowDefinition Height="41*"/>
-                            <RowDefinition Height="193*"/>
-                            <RowDefinition Height="44*"/>
+                            <RowDefinition Height="14*"/>
+                            <RowDefinition Height="165*"/>
+                            <RowDefinition Height="43*"/>
+                            <RowDefinition Height="145*"/>
+                            <RowDefinition Height="8*"/>
+                            <RowDefinition Height="53*"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="50*"/>
@@ -137,10 +181,21 @@
                             <ColumnDefinition Width="17*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Label Grid.Row="1" Grid.Column="0" Content="곡 목록" VerticalAlignment="Center" Height="26" Margin="0,64,0,63" ></Label>
-                        <ListBox Grid.Row="1" Grid.Column="1"
-                             ItemsSource="{Binding LyricList}" DisplayMemberPath="title" SelectionMode="Extended"
-                                 x:Name="LyricListBox"></ListBox>
+                        <Label Grid.Row="1" Grid.Column="0" Content="곡 목록" VerticalAlignment="Center" Height="26" Margin="0,68,0,71" ></Label>
+                        <TabControl Grid.Row="1" Grid.Column="1" x:Name="LyricReserveSelectTabControl">
+                            <TabItem Header="CCM">
+                                <ListBox 
+                                         ItemsSource="{Binding LyricList}" DisplayMemberPath="title" SelectionMode="Extended"
+                                         x:Name="LyricListBox"></ListBox>
+                            </TabItem>
+                            <TabItem Header="찬송가">
+                                <ListBox
+                                    ItemsSource="{Binding HymnList}" 
+                                    DisplayMemberPath="title" 
+                                    SelectionMode="Extended"
+                                    x:Name="HymnListBox"></ListBox>
+                            </TabItem>
+                        </TabControl>
                         <Grid Grid.Row="2" Grid.Column="1">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="6*"/>
@@ -155,7 +210,7 @@
                             <Button Grid.Row="1" Grid.Column="1" Content="▼" Click="ReserveAdd_Click"></Button>
                         </Grid>
 
-                        <Label Grid.Row="3" Grid.Column="0" Content="예약된&#10;목록" VerticalAlignment="Center" Height="42" Margin="0,78"  ></Label>
+                        <Label Grid.Row="3" Grid.Column="0" Content="예약된&#10;목록" VerticalAlignment="Center" Height="42" Margin="0,56,0,47"  ></Label>
                         <ListBox Grid.Row="3" Grid.Column="1" SelectionMode="Extended"
                                  ItemsSource="{Binding LyricReserveList}"
                                  DisplayMemberPath="lyric.title"
@@ -167,7 +222,7 @@
                                 </Style>
                             </ListBox.ItemContainerStyle>
                         </ListBox>
-                        <Grid Grid.Row="4" Grid.Column="1">
+                        <Grid Grid.Row="5" Grid.Column="1">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="61*"/>
                                 <ColumnDefinition Width="57*"/>
@@ -206,7 +261,7 @@
             <Label Grid.Row="1" Content="ppt 틀"></Label>
             <ComboBox Grid.Row="2" ItemsSource="{Binding SongFrameList}" SelectedItem="{Binding SongFrameSelection}"
                       DisplayMemberPath="FileName"></ComboBox>
-            
+
             <Label Grid.Row="4" Content="슬라이드별&#10;줄 수 :"></Label>
             <TextBox Grid.Row="5" Text="{Binding LinePerSlideText, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             <Button Grid.Row="7" Content="출력" Click="LyricShowButton_Click">

@@ -24,6 +24,7 @@ namespace BibleProjector_WPF.module
         const string BIBLE_RESERVE_DATA = PROGRAM_DATA_PATH + "\\BibleReserve";
         const string LYRIC_DATA = PROGRAM_DATA_PATH + "\\Lyrics";
         const string LYRIC_RESERVE_DATA = PROGRAM_DATA_PATH + "\\LyricReserve";
+        const string HYMN_DATA = PROGRAM_DATA_PATH + "\\Hymns";
         const string OPTION_DATA = PROGRAM_DATA_PATH + "\\Option";
         const string LAYOUT_DATA = PROGRAM_DATA_PATH + "\\LayoutData";
 
@@ -53,6 +54,10 @@ namespace BibleProjector_WPF.module
 
             file = new StreamWriter(LYRIC_RESERVE_DATA, false);
             file.Write(VM_LyricViewModel.getSaveData_Reserve());
+            file.Close();
+
+            file = new StreamWriter(HYMN_DATA, false);
+            file.Write(VM_LyricViewModel.getSaveData_Hymn());
             file.Close();
 
             /*
@@ -118,6 +123,11 @@ namespace BibleProjector_WPF.module
         public static string getLyricReserveData()
         {
             return getDataFromFile(LYRIC_RESERVE_DATA);
+        }
+
+        public static string getHymnData()
+        {
+            return getDataFromFile(HYMN_DATA);
         }
 
         public static string getOptionData()
