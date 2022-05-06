@@ -41,7 +41,8 @@ namespace BibleProjector_WPF
         void ExitFromError(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
             Console.WriteLine("프로그램 에러 종료");
-            
+
+            module.ProgramData.saveProgramData();
             Powerpoint.FinallProcess();
             
             MessageBox.Show("프로그램 결함으로 강제 종료합니다.");
