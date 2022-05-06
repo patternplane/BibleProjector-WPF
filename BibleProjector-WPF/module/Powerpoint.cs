@@ -123,6 +123,15 @@ namespace BibleProjector_WPF
                 getCommand();
             }
 
+            static void checkAndClose(Presentation ppt)
+            {
+                foreach(Presentation p in app.Presentations)
+                    if (p == ppt) {
+                        ppt.Close();
+                        return;
+                    }
+            }
+
             static public void refreshPresentation(string path)
             {
                 Presentation lastppt = ppt;
@@ -134,47 +143,52 @@ namespace BibleProjector_WPF
                 }
                 else if (pptState == PptSlideState.WindowHide)
                 {
-                    int currentPosition = SlideWindow.View.CurrentShowPosition;
-                    SlideWindow = null;
-                    lastppt.Close();
+                    if (SlideWindow != null)
+                    {
+                        SlideWindow.View.Exit();
+                        SlideWindow = null;
+                    }
+                    checkAndClose(lastppt);
 
                     setPresentation(path);
                     Change();
-                    if (currentPosition == 1)
+                    if (pptTextState == PptTextShow.Show)
                         ShowText();
-                    else if (currentPosition == 2)
+                    else if (pptTextState == PptTextShow.Hide)
                         HideText();
                 }
                 else if (pptState == PptSlideState.WindowShow)
                 {
-                    int currentPosition = SlideWindow.View.CurrentShowPosition;
+                    SlideShowWindow lastShowWindow = SlideWindow;
                     SlideWindow = null;
 
                     ppt = app.Presentations.Open(path, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
                     checkValidPPT();
                     getCommand();
                     Change();
-                    if (currentPosition == 1)
+                    if (pptTextState == PptTextShow.Show)
                         ShowText();
-                    else if (currentPosition == 2)
+                    else if (pptTextState == PptTextShow.Hide)
                         HideText();
                     SlideShowRun();
 
-                    lastppt.Close();
+                    lastShowWindow.View.Exit();
+                    checkAndClose(lastppt);
 
                     lastppt = ppt;
-                    currentPosition = SlideWindow.View.CurrentShowPosition;
+                    lastShowWindow = SlideWindow;
                     SlideWindow = null;
 
                     setPresentation(path);
                     Change();
-                    if (currentPosition == 1)
+                    if (pptTextState == PptTextShow.Show)
                         ShowText();
-                    else if (currentPosition == 2)
+                    else if (pptTextState == PptTextShow.Hide)
                         HideText();
                     SlideShowRun();
 
-                    lastppt.Close();
+                    lastShowWindow.View.Exit();
+                    checkAndClose(lastppt);
                 }
             }
 
@@ -362,6 +376,16 @@ namespace BibleProjector_WPF
                 getCommand();
             }
 
+            static void checkAndClose(Presentation ppt)
+            {
+                foreach (Presentation p in app.Presentations)
+                    if (p == ppt)
+                    {
+                        ppt.Close();
+                        return;
+                    }
+            }
+
             static public void refreshPresentation(string path)
             {
                 Presentation lastppt = ppt;
@@ -373,47 +397,52 @@ namespace BibleProjector_WPF
                 }
                 else if (pptState == PptSlideState.WindowHide)
                 {
-                    int currentPosition = SlideWindow.View.CurrentShowPosition;
-                    SlideWindow = null;
-                    lastppt.Close();
+                    if (SlideWindow != null)
+                    {
+                        SlideWindow.View.Exit();
+                        SlideWindow = null;
+                    }
+                    checkAndClose(lastppt);
 
                     setPresentation(path);
                     Change();
-                    if (currentPosition == 1)
+                    if (pptTextState == PptTextShow.Show)
                         ShowText();
-                    else if (currentPosition == 2)
+                    else if (pptTextState == PptTextShow.Hide)
                         HideText();
                 }
                 else if (pptState == PptSlideState.WindowShow)
                 {
-                    int currentPosition = SlideWindow.View.CurrentShowPosition;
+                    SlideShowWindow lastShowWindow = SlideWindow;
                     SlideWindow = null;
 
                     ppt = app.Presentations.Open(path, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
                     checkValidPPT();
                     getCommand();
                     Change();
-                    if (currentPosition == 1)
+                    if (pptTextState == PptTextShow.Show)
                         ShowText();
-                    else if (currentPosition == 2)
+                    else if (pptTextState == PptTextShow.Hide)
                         HideText();
                     SlideShowRun();
 
-                    lastppt.Close();
+                    lastShowWindow.View.Exit();
+                    checkAndClose(lastppt);
 
                     lastppt = ppt;
-                    currentPosition = SlideWindow.View.CurrentShowPosition;
+                    lastShowWindow = SlideWindow;
                     SlideWindow = null;
 
                     setPresentation(path);
-                    Change();
-                    if (currentPosition == 1)
+                    Change(); 
+                    if (pptTextState == PptTextShow.Show)
                         ShowText();
-                    else if (currentPosition == 2)
+                    else if (pptTextState == PptTextShow.Hide)
                         HideText();
                     SlideShowRun();
 
-                    lastppt.Close();
+                    lastShowWindow.View.Exit();
+                    checkAndClose(lastppt);
                 }
             }
 
@@ -704,6 +733,16 @@ namespace BibleProjector_WPF
                 getCommand();
             }
 
+            void checkAndClose(Presentation ppt)
+            {
+                foreach (Presentation p in app.Presentations)
+                    if (p == ppt)
+                    {
+                        ppt.Close();
+                        return;
+                    }
+            }
+
             public void refreshPresentation(string path)
             {
                 Presentation lastppt = ppt;
@@ -715,47 +754,52 @@ namespace BibleProjector_WPF
                 }
                 else if (pptState == PptSlideState.WindowHide)
                 {
-                    int currentPosition = SlideWindow.View.CurrentShowPosition;
-                    SlideWindow = null;
-                    lastppt.Close();
+                    if (SlideWindow != null)
+                    {
+                        SlideWindow.View.Exit();
+                        SlideWindow = null;
+                    }
+                    checkAndClose(lastppt);
 
                     setPresentation(path);
                     ChangeApply(currentPage);
-                    if (currentPosition == 1)
+                    if (pptTextState == PptTextShow.Show)
                         ShowText();
-                    else if (currentPosition == 2)
+                    else if (pptTextState == PptTextShow.Hide)
                         HideText();
                 }
                 else if (pptState == PptSlideState.WindowShow)
                 {
-                    int currentPosition = SlideWindow.View.CurrentShowPosition;
+                    SlideShowWindow lastShowWindow = SlideWindow;
                     SlideWindow = null;
 
                     ppt = app.Presentations.Open(path, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
                     checkValidPPT();
                     getCommand();
                     ChangeApply(currentPage);
-                    if (currentPosition == 1)
+                    if (pptTextState == PptTextShow.Show)
                         ShowText();
-                    else if (currentPosition == 2)
+                    else if (pptTextState == PptTextShow.Hide)
                         HideText();
                     SlideShowRun();
 
-                    lastppt.Close();
+                    lastShowWindow.View.Exit();
+                    checkAndClose(lastppt);
 
                     lastppt = ppt;
-                    currentPosition = SlideWindow.View.CurrentShowPosition;
+                    lastShowWindow = SlideWindow;
                     SlideWindow = null;
 
                     setPresentation(path);
                     ChangeApply(currentPage);
-                    if (currentPosition == 1)
+                    if (pptTextState == PptTextShow.Show)
                         ShowText();
-                    else if (currentPosition == 2)
+                    else if (pptTextState == PptTextShow.Hide)
                         HideText();
                     SlideShowRun();
 
-                    lastppt.Close();
+                    lastShowWindow.View.Exit();
+                    checkAndClose(lastppt);
                 }
             }
 
