@@ -68,7 +68,8 @@ namespace BibleProjector_WPF
             VM_ExternPPT.RunRefreshPPT(getSelectedIndexes());
 
             if (Ctrl_ExternPPT != null)
-                Ctrl_ExternPPT.RefreshExternPPT(System.IO.Path.GetFileName((string)ExternPPTListBox.SelectedItem));
+                foreach(object obj in ExternPPTListBox.SelectedItems)
+                    Ctrl_ExternPPT.RefreshExternPPT(System.IO.Path.GetFileName((string)obj));
         }
 
         // ==================================== 실행 =================================
