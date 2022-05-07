@@ -270,13 +270,16 @@
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="67*"/>
-                <ColumnDefinition Width="246*"/>
+                <ColumnDefinition Width="168*"/>
+                <ColumnDefinition Width="14*"/>
+                <ColumnDefinition Width="64*"/>
             </Grid.ColumnDefinitions>
 
             <Label Grid.Column="0" >
                 현재 곡 :
             </Label>
             <TextBox Grid.Column="1" IsReadOnly="True" Text="{Binding SelectedLyric.title}"></TextBox>
+            <Button Grid.Column="3" Content="예약하기" Click="ThisLyricReserve_Click"></Button>
         </Grid>
     </Grid>
 </UserControl>

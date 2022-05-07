@@ -110,6 +110,13 @@ namespace BibleProjector_WPF
             }
         }
 
+        // ============================================ 예약처리 ==========================================
+        
+        void ThisLyricReserve_Click(object sender, RoutedEventArgs e) 
+        {
+            VM_LyricViewModel.RunAddReserveFromSelection();
+        }
+
         // ============================================= 예약 특수처리 ============================================= 
 
         void ReserveUp_Click(object sender, RoutedEventArgs e)

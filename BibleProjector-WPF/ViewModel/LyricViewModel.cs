@@ -668,6 +668,12 @@ namespace BibleProjector_WPF.ViewModel
             outedLyric = SelectedLyric;
         }
 
+        public void RunAddReserveFromSelection()
+        {
+            if (SelectedLyric != null)
+                LyricReserveList.Add(new LyricReserve(SelectedLyric));
+        }
+
         // ============================================ 메소드 ==============================================
 
         SingleLyric makeEnableLyric(String title, String content)
