@@ -118,7 +118,7 @@ namespace BibleProjector_WPF
 
         // ========================================== 윈도우 최상위 ======================================
 
-        void setSlideTopMost(object sender, EventArgs e)
+        void setSlideTopMost(object sender, RoutedEventArgs e)
         {
             VM_ExternPPTControl.RunTopMost();
         }
