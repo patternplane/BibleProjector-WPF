@@ -132,11 +132,23 @@ namespace BibleProjector_WPF.ViewModel
 
         public void RunRefreshPPT(int[] indexList)
         {
-            foreach (int i in indexList)
-                Powerpoint.ExternPPTs.refreshPresentation(ExternPPTList_fullpath[i]);
+            StringBuilder nonFrame = new StringBuilder(50);
+
+            for (int i = indexList.Length - 1; i >= 0; i--)
+            {
+                if (!new FileInfo(ExternPPTList_fullpath[indexList[i]]).Exists)
+                {
+                    nonFrame.Append("\r\n");
+                    nonFrame.Append(ExternPPTList_fullpath[indexList[i]]);
+                }
+                else
+                    Powerpoint.ExternPPTs.refreshPresentation(ExternPPTList_fullpath[indexList[i]]);
+            }
+            if (nonFrame.Length != 0)
+                System.Windows.MessageBox.Show("해당 PPT파일들은 원본이 없어 새로고침하지 못했습니다!" + nonFrame.ToString(), "파일 없음", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
         }
 
-    
+
 
 
 
