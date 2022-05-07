@@ -83,6 +83,10 @@ namespace BibleProjector_WPF
 
         public MainWindow()
         {
+            // 프로그램 로딩 창
+            ProgramStartLoading startLodingWindow = new ProgramStartLoading();
+            startLodingWindow.Show();
+
             ProgramMainWindow = this;
 
             Database.DatabaseInitailize();
@@ -99,6 +103,9 @@ namespace BibleProjector_WPF
             ReadingInitialize();
 
             setLayout();
+
+            // 프로그램 로딩 창 종료
+            startLodingWindow.Close();
         }
 
         void BibleInitialize()

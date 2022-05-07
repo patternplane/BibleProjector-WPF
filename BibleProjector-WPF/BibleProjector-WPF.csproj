@@ -70,6 +70,9 @@
     <Compile Include="ExternPPTControl.xaml.cs">
       <DependentUpon>ExternPPTControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ProgramStartLoading.xaml.cs">
+      <DependentUpon>ProgramStartLoading.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SongControl.xaml.cs">
       <DependentUpon>SongControl.xaml</DependentUpon>
     </Compile>
@@ -96,6 +99,9 @@
     <Compile Include="ViewModel\BibleReserveData.cs" />
     <Compile Include="ViewModel\BibleSelectData.cs" />
     <Compile Include="ViewModel\LyricViewModel.cs" />
+    <Compile Include="ExternPPTLoading.xaml.cs">
+      <DependentUpon>ExternPPTLoading.xaml</DependentUpon>
+    </Compile>
     <Page Include="BibleModifyWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -111,6 +117,10 @@
     <Page Include="ExternPPTControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ProgramStartLoading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SongControl.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -142,6 +152,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="ExternPPTLoading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="module\Powerpoint.cs" />
