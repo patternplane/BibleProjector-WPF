@@ -149,7 +149,12 @@ namespace BibleProjector_WPF.ViewModel
 
             foreach (LyricReserve r in LyricReserveList)
             {
-                str.Append(LyricList.IndexOf(r.lyric));
+                if (r.lyric.GetType() == typeof(SingleHymn)) {
+                    str.Append("-");
+                    str.Append(r.lyric.title);
+                }
+                else
+                    str.Append(LyricList.IndexOf(r.lyric));
                 str.Append(SEPARATOR);
             }
 
