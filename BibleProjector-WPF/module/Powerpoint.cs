@@ -86,6 +86,17 @@ namespace BibleProjector_WPF
             Song.closeAll();
             ExternPPTs.closeAll();
         }
+
+        // ========================================== 제공하는 기능 =======================================
+
+        static public int getSlideCountFromFile(string path)
+        {
+            Presentation ppt =  app.Presentations.Open(path, WithWindow:Microsoft.Office.Core.MsoTriState.msoFalse);
+            int slideCount = ppt.Slides.Count;
+            ppt.Close();
+
+            return slideCount;
+        }
     }
 
     /// <summary>
