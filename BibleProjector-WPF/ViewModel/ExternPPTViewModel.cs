@@ -26,8 +26,11 @@ namespace BibleProjector_WPF.ViewModel
 
             foreach (string data in rawData.Split(new string[] { SEPARATOR }, StringSplitOptions.RemoveEmptyEntries))
             {
-                ExternPPTList_fullpath.Add(data);
-                ExternPPTList.Add(Path.GetFileName(data));
+                if (new FileInfo(data).Exists)
+                {
+                    ExternPPTList_fullpath.Add(data);
+                    ExternPPTList.Add(Path.GetFileName(data));
+                }
             }
 
             Powerpoint.ExternPPTs.Initialize(ExternPPTList_fullpath.ToArray());
