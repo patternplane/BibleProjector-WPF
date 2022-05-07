@@ -25,18 +25,13 @@ namespace BibleProjector_WPF.ViewModel
             newExternPPTSetting(fileName, StartSlide);
         }
 
-        public void RefreshExternPPT(string fileName)
+        void SetImages(string fileName)
         {
-            if (fileName.CompareTo(currentFileName) != 0)
-                return;
-
-            int temp = CurrentPageIndex;
-
-            BitmapImage bi;
             PPTImages.Clear();
-            System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(Powerpoint.ExternPPTs.getThumbnailPathWithGenerator(currentFileName));
+            System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(Powerpoint.ExternPPTs.getThumbnailPathWithGenerator(fileName));
 
-            int slidenum = 1;
+            List<SingleSlidePreview> slideData = new List<SingleSlidePreview>(50);
+            BitmapImage bi;
             foreach (System.IO.FileInfo f in di.GetFiles())
             {
                 bi = new BitmapImage();
@@ -44,10 +39,22 @@ namespace BibleProjector_WPF.ViewModel
                 bi.UriSource = new Uri(f.FullName, UriKind.Absolute);
                 bi.CacheOption = BitmapCacheOption.OnLoad;
                 bi.EndInit();
-                PPTImages.Add(new SingleSlidePreview() { Number = slidenum.ToString(), Image = bi });
-
-                slidenum++;
+                slideData.Add(new SingleSlidePreview() { Number = int.Parse(module.StringModifier.makeOnlyNum(f.Name)), Image = bi });
             }
+
+            slideData.Sort((a, b) => (a.Number.CompareTo(b.Number)));
+            PPTImages = new BindingList<SingleSlidePreview>(slideData);
+        }
+
+        public void RefreshExternPPT(string fileName)
+        {
+            if (fileName.CompareTo(currentFileName) != 0)
+                return;
+
+            int temp = CurrentPageIndex;
+
+            SetImages(fileName);
+
             CurrentPageIndex = temp;
         }
 
@@ -60,22 +67,8 @@ namespace BibleProjector_WPF.ViewModel
         {
             setCurrentPPTInfo(fileName);
 
-            BitmapImage bi;
-            PPTImages.Clear();
-            System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(Powerpoint.ExternPPTs.getThumbnailPathWithGenerator(fileName));
+            SetImages(fileName);
 
-            int slidenum = 1;
-            foreach (System.IO.FileInfo f in di.GetFiles())
-            {
-                bi = new BitmapImage();
-                bi.BeginInit();
-                bi.UriSource = new Uri(f.FullName, UriKind.Absolute);
-                bi.CacheOption = BitmapCacheOption.OnLoad;
-                bi.EndInit();
-                PPTImages.Add(new SingleSlidePreview() { Number = slidenum.ToString(), Image = bi});
-
-                slidenum++;
-            }
             CurrentPageIndex = StartSlide - 1;
 
             isDisplayShow = true;
@@ -119,7 +112,7 @@ namespace BibleProjector_WPF.ViewModel
 
         public class SingleSlidePreview
         {
-            public string Number { get; set; }
+            public int Number { get; set; }
             public BitmapImage Image {get; set;}
         }
 
