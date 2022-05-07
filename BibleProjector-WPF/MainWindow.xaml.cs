@@ -320,7 +320,7 @@ namespace BibleProjector_WPF
         {
             if (BibleReserveListBox.SelectedItems.Count == 0)
                 return;
-            if (MessageBox.Show("선택된 예약구절을 삭제합니다.","성경 예약 삭제",MessageBoxButton.OKCancel,MessageBoxImage.Hand) != MessageBoxResult.OK)
+            if (MessageBox.Show("선택된 예약구절을 삭제하시겠습니까?","성경 예약 삭제",MessageBoxButton.OKCancel,MessageBoxImage.Question) != MessageBoxResult.OK)
                 return;
 
             List<int> itemindex = new List<int>(10);

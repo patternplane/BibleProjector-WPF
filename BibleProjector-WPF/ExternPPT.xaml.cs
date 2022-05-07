@@ -54,6 +54,9 @@ namespace BibleProjector_WPF
             if (ExternPPTListBox.SelectedItems.Count == 0)
                 return;
 
+            if (MessageBox.Show("선택된 PPT를 리스트에서 삭제하시겠습니까?", "외부PPT 등록 해제", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.Cancel)
+                return;
+
             VM_ExternPPT.RunDeletePPT(getSelectedIndexes());
         }
 
@@ -69,6 +72,11 @@ namespace BibleProjector_WPF
         }
 
         // ==================================== 실행 =================================
+
+        void ExternPPTListBox_DoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            PPTRun_Click(null, null);
+        }
 
         void PPTRun_Click(object sender, RoutedEventArgs e)
         {

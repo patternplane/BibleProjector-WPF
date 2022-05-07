@@ -74,7 +74,7 @@ namespace BibleProjector_WPF
         {
             if (SongFramePaths_ListBox.SelectedItems.Count == 0)
                 return;
-            if (MessageBox.Show("선택된 찬양곡 ppt틀을 삭제합니다.", "ppt틀 삭제", MessageBoxButton.OKCancel, MessageBoxImage.Hand) != MessageBoxResult.OK)
+            if (MessageBox.Show("선택된 찬양곡 ppt틀을 삭제하시겠습니까?", "ppt틀 삭제", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
                 return;
 
             List<int> itemindex = new List<int>(10);
@@ -87,7 +87,7 @@ namespace BibleProjector_WPF
 
         void LayoutResetButton_Click(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("모든 창의 크기를 초기화합니다.", "창 크기 초기화", MessageBoxButton.OKCancel, MessageBoxImage.Hand) != MessageBoxResult.OK)
+            if (MessageBox.Show("모든 창의 크기를 초기화하시겠습니까?", "창 크기 초기화", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
                 return;
 
             module.LayoutInfo.removeAllLayoutData();

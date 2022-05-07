@@ -33,7 +33,13 @@
         </Grid>
         <ListBox Grid.Row="3" 
                  x:Name="ExternPPTListBox"
-                 ItemsSource="{Binding ExternPPTList}"></ListBox>
+                 ItemsSource="{Binding ExternPPTList}">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <EventSetter Event="MouseDoubleClick" Handler="ExternPPTListBox_DoubleClick"></EventSetter>
+                </Style>
+            </ListBox.ItemContainerStyle>
+        </ListBox>
         <Grid Grid.Row="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="89*"/>

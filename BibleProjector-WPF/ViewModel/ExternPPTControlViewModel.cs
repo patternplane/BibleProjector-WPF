@@ -35,6 +35,8 @@ namespace BibleProjector_WPF.ViewModel
             BitmapImage bi;
             PPTImages.Clear();
             System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(Powerpoint.ExternPPTs.getThumbnailPath(currentFileName));
+
+            int slidenum = 1;
             foreach (System.IO.FileInfo f in di.GetFiles())
             {
                 bi = new BitmapImage();
@@ -42,7 +44,9 @@ namespace BibleProjector_WPF.ViewModel
                 bi.UriSource = new Uri(f.FullName, UriKind.Absolute);
                 bi.CacheOption = BitmapCacheOption.OnLoad;
                 bi.EndInit();
-                PPTImages.Add(bi);
+                PPTImages.Add(new SingleSlidePreview() { Number = slidenum.ToString(), Image = bi });
+
+                slidenum++;
             }
             CurrentPageIndex = temp;
         }
@@ -59,6 +63,8 @@ namespace BibleProjector_WPF.ViewModel
             BitmapImage bi;
             PPTImages.Clear();
             System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(Powerpoint.ExternPPTs.getThumbnailPath(fileName));
+
+            int slidenum = 1;
             foreach (System.IO.FileInfo f in di.GetFiles())
             {
                 bi = new BitmapImage();
@@ -66,7 +72,9 @@ namespace BibleProjector_WPF.ViewModel
                 bi.UriSource = new Uri(f.FullName, UriKind.Absolute);
                 bi.CacheOption = BitmapCacheOption.OnLoad;
                 bi.EndInit();
-                PPTImages.Add(bi);
+                PPTImages.Add(new SingleSlidePreview() { Number = slidenum.ToString(), Image = bi});
+
+                slidenum++;
             }
             CurrentPageIndex = StartSlide - 1;
 
@@ -97,8 +105,8 @@ namespace BibleProjector_WPF.ViewModel
         public string CurrentPPTInfo { get; set; }
 
         // ppt 페이지 리스트박스
-        private BindingList<BitmapImage> PPTImages_in = new BindingList<BitmapImage>();
-        public BindingList<BitmapImage> PPTImages { get { return PPTImages_in; } set { PPTImages_in = value; NotifyPropertyChanged(); } }
+        private BindingList<SingleSlidePreview> PPTImages_in = new BindingList<SingleSlidePreview>();
+        public BindingList<SingleSlidePreview> PPTImages { get { return PPTImages_in; } set { PPTImages_in = value; NotifyPropertyChanged(); } }
         private int CurrentPageIndex_in;
         public int CurrentPageIndex { get { return CurrentPageIndex_in; } set { CurrentPageIndex_in = value;
                 if (CurrentPageIndex_in != -1)
@@ -108,6 +116,12 @@ namespace BibleProjector_WPF.ViewModel
                 }
                 NotifyPropertyChanged();
             } }
+
+        public class SingleSlidePreview
+        {
+            public string Number { get; set; }
+            public BitmapImage Image {get; set;}
+        }
 
         // ================================================ 속성 메소드 ================================================
 

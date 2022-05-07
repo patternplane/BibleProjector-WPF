@@ -130,7 +130,7 @@ namespace BibleProjector_WPF.ViewModel
 
         void setCurrentBibleInfo(string book, int chapter, int verse)
         {
-            CurrentBibleInfo = string.Format("{0}\r\n{1}장 {2}절",book,chapter,verse);
+            CurrentBibleInfo = string.Format("{0}  {1}장  {2}절",book,chapter,verse);
         }
 
         // ================================================ 이벤트에 쓰일 함수 ================================================

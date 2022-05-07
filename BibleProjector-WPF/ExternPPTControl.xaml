@@ -12,10 +12,12 @@
         Activated="setSlideTopMost">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="23*"/>
-            <RowDefinition Height="149*"/>
-            <RowDefinition Height="22*"/>
-            <RowDefinition Height="90*"/>
+            <RowDefinition Height="16*"/>
+            <RowDefinition Height="39*"/>
+            <RowDefinition Height="14*"/>
+            <RowDefinition Height="148*"/>
+            <RowDefinition Height="15*"/>
+            <RowDefinition Height="52*"/>
             <RowDefinition Height="21*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -24,8 +26,16 @@
             <ColumnDefinition Width="26*"/>
         </Grid.ColumnDefinitions>
 
-        
-        <ListBox Grid.Row="1" Grid.Column="1" VerticalContentAlignment="Stretch" Focusable="False"
+        <Grid Grid.Row="1 " Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="53*"/>
+                <ColumnDefinition Width="427*"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Content="PPT : "></Label>
+            <TextBox Grid.Column="1" Focusable="False" Text="{Binding CurrentPPTInfo}"></TextBox>
+        </Grid>
+
+        <ListBox Grid.Row="3" Grid.Column="1" VerticalContentAlignment="Stretch" Focusable="False"
                  ScrollViewer.CanContentScroll="false"
                      ScrollViewer.HorizontalScrollBarVisibility="Visible"
                      ScrollViewer.VerticalScrollBarVisibility="Disabled"
@@ -34,8 +44,13 @@
                  SelectionChanged="PageListBox_SelectionChanged">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Border BorderThickness="1,1,1,1" BorderBrush="Black" MinWidth="50">
-                        <Image Source="{Binding}" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
+                    <Border BorderThickness="1,1,1,1" BorderBrush="Black" MinWidth="50" Padding="5">
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="{Binding Number}" VerticalAlignment="Top" FontSize="14"></Label>
+                            <Border BorderThickness="1,1,1,1" BorderBrush="Gray" Padding="4,0,0,0">
+                            <Image Source="{Binding Image}" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
+                            </Border>
+                        </StackPanel>
                     </Border>
                 </DataTemplate>
             </ListBox.ItemTemplate>
@@ -53,9 +68,9 @@
                 </Style>
             </ListBox.Style>
         </ListBox>
-        
 
-        <Grid Grid.Row="3" Grid.Column="1">
+
+        <Grid Grid.Row="5" Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="85*"/>
                 <ColumnDefinition Width="10*"/>
@@ -68,17 +83,6 @@
             <Button Grid.Column="0" Content="이전&#10;페이지" Click="PreviousPageButton_Click"></Button>
             <Button Grid.Column="2" Content="다음&#10;페이지" Click="NextPageButton_Click"></Button>
 
-            <Grid Grid.Column="4">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="9*"/>
-                    <RowDefinition Height="26*"/>
-                    <RowDefinition Height="44*"/>
-                    <RowDefinition Height="11*"/>
-                </Grid.RowDefinitions>
-                <Label Grid.Row="1" Content="PPT : "></Label>
-                <TextBox Grid.Row="2" Focusable="False" Text="{Binding CurrentPPTInfo}"></TextBox>
-            </Grid>
-
             <Grid Grid.Column="6">
                 <ToggleButton IsChecked="{Binding isDisplayShow}">
                     <ToggleButton.Style>
@@ -87,12 +91,12 @@
                                 <Trigger Property="IsChecked" Value="True">
                                     <Setter Property="Content" Value="화면 끄기"></Setter>
                                     <Setter Property="FontWeight" Value="Bold"></Setter>
-                                    <Setter Property="FontSize" Value="17"></Setter>
+                                    <Setter Property="FontSize" Value="14"></Setter>
                                 </Trigger>
                                 <Trigger Property="IsChecked" Value="False">
                                     <Setter Property="Content" Value="화면 켜기"></Setter>
                                     <Setter Property="FontWeight" Value="Normal"></Setter>
-                                    <Setter Property="FontSize" Value="15"></Setter>
+                                    <Setter Property="FontSize" Value="14"></Setter>
                                 </Trigger>
                             </Style.Triggers>
                         </Style>

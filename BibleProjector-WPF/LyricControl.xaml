@@ -176,9 +176,9 @@
                             <RowDefinition Height="53*"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="50*"/>
-                            <ColumnDefinition Width="240*"/>
-                            <ColumnDefinition Width="17*"/>
+                            <ColumnDefinition Width="58*"/>
+                            <ColumnDefinition Width="239*"/>
+                            <ColumnDefinition Width="10*"/>
                         </Grid.ColumnDefinitions>
 
                         <Label Grid.Row="1" Grid.Column="0" Content="곡 목록" VerticalAlignment="Center" Height="26" Margin="0,68,0,71" ></Label>

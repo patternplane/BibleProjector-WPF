@@ -37,7 +37,7 @@ namespace BibleProjector_WPF.ViewModel
 
         public void save()
         {
-            if (System.Windows.MessageBox.Show("변경값을 저장합니다.","변경값 저장 확인", System.Windows.MessageBoxButton.OKCancel, System.Windows.MessageBoxImage.Hand) == System.Windows.MessageBoxResult.Cancel)
+            if (System.Windows.MessageBox.Show("변경값을 저장하시겠습니까?","변경값 저장 확인", System.Windows.MessageBoxButton.OKCancel, System.Windows.MessageBoxImage.Question) == System.Windows.MessageBoxResult.Cancel)
                 return;
 
             Database.updateBible(currentKjjeul, UserModifyContent);
@@ -46,7 +46,7 @@ namespace BibleProjector_WPF.ViewModel
 
         public void reset()
         {
-            if (System.Windows.MessageBox.Show("변경을 초기화합니다.", "수정 취소 확인", System.Windows.MessageBoxButton.OKCancel, System.Windows.MessageBoxImage.Hand) == System.Windows.MessageBoxResult.Cancel)
+            if (System.Windows.MessageBox.Show("변경을 초기화하시겠습니까?", "수정 취소 확인", System.Windows.MessageBoxButton.OKCancel, System.Windows.MessageBoxImage.Question) == System.Windows.MessageBoxResult.Cancel)
                 return;
 
             UserModifyContent = Database.getBible(currentKjjeul);
