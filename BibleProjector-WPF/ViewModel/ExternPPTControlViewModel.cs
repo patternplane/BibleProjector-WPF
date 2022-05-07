@@ -34,7 +34,7 @@ namespace BibleProjector_WPF.ViewModel
 
             BitmapImage bi;
             PPTImages.Clear();
-            System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(Powerpoint.ExternPPTs.getThumbnailPath(currentFileName));
+            System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(Powerpoint.ExternPPTs.getThumbnailPathWithGenerator(currentFileName));
 
             int slidenum = 1;
             foreach (System.IO.FileInfo f in di.GetFiles())
@@ -62,7 +62,7 @@ namespace BibleProjector_WPF.ViewModel
 
             BitmapImage bi;
             PPTImages.Clear();
-            System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(Powerpoint.ExternPPTs.getThumbnailPath(fileName));
+            System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(Powerpoint.ExternPPTs.getThumbnailPathWithGenerator(fileName));
 
             int slidenum = 1;
             foreach (System.IO.FileInfo f in di.GetFiles())

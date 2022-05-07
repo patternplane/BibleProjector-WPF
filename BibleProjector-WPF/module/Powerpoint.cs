@@ -1080,11 +1080,12 @@ namespace BibleProjector_WPF
                 return -1;
             }
 
-            static public string getThumbnailPath(string PPTName)
+            static public string getThumbnailPathWithGenerator(string PPTName)
             {
                 int index;
                 if ((index = pptFinder(PPTName)) != -1)
                 {
+                    ppt[index].ThumbnailGenerator();
                     return ppt[index].getThumbnailPath();
                 }
 
@@ -1165,6 +1166,8 @@ namespace BibleProjector_WPF
             SlideShowWindow SlideWindow = null;
             int currentSlideNum = 1;
 
+            bool isNeedMakeThumbnail = true;
+
             PptSlideState pptState = PptSlideState.NotRunning;
 
             // ============================================ 세팅 및 종료 ============================================ 
@@ -1184,7 +1187,6 @@ namespace BibleProjector_WPF
 
                 ppt = app.Presentations.Open(path, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
                 checkValidPPT();
-                makeThumbNail();
             }
 
             void checkAndClose(Presentation ppt)
@@ -1199,6 +1201,7 @@ namespace BibleProjector_WPF
 
             public void refreshPresentation(string path)
             {
+                isNeedMakeThumbnail = true;
                 Presentation lastppt = ppt;
 
                 if (pptState == PptSlideState.NotRunning)
@@ -1281,6 +1284,15 @@ namespace BibleProjector_WPF
             }
 
             // ============================================ 메소드 ============================================
+
+            public void ThumbnailGenerator()
+            {
+                if (isNeedMakeThumbnail)
+                {
+                    makeThumbNail();
+                    isNeedMakeThumbnail = false;
+                }
+            }
 
             public string getThumbnailPath()
             {
