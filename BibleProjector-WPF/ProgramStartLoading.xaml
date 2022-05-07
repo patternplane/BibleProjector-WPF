@@ -5,9 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BibleProjector_WPF"
         mc:Ignorable="d"
-        Title="ProgramStartLoading" Height="450" Width="800"
-        WindowStyle="None">
-    <Grid>
-        <Image Source="{Binding loadingImage}"></Image>
+        Title="ProgramStartLoading" Height="573.721" Width="601.689"
+        WindowStyle="None" Background="{x:Null}" Foreground="{x:Null}"
+        AllowsTransparency="True">
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+    <Border BorderThickness="2" BorderBrush="Black">
+        <Image Source="{Binding loadingImage}" Stretch="Uniform"></Image>
+    </Border>
     </Grid>
 </Window>
