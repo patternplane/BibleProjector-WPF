@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 namespace BibleProjector_WPF
 {
     /// <summary>
-    /// ReadingControl.xaml에 대한 상호 작용 논리
+    /// ExternPPTControl.xaml에 대한 상호 작용 논리
     /// </summary>
     public partial class ExternPPTControl : Window
     {
