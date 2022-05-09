@@ -121,6 +121,24 @@ namespace BibleProjector_WPF.ViewModel
                 System.Windows.MessageBox.Show("하나 이상의 ppt가 이미 등록되어 있었습니다.\r\n중복된 등록은 할 수 없습니다.", "중복 등록", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
         }
 
+        public void RunModifyOpenPPT(int[] indexList)
+        {
+            StringBuilder nonFile = new StringBuilder(50);
+
+            for (int i = indexList.Length - 1; i >= 0; i--)
+            {
+                if (!new FileInfo(ExternPPTList_fullpath[indexList[i]]).Exists)
+                {
+                    nonFile.Append("\r\n");
+                    nonFile.Append(ExternPPTList_fullpath[indexList[i]]);
+                }
+                else
+                    Powerpoint.justOpen(ExternPPTList_fullpath[indexList[i]]);
+            }
+            if (nonFile.Length != 0)
+                System.Windows.MessageBox.Show("해당 PPT파일들은 원본이 없어 열지 못했습니다!" + nonFile.ToString(), "파일 없음", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+        }
+
         public void RunDeletePPT(int[] indexList)
         {
             for (int j = indexList.Length - 1; j >= 0; j--)

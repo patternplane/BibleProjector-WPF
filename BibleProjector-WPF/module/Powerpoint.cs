@@ -97,6 +97,11 @@ namespace BibleProjector_WPF
 
             return slideCount;
         }
+
+        static public void justOpen(string path)
+        {
+            app.Presentations.Open(path);
+        }
     }
 
     /// <summary>
@@ -243,7 +248,7 @@ namespace BibleProjector_WPF
             static void checkValidPPT()
             {
                 if (ppt.Slides.Count == 0)
-                    ppt.Slides.AddSlide(1, ppt.SlideMaster.CustomLayouts[0]);
+                    ppt.Slides.AddSlide(1, ppt.SlideMaster.CustomLayouts[1]);
                 if (ppt.Slides.Count == 1)
                     ppt.Slides.AddSlide(2,ppt.Slides[1].CustomLayout);
             }
@@ -502,7 +507,7 @@ namespace BibleProjector_WPF
             static void checkValidPPT()
             {
                 if (ppt.Slides.Count == 0)
-                    ppt.Slides.AddSlide(1, ppt.SlideMaster.CustomLayouts[0]);
+                    ppt.Slides.AddSlide(1, ppt.SlideMaster.CustomLayouts[1]);
                 if (ppt.Slides.Count == 1)
                     ppt.Slides.AddSlide(2, ppt.Slides[1].CustomLayout);
             }
@@ -910,7 +915,7 @@ namespace BibleProjector_WPF
             void checkValidPPT()
             {
                 if (ppt.Slides.Count == 0)
-                    ppt.Slides.AddSlide(1, ppt.SlideMaster.CustomLayouts[0]);
+                    ppt.Slides.AddSlide(1, ppt.SlideMaster.CustomLayouts[1]);
                 if (ppt.Slides.Count == 1)
                     ppt.Slides.AddSlide(2,ppt.Slides[1].CustomLayout);
             }
@@ -1266,7 +1271,7 @@ namespace BibleProjector_WPF
             void checkValidPPT()
             {
                 if (ppt.Slides.Count == 0)
-                    ppt.Slides.AddSlide(1, ppt.SlideMaster.CustomLayouts[0]);
+                    ppt.Slides.AddSlide(1, ppt.SlideMaster.CustomLayouts[1]);
             }
 
             // ============================================ 썸네일 작업 ==========================================

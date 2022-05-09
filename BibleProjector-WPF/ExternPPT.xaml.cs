@@ -49,6 +49,14 @@ namespace BibleProjector_WPF
             return itemindex.ToArray();
         }
 
+        void PPTOpen_Click(object sender, RoutedEventArgs e)
+        {
+            if (ExternPPTListBox.SelectedItems.Count == 0)
+                return;
+
+            VM_ExternPPT.RunModifyOpenPPT(getSelectedIndexes());
+        }
+
         void PPTDelete_Click(object sender, RoutedEventArgs e)
         {
             if (ExternPPTListBox.SelectedItems.Count == 0)

@@ -26,8 +26,16 @@
             <Button Content="외부 ppt&#10;  등록"
                     Click="AddExternPPT_Click">
             </Button>
-            <Button Grid.Column="2"
-                    Click="PPTDelete_Click">삭제</Button>
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Button Grid.Row="0"
+                    Click="PPTOpen_Click">선택PPT 열기</Button>
+                <Button Grid.Row="1"
+                    Click="PPTDelete_Click">항목 삭제</Button>
+            </Grid>
             <Button Grid.Column="4" Content="선택된 ppt&#10; 새로고침"
                     Click="Refresh_Click"></Button>
         </Grid>
