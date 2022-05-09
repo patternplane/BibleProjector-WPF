@@ -59,7 +59,7 @@ namespace BibleProjector_WPF.ViewModel
         {
             FD_ExternPPT = new System.Windows.Forms.OpenFileDialog();
 
-            FD_ExternPPT.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            FD_ExternPPT.InitialDirectory = System.IO.Directory.GetCurrentDirectory();
             FD_ExternPPT.Multiselect = true;
             FD_ExternPPT.Filter = "PowerPoint파일(*.ppt,*.pptx,*.pptm)|*.ppt;*.pptx;*.pptm";
         }

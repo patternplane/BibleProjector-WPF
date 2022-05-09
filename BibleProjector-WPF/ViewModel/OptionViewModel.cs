@@ -92,7 +92,7 @@ namespace BibleProjector_WPF.ViewModel
             FD_SongFrame = new System.Windows.Forms.OpenFileDialog();
 
             FD_BibleFrame.InitialDirectory = FD_ReadingFrame.InitialDirectory = FD_SongFrame.InitialDirectory
-                = ".\\Frame\\";
+                = System.IO.Directory.GetCurrentDirectory();
             FD_BibleFrame.Multiselect = FD_ReadingFrame.Multiselect = false;
             FD_SongFrame.Multiselect = true;
             FD_BibleFrame.Filter = FD_ReadingFrame.Filter = FD_SongFrame.Filter
