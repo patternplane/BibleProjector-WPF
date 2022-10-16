@@ -52,7 +52,8 @@
                                   DisplayMemberPath="display"
                                   Text="{Binding SearchText}"
                                   SelectedValue="{Binding currentSearchData}"
-                                  IsDropDownOpen="{Binding isSearchResultShow}">
+                                  IsDropDownOpen="{Binding isSearchResultShow}"
+                                  KeyDown="SearchComboBox_KeyDown">
                             </ComboBox>
                             <Button Grid.Column="2" Content="검색하기" Click="SearchButton_Click"/>
                         </Grid>

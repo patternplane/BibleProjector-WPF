@@ -43,6 +43,12 @@ namespace BibleProjector_WPF
             VM_LyricViewModel.RunSearch();
         }
 
+        void SearchComboBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                VM_LyricViewModel.RunSearch();
+        }
+
         void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("현재 선택된 곡을 삭제하시겠습니까?", "찬양곡 삭제", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
