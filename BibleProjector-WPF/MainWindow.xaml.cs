@@ -492,7 +492,7 @@ namespace BibleProjector_WPF
                 if (Ctrl_Bible == null)
                 {
                     Ctrl_Bible = new BibleControl(VM_BibleSelectData.Book + VM_BibleSelectData.Chapter + VM_BibleSelectData.Verse);
-                    Ctrl_Bible.Owner = this;
+                    //Ctrl_Bible.Owner = this;
                 }
                 else
                     Ctrl_Bible.ShowBible(VM_BibleSelectData.Book + VM_BibleSelectData.Chapter + VM_BibleSelectData.Verse);
@@ -518,7 +518,7 @@ namespace BibleProjector_WPF
                 if (Ctrl_Reading == null)
                 {
                     Ctrl_Reading = new ReadingControl(ReadingListBox.SelectedIndex);
-                    Ctrl_Reading.Owner = this;
+                    //Ctrl_Reading.Owner = this;
                 }
                 else
                     Ctrl_Reading.ShowReading(ReadingListBox.SelectedIndex);

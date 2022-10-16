@@ -99,7 +99,7 @@ namespace BibleProjector_WPF
                         VM_ExternPPT.ExternPPTList[ExternPPTListBox.SelectedIndex]
                         , int.Parse(VM_ExternPPT.SlideStartNum_Text)
                         );
-                    Ctrl_ExternPPT.Owner = MainWindow.ProgramMainWindow;
+                    //Ctrl_ExternPPT.Owner = MainWindow.ProgramMainWindow;
                 }
                 else
                     Ctrl_ExternPPT.ShowExternPPT(

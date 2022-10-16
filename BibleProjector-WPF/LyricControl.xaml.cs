@@ -104,7 +104,7 @@ namespace BibleProjector_WPF
                         VM_LyricViewModel.SelectedLyric.makeSongData(VM_LyricViewModel.LinePerSlide)
                         , VM_LyricViewModel.SongFrameSelection.Path
                         , VM_LyricViewModel.SelectedLyric.GetType() == typeof(ViewModel.LyricViewModel.SingleHymn));
-                    Ctrl_Song.Owner = MainWindow.ProgramMainWindow;
+                    //Ctrl_Song.Owner = MainWindow.ProgramMainWindow;
                 }
                 else
                     Ctrl_Song.ShowSong(
