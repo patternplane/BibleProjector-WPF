@@ -160,6 +160,7 @@
                         <TextBox Grid.Row="3" Grid.Column="1"
                                  Text="{Binding CurrentHymnPosition_Text}"></TextBox>
                         <TextBox Grid.Row="5" Grid.Column="1"
+                                 AcceptsReturn="True"
                                  Text="{Binding VerseContent, UpdateSourceTrigger=PropertyChanged}"
                                  LostFocus="HymnContentTextBox_LostFocus"></TextBox>
                     </Grid>
