@@ -144,7 +144,7 @@
                                     <RowDefinition Height="14*"/>
                                     <RowDefinition Height="54*"/>
                                 </Grid.RowDefinitions>
-                                <Button Grid.Row="0" x:Name="BibleReserveAddButton">성경구절 예약</Button>
+                                <Button Grid.Row="0" x:Name="BibleReserveAddButton" Background="#FFCBFFB9" >성경구절 예약</Button>
                                 <ListBox Grid.Row="2" SelectionMode="Extended" ScrollViewer.VerticalScrollBarVisibility="auto" 
                                  x:Name="BibleReserveListBox" >
                                     <ListBox.ItemContainerStyle>
