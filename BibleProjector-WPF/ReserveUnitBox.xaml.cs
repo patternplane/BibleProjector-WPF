@@ -1,5 +1,4 @@
-﻿using BibleProjector_WPF.ViewModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,18 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
-
-using System.ComponentModel;
 
 namespace BibleProjector_WPF
 {
     /// <summary>
-    /// ReserveManagerWindow.xaml에 대한 상호 작용 논리
+    /// ReserveUnitBox.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class ReserveManagerWindow : Window
+    public partial class ReserveUnitBox : UserControl
     {
-        public ReserveManagerWindow()
+        public ReserveUnitBox()
         {
             InitializeComponent();
         }

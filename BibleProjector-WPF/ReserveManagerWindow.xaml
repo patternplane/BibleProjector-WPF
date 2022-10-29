@@ -5,200 +5,69 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BibleProjector_WPF"
         mc:Ignorable="d"
-        Title="자막 예약" Height="570" Width="874">
+        Title="자막 예약" Height="501" Width="532">
     <Grid Background="#FFD8FDCA">
         <Grid.RowDefinitions>
-            <RowDefinition Height="3*"/>
-            <RowDefinition Height="55*"/>
-            <RowDefinition Height="3*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="27*"/>
+            <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
-            <ColumnDefinition Width="25*"/>
+            <ColumnDefinition Width="48*"/>
             <ColumnDefinition Width="3*"/>
-            <ColumnDefinition Width="25*"/>
-            <ColumnDefinition Width="3*"/>
-            <ColumnDefinition Width="25*"/>
+            <ColumnDefinition Width="48*"/>
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
 
-        <!--
-        =============================================================
-        성경, 찬양곡 부분은 각각 6개,
-        외부ppt 부분은 9개의
-        "NeedBinding"을 적절히 수정할 것.
-        =============================================================
-        -->
-
-        <!--성경 예약 관리창-->
-        <Border Grid.Row="1" Grid.Column="1" BorderThickness="1" BorderBrush="#FF666666" Padding="4" Background="White">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="84*"/>
-                    <RowDefinition Height="15*"/>
-                    <RowDefinition Height="319*"/>
-                    <RowDefinition Height="12*"/>
-                    <RowDefinition Height="60*"/>
-                </Grid.RowDefinitions>
-                <Button Grid.Row="0" x:Name="NeedBinding1" Margin="0,0,0,8" >성경구절 출력</Button>
-                <ListBox Grid.Row="2" SelectionMode="Extended" ScrollViewer.VerticalScrollBarVisibility="auto" 
-                                 x:Name="NeedBinding2" Margin="0,0,0,2" >
-                    <ListBox.ItemContainerStyle>
-                        <Style TargetType="ListBoxItem">
-                            <EventSetter Event="MouseDoubleClick" Handler="NeedBinding3"></EventSetter>
-                        </Style>
-                    </ListBox.ItemContainerStyle>
-                </ListBox>
-                <Grid Grid.Row="4">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="37*"/>
-                        <ColumnDefinition Width="7*"/>
-                        <ColumnDefinition Width="58*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Button Grid.Row="0" x:Name="NeedBinding4">▲</Button>
-                        <Button Grid.Row="1" x:Name="NeedBinding5">▼</Button>
-                    </Grid>
-                    <Button Grid.Column="2" x:Name="NeedBinding6">선택항목 삭제</Button>
-                </Grid>
-            </Grid>
-        </Border>
-
-        <!--찬양곡 예약 관리창-->
-        <Border Grid.Row="1" Grid.Column="3" BorderThickness="1" BorderBrush="#FF666666" Padding="4" Background="White">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="84*"/>
-                    <RowDefinition Height="15*"/>
-                    <RowDefinition Height="319*"/>
-                    <RowDefinition Height="12*"/>
-                    <RowDefinition Height="60*"/>
-                </Grid.RowDefinitions>
-                <Button Grid.Row="0" x:Name="NeedBinding7" Margin="0,0,0,8" >찬양곡 출력</Button>
-                <ListBox Grid.Row="2" SelectionMode="Extended" ScrollViewer.VerticalScrollBarVisibility="auto" 
-                                 x:Name="NeedBinding8" Margin="0,0,0,2" >
-                    <ListBox.ItemContainerStyle>
-                        <Style TargetType="ListBoxItem">
-                            <EventSetter Event="MouseDoubleClick" Handler="NeedBinding9"></EventSetter>
-                        </Style>
-                    </ListBox.ItemContainerStyle>
-                </ListBox>
-                <Grid Grid.Row="4">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="37*"/>
-                        <ColumnDefinition Width="7*"/>
-                        <ColumnDefinition Width="58*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Button Grid.Row="0" x:Name="NeedBinding10">▲</Button>
-                        <Button Grid.Row="1" x:Name="NeedBinding11">▼</Button>
-                    </Grid>
-                    <Button Grid.Column="2" x:Name="NeedBinding12">선택항목 삭제</Button>
-                </Grid>
-            </Grid>
-        </Border>
-
-        <Grid Grid.Row="1" Grid.Column="5">
+        <Grid Grid.Row="1" Grid.Column="1" >
             <Grid.RowDefinitions>
-                <RowDefinition Height="448*"/>
-                <RowDefinition Height="32*"/>
-                <RowDefinition Height="151*"/>
+                <RowDefinition Height="102*"/>
+                <RowDefinition Height="4*"/>
+                <RowDefinition Height="13*"/>
             </Grid.RowDefinitions>
 
-            <!--외부ppt 예약 관리창-->
+            <!--예약항목 리스트-->
             <Border BorderThickness="1" BorderBrush="#FF666666" Padding="4" Background="White">
+                <Grid>
+                    <ItemsControl>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical"></StackPanel>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <local:ReserveUnitBox Margin="5,5,5,5"></local:ReserveUnitBox>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+            </Border>
+
+            <!--예약항목 조작부-->
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="67*"/>
+                    <ColumnDefinition Width="41*"/>
+                    <ColumnDefinition Width="135*"/>
+                </Grid.ColumnDefinitions>
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
-                        <RowDefinition Height="76*"/>
-                        <RowDefinition Height="22*"/>
-                        <RowDefinition Height="168*"/>
-                        <RowDefinition Height="10*"/>
-                        <RowDefinition Height="68*"/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="1" Margin="0,0,0,1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="86*"/>
-                            <ColumnDefinition Width="24*"/>
-                            <ColumnDefinition Width="81*"/>
-                            <ColumnDefinition Width="24*"/>
-                            <ColumnDefinition Width="81*"/>
-                        </Grid.ColumnDefinitions>
-                        <Button Content="외부 ppt&#10;  등록"
-                    Click="NeedBinding13" Background="#FFCBFFB9">
-                        </Button>
-                        <Grid Grid.Column="2" >
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <Button Grid.Row="0"
-                    Click="NeedBinding14">PPT 열기</Button>
-                            <Button Grid.Row="1"
-                    Click="NeedBinding15">항목 삭제</Button>
-                        </Grid>
-                        <Button Grid.Column="4" Content="선택된 ppt&#10; 새로고침"
-                    Click="NeedBinding16"></Button>
-                    </Grid>
-                    <ListBox Grid.Row="3" 
-                 x:Name="NeedBinding17"
-                 ItemsSource="{Binding NeedBinding18}"
-                 SelectionMode="Extended" Margin="0,0,0,3">
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="ListBoxItem">
-                                <EventSetter Event="MouseDoubleClick" Handler="NeedBinding19"></EventSetter>
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                    </ListBox>
-                    <Grid Grid.Row="5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="95*"/>
-                            <ColumnDefinition Width="15*"/>
-                            <ColumnDefinition Width="131*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <Label>시작 슬라이드</Label>
-                            <TextBox Grid.Row="1" Text="{Binding NeedBinding20, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                        </Grid>
-                        <Button Grid.Column="2" Content="ppt 실행"
-                    Click="NeedBinding21" />
-                    </Grid>
+                    <Button Grid.Row="0">▲</Button>
+                    <Button Grid.Row="1">▼</Button>
                 </Grid>
-            </Border>
-
-            <!--교독문 예약 관리창-->
-            <Border Grid.Row="2" BorderThickness="1" BorderBrush="#FF666666" Padding="4" Background="White">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="4*"/>
-                        <RowDefinition Height="38*"/>
-                        <RowDefinition Height="10*"/>
-                        <RowDefinition Height="43*"/>
-                        <RowDefinition Height="4*"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="290*"/>
-                        <ColumnDefinition Width="3*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <TextBox Grid.Row="1" Grid.Column="1"/>
-
-                    <Button Grid.Row="3" Grid.Column="1" Content="교독문 출력"/>
-                </Grid>
-            </Border>
+                <Button Grid.Column="2">선택항목 삭제</Button>
+            </Grid>
         </Grid>
+
+        <!--선택된 예약항목 세부설정-->
+        <Border Grid.Row="1" Grid.Column="3" BorderThickness="1" BorderBrush="#FF666666" Padding="4" Background="White">
+            <!--화면전환 기능을 사용할 것-->
+            <ContentControl Content="{Binding}"></ContentControl>
+        </Border>
     </Grid>
 </Window>
