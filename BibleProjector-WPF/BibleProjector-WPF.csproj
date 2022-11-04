@@ -79,6 +79,18 @@
     <Compile Include="ReserveManagerWindow.xaml.cs">
       <DependentUpon>ReserveManagerWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ReserveOptionViews\Bible.xaml.cs">
+      <DependentUpon>Bible.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ReserveOptionViews\ExternPPT.xaml.cs">
+      <DependentUpon>ExternPPT.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ReserveOptionViews\Reading.xaml.cs">
+      <DependentUpon>Reading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ReserveOptionViews\Song.xaml.cs">
+      <DependentUpon>Song.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ReserveUnitBox.xaml.cs">
       <DependentUpon>ReserveUnitBox.xaml</DependentUpon>
     </Compile>
@@ -102,6 +114,10 @@
     <Compile Include="ViewModel\OptionViewModel.cs" />
     <Compile Include="ViewModel\ExternPPTControlViewModel.cs" />
     <Compile Include="ViewModel\ReserveManagerViewModel.cs" />
+    <Compile Include="ViewModel\ReserveOptionViewModels\Bible.cs" />
+    <Compile Include="ViewModel\ReserveOptionViewModels\ExternPPT.cs" />
+    <Compile Include="ViewModel\ReserveOptionViewModels\Reading.cs" />
+    <Compile Include="ViewModel\ReserveOptionViewModels\Song.cs" />
     <Compile Include="ViewModel\SongControlViewModel.cs" />
     <Compile Include="ViewModel\ReadingControlViewModel.cs" />
     <Compile Include="ViewModel\BibleControlViewModel.cs" />
@@ -135,6 +151,22 @@
     <Page Include="ReserveManagerWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ReserveOptionViews\Bible.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ReserveOptionViews\ExternPPT.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ReserveOptionViews\Reading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ReserveOptionViews\Song.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ReserveUnitBox.xaml">
       <Generator>MSBuild:Compile</Generator>

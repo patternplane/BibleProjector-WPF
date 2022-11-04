@@ -15,7 +15,7 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"/>
-                <RowDefinition Height="27*"/>
+                <RowDefinition Height="45*"/>
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -87,7 +87,7 @@
         <Grid Grid.Column="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"/>
-                <RowDefinition Height="27*"/>
+                <RowDefinition Height="45*"/>
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -97,8 +97,25 @@
 
             <!--선택된 예약항목 세부설정-->
             <Border Grid.Row="1" BorderThickness="1" BorderBrush="#FF666666" Padding="4" Background="White">
-                <!--화면전환 기능을 사용할 것-->
-                <ContentControl Content="{Binding}"></ContentControl>
+                <ContentControl
+                    xmlns:rv="clr-namespace:BibleProjector_WPF.ReserveOptionViews"
+                    xmlns:rvm="clr-namespace:BibleProjector_WPF.ViewModel.ReserveOptionViewModels">
+                    <ContentControl.Resources>
+                        <DataTemplate DataType="{x:Type rvm:Bible}">
+                            <rv:Bible></rv:Bible>
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type rvm:Reading}">
+                            <rv:Reading></rv:Reading>
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type rvm:Song}">
+                            <rv:Song></rv:Song>
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type rvm:ExternPPT}">
+                            <rv:ExternPPT></rv:ExternPPT>
+                        </DataTemplate>
+                    </ContentControl.Resources>
+                    <Binding Path="ReserveOptionViewModel"></Binding>
+                </ContentControl>
             </Border>
         </Grid>
     </Grid>
