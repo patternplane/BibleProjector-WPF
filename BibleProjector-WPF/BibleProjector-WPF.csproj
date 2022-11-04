@@ -76,6 +76,12 @@
     <Compile Include="ProgramStartLoading.xaml.cs">
       <DependentUpon>ProgramStartLoading.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ReserveManagerWindow.xaml.cs">
+      <DependentUpon>ReserveManagerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ReserveUnitBox.xaml.cs">
+      <DependentUpon>ReserveUnitBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SongControl.xaml.cs">
       <DependentUpon>SongControl.xaml</DependentUpon>
     </Compile>
@@ -95,6 +101,7 @@
     <Compile Include="ViewModel\ExternPPTViewModel.cs" />
     <Compile Include="ViewModel\OptionViewModel.cs" />
     <Compile Include="ViewModel\ExternPPTControlViewModel.cs" />
+    <Compile Include="ViewModel\ReserveManagerViewModel.cs" />
     <Compile Include="ViewModel\SongControlViewModel.cs" />
     <Compile Include="ViewModel\ReadingControlViewModel.cs" />
     <Compile Include="ViewModel\BibleControlViewModel.cs" />
@@ -124,6 +131,14 @@
     <Page Include="ProgramStartLoading.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ReserveManagerWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ReserveUnitBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="SongControl.xaml">
       <Generator>MSBuild:Compile</Generator>

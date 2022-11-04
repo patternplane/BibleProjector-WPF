@@ -25,6 +25,24 @@ namespace BibleProjector_WPF
         public ReserveManagerWindow()
         {
             InitializeComponent();
+            this.DataContext = new ReserveManagerViewModel();
+        }
+
+        // =========================== Event DataBinding ============================
+
+        void Event_UpButtonClick(object sender, RoutedEventArgs e)
+        {
+            ((ReserveManagerViewModel)DataContext).UpButtonClick();
+        }
+
+        void Event_DownButtonClick(object sender, RoutedEventArgs e)
+        {
+            ((ReserveManagerViewModel)DataContext).DownButtonClick();
+        }
+
+        void Event_DeleteButtonClick(object sender, RoutedEventArgs e)
+        {
+            ((ReserveManagerViewModel)DataContext).DeleteButtonClick();
         }
     }
 }

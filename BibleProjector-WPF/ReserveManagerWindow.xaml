@@ -7,67 +7,99 @@
         mc:Ignorable="d"
         Title="자막 예약" Height="501" Width="532">
     <Grid Background="#FFD8FDCA">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="27*"/>
-            <RowDefinition Height="1*"/>
-        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*"/>
-            <ColumnDefinition Width="48*"/>
-            <ColumnDefinition Width="3*"/>
-            <ColumnDefinition Width="48*"/>
-            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="52*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="52*"/>
         </Grid.ColumnDefinitions>
-
-        <Grid Grid.Row="1" Grid.Column="1" >
+        <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="102*"/>
-                <RowDefinition Height="4*"/>
-                <RowDefinition Height="13*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="27*"/>
+                <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="48*"/>
+            </Grid.ColumnDefinitions>
 
-            <!--예약항목 리스트-->
-            <Border BorderThickness="1" BorderBrush="#FF666666" Padding="4" Background="White">
-                <Grid>
-                    <ItemsControl>
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Vertical"></StackPanel>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <local:ReserveUnitBox Margin="5,5,5,5"></local:ReserveUnitBox>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </Grid>
-            </Border>
+            <Grid Grid.Row="1" Grid.Column="1" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="102*"/>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="13*"/>
+                </Grid.RowDefinitions>
 
-            <!--예약항목 조작부-->
-            <Grid Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="67*"/>
-                    <ColumnDefinition Width="41*"/>
-                    <ColumnDefinition Width="135*"/>
-                </Grid.ColumnDefinitions>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <Button Grid.Row="0">▲</Button>
-                    <Button Grid.Row="1">▼</Button>
+                <!--예약항목 리스트-->
+                <Border BorderThickness="1" BorderBrush="#FF666666" Background="White">
+                    <Grid>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                            <ListView ItemsSource="{Binding ReserveList}" SelectionMode="Single">
+                                <ListView.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Vertical"/>
+                                    </ItemsPanelTemplate>
+                                </ListView.ItemsPanel>
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="ListViewItem">
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <local:ReserveUnitBox Margin="2,2,2,2"></local:ReserveUnitBox>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </ScrollViewer>
+                    </Grid>
+                </Border>
+
+                <!--예약항목 조작부-->
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="67*"/>
+                        <ColumnDefinition Width="41*"/>
+                        <ColumnDefinition Width="135*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Button Grid.Row="0" Click="Event_UpButtonClick">▲</Button>
+                        <Button Grid.Row="1" Click="Event_DownButtonClick">▼</Button>
+                    </Grid>
+                    <Button Grid.Column="2" Click="Event_DeleteButtonClick">선택항목 삭제</Button>
                 </Grid>
-                <Button Grid.Column="2">선택항목 삭제</Button>
             </Grid>
         </Grid>
+        <GridSplitter Grid.Column="1" Width="10" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+            <GridSplitter.Template>
+                <ControlTemplate>
+                    <Border Background="#FFD8FDCA">
+                        <Border Background="Gray" Width="1">
+                        </Border>
+                    </Border>
+                </ControlTemplate>
+            </GridSplitter.Template>
+        </GridSplitter>
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="27*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="48*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
 
-        <!--선택된 예약항목 세부설정-->
-        <Border Grid.Row="1" Grid.Column="3" BorderThickness="1" BorderBrush="#FF666666" Padding="4" Background="White">
-            <!--화면전환 기능을 사용할 것-->
-            <ContentControl Content="{Binding}"></ContentControl>
-        </Border>
+            <!--선택된 예약항목 세부설정-->
+            <Border Grid.Row="1" BorderThickness="1" BorderBrush="#FF666666" Padding="4" Background="White">
+                <!--화면전환 기능을 사용할 것-->
+                <ContentControl Content="{Binding}"></ContentControl>
+            </Border>
+        </Grid>
     </Grid>
 </Window>
