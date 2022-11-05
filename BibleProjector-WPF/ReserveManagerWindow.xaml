@@ -34,7 +34,8 @@
                 <Border BorderThickness="1" BorderBrush="#FF666666" Background="White">
                     <Grid>
                         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                            <ListView ItemsSource="{Binding ReserveList}" SelectionMode="Single">
+                            <ListView 
+                                ItemsSource="{Binding ReserveList}">
                                 <ListView.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <StackPanel Orientation="Vertical"/>

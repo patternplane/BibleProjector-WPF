@@ -10,28 +10,21 @@ using System.Threading.Tasks;
 
 namespace BibleProjector_WPF.ViewModel
 {
-    // 예약항목 데이터 한 단위
-    public class ReserveDataUnit
-    {
-        string displayInfo;
-        public String DisplayInfo
-        {
-            get { return displayInfo; }
-            set { displayInfo = value; }
-        }
-    }
-
     internal class ReserveManagerViewModel : INotifyPropertyChanged
     {
+        module.ReserveData M_ReserveData;
+
         public ReserveManagerViewModel()
         {
-            reserveList = new ObservableCollection<ReserveDataUnit>();
+            M_ReserveData = new module.ReserveData();
+            M_ReserveData.applyPropertyChanged(reserveListUpdater);
+            reserveList = M_ReserveData.getReserveList();
 
             // 리스트 테스트용 항목들
-            reserveList.Add(new ReserveDataUnit() { DisplayInfo="dsaddddddddddddddfdsafsdfadsffdsaafs"});
-            reserveList.Add(new ReserveDataUnit());
-            reserveList.Add(new ReserveDataUnit());
-            reserveList.Add(new ReserveDataUnit());
+            M_ReserveData.addReserve(new module.ReserveDataUnit() { DisplayInfo="dsaddddddddddddddfdsafsdfadsffdsaafs"});
+            M_ReserveData.addReserve(new module.ReserveDataUnit());
+            M_ReserveData.addReserve(new module.ReserveDataUnit());
+            M_ReserveData.addReserve(new module.ReserveDataUnit());
 
             // 화면전환 테스트 
             rvm_bible = new ReserveOptionViewModels.Bible();
@@ -47,11 +40,15 @@ namespace BibleProjector_WPF.ViewModel
         ReserveOptionViewModels.Song rvm_song;
         ReserveOptionViewModels.ExternPPT rvm_extern;
 
-        ObservableCollection<ReserveDataUnit> reserveList;
-        public ObservableCollection<ReserveDataUnit> ReserveList
+        Collection<module.ReserveDataUnit> reserveList;
+        public Collection<module.ReserveDataUnit> ReserveList
         {
             get { return reserveList; }
             set { reserveList = value; }
+        }
+        void reserveListUpdater(object sender, PropertyChangedEventArgs e)
+        {
+            reserveList = M_ReserveData.getReserveList();
         }
 
         object reserveOptionViewModel;
@@ -61,6 +58,13 @@ namespace BibleProjector_WPF.ViewModel
             set { reserveOptionViewModel = value;
                 OnPropertyChanged("ReserveOptionViewModel");
             }
+        }
+        
+        object selectedReserveItems;
+        public object SelectedReserveItems
+        {
+            get { return selectedReserveItems;}
+            set { selectedReserveItems = value; Console.WriteLine(selectedReserveItems.ToString()); }
         }
 
         public void UpButtonClick()
