@@ -9,13 +9,21 @@ using System.Threading.Tasks;
 namespace BibleProjector_WPF.module
 {
     // 예약항목 데이터 한 단위
+    public enum ReserveType
+    {
+        NULL,
+        Bible,
+        Reading,
+        Song_CCM,
+        Song_Hymn,
+        ExternPPT
+    }
     public class ReserveDataUnit
     {
-        string displayInfo;
-        public String DisplayInfo
+        public ReserveType reserveType = ReserveType.NULL;
+        public virtual string getDisplayInfo()
         {
-            get { return displayInfo; }
-            set { displayInfo = value; }
+            return "no Data";
         }
     }
 

@@ -114,6 +114,7 @@
     <Compile Include="ViewModel\ExternPPTViewModel.cs" />
     <Compile Include="ViewModel\OptionViewModel.cs" />
     <Compile Include="ViewModel\ExternPPTControlViewModel.cs" />
+    <Compile Include="ViewModel\ReserveCollection.cs" />
     <Compile Include="ViewModel\ReserveManagerViewModel.cs" />
     <Compile Include="ViewModel\ReserveOptionViewModels\Bible.cs" />
     <Compile Include="ViewModel\ReserveOptionViewModels\ExternPPT.cs" />

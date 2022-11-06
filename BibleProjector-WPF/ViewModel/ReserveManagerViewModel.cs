@@ -1,4 +1,5 @@
-﻿using BibleProjector_WPF.ReserveOptionViews;
+﻿using BibleProjector_WPF.module;
+using BibleProjector_WPF.ReserveOptionViews;
 using BibleProjector_WPF.ViewModel.ReserveOptionViewModels;
 using System;
 using System.Collections.Generic;
@@ -18,10 +19,10 @@ namespace BibleProjector_WPF.ViewModel
         {
             M_ReserveData = new module.ReserveData();
             M_ReserveData.applyPropertyChanged(reserveListUpdater);
-            reserveList = M_ReserveData.getReserveList();
+            reserveList = ReserveCollection.makeReserveCollection(M_ReserveData);
 
             // 리스트 테스트용 항목들
-            M_ReserveData.addReserve(new module.ReserveDataUnit() { DisplayInfo="dsaddddddddddddddfdsafsdfadsffdsaafs"});
+            M_ReserveData.addReserve(new module.ReserveDataUnit());
             M_ReserveData.addReserve(new module.ReserveDataUnit());
             M_ReserveData.addReserve(new module.ReserveDataUnit());
             M_ReserveData.addReserve(new module.ReserveDataUnit());
@@ -40,15 +41,15 @@ namespace BibleProjector_WPF.ViewModel
         ReserveOptionViewModels.Song rvm_song;
         ReserveOptionViewModels.ExternPPT rvm_extern;
 
-        Collection<module.ReserveDataUnit> reserveList;
-        public Collection<module.ReserveDataUnit> ReserveList
+        Collection<ReserveCollectionUnit> reserveList;
+        public Collection<ReserveCollectionUnit> ReserveList
         {
             get { return reserveList; }
             set { reserveList = value; }
         }
         void reserveListUpdater(object sender, PropertyChangedEventArgs e)
         {
-            reserveList = M_ReserveData.getReserveList();
+            reserveList = ReserveCollection.makeReserveCollection(M_ReserveData);
         }
 
         object reserveOptionViewModel;
