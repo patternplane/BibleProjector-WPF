@@ -6,52 +6,50 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace BibleProjector_WPF.ViewModel
 {
     internal class ReserveManagerViewModel : INotifyPropertyChanged
     {
-        module.ReserveData M_ReserveData;
-
         public ReserveManagerViewModel()
         {
-            M_ReserveData = new module.ReserveData();
-            M_ReserveData.applyPropertyChanged(reserveListUpdater);
-            reserveList = ReserveCollection.makeReserveCollection(M_ReserveData);
+            reserveDataManager = new ReserveDataManager();
+            
+            // 옵션 탭
+            ROViewModels[(int)ROViewModel.Null] = new ReserveOptionViewModels.Null();
+            ROViewModels[(int)ROViewModel.Bible] = new ReserveOptionViewModels.Bible();
+            ROViewModels[(int)ROViewModel.Reading] = new ReserveOptionViewModels.Reading();
+            ROViewModels[(int)ROViewModel.Song] = new ReserveOptionViewModels.Song();
+            ROViewModels[(int)ROViewModel.ExternPPT] = new ReserveOptionViewModels.ExternPPT();
+            ReserveOptionViewModel = ROViewModels[(int)ROViewModel.Null];
 
             // 리스트 테스트용 항목들
-            M_ReserveData.addReserve(new module.ReserveDataUnit());
-            M_ReserveData.addReserve(new module.ReserveDataUnit());
-            M_ReserveData.addReserve(new module.ReserveDataUnit());
-            M_ReserveData.addReserve(new module.ReserveDataUnit());
-
-            // 화면전환 테스트 
-            rvm_bible = new ReserveOptionViewModels.Bible();
-            rvm_song = new ReserveOptionViewModels.Song();
-            rvm_extern = new ReserveOptionViewModels.ExternPPT();
-            rvm_reading = new ReserveOptionViewModels.Reading();
-            ReserveOptionViewModel = rvm_bible;
+            reserveDataManager.addReserve(new module.EmptyReserveDataUnit());
+            reserveDataManager.addReserve(new module.BibleReserveDataUnit("05","003","005"));
+            reserveDataManager.addReserve(new module.BibleReserveDataUnit("15", "006", "010"));
+            reserveDataManager.addReserve(new module.BibleReserveDataUnit("1", "007", "015"));
         }
 
-        // 화면전환 테스트용
-        ReserveOptionViewModels.Bible rvm_bible;
-        ReserveOptionViewModels.Reading rvm_reading;
-        ReserveOptionViewModels.Song rvm_song;
-        ReserveOptionViewModels.ExternPPT rvm_extern;
-
-        Collection<ReserveCollectionUnit> reserveList;
-        public Collection<ReserveCollectionUnit> ReserveList
+        ReserveDataManager reserveDataManager;
+        public ReserveDataManager ReserveDataManager
         {
-            get { return reserveList; }
-            set { reserveList = value; }
-        }
-        void reserveListUpdater(object sender, PropertyChangedEventArgs e)
-        {
-            reserveList = ReserveCollection.makeReserveCollection(M_ReserveData);
+            get { return reserveDataManager; }
+            private set { reserveDataManager = value; }
         }
 
+        enum ROViewModel
+        {
+            Null,
+            Bible,
+            Reading,
+            Song,
+            ExternPPT
+        }
+        object[] ROViewModels = new object[5];
         object reserveOptionViewModel;
         public object ReserveOptionViewModel
         {
@@ -60,24 +58,49 @@ namespace BibleProjector_WPF.ViewModel
                 OnPropertyChanged("ReserveOptionViewModel");
             }
         }
-        
-        object selectedReserveItems;
-        public object SelectedReserveItems
-        {
-            get { return selectedReserveItems;}
-            set { selectedReserveItems = value; Console.WriteLine(selectedReserveItems.ToString()); }
-        }
 
         public void UpButtonClick()
         {
+            reserveDataManager.moveSelectionUp();
         }
 
         public void DownButtonClick()
         {
+            reserveDataManager.moveSelectionDown();
         }
 
         public void DeleteButtonClick()
         {
+            reserveDataManager.deleteSelection();
+        }
+
+        public void ListKeyInputed(KeyEventArgs e)
+        {
+            if (e.Key == Key.Delete)
+                reserveDataManager.deleteSelection();
+        }
+
+        public void ListSelectionChanged()
+        {
+            switch (ReserveDataManager.getTypeOfSelection())
+            {
+                case ReserveType.Bible:
+                    ReserveOptionViewModel = ROViewModels[(int)ROViewModel.Bible];
+                    break;
+                case ReserveType.Reading:
+                    ReserveOptionViewModel = ROViewModels[(int)ROViewModel.Reading];
+                    break;
+                case ReserveType.Song_CCM:
+                case ReserveType.Song_Hymn:
+                    ReserveOptionViewModel = ROViewModels[(int)ROViewModel.Song];
+                    break;
+                case ReserveType.ExternPPT:
+                    ReserveOptionViewModel = ROViewModels[(int)ROViewModel.ExternPPT];
+                    break;
+                default :
+                    ReserveOptionViewModel = ROViewModels[(int)ROViewModel.Null];
+                    break;
+            }
         }
 
         // INotifyPropertyChanged 인터페이스 관련

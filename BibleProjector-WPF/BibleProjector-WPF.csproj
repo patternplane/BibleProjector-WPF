@@ -67,7 +67,7 @@
     </Compile>
     <Compile Include="module\LayoutInfo.cs" />
     <Compile Include="module\ProgramOption.cs" />
-    <Compile Include="module\ReserveData.cs" />
+    <Compile Include="module\ReserveDataUnits.cs" />
     <Compile Include="Option.xaml.cs">
       <DependentUpon>Option.xaml</DependentUpon>
     </Compile>
@@ -85,6 +85,9 @@
     </Compile>
     <Compile Include="ReserveOptionViews\ExternPPT.xaml.cs">
       <DependentUpon>ExternPPT.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ReserveOptionViews\Null.xaml.cs">
+      <DependentUpon>Null.xaml</DependentUpon>
     </Compile>
     <Compile Include="ReserveOptionViews\Reading.xaml.cs">
       <DependentUpon>Reading.xaml</DependentUpon>
@@ -114,10 +117,11 @@
     <Compile Include="ViewModel\ExternPPTViewModel.cs" />
     <Compile Include="ViewModel\OptionViewModel.cs" />
     <Compile Include="ViewModel\ExternPPTControlViewModel.cs" />
-    <Compile Include="ViewModel\ReserveCollection.cs" />
+    <Compile Include="ViewModel\ReserveDataManager.cs" />
     <Compile Include="ViewModel\ReserveManagerViewModel.cs" />
     <Compile Include="ViewModel\ReserveOptionViewModels\Bible.cs" />
     <Compile Include="ViewModel\ReserveOptionViewModels\ExternPPT.cs" />
+    <Compile Include="ViewModel\ReserveOptionViewModels\Null.cs" />
     <Compile Include="ViewModel\ReserveOptionViewModels\Reading.cs" />
     <Compile Include="ViewModel\ReserveOptionViewModels\Song.cs" />
     <Compile Include="ViewModel\SongControlViewModel.cs" />
@@ -159,6 +163,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ReserveOptionViews\ExternPPT.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ReserveOptionViews\Null.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

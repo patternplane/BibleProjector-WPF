@@ -35,7 +35,9 @@
                     <Grid>
                         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                             <ListView 
-                                ItemsSource="{Binding ReserveList}">
+                                ItemsSource="{Binding ReserveDataManager.ReserveList}"
+                                KeyDown="Event_ReserveListKeyDown"
+                                SelectionChanged="Event_SelectionChanged">
                                 <ListView.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <StackPanel Orientation="Vertical"/>
@@ -69,10 +71,10 @@
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <Button Grid.Row="0" Click="Event_UpButtonClick">▲</Button>
-                        <Button Grid.Row="1" Click="Event_DownButtonClick">▼</Button>
+                        <Button Grid.Row="0" Click="Event_UpButtonClick" Focusable="False">▲</Button>
+                        <Button Grid.Row="1" Click="Event_DownButtonClick" Focusable="False">▼</Button>
                     </Grid>
-                    <Button Grid.Column="2" Click="Event_DeleteButtonClick">선택항목 삭제</Button>
+                    <Button Grid.Column="2" Click="Event_DeleteButtonClick" Focusable="False">선택항목 삭제</Button>
                 </Grid>
             </Grid>
         </Grid>
@@ -114,6 +116,9 @@
                         </DataTemplate>
                         <DataTemplate DataType="{x:Type rvm:ExternPPT}">
                             <rv:ExternPPT></rv:ExternPPT>
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type rvm:Null}">
+                            <rv:Null></rv:Null>
                         </DataTemplate>
                     </ContentControl.Resources>
                     <Binding Path="ReserveOptionViewModel"></Binding>

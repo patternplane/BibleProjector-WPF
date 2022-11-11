@@ -44,5 +44,15 @@ namespace BibleProjector_WPF
         {
             ((ReserveManagerViewModel)DataContext).DeleteButtonClick();
         }
+
+        void Event_ReserveListKeyDown(object sender, KeyEventArgs e)
+        {
+            ((ReserveManagerViewModel)DataContext).ListKeyInputed(e);
+        }
+
+        void Event_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ((ReserveManagerViewModel)DataContext).ListSelectionChanged();
+        }
     }
 }
