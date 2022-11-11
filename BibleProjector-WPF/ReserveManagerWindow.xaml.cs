@@ -26,6 +26,8 @@ namespace BibleProjector_WPF
         {
             InitializeComponent();
             this.DataContext = new ReserveManagerViewModel();
+
+            CloseButtonDisabler.DisableCloseButton(this);
         }
 
         // =========================== Event DataBinding ============================

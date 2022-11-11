@@ -62,6 +62,7 @@
     <Compile Include="BibleModifyWindow.xaml.cs">
       <DependentUpon>BibleModifyWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CloseButtonDisabler.cs" />
     <Compile Include="ExternPPT.xaml.cs">
       <DependentUpon>ExternPPT.xaml</DependentUpon>
     </Compile>
