@@ -17,6 +17,14 @@ namespace BibleProjector_WPF.module
         static ViewModel.LyricViewModel VM_LyricViewModel;
         static ViewModel.ExternPPTViewModel VM_ExternPPT;
 
+        // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+        // ■■■■■■■■■■■■■ 공사부근 : 여러 곳의 예약을 하나로 통합중  ■■■■■■■■■■■■■■
+        // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+
+        static ViewModel.ReserveManagerViewModel VM_ReserveManager;
+
+        // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+
         // =========================================== 파일 경로 =========================================== 
 
         // 파일 경로들
@@ -30,6 +38,13 @@ namespace BibleProjector_WPF.module
         const string LAYOUT_DATA = PROGRAM_DATA_PATH + "\\LayoutData";
         const string EXTERN_PPT_DATA = PROGRAM_DATA_PATH + "\\ExternPPTpaths";
 
+        // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+        // ■■■■■■■■■■■■■ 공사부근 : 여러 곳의 예약을 하나로 통합중  ■■■■■■■■■■■■■■
+        // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+
+        const string RESERVE_DATA = PROGRAM_DATA_PATH + "\\ReserveData";
+
+        // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
         // =========================================== 프로그램 종료시 ===========================================
 
@@ -40,6 +55,14 @@ namespace BibleProjector_WPF.module
             saveOptionData();
             saveLayoutData();
             saveExternPPTData();
+
+            // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+            // ■■■■■■■■■■■■■ 공사부근 : 여러 곳의 예약을 하나로 통합중  ■■■■■■■■■■■■■■
+            // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+
+            saveReserveData();
+
+            // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
         }
 
         static void saveBibleReserveData()
@@ -91,6 +114,19 @@ namespace BibleProjector_WPF.module
             file.Write(VM_ExternPPT.getSaveData());
             file.Close();
         }
+
+        // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+        // ■■■■■■■■■■■■■ 공사부근 : 여러 곳의 예약을 하나로 통합중  ■■■■■■■■■■■■■■
+        // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+
+        static void saveReserveData()
+        {
+            StreamWriter file = new StreamWriter(RESERVE_DATA, false);
+            file.Write(VM_ReserveManager.getSaveData());
+            file.Close();
+        }
+
+        // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
         // =========================================== 별도 메소드 =========================================== 
 
@@ -155,5 +191,17 @@ namespace BibleProjector_WPF.module
             VM_ExternPPT = ExternPPTViewModel;
             return getDataFromFile(EXTERN_PPT_DATA);
         }
+
+        // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+        // ■■■■■■■■■■■■■ 공사부근 : 여러 곳의 예약을 하나로 통합중  ■■■■■■■■■■■■■■
+        // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+
+        public static string getReserveData(ViewModel.ReserveManagerViewModel ReserveManagerViewModel)
+        {
+            VM_ReserveManager = ReserveManagerViewModel;
+            return getDataFromFile(RESERVE_DATA);
+        }
+
+        // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
     }
 }

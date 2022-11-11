@@ -20,18 +20,41 @@ namespace BibleProjector_WPF.ViewModel
             reserveDataManager = new ReserveDataManager();
             
             // 옵션 탭
-            ROViewModels[(int)ROViewModel.Null] = new ReserveOptionViewModels.Null();
-            ROViewModels[(int)ROViewModel.Bible] = new ReserveOptionViewModels.Bible();
-            ROViewModels[(int)ROViewModel.Reading] = new ReserveOptionViewModels.Reading();
-            ROViewModels[(int)ROViewModel.Song] = new ReserveOptionViewModels.Song();
-            ROViewModels[(int)ROViewModel.ExternPPT] = new ReserveOptionViewModels.ExternPPT();
-            ReserveOptionViewModel = ROViewModels[(int)ROViewModel.Null];
+            ROViewModels[(int)ReserveType.NULL] = new ReserveOptionViewModels.Null();
+            ROViewModels[(int)ReserveType.Bible] = new ReserveOptionViewModels.Bible();
+            ROViewModels[(int)ReserveType.Reading] = new ReserveOptionViewModels.Reading();
+            ROViewModels[(int)ReserveType.Song] = new ReserveOptionViewModels.Song();
+            ROViewModels[(int)ReserveType.ExternPPT] = new ReserveOptionViewModels.ExternPPT();
+            ReserveOptionViewModel = ROViewModels[(int)ReserveType.NULL];
+
+            // 프로그램 저장데이터 불러오기
+            makeListFromSaveData();
 
             // 리스트 테스트용 항목들
             reserveDataManager.addReserve(new module.EmptyReserveDataUnit());
             reserveDataManager.addReserve(new module.BibleReserveDataUnit("05","003","005"));
             reserveDataManager.addReserve(new module.BibleReserveDataUnit("15", "006", "010"));
             reserveDataManager.addReserve(new module.BibleReserveDataUnit("1", "007", "015"));
+        }
+
+        // 프로그램 불러온 저장데이터 가공
+        void makeListFromSaveData()
+        {
+            module.ProgramData.getReserveData(this);
+        }
+
+        // 프로그램 종료시 저장값 생성 메소드
+        public string getSaveData()
+        {
+            StringBuilder str = new StringBuilder(50);
+            foreach (ReserveCollectionUnit item in ReserveDataManager.ReserveList)
+            {
+                str.Append(((int)item.reserveType));
+                str.Append("§");
+                str.Append(item.reserveData.getFileSaveText());
+                str.Append("\r\n");
+            }
+            return str.ToString();
         }
 
         ReserveDataManager reserveDataManager;
@@ -41,14 +64,6 @@ namespace BibleProjector_WPF.ViewModel
             private set { reserveDataManager = value; }
         }
 
-        enum ROViewModel
-        {
-            Null,
-            Bible,
-            Reading,
-            Song,
-            ExternPPT
-        }
         object[] ROViewModels = new object[5];
         object reserveOptionViewModel;
         public object ReserveOptionViewModel
@@ -85,20 +100,19 @@ namespace BibleProjector_WPF.ViewModel
             switch (ReserveDataManager.getTypeOfSelection())
             {
                 case ReserveType.Bible:
-                    ReserveOptionViewModel = ROViewModels[(int)ROViewModel.Bible];
+                    ReserveOptionViewModel = ROViewModels[(int)ReserveType.Bible];
                     break;
                 case ReserveType.Reading:
-                    ReserveOptionViewModel = ROViewModels[(int)ROViewModel.Reading];
+                    ReserveOptionViewModel = ROViewModels[(int)ReserveType.Reading];
                     break;
-                case ReserveType.Song_CCM:
-                case ReserveType.Song_Hymn:
-                    ReserveOptionViewModel = ROViewModels[(int)ROViewModel.Song];
+                case ReserveType.Song:
+                    ReserveOptionViewModel = ROViewModels[(int)ReserveType.Song];
                     break;
                 case ReserveType.ExternPPT:
-                    ReserveOptionViewModel = ROViewModels[(int)ROViewModel.ExternPPT];
+                    ReserveOptionViewModel = ROViewModels[(int)ReserveType.ExternPPT];
                     break;
                 default :
-                    ReserveOptionViewModel = ROViewModels[(int)ROViewModel.Null];
+                    ReserveOptionViewModel = ROViewModels[(int)ReserveType.NULL];
                     break;
             }
         }

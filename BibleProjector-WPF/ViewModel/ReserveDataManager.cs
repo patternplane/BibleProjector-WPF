@@ -130,9 +130,7 @@ namespace BibleProjector_WPF.ViewModel
                     return "성경";
                 case ReserveType.Reading:
                     return "교독문";
-                case ReserveType.Song_CCM:
-                    return "찬양";
-                case ReserveType.Song_Hymn:
+                case ReserveType.Song:
                     return "찬양";
                 case ReserveType.ExternPPT:
                     return "PPT";

@@ -103,14 +103,14 @@ namespace BibleProjector_WPF
                     Ctrl_Song = new SongControl(
                         VM_LyricViewModel.SelectedLyric.makeSongData(VM_LyricViewModel.LinePerSlide)
                         , VM_LyricViewModel.SongFrameSelection.Path
-                        , VM_LyricViewModel.SelectedLyric.GetType() == typeof(ViewModel.LyricViewModel.SingleHymn));
+                        , VM_LyricViewModel.SelectedLyric.GetType() == typeof(ViewModel.SingleHymn));
                     //Ctrl_Song.Owner = MainWindow.ProgramMainWindow;
                 }
                 else
                     Ctrl_Song.ShowSong(
                         VM_LyricViewModel.SelectedLyric.makeSongData(VM_LyricViewModel.LinePerSlide)
                         , VM_LyricViewModel.SongFrameSelection.Path
-                        , VM_LyricViewModel.SelectedLyric.GetType() == typeof(ViewModel.LyricViewModel.SingleHymn));
+                        , VM_LyricViewModel.SelectedLyric.GetType() == typeof(ViewModel.SingleHymn));
                 VM_LyricViewModel.currentLyricOuted();
                 Ctrl_Song.Show();
             }
