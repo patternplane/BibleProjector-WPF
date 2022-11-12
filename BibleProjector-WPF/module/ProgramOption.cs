@@ -24,6 +24,10 @@ namespace BibleProjector_WPF.module
         {
             public string Path { get; set; }
             public string FileName { get; set; }
+            bool _isCCMFrame;
+            public bool isCCMFrame { get { return _isCCMFrame; } set { 미완} }
+            bool _isHymnFrame;
+            public bool isHymnFrame { get { return _isHymnFrame; } set { 미완} }
         }
         static public BindingList<SongFrameFile> SongFrameFiles { get; set; } = new BindingList<SongFrameFile>();
 
@@ -32,9 +36,29 @@ namespace BibleProjector_WPF.module
             SongFrameFiles.Add(f);
         }
 
+        // ======================================= 찬양PPT틀 선택가능 판단 =======================================
+
+        static public bool canCCMSelect(SongFrameFile item)
+        {
+            foreach(SongFrameFile file in SongFrameFiles)
+                if (file != item && file.isCCMFrame)
+                    return false;
+            return true;
+        }
+
+        static public bool canHymnSelect(SongFrameFile item)
+        {
+            foreach (SongFrameFile file in SongFrameFiles)
+                if (file != item && file.isHymnFrame)
+                    return false;
+            return true;
+        }
+
         // ======================================= 세팅 및 종료 =======================================
 
         const string SEPARATOR = "∂";
+        const int IS_CCM_FRAME = 1;
+        const int IS_HYMN_FRAME = 2;
 
         static public void Initialize()
         {
@@ -59,11 +83,40 @@ namespace BibleProjector_WPF.module
                 if (file.Exists)
                     ReadingFramePath = items[3];
             }
-            for (int i = 4; i < items.Length; i++)
+
+            // 이전 버전의 저장값을 불러오면 오류 발생하므로 처리
+            // 변경사항 : 찬양곡 ppt의 저장값에 ccm혹은 찬송가 프레임 선택 정보가 추가됨
+            if (items.Length > 4)
             {
-                System.IO.FileInfo file = new FileInfo(items[i]);
-                if (file.Exists)
-                    SongFrameFiles.Add(new SongFrameFile() { Path = items[i], FileName = System.IO.Path.GetFileName(items[i]) });
+                int dummy;
+
+                // 최근 버전
+                if (int.TryParse(items[4], out dummy))
+                {
+                    for (int i = 4; i < items.Length; i += 2)
+                    {
+                        System.IO.FileInfo file = new FileInfo(items[i + 1]);
+                        if (file.Exists)
+                            SongFrameFiles.Add(new SongFrameFile()
+                            {
+                                Path = items[i + 1],
+                                FileName = System.IO.Path.GetFileName(items[i + 1]),
+                                isCCMFrame = int.Parse(items[i]) == IS_CCM_FRAME,
+                                isHymnFrame = int.Parse(items[i]) == IS_HYMN_FRAME
+                            });
+                    }
+                }
+
+                // 구버전
+                else
+                {
+                    for (int i = 4; i < items.Length; i++)
+                    {
+                        System.IO.FileInfo file = new FileInfo(items[i]);
+                        if (file.Exists)
+                            SongFrameFiles.Add(new SongFrameFile() { Path = items[i], FileName = System.IO.Path.GetFileName(items[i]) });
+                    }
+                }
             }
 
         }
@@ -82,6 +135,8 @@ namespace BibleProjector_WPF.module
             str.Append(ReadingFramePath);
             foreach (SongFrameFile f in SongFrameFiles)
             {
+                str.Append(SEPARATOR);
+                str.Append(((f.isCCMFrame ? IS_CCM_FRAME : (f.isHymnFrame ? IS_HYMN_FRAME : 0))));
                 str.Append(SEPARATOR);
                 str.Append(f.Path);
             }

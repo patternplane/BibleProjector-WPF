@@ -27,7 +27,7 @@ namespace BibleProjector_WPF
         public Option()
         {
             InitializeComponent();
-            MainOptionGrid.DataContext = VM_Option = new ViewModel.OptionViewModel();
+            this.DataContext = VM_Option = new ViewModel.OptionViewModel();
         }
 
         // ========================================= 틀 파일 등록 ==========================================
