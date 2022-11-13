@@ -394,6 +394,11 @@ namespace BibleProjector_WPF.ViewModel
             get { return SelectedLyric_in; }
             set
             {
+                if (value.GetType() == typeof(SingleHymn)
+                    && module.ProgramOption.DefaultHymnFrame != null)
+                    SongFrameSelection = module.ProgramOption.DefaultHymnFrame;
+                else if (module.ProgramOption.DefaultCCMFrame != null)
+                    SongFrameSelection = module.ProgramOption.DefaultCCMFrame;
                 SelectedLyric_in = value;
                 NotifyPropertyChanged();
             }
