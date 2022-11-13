@@ -24,7 +24,7 @@
                 <ColumnDefinition Width="73*"/>
             </Grid.ColumnDefinitions>
             <Button Content="외부 ppt&#10;  등록"
-                    Click="AddExternPPT_Click" Background="#FFCBFFB9">
+                    Click="AddExternPPT_Click">
             </Button>
             <Grid Grid.Column="2">
                 <Grid.RowDefinitions>
@@ -37,7 +37,7 @@
                     Click="PPTDelete_Click">항목 삭제</Button>
             </Grid>
             <Button Grid.Column="4" Content="선택된 ppt&#10; 새로고침"
-                    Click="Refresh_Click"></Button>
+                    Click="Refresh_Click" Background="#FFCBFFB9"></Button>
         </Grid>
         <ListBox Grid.Row="3" 
                  x:Name="ExternPPTListBox"
