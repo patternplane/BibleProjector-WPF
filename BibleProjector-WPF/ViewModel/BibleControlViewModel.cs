@@ -31,7 +31,7 @@ namespace BibleProjector_WPF.ViewModel
         private void showBible_next()
         {
             Kjjeul = Database.getBibleIndex_Next(Kjjeul);
-            onlyPageSetting();
+            onlyPageSetting(false);
 
             MainWindow.ProgramMainWindow.applyBibleMoving(Kjjeul.Substring(0,2), Kjjeul.Substring(2, 3), Kjjeul.Substring(5, 3));
         }
@@ -39,7 +39,7 @@ namespace BibleProjector_WPF.ViewModel
         private void showBible_previous()
         {
             Kjjeul = Database.getBibleIndex_Previous(Kjjeul);
-            onlyPageSetting();
+            onlyPageSetting(preview_GoLastPage);
 
             MainWindow.ProgramMainWindow.applyBibleMoving(Kjjeul.Substring(0, 2), Kjjeul.Substring(2, 3), Kjjeul.Substring(5, 3));
         }
@@ -63,7 +63,7 @@ namespace BibleProjector_WPF.ViewModel
             isDisplayShow = true;
         }
 
-        private void onlyPageSetting()
+        private void onlyPageSetting(bool setLastPage)
         {
             setCurrentBibleInfo(bible_display, chapter, verse);
 
@@ -76,6 +76,11 @@ namespace BibleProjector_WPF.ViewModel
                     )
                 );
             setBibleSlide_BibleChapter(bible_display, chapter);
+            if (setLastPage)
+            {
+                CurrentPageIndex = BiblePages.Count - 1;
+            }
+            else
             CurrentPageIndex = 0;
         }
 
@@ -125,6 +130,9 @@ namespace BibleProjector_WPF.ViewModel
                     setBibleSlide_VerseContent(BiblePages[CurrentPageIndex_in], verse, CurrentPageIndex_in == 0);
                 NotifyPropertyChanged();
             } }
+
+        // 이전 페이지 넘기는 동작 설정
+        public bool preview_GoLastPage { get; set; } = true;
 
         // ================================================ 속성 메소드 ================================================
 
