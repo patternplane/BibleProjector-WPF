@@ -217,7 +217,8 @@
                                  ItemsSource="{Binding LyricReserveList}"
                                  DisplayMemberPath="lyric.title"
                                  SelectedItem="{Binding LyricReserveSelection}"
-                                 x:Name="LyricReserveListBox">
+                                 x:Name="LyricReserveListBox"
+                                 KeyDown="ReserveDelete_KeyDown">
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem">
                                     <EventSetter Event="MouseDoubleClick" Handler="LyricReserveListBox_DoubleClick"></EventSetter>

@@ -42,7 +42,8 @@
         <ListBox Grid.Row="3" 
                  x:Name="ExternPPTListBox"
                  ItemsSource="{Binding ExternPPTList}"
-                 SelectionMode="Extended">
+                 SelectionMode="Extended"
+                 KeyDown="ExternPPTListBox_KeyDown">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <EventSetter Event="MouseDoubleClick" Handler="ExternPPTListBox_DoubleClick"></EventSetter>
