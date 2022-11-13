@@ -75,11 +75,12 @@
 
             <Grid Grid.Column="4">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="15*"/>
-                    <RowDefinition Height="47*"/>
-                    <RowDefinition Height="18*"/>
+                    <RowDefinition Height="38*"/>
+                    <RowDefinition Height="14*"/>
+                    <RowDefinition Height="32*"/>
                 </Grid.RowDefinitions>
-                <Button Grid.Row="1" Content="화면을&#10;가장 앞으로" Click="setSlideTopMost"></Button>
+                <Button Content="화면을&#10;가장 앞으로" Click="setSlideTopMost"></Button>
+                <CheckBox Grid.Row="2" Content="(이전 절의&#10;마지막페이지로)" IsChecked="{Binding preview_GoLastPage}"></CheckBox>
             </Grid>
 
             <Grid Grid.Column="6">
