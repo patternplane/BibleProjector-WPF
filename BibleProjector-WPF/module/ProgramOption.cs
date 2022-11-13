@@ -19,8 +19,7 @@ namespace BibleProjector_WPF.module
             get { return _isCCMFrame; }
             set
             {
-                if (value)
-                    ProgramOption.setThisFrameToCCM(this);
+                ProgramOption.setThisFrameToCCM(this,value);
                 _isCCMFrame = value;
                 OnPropertyChanged("isCCMFrame");
             }
@@ -31,8 +30,7 @@ namespace BibleProjector_WPF.module
             get { return _isHymnFrame; }
             set
             {
-                if (value)
-                    ProgramOption.setThisFrameToHymn(this);
+                ProgramOption.setThisFrameToHymn(this,value);
                 _isHymnFrame = value;
                 OnPropertyChanged("isHymnFrame");
             }
@@ -80,28 +78,40 @@ namespace BibleProjector_WPF.module
         {
             if (item.isCCMFrame)
                 DefaultCCMFrame = null;
-            else if (item.isHymnFrame)
+            if (item.isHymnFrame)
                 DefaultHymnFrame = null;
         }
 
         // ======================================= 찬양PPT틀 선택가능 판단 =======================================
 
-        static public void setThisFrameToCCM(SongFrameFile thisFrame)
+        static public void setThisFrameToCCM(SongFrameFile thisFrame, bool value)
         {
-            foreach (SongFrameFile file in SongFrameFiles)
-                if (file != thisFrame && file.isCCMFrame)
-                    file.isCCMFrame = false;
+            if (value)
+            {
+                foreach (SongFrameFile file in SongFrameFiles)
+                    if (file != thisFrame && file.isCCMFrame)
+                        file.isCCMFrame = false;
 
-            DefaultCCMFrame = thisFrame;
+                DefaultCCMFrame = thisFrame;
+            }
+            else
+                if (DefaultCCMFrame == thisFrame)
+                    DefaultCCMFrame = null;
         }
 
-        static public void setThisFrameToHymn(SongFrameFile thisFrame)
+        static public void setThisFrameToHymn(SongFrameFile thisFrame, bool value)
         {
-            foreach (SongFrameFile file in SongFrameFiles)
-                if (file != thisFrame && file.isHymnFrame)
-                    file.isHymnFrame = false;
+            if (value)
+            {
+                foreach (SongFrameFile file in SongFrameFiles)
+                    if (file != thisFrame && file.isHymnFrame)
+                        file.isHymnFrame = false;
 
-            DefaultHymnFrame = thisFrame;
+                DefaultHymnFrame = thisFrame;
+            }
+            else
+                if (DefaultHymnFrame == thisFrame)
+                    DefaultHymnFrame = null;
         }
 
         // ======================================= 세팅 및 종료 =======================================
