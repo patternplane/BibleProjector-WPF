@@ -181,6 +181,17 @@ namespace BibleProjector_WPF
 
         void ReserveDelete_Click(object sender, RoutedEventArgs e)
         {
+            ReserveDelete();
+        }
+
+        void ReserveDelete_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Delete)
+                ReserveDelete();
+        }
+
+        void ReserveDelete()
+        {
             if (LyricReserveListBox.SelectedItems.Count == 0)
                 return;
             if (MessageBox.Show("선택된 예약 곡을 삭제하시겠습니까?", "찬양곡 예약 삭제", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)

@@ -221,6 +221,7 @@ namespace BibleProjector_WPF
 
             BibleReserveListBox.GotFocus += BibleReserveListBox_GotFocus;
             BibleReserveListBox.SelectionChanged += BibleReserveListBox_SelectionChanged;
+            BibleReserveListBox.KeyDown += BibleReserveListBox_KeyDown;
         }
 
         // ======================================== 성경 선택 처리
@@ -324,6 +325,17 @@ namespace BibleProjector_WPF
         }
 
         void BibleReserveDeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            BibleReserveDelete();
+        }
+
+        void BibleReserveListBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Delete)
+                BibleReserveDelete();
+        }
+
+        void BibleReserveDelete()
         {
             if (BibleReserveListBox.SelectedItems.Count == 0)
                 return;

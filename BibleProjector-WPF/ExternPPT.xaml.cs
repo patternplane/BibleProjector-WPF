@@ -59,6 +59,17 @@ namespace BibleProjector_WPF
 
         void PPTDelete_Click(object sender, RoutedEventArgs e)
         {
+            ExternPPTDelete();
+        }
+
+        void ExternPPTListBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Delete)
+                ExternPPTDelete();
+        }
+
+        void ExternPPTDelete()
+        {
             if (ExternPPTListBox.SelectedItems.Count == 0)
                 return;
 

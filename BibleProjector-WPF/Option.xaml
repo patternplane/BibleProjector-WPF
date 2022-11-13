@@ -94,7 +94,8 @@
                     </Grid.ColumnDefinitions>
                     <Label Grid.Column="0" Content="찬양곡 틀 :" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
                     <ListBox Grid.Column="1" x:Name="SongFramePaths_ListBox" SelectionMode="Extended"
-                         ItemsSource="{Binding SongFramePaths_List}">
+                         ItemsSource="{Binding SongFramePaths_List}"
+                         KeyDown="SongFrameListBox_KeyDown">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
 

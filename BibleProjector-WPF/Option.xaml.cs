@@ -72,6 +72,17 @@ namespace BibleProjector_WPF
 
         void SongFrameDeleteButton_Click(object sender, RoutedEventArgs e)
         {
+            SongFrameDelete();
+        }
+
+        void SongFrameListBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Delete)
+                SongFrameDelete();
+        }
+
+        void SongFrameDelete()
+        {
             if (SongFramePaths_ListBox.SelectedItems.Count == 0)
                 return;
             if (MessageBox.Show("선택된 찬양곡 ppt틀을 삭제하시겠습니까?", "ppt틀 삭제", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
