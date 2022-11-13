@@ -583,11 +583,11 @@ namespace BibleProjector_WPF.ViewModel
         }
 
         // ppt 틀
-        public BindingList<module.ProgramOption.SongFrameFile> SongFrameList { 
+        public BindingList<module.SongFrameFile> SongFrameList { 
             get { return module.ProgramOption.SongFrameFiles; }
             set { }
         }
-        public module.ProgramOption.SongFrameFile SongFrameSelection { get; set; }
+        public module.SongFrameFile SongFrameSelection { get; set; }
 
         // ============================================ 이벤트에 쓰일 함수 ==============================================
 

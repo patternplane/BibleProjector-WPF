@@ -9,6 +9,47 @@ using System.ComponentModel;
 
 namespace BibleProjector_WPF.module
 {
+    public class SongFrameFile : INotifyPropertyChanged
+    {
+        public string Path { get; set; }
+        public string FileName { get; set; }
+        bool _isCCMFrame;
+        public bool isCCMFrame
+        {
+            get { return _isCCMFrame; }
+            set
+            {
+                if (value)
+                    ProgramOption.setThisFrameToCCM(this);
+                _isCCMFrame = value;
+                OnPropertyChanged("isCCMFrame");
+            }
+        }
+        bool _isHymnFrame;
+        public bool isHymnFrame
+        {
+            get { return _isHymnFrame; }
+            set
+            {
+                if (value)
+                    ProgramOption.setThisFrameToHymn(this);
+                _isHymnFrame = value;
+                OnPropertyChanged("isHymnFrame");
+            }
+        }
+
+        // INotifyPropertyChanged 인터페이스 관련
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+
     class ProgramOption
     {
 
@@ -20,15 +61,6 @@ namespace BibleProjector_WPF.module
 
         static public string BibleFramePath { get; set; } = null;
         static public string ReadingFramePath { get; set; } = null;
-        public class SongFrameFile
-        {
-            public string Path { get; set; }
-            public string FileName { get; set; }
-            bool _isCCMFrame;
-            public bool isCCMFrame { get { return _isCCMFrame; } set { 미완} }
-            bool _isHymnFrame;
-            public bool isHymnFrame { get { return _isHymnFrame; } set { 미완} }
-        }
         static public BindingList<SongFrameFile> SongFrameFiles { get; set; } = new BindingList<SongFrameFile>();
 
         static public void test(SongFrameFile f)
@@ -38,20 +70,20 @@ namespace BibleProjector_WPF.module
 
         // ======================================= 찬양PPT틀 선택가능 판단 =======================================
 
-        static public bool canCCMSelect(SongFrameFile item)
-        {
-            foreach(SongFrameFile file in SongFrameFiles)
-                if (file != item && file.isCCMFrame)
-                    return false;
-            return true;
-        }
-
-        static public bool canHymnSelect(SongFrameFile item)
+        static public void setThisFrameToCCM(SongFrameFile thisFrame)
         {
             foreach (SongFrameFile file in SongFrameFiles)
-                if (file != item && file.isHymnFrame)
-                    return false;
-            return true;
+                if (file != thisFrame && file.isCCMFrame)
+                    file.isCCMFrame = false;
+
+        }
+
+        static public void setThisFrameToHymn(SongFrameFile thisFrame)
+        {
+            foreach (SongFrameFile file in SongFrameFiles)
+                if (file != thisFrame && file.isHymnFrame)
+                    file.isHymnFrame = false;
+
         }
 
         // ======================================= 세팅 및 종료 =======================================
