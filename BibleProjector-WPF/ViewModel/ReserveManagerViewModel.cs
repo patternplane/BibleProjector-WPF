@@ -16,11 +16,11 @@ namespace BibleProjector_WPF.ViewModel
     internal class ReserveManagerViewModel : INotifyPropertyChanged
     {
         // 이거 말고 더 좋은 방법 있을텐데
-        static public ReserveManagerViewModel VM_ReserveManager;
+        static public ReserveManagerViewModel instance;
 
         public ReserveManagerViewModel()
         {
-            ReserveManagerViewModel.VM_ReserveManager = this;
+            ReserveManagerViewModel.instance = this;
 
             reserveDataManager = new ReserveDataManager();
             

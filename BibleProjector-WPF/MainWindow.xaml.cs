@@ -321,6 +321,10 @@ namespace BibleProjector_WPF
         {
             if (VM_BibleCurrentSelectingData.isBibleSelected())
                 VM_BibleReserveData.BibleReserveList.Add(new ViewModel.BibleReserveData.BibleReserveContent(VM_BibleCurrentSelectingData.Book, VM_BibleCurrentSelectingData.Chapter, VM_BibleCurrentSelectingData.Verse));
+
+            // 예약창에 적용하는 데이터
+            ViewModel.ReserveManagerViewModel.instance.ReserveDataManager.addReserve(
+                new module.BibleReserveDataUnit(VM_BibleCurrentSelectingData.Book, VM_BibleCurrentSelectingData.Chapter, VM_BibleCurrentSelectingData.Verse));
         }
 
         void BibleReserveDeleteButton_Click(object sender, RoutedEventArgs e)
@@ -523,6 +527,19 @@ namespace BibleProjector_WPF
                 else
                     Ctrl_Reading.ShowReading(ReadingListBox.SelectedIndex);
                 Ctrl_Reading.Show();
+            }
+        }
+
+        // ======================================== 교독문 예약처리
+        void ReadingReserveButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (ReadingListBox.SelectedIndex == -1)
+                MessageBox.Show("출력할 교독문을 선택해주세요!", "교독문 선택되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
+            else
+            {
+                // 예약창에 보내는 데이터
+                ViewModel.ReserveManagerViewModel.instance.ReserveDataManager.addReserve(
+                    new module.ReadingReserveDataUnit(ReadingListBox.SelectedIndex));
             }
         }
 

@@ -208,7 +208,13 @@ namespace BibleProjector_WPF
                 itemindex.Sort();
 
                 foreach (int i in itemindex)
+                {
                     VM_LyricViewModel.LyricReserveList.Add(new ViewModel.LyricViewModel.LyricReserve(ViewModel.LyricViewModel.LyricList[i]));
+
+                    // 예약창에 보내는 데이터
+                    ViewModel.ReserveManagerViewModel.instance.ReserveDataManager.addReserve(
+                        new SongReserveDataUnit(ViewModel.LyricViewModel.LyricList[i]));
+            }
             }
             if (LyricReserveSelectTabControl.SelectedIndex == 1)
             {
@@ -221,7 +227,13 @@ namespace BibleProjector_WPF
                 itemindex.Sort();
 
                 foreach (int i in itemindex)
+                {
                     VM_LyricViewModel.LyricReserveList.Add(new ViewModel.LyricViewModel.LyricReserve(ViewModel.LyricViewModel.HymnList[i]));
+
+                    // 예약창에 보내는 데이터
+                    ViewModel.ReserveManagerViewModel.instance.ReserveDataManager.addReserve(
+                        new SongReserveDataUnit(ViewModel.LyricViewModel.HymnList[i]));
+                }
             }
         }
     }

@@ -209,7 +209,15 @@
                                     </Style>
                                 </ListBox.ItemContainerStyle>
                             </ListBox>
-                            <Button Grid.Row="2" Click="ReadingOutputButton_Click">선택된 교독문 출력하기</Button>
+                            <Grid Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="15*"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="8*"/>
+                                </Grid.ColumnDefinitions>
+                                <Button Click="ReadingOutputButton_Click" Content="선택된 교독문&#10;출력하기" HorizontalContentAlignment="Center"></Button>
+                                <Button Grid.Column="2" Click="ReadingReserveButton_Click" Content="교독문&#10;예약하기"  HorizontalContentAlignment="Center"  Background="#FFCBFFB9"></Button>
+                            </Grid>
                         </Grid>
                     </Border>
                     <!--찬양곡 Control-->
