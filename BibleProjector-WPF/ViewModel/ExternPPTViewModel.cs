@@ -33,7 +33,7 @@ namespace BibleProjector_WPF.ViewModel
                 }
             }
 
-            Powerpoint.ExternPPTs.Initialize(ExternPPTList_fullpath.ToArray());
+            Powerpoint.ExternPPTs.Initialize_All(ExternPPTList_fullpath.ToArray());
         }
 
         public string getSaveData()

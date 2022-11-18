@@ -50,6 +50,11 @@ namespace BibleProjector_WPF.ViewModel
             content_in = value;
         }
 
+        public int getIndexInList()
+        {
+            return LyricViewModel.LyricList.IndexOf(this);
+        }
+
         // 출력
         public virtual string[][][] makeSongData(int linePerPage)
         {
@@ -449,7 +454,7 @@ namespace BibleProjector_WPF.ViewModel
         }
 
         // 가사 리스트
-        public BindingList<SingleLyric> LyricList { get; set; }
+        static public BindingList<SingleLyric> LyricList { get; set; }
 
         // 검색 문구
         private string SearchText_in = DEFAUL_SEARCH_TEXT;
@@ -487,7 +492,7 @@ namespace BibleProjector_WPF.ViewModel
         // =================================== 찬송가 탭
 
         // 찬송가 리스트
-        public BindingList<SingleHymn> HymnList { get; set; }
+        static public BindingList<SingleHymn> HymnList { get; set; }
         private SingleHymn HymnSelection_in;
         public SingleHymn HymnSelection
         {
@@ -608,7 +613,7 @@ namespace BibleProjector_WPF.ViewModel
 
             if (newLyric != null)
             {
-                LyricList.Add(newLyric);
+                insertInOrder(newLyric);
                 if (lastSearchPattern != null)
                 {
                     refreshSearchItem(newLyric, lastSearchPattern);
@@ -616,6 +621,18 @@ namespace BibleProjector_WPF.ViewModel
                 }
                 currentLyric = newLyric;
             }
+        }
+        void insertInOrder(SingleLyric newLyric) 
+        {
+            int i = 0;
+            for(; i < LyricList.Count; i++)
+                if (newLyric.title.CompareTo(LyricList[i].title) <= 0)
+                {
+                    LyricList.Insert(i, newLyric);
+                    break;
+                }
+            if (i == LyricList.Count)
+                LyricList.Insert(i, newLyric);
         }
 
         public bool RunDelete()

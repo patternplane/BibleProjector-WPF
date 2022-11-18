@@ -1,6 +1,7 @@
 ﻿using BibleProjector_WPF.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +25,25 @@ namespace BibleProjector_WPF.module
         protected abstract ReserveType getReserveType();
         public abstract string getContentInfo();
         public abstract string getFileSaveText();
+
+        static public ReserveDataUnit ReserveDataUnitFactory(ReserveType type, string FileSaveData)
+        {
+            switch (type) 
+            {
+                case ReserveType.Bible:
+                    return new BibleReserveDataUnit(FileSaveData);    
+                case ReserveType.Reading:
+                    return new ReadingReserveDataUnit(FileSaveData);
+                case ReserveType.Song:
+                    return new SongReserveDataUnit(FileSaveData);
+                case ReserveType.ExternPPT:
+                    if (!ExternPPTReserveDataUnit.isAvailData(FileSaveData))
+                        return null;
+                    return new ExternPPTReserveDataUnit(FileSaveData);
+                default:
+                    return new EmptyReserveDataUnit();
+            }
+        }
     }
 
     public class EmptyReserveDataUnit : ReserveDataUnit
@@ -138,7 +158,10 @@ namespace BibleProjector_WPF.module
 
         public override string getFileSaveText()
         {
-            return 
+            if (isHymn)
+                return "-" + lyric.title;
+            else
+                return lyric.getIndexInList().ToString();
         }
         void Initializer(SingleLyric lyric)
         {
@@ -156,7 +179,14 @@ namespace BibleProjector_WPF.module
         }
         public SongReserveDataUnit(string SaveData)
         {
-            Initializer
+            // viewModel 설계의 잘못으로
+            // Model에서 가져와야 할 데이터를
+            // viewModel에서 가져오고 있다.
+            int songUID = int.Parse(SaveData);
+            if (songUID < 0)
+                Initializer(ViewModel.LyricViewModel.HymnList[-songUID]);
+            else
+                Initializer(ViewModel.LyricViewModel.LyricList[songUID]);
         }
     }
     
@@ -174,11 +204,28 @@ namespace BibleProjector_WPF.module
 
         public string PPTfilePath;
 
+        public override string getFileSaveText()
+        {
+            return PPTfilePath;
+        }
+
+        // 설계 마음에 안들어
+        static public bool isAvailData(string fullFilePath)
+        {
+            if (new FileInfo(fullFilePath).Exists)
+                return true;
+            return false;
+        }
+
         public ExternPPTReserveDataUnit(string fullFilePath)
         {
             displayInfo_in = System.IO.Path.GetFileName(fullFilePath) + " : (" + fullFilePath + ")";
 
+            // 설계 마음에 안듦
+            if (!isAvailData(fullFilePath))
+                throw new Exception("없는 PPT 파일!");
             PPTfilePath = fullFilePath;
+            Powerpoint.ExternPPTs.Initialize_Single(fullFilePath);
         }
     }
 

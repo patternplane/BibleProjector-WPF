@@ -15,8 +15,13 @@ namespace BibleProjector_WPF.ViewModel
 {
     internal class ReserveManagerViewModel : INotifyPropertyChanged
     {
+        // 이거 말고 더 좋은 방법 있을텐데
+        static public ReserveManagerViewModel VM_ReserveManager;
+
         public ReserveManagerViewModel()
         {
+            ReserveManagerViewModel.VM_ReserveManager = this;
+
             reserveDataManager = new ReserveDataManager();
             
             // 옵션 탭
@@ -31,16 +36,27 @@ namespace BibleProjector_WPF.ViewModel
             makeListFromSaveData();
 
             // 리스트 테스트용 항목들
-            reserveDataManager.addReserve(new module.EmptyReserveDataUnit());
+            /*reserveDataManager.addReserve(new module.EmptyReserveDataUnit());
             reserveDataManager.addReserve(new module.BibleReserveDataUnit("05","003","005"));
             reserveDataManager.addReserve(new module.BibleReserveDataUnit("15", "006", "010"));
-            reserveDataManager.addReserve(new module.BibleReserveDataUnit("1", "007", "015"));
+            reserveDataManager.addReserve(new module.BibleReserveDataUnit("1", "007", "015"));*/
         }
 
         // 프로그램 불러온 저장데이터 가공
         void makeListFromSaveData()
         {
-            module.ProgramData.getReserveData(this);
+            string[] rawData = module.ProgramData.getReserveData(this)
+                .Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+
+            ReserveDataUnit data;
+            for (int i = 0; i < rawData.Count(); i += 2)
+            {
+                data = ReserveDataUnit.ReserveDataUnitFactory(
+                        (ReserveType)int.Parse(rawData[i]),
+                        rawData[i + 1]);
+                if (data != null)
+                    reserveDataManager.addReserve(data);
+            }
         }
 
         // 프로그램 종료시 저장값 생성 메소드

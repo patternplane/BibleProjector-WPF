@@ -208,7 +208,7 @@ namespace BibleProjector_WPF
                 itemindex.Sort();
 
                 foreach (int i in itemindex)
-                    VM_LyricViewModel.LyricReserveList.Add(new ViewModel.LyricViewModel.LyricReserve(VM_LyricViewModel.LyricList[i]));
+                    VM_LyricViewModel.LyricReserveList.Add(new ViewModel.LyricViewModel.LyricReserve(ViewModel.LyricViewModel.LyricList[i]));
             }
             if (LyricReserveSelectTabControl.SelectedIndex == 1)
             {
@@ -221,7 +221,7 @@ namespace BibleProjector_WPF
                 itemindex.Sort();
 
                 foreach (int i in itemindex)
-                    VM_LyricViewModel.LyricReserveList.Add(new ViewModel.LyricViewModel.LyricReserve(VM_LyricViewModel.HymnList[i]));
+                    VM_LyricViewModel.LyricReserveList.Add(new ViewModel.LyricViewModel.LyricReserve(ViewModel.LyricViewModel.HymnList[i]));
             }
         }
     }
