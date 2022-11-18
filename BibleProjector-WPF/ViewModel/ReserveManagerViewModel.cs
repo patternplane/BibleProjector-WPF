@@ -46,7 +46,7 @@ namespace BibleProjector_WPF.ViewModel
         void makeListFromSaveData()
         {
             string[] rawData = module.ProgramData.getReserveData(this)
-                .Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+                .Split(new string[] { "§", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
 
             ReserveDataUnit data;
             for (int i = 0; i < rawData.Count(); i += 2)

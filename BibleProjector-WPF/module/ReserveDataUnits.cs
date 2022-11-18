@@ -184,7 +184,7 @@ namespace BibleProjector_WPF.module
             // viewModel에서 가져오고 있다.
             int songUID = int.Parse(SaveData);
             if (songUID < 0)
-                Initializer(ViewModel.LyricViewModel.HymnList[-songUID]);
+                Initializer(ViewModel.LyricViewModel.HymnList[(-songUID) - 1]);
             else
                 Initializer(ViewModel.LyricViewModel.LyricList[songUID]);
         }
