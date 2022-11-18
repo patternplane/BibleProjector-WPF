@@ -53,6 +53,9 @@ namespace BibleProjector_WPF
         // 설정 창
         BibleModifyWindow SubWindow_BibleModify = null;
 
+        // 예약 창
+        ReserveManagerWindow Window_Reserve = null;
+
         public static MainWindow ProgramMainWindow = null;
 
         // =================================================== 윈도우 레이아웃 변경 ======================================================
@@ -101,6 +104,7 @@ namespace BibleProjector_WPF
 
             BibleInitialize();
             ReadingInitialize();
+            ReserveInitialize();
 
             setLayout();
 
@@ -126,6 +130,12 @@ namespace BibleProjector_WPF
         void ReadingInitialize()
         {
             SetReadingList();
+        }
+
+        void ReserveInitialize()
+        {
+            Window_Reserve = new ReserveManagerWindow();
+            Window_Reserve.Show();
         }
 
         void setLayout()
@@ -164,6 +174,8 @@ namespace BibleProjector_WPF
                 SubWindow_BibleModify.ForceClose();
             if (ExternPPT.Ctrl_ExternPPT != null)
                 ExternPPT.Ctrl_ExternPPT.ForceClose();
+            if (Window_Reserve != null)
+                Window_Reserve.ForceClose();
 
             base.OnClosing(e);
         }

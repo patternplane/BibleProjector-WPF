@@ -30,6 +30,27 @@ namespace BibleProjector_WPF
             CloseButtonDisabler.DisableCloseButton(this);
         }
 
+        // =========================== Window Setting ============================
+
+        private bool AllowClose = false;
+
+        public void ForceClose()
+        {
+            AllowClose = true;
+            this.Close();
+        }
+
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            if (AllowClose)
+                e.Cancel = false;
+            else
+            {
+                e.Cancel = true;
+            }
+            base.OnClosing(e);
+        }
+
         // =========================== Event DataBinding ============================
 
         void Event_UpButtonClick(object sender, RoutedEventArgs e)
