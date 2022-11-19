@@ -22,12 +22,52 @@ namespace BibleProjector_WPF
     /// </summary>
     public partial class ReserveManagerWindow : Window
     {
+        // 허허 이게 맞나
+        static public ReserveManagerWindow ReserveWindow;
+
         public ReserveManagerWindow()
         {
             InitializeComponent();
             this.DataContext = new ReserveManagerViewModel();
+            ReserveWindow = this;
 
             CloseButtonDisabler.DisableCloseButton(this);
+            setLayout();
+        }
+
+        // ============================ 윈도우 레이아웃 ============================
+
+        void setLayout()
+        {
+            if (module.LayoutInfo.Layout_ReserveWindow.Width == -1)
+                return;
+
+            this.Width = module.LayoutInfo.Layout_ReserveWindow.Width;
+            this.Height = module.LayoutInfo.Layout_ReserveWindow.Height;
+            this.Left = module.LayoutInfo.Layout_ReserveWindow.x;
+            this.Top = module.LayoutInfo.Layout_ReserveWindow.y;
+        }
+
+        public void ResetLayout()
+        {
+            this.Width = 501;
+            this.Height = 532;
+        }
+
+        void changeSize(object sender, SizeChangedEventArgs e)
+        {
+            module.LayoutInfo.Layout_ReserveWindow.Width = this.ActualWidth;
+            module.LayoutInfo.Layout_ReserveWindow.Height = this.ActualHeight;
+            module.LayoutInfo.Layout_ReserveWindow.x = this.Left;
+            module.LayoutInfo.Layout_ReserveWindow.y = this.Top;
+        }
+
+        void changeLocate(object sender, EventArgs e)
+        {
+            module.LayoutInfo.Layout_ReserveWindow.Width = this.ActualWidth;
+            module.LayoutInfo.Layout_ReserveWindow.Height = this.ActualHeight;
+            module.LayoutInfo.Layout_ReserveWindow.x = this.Left;
+            module.LayoutInfo.Layout_ReserveWindow.y = this.Top;
         }
 
         // =========================== Window Setting ============================
