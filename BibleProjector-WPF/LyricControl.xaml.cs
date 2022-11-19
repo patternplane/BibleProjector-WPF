@@ -213,7 +213,7 @@ namespace BibleProjector_WPF
 
                     // 예약창에 보내는 데이터
                     ViewModel.ReserveManagerViewModel.instance.ReserveDataManager.addReserve(
-                        new SongReserveDataUnit(ViewModel.LyricViewModel.LyricList[i]));
+                        new module.SongReserveDataUnit(ViewModel.LyricViewModel.LyricList[i]));
             }
             }
             if (LyricReserveSelectTabControl.SelectedIndex == 1)
@@ -232,7 +232,7 @@ namespace BibleProjector_WPF
 
                     // 예약창에 보내는 데이터
                     ViewModel.ReserveManagerViewModel.instance.ReserveDataManager.addReserve(
-                        new SongReserveDataUnit(ViewModel.LyricViewModel.HymnList[i]));
+                        new module.SongReserveDataUnit(ViewModel.LyricViewModel.HymnList[i]));
                 }
             }
         }
