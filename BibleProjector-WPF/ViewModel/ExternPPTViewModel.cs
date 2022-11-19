@@ -11,14 +11,10 @@ namespace BibleProjector_WPF.ViewModel
 {
     class ExternPPTViewModel
     {
-        bool isOvelaped(string fileName)
-        {
-            return ReserveManagerViewModel.instance.ExternPPT_isNotOverlaped(fileName);
-        }
-
         public void RunAddPPT()
         {
-            foreach (string filePath in new module.ExternPPTManager().RegisterNewPPT(isOvelaped))
+            foreach (string filePath in new module.ExternPPTManager().getNewValidationPPT(
+                ReserveManagerViewModel.instance.ExternPPT_isNotOverlaped))
                 ReserveManagerViewModel.instance.AddReserveData(
                     new module.ExternPPTReserveDataUnit(filePath));
         }

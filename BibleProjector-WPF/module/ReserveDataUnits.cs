@@ -38,8 +38,6 @@ namespace BibleProjector_WPF.module
                 case ReserveType.Song:
                     return new SongReserveDataUnit(FileSaveData);
                 case ReserveType.ExternPPT:
-                    if (!ExternPPTReserveDataUnit.isAvailData(FileSaveData))
-                        return null;
                     return new ExternPPTReserveDataUnit(FileSaveData);
                 default:
                     return new EmptyReserveDataUnit();
@@ -228,23 +226,12 @@ namespace BibleProjector_WPF.module
             return PPTfilePath;
         }
 
-        // 설계 마음에 안들어
-        static public bool isAvailData(string fullFilePath)
-        {
-            if (new FileInfo(fullFilePath).Exists)
-                return true;
-            return false;
-        }
-
         public ExternPPTReserveDataUnit(string fullFilePath)
         {
             displayInfo_in = System.IO.Path.GetFileName(fullFilePath) + " : (" + fullFilePath + ")";
 
-            // 설계 마음에 안듦
-            if (!isAvailData(fullFilePath))
-                throw new Exception("없는 PPT 파일!");
             PPTfilePath = fullFilePath;
-            Powerpoint.ExternPPTs.Initialize_Single(fullFilePath);
+            Powerpoint.ExternPPTs.setPresentation(fullFilePath);
         }
 
         public override void ProcessBeforeDeletion()

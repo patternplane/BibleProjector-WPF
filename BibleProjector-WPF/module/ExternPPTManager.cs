@@ -95,10 +95,10 @@ namespace BibleProjector_WPF.module
         /// <returns></returns>
         public delegate bool isNotOverlaped(string fileName);
         /// <summary>
-        /// 외부 ppt를 등록하려 시도하며, 등록 성공한 ppt 목록을 반환합니다.
+        /// 사용자 선택 PPT들을 받아, 그 중 사용가능한 ppt 목록을 반환합니다.
         /// </summary>
         /// <returns></returns>
-        public string[] RegisterNewPPT(isNotOverlaped checkFunc)
+        public string[] getNewValidationPPT(isNotOverlaped checkFunc)
         {
             List<string> successFiles = new List<string>();
 
@@ -107,15 +107,15 @@ namespace BibleProjector_WPF.module
 
             bool hasDuplicated = false;
             bool hasTooBigFile = false;
+            int errorCode;
             foreach (string fileName in FD_ExternPPT.FileNames)
             {
-                if (Powerpoint.getSlideCountFromFile(fileName) > MAX_SLIDE_COUNT)
-                    hasTooBigFile = true;
-                else if (checkFunc(fileName))
-                {
-                    Powerpoint.ExternPPTs.setPresentation(fileName);
+                errorCode = checkAvailPPT(fileName,checkFunc);
+
+                if (errorCode == 0)
                     successFiles.Add(fileName);
-                }
+                else if (errorCode == 1)
+                    hasTooBigFile = true;
                 else
                     hasDuplicated = true;
             }
@@ -126,6 +126,23 @@ namespace BibleProjector_WPF.module
                 System.Windows.MessageBox.Show("하나 이상의 ppt가 이미 등록되어 있었습니다.\r\n중복된 등록은 할 수 없습니다.", "중복 등록", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
 
             return successFiles.ToArray();
+        }
+
+        /// <summary>
+        /// ppt파일이 등록 가능한지 판별하여 그 결과 에러코드를 반환합니다.
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns>성공 : 0, 허용 슬라이드 수 초과 : 1, 중복 등록 시도 : 2, 파일 없음 : 3</returns>
+        public int checkAvailPPT(string fileName, isNotOverlaped checkFunc)
+        {
+            if (!(new FileInfo(fileName).Exists))
+                return 3;
+            else if (!checkFunc(fileName))
+                return 2;
+            else if (Powerpoint.getSlideCountFromFile(fileName) > MAX_SLIDE_COUNT)
+                return 1;
+            else
+                return 0;
         }
     }
 }

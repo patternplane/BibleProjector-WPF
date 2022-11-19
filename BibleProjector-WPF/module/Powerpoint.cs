@@ -1033,21 +1033,8 @@ namespace BibleProjector_WPF
 
             // ============================================ 세팅 및 종료 ============================================ 
 
-            static public void Initialize_All(string[] paths)
-            {
-                Initialize_Setup();
-                foreach (string path in paths)
-                    ppt.Add(new ExternPPT(path));
-            }
-
-            static public void Initialize_Single(string path)
-            {
-                Initialize_Setup();
-                ppt.Add(new ExternPPT(path));
-            }
-
             static bool isSetup = false;
-            static void Initialize_Setup()
+            static void Initialize()
             {
                 if (isSetup)
                     return;
@@ -1065,6 +1052,7 @@ namespace BibleProjector_WPF
 
             static public void setPresentation(string path)
             {
+                Initialize();
                 ppt.Add(new ExternPPT(path));
             }
 

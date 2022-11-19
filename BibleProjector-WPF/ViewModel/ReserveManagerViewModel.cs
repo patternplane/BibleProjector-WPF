@@ -46,19 +46,34 @@ namespace BibleProjector_WPF.ViewModel
         // ===================================== 저장 데이터 처리 ====================================
         
         // 프로그램 불러온 저장데이터 가공
+        bool checkBeforeMakeReserve(ReserveType type, string SaveData)
+        {
+            if (type == ReserveType.ExternPPT)
+            {
+                if ((new ExternPPTManager().checkAvailPPT(SaveData, ExternPPT_isNotOverlaped)) != 0)
+                    return false;
+                else
+                    return true;
+            }
+            else
+            {
+                return true;
+            }
+        }
         void makeListFromSaveData()
         {
             string[] rawData = module.ProgramData.getReserveData(this)
                 .Split(new string[] { "§", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
 
-            ReserveDataUnit data;
+            ReserveType type;
             for (int i = 0; i < rawData.Count(); i += 2)
             {
-                data = ReserveDataUnit.ReserveDataUnitFactory(
-                        (ReserveType)int.Parse(rawData[i]),
-                        rawData[i + 1]);
-                if (data != null)
-                    AddReserveData(data);
+                type = (ReserveType)int.Parse(rawData[i]);
+                if (checkBeforeMakeReserve(type, rawData[i + 1]))
+                    AddReserveData(
+                        ReserveDataUnit.ReserveDataUnitFactory(
+                            type,
+                            rawData[i + 1]));
             }
         }
 
