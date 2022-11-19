@@ -10,6 +10,22 @@ using System.Threading.Tasks;
 
 namespace BibleProjector_WPF.ViewModel
 {
+    public enum ReserveSelectionsType
+    {
+        NoneSelected,
+        Mixed,
+        NULL_Single,
+        NULL_Multi,
+        Bible_Single,
+        Bible_Multi,
+        Reading_Single,
+        Reading_Multi,
+        Song_Single,
+        Song_Multi,
+        ExternPPT_Single,
+        ExternPPT_Multi
+    }
+
     public class ReserveDataManager
     {
         ObservableCollection<ReserveCollectionUnit> reserveList;
@@ -59,28 +75,78 @@ namespace BibleProjector_WPF.ViewModel
         {
             for (int i = reserveList.Count - 1; i >= 0; i--)
                 if (reserveList[i].isSelected)
+                {
+                    reserveList[i].reserveData.ProcessBeforeDeletion();
                     reserveList.RemoveAt(i);
+                }
+        }
+
+        public ReserveDataUnit[] getSelectionItems()
+        {
+            List<ReserveDataUnit> list = new List<ReserveDataUnit>();
+            foreach (ReserveCollectionUnit item in reserveList)
+                if (item.isSelected)
+                    list.Add(item.reserveData);
+            return list.ToArray();
         }
 
         /// <summary>
-        /// 리스트에서 선택된 항목들의 예약데이터 타입을 반환하며, 여러개일 경우 Null 타입으로 반환합니다.
+        /// 리스트에서 선택된 항목들의 예약데이터 타입을 반환합니다.
         /// </summary>
         /// <returns></returns>
-        public ReserveType getTypeOfSelection()
+        public ReserveSelectionsType getTypeOfSelection()
         {
             ReserveType type = ReserveType.NULL;
-            bool finded = false;
+            int finded = 0;
             for (int i = 0; i < reserveList.Count; i++)
                 if (reserveList[i].isSelected)
                 {
-                    if (finded)
-                        return ReserveType.NULL;
-
-                    type = reserveList[i].reserveType;
-                    finded = true;
+                    if (finded > 0)
+                    {
+                        if (type != reserveList[i].reserveType)
+                            return ReserveSelectionsType.Mixed;
+                    }
+                    else
+                        type = reserveList[i].reserveType;
+                    finded++;
                 }
 
-            return type;
+            if (finded == 0)
+                return ReserveSelectionsType.NoneSelected;
+            
+            return RTypeToRSType(type,(finded > 1));
+        }
+        ReserveSelectionsType RTypeToRSType(ReserveType type, bool isMulti)
+        {
+            if (isMulti)
+                switch (type)
+                {
+                    case ReserveType.NULL:
+                        return ReserveSelectionsType.NULL_Multi;
+                    case ReserveType.Bible:
+                        return ReserveSelectionsType.Bible_Multi;
+                    case ReserveType.Reading:
+                        return ReserveSelectionsType.Reading_Multi;
+                    case ReserveType.Song:
+                        return ReserveSelectionsType.Song_Multi;
+                    case ReserveType.ExternPPT:
+                        return ReserveSelectionsType.ExternPPT_Multi;
+                }
+            else
+                switch (type)
+                {
+                    case ReserveType.NULL:
+                        return ReserveSelectionsType.NULL_Single;
+                    case ReserveType.Bible:
+                        return ReserveSelectionsType.Bible_Single;
+                    case ReserveType.Reading:
+                        return ReserveSelectionsType.Reading_Single;
+                    case ReserveType.Song:
+                        return ReserveSelectionsType.Song_Single;
+                    case ReserveType.ExternPPT:
+                        return ReserveSelectionsType.ExternPPT_Single;
+                }
+            return ReserveSelectionsType.NoneSelected;
         }
     }
 

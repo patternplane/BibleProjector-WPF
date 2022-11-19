@@ -25,6 +25,7 @@ namespace BibleProjector_WPF.module
         protected abstract ReserveType getReserveType();
         public abstract string getContentInfo();
         public abstract string getFileSaveText();
+        public abstract void ProcessBeforeDeletion();
 
         static public ReserveDataUnit ReserveDataUnitFactory(ReserveType type, string FileSaveData)
         {
@@ -61,6 +62,11 @@ namespace BibleProjector_WPF.module
         public override string getFileSaveText()
         {
             return getContentInfo();
+        }
+
+        public override void ProcessBeforeDeletion()
+        {
+            return;
         }
     }
 
@@ -105,6 +111,11 @@ namespace BibleProjector_WPF.module
         {
             Initializer(SaveData.Substring(0,2),SaveData.Substring(2,3),SaveData.Substring(5,3));
         }
+
+        public override void ProcessBeforeDeletion()
+        {
+            return;
+        }
     }
 
     public class ReadingReserveDataUnit : ReserveDataUnit
@@ -138,6 +149,10 @@ namespace BibleProjector_WPF.module
         public ReadingReserveDataUnit(string SaveData)
         {
             Initializer(int.Parse(SaveData));
+        }
+        public override void ProcessBeforeDeletion()
+        {
+            return;
         }
     }
     
@@ -188,6 +203,10 @@ namespace BibleProjector_WPF.module
             else
                 Initializer(ViewModel.LyricViewModel.LyricList[songUID]);
         }
+        public override void ProcessBeforeDeletion()
+        {
+            return;
+        }
     }
     
     public class ExternPPTReserveDataUnit : ReserveDataUnit
@@ -226,6 +245,11 @@ namespace BibleProjector_WPF.module
                 throw new Exception("없는 PPT 파일!");
             PPTfilePath = fullFilePath;
             Powerpoint.ExternPPTs.Initialize_Single(fullFilePath);
+        }
+
+        public override void ProcessBeforeDeletion()
+        {
+            ExternPPTManager.UnlinkPPT(PPTfilePath);
         }
     }
 

@@ -55,17 +55,17 @@ namespace BibleProjector_WPF
 
         void Event_UpButtonClick(object sender, RoutedEventArgs e)
         {
-            ((ReserveManagerViewModel)DataContext).UpButtonClick();
+            ((ReserveManagerViewModel)DataContext).PutUpReserveData();
         }
 
         void Event_DownButtonClick(object sender, RoutedEventArgs e)
         {
-            ((ReserveManagerViewModel)DataContext).DownButtonClick();
+            ((ReserveManagerViewModel)DataContext).PutDownReserveData();
         }
 
         void Event_DeleteButtonClick(object sender, RoutedEventArgs e)
         {
-            ((ReserveManagerViewModel)DataContext).DeleteButtonClick();
+            ((ReserveManagerViewModel)DataContext).DeleteReserveData();
         }
 
         void Event_ReserveListKeyDown(object sender, KeyEventArgs e)

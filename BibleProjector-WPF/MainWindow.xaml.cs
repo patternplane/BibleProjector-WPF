@@ -172,8 +172,8 @@ namespace BibleProjector_WPF
                 LyricControl.Ctrl_Song.ForceClose();
             if (SubWindow_BibleModify != null)
                 SubWindow_BibleModify.ForceClose();
-            if (ExternPPT.Ctrl_ExternPPT != null)
-                ExternPPT.Ctrl_ExternPPT.ForceClose();
+            if (ViewModel.ReserveOptionViewModels.ExternPPT.Ctrl_ExternPPT != null)
+                ViewModel.ReserveOptionViewModels.ExternPPT.Ctrl_ExternPPT.ForceClose();
             if (Window_Reserve != null)
                 Window_Reserve.ForceClose();
 

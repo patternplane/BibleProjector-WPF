@@ -15,7 +15,6 @@ namespace BibleProjector_WPF.module
         // 데이터를 가진 객체에 접근하기 위한 참조변수들
         static ViewModel.BibleReserveData VM_BibleReserve;
         static ViewModel.LyricViewModel VM_LyricViewModel;
-        static ViewModel.ExternPPTViewModel VM_ExternPPT;
 
         // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
         // ■■■■■■■■■■■■■ 공사부근 : 여러 곳의 예약을 하나로 통합중  ■■■■■■■■■■■■■■
@@ -36,7 +35,6 @@ namespace BibleProjector_WPF.module
         const string HYMN_DATA = PROGRAM_DATA_PATH + "\\Hymns";
         const string OPTION_DATA = PROGRAM_DATA_PATH + "\\Option";
         const string LAYOUT_DATA = PROGRAM_DATA_PATH + "\\LayoutData";
-        const string EXTERN_PPT_DATA = PROGRAM_DATA_PATH + "\\ExternPPTpaths";
 
         // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
         // ■■■■■■■■■■■■■ 공사부근 : 여러 곳의 예약을 하나로 통합중  ■■■■■■■■■■■■■■
@@ -54,7 +52,6 @@ namespace BibleProjector_WPF.module
             saveLyricData();
             saveOptionData();
             saveLayoutData();
-            saveExternPPTData();
 
             // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
             // ■■■■■■■■■■■■■ 공사부근 : 여러 곳의 예약을 하나로 통합중  ■■■■■■■■■■■■■■
@@ -105,13 +102,6 @@ namespace BibleProjector_WPF.module
         {
             StreamWriter file = new StreamWriter(LAYOUT_DATA, false);
             file.Write(module.LayoutInfo.getSaveData());
-            file.Close();
-        }
-
-        static void saveExternPPTData()
-        {
-            StreamWriter file = new StreamWriter(EXTERN_PPT_DATA, false);
-            file.Write(VM_ExternPPT.getSaveData());
             file.Close();
         }
 
@@ -184,12 +174,6 @@ namespace BibleProjector_WPF.module
         public static string getLayoutData()
         {
             return getDataFromFile(LAYOUT_DATA);
-        }
-
-        public static string getExternPPTData(ViewModel.ExternPPTViewModel ExternPPTViewModel)
-        {
-            VM_ExternPPT = ExternPPTViewModel;
-            return getDataFromFile(EXTERN_PPT_DATA);
         }
 
         // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■

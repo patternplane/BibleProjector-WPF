@@ -20,9 +20,33 @@ namespace BibleProjector_WPF.ReserveOptionViews
     /// </summary>
     public partial class ExternPPT : UserControl
     {
+
+        ViewModel.ReserveOptionViewModels.ExternPPT VM_ExternPPT = null;
+
         public ExternPPT()
         {
             InitializeComponent();
+
+            this.DataContext = VM_ExternPPT = new ViewModel.ReserveOptionViewModels.ExternPPT();
+        }
+
+        // ==================================== 항목 파일 열기/새로고침 =================================
+
+        void PPTOpen_Click(object sender, RoutedEventArgs e)
+        {
+            VM_ExternPPT.RunModifyOpenPPT();
+        }
+
+        void Refresh_Click(object sender, RoutedEventArgs e)
+        {
+            VM_ExternPPT.RunRefreshPPT();
+        }
+
+        // ==================================== 실행 =================================
+
+        void PPTRun_Click(object sender, RoutedEventArgs e)
+        {
+            VM_ExternPPT.PPTRun();
         }
     }
 }

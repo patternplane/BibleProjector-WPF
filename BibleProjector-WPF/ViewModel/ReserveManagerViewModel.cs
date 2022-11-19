@@ -9,6 +9,7 @@ using System.Linq;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace BibleProjector_WPF.ViewModel
@@ -42,6 +43,8 @@ namespace BibleProjector_WPF.ViewModel
             reserveDataManager.addReserve(new module.BibleReserveDataUnit("1", "007", "015"));*/
         }
 
+        // ===================================== 저장 데이터 처리 ====================================
+        
         // 프로그램 불러온 저장데이터 가공
         void makeListFromSaveData()
         {
@@ -55,7 +58,7 @@ namespace BibleProjector_WPF.ViewModel
                         (ReserveType)int.Parse(rawData[i]),
                         rawData[i + 1]);
                 if (data != null)
-                    reserveDataManager.addReserve(data);
+                    AddReserveData(data);
             }
         }
 
@@ -72,6 +75,8 @@ namespace BibleProjector_WPF.ViewModel
             }
             return str.ToString();
         }
+
+        // ===================================== 바인딩 속성 ====================================
 
         ReserveDataManager reserveDataManager;
         public ReserveDataManager ReserveDataManager
@@ -90,19 +95,42 @@ namespace BibleProjector_WPF.ViewModel
             }
         }
 
-        public void UpButtonClick()
+        ReserveSelectionsType _selectionType = ReserveSelectionsType.NULL_Single;
+        public ReserveSelectionsType selectionType { get { return _selectionType; } set { _selectionType = value; OnPropertyChanged("selectionType"); } }
+
+        // ===================================== 메소드 ====================================
+
+        public bool ExternPPT_isNotOverlaped(string filePath)
+        {
+            foreach (ReserveCollectionUnit item in ReserveDataManager.ReserveList)
+                if (item.reserveType == module.ReserveType.ExternPPT
+                    && ((module.ExternPPTReserveDataUnit)item.reserveData).PPTfilePath.CompareTo(filePath) == 0)
+                    return false;
+
+            return true;
+        }
+
+        public void AddReserveData(module.ReserveDataUnit data)
+        {
+            reserveDataManager.addReserve(data);
+        }
+
+        public void DeleteReserveData()
+        {
+            if (MessageBox.Show("선택된 예약항목들을 리스트에서 삭제하시겠습니까?", "예약 항목 삭제", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.Cancel)
+                return;
+
+            reserveDataManager.deleteSelection();
+        }
+
+        public void PutUpReserveData()
         {
             reserveDataManager.moveSelectionUp();
         }
 
-        public void DownButtonClick()
+        public void PutDownReserveData()
         {
             reserveDataManager.moveSelectionDown();
-        }
-
-        public void DeleteButtonClick()
-        {
-            reserveDataManager.deleteSelection();
         }
 
         public void ListKeyInputed(KeyEventArgs e)
@@ -111,26 +139,40 @@ namespace BibleProjector_WPF.ViewModel
                 reserveDataManager.deleteSelection();
         }
 
+        public ReserveDataUnit[] getSelectionItems()
+        {
+            return reserveDataManager.getSelectionItems();
+        }
+
+        public ReserveSelectionsType getTypeOfSelection()
+        {
+            return ReserveDataManager.getTypeOfSelection();
+        }
+
         public void ListSelectionChanged()
         {
-            switch (ReserveDataManager.getTypeOfSelection())
+            ReserveSelectionsType type = ReserveDataManager.getTypeOfSelection();
+            switch (type)
             {
-                case ReserveType.Bible:
+                case ReserveSelectionsType.Bible_Single:
                     ReserveOptionViewModel = ROViewModels[(int)ReserveType.Bible];
                     break;
-                case ReserveType.Reading:
+                case ReserveSelectionsType.Reading_Single:
                     ReserveOptionViewModel = ROViewModels[(int)ReserveType.Reading];
                     break;
-                case ReserveType.Song:
+                case ReserveSelectionsType.Song_Single:
                     ReserveOptionViewModel = ROViewModels[(int)ReserveType.Song];
                     break;
-                case ReserveType.ExternPPT:
+                case ReserveSelectionsType.ExternPPT_Single:
+                case ReserveSelectionsType.ExternPPT_Multi:
                     ReserveOptionViewModel = ROViewModels[(int)ReserveType.ExternPPT];
                     break;
                 default :
                     ReserveOptionViewModel = ROViewModels[(int)ReserveType.NULL];
                     break;
             }
+
+            selectionType = type;
         }
 
         // INotifyPropertyChanged 인터페이스 관련
