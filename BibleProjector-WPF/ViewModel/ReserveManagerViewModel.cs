@@ -117,6 +117,9 @@ namespace BibleProjector_WPF.ViewModel
 
         public void DeleteReserveData()
         {
+            if (getTypeOfSelection() == ReserveSelectionsType.NoneSelected)
+                return;
+
             if (MessageBox.Show("선택된 예약항목들을 리스트에서 삭제하시겠습니까?", "예약 항목 삭제", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.Cancel)
                 return;
 
@@ -125,18 +128,24 @@ namespace BibleProjector_WPF.ViewModel
 
         public void PutUpReserveData()
         {
+            if (getTypeOfSelection() == ReserveSelectionsType.NoneSelected)
+                return;
+            
             reserveDataManager.moveSelectionUp();
         }
 
         public void PutDownReserveData()
         {
+            if (getTypeOfSelection() == ReserveSelectionsType.NoneSelected)
+                return;
+
             reserveDataManager.moveSelectionDown();
         }
 
         public void ListKeyInputed(KeyEventArgs e)
         {
             if (e.Key == Key.Delete)
-                reserveDataManager.deleteSelection();
+                DeleteReserveData();
         }
 
         public ReserveDataUnit[] getSelectionItems()
