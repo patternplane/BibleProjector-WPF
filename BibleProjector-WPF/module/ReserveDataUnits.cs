@@ -249,7 +249,7 @@ namespace BibleProjector_WPF.module
 
         public override void ProcessBeforeDeletion()
         {
-            ExternPPTManager.UnlinkPPT(PPTfilePath);
+            new ExternPPTManager().UnlinkPPT(PPTfilePath);
         }
     }
 

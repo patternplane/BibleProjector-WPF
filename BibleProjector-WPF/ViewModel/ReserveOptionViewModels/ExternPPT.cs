@@ -72,7 +72,7 @@ namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
             if (filePaths.Count() == 0)
                 return;
 
-            module.ExternPPTManager.ModifyOpenPPT(filePaths);
+            new module.ExternPPTManager().ModifyOpenPPT(filePaths);
         }
 
         public void RunRefreshPPT()
@@ -81,7 +81,7 @@ namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
             if (filePaths.Count() == 0)
                 return;
 
-            module.ExternPPTManager.RefreshPPT(filePaths);
+            new module.ExternPPTManager().RefreshPPT(filePaths);
 
             if (Ctrl_ExternPPT != null)
                 foreach (string path in filePaths)

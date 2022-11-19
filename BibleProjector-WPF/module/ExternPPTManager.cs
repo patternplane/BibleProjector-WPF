@@ -9,7 +9,38 @@ namespace BibleProjector_WPF.module
 {
     internal class ExternPPTManager
     {
-        static public void ModifyOpenPPT(string[] pptFullPaths)
+
+        public ExternPPTManager()
+        {
+            SetFileDialogs();
+        }
+
+        // ================================ 상수 ==============================
+
+        const int MAX_SLIDE_COUNT = 200;
+
+        // ================================== 파일 찾기 ===========================
+
+        static bool isSetUp = false;
+        static System.Windows.Forms.OpenFileDialog FD_ExternPPT;
+
+        void SetFileDialogs()
+        {
+            if (isSetUp)
+                return;
+
+            FD_ExternPPT = new System.Windows.Forms.OpenFileDialog();
+
+            FD_ExternPPT.InitialDirectory = System.IO.Directory.GetCurrentDirectory();
+            FD_ExternPPT.Multiselect = true;
+            FD_ExternPPT.Filter = "PowerPoint파일(*.ppt,*.pptx,*.pptm)|*.ppt;*.pptx;*.pptm";
+
+            isSetUp = true;
+        }
+
+        // ================================== 메서드 ===========================
+
+        public void ModifyOpenPPT(string[] pptFullPaths)
         {
             StringBuilder nonFile = new StringBuilder(50);
 
@@ -27,19 +58,19 @@ namespace BibleProjector_WPF.module
                 System.Windows.MessageBox.Show("해당 PPT파일들은 원본이 없어 열지 못했습니다!" + nonFile.ToString(), "파일 없음", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
         }
 
-        static public void UnlinkPPT(string filePath)
+        public void UnlinkPPT(string filePath)
         {
             if (ExternPPTControl.ExternPPTControlAccess != null)
                 ExternPPTControl.ExternPPTControlAccess.CheckDeletedPPTAndClose(Path.GetFileName(filePath));
             Powerpoint.ExternPPTs.closeSingle(Powerpoint.EXTERN_TEMP_DIRECTORY + Path.GetFileName(filePath));
         }
-        static public void UnlinkPPT(string[] pptFullPaths)
+        public void UnlinkPPT(string[] pptFullPaths)
         {
             for (int i = 0; i < pptFullPaths.Length; i++)
                 UnlinkPPT(pptFullPaths[i]);
         }
 
-        static public void RefreshPPT(string[] pptFullPaths)
+        public void RefreshPPT(string[] pptFullPaths)
         {
             StringBuilder nonFrame = new StringBuilder(50);
 
@@ -55,6 +86,46 @@ namespace BibleProjector_WPF.module
             }
             if (nonFrame.Length != 0)
                 System.Windows.MessageBox.Show("해당 PPT파일들은 원본이 없어 새로고침하지 못했습니다!" + nonFrame.ToString(), "파일 없음", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+        }
+
+        /// <summary>
+        /// 해당 외부ppt파일을 중복/중복이 아니라고 판단하는 함수입니다.
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public delegate bool isNotOverlaped(string fileName);
+        /// <summary>
+        /// 외부 ppt를 등록하려 시도하며, 등록 성공한 ppt 목록을 반환합니다.
+        /// </summary>
+        /// <returns></returns>
+        public string[] RegisterNewPPT(isNotOverlaped checkFunc)
+        {
+            List<string> successFiles = new List<string>();
+
+            if (FD_ExternPPT.ShowDialog() == System.Windows.Forms.DialogResult.Cancel)
+                return successFiles.ToArray();
+
+            bool hasDuplicated = false;
+            bool hasTooBigFile = false;
+            foreach (string fileName in FD_ExternPPT.FileNames)
+            {
+                if (Powerpoint.getSlideCountFromFile(fileName) > MAX_SLIDE_COUNT)
+                    hasTooBigFile = true;
+                else if (checkFunc(fileName))
+                {
+                    Powerpoint.ExternPPTs.setPresentation(fileName);
+                    successFiles.Add(fileName);
+                }
+                else
+                    hasDuplicated = true;
+            }
+
+            if (hasTooBigFile)
+                System.Windows.MessageBox.Show("너무 큰 용량의 ppt를 등록하려 했습니다.\r\n파일당 허용하는 최대 슬라이드 수는 " + MAX_SLIDE_COUNT.ToString() + "개 입니다.", "너무 큰 파일 등록", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+            if (hasDuplicated)
+                System.Windows.MessageBox.Show("하나 이상의 ppt가 이미 등록되어 있었습니다.\r\n중복된 등록은 할 수 없습니다.", "중복 등록", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+
+            return successFiles.ToArray();
         }
     }
 }
