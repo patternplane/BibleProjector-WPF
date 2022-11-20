@@ -179,6 +179,28 @@ namespace BibleProjector_WPF.ViewModel
             set { _isSelected = value; }
         }
 
+        public string BackColor
+        {
+            get { return RTypeToColor(this.reserveType); }
+        }
+        string RTypeToColor(ReserveType type)
+        {
+            switch (type)
+            {
+                case ReserveType.Bible:
+                    return "#FF99D9EA";
+                case ReserveType.Reading:
+                    return "#FFEFE4B0";
+                case ReserveType.Song:
+                    return "#FFCEEF76";
+                case ReserveType.ExternPPT:
+                    return "#FFC8BFE7";
+                case ReserveType.NULL:
+                default:
+                    return "#FFC3C3C3";
+            }
+        }
+
         public module.ReserveDataUnit reserveData = null;
 
         public ReserveCollectionUnit(module.ReserveDataUnit reserveDataUnit)
