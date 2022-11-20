@@ -37,6 +37,7 @@
                     <Grid>
                         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                             <ListView 
+                                ScrollViewer.CanContentScroll="False"
                                 ItemsSource="{Binding ReserveDataManager.ReserveList}"
                                 KeyDown="Event_ReserveListKeyDown"
                                 SelectionChanged="Event_SelectionChanged">
