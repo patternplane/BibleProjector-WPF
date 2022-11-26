@@ -60,8 +60,8 @@ namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
             if (ReserveManagerViewModel.instance.getTypeOfSelection() == ReserveSelectionsType.ExternPPT_Single
                 || ReserveManagerViewModel.instance.getTypeOfSelection() == ReserveSelectionsType.ExternPPT_Multi)
             {
-                foreach (module.ExternPPTReserveDataUnit item in ReserveManagerViewModel.instance.getSelectionItems())
-                    filePaths.Add(item.PPTfilePath);
+                foreach (ReserveCollectionUnit item in ReserveManagerViewModel.instance.getSelectionItems())
+                    filePaths.Add(((module.ExternPPTReserveDataUnit)item.reserveData).PPTfilePath);
             }
             return filePaths.ToArray();
         }

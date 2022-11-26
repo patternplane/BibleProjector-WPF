@@ -96,12 +96,12 @@ namespace BibleProjector_WPF.ViewModel
                 }
         }
 
-        public ReserveDataUnit[] getSelectionItems()
+        public ReserveCollectionUnit[] getSelectionItems()
         {
-            List<ReserveDataUnit> list = new List<ReserveDataUnit>();
+            List<ReserveCollectionUnit> list = new List<ReserveCollectionUnit>();
             foreach (ReserveCollectionUnit item in reserveList)
                 if (item.isSelected)
-                    list.Add(item.reserveData);
+                    list.Add(item);
             return list.ToArray();
         }
 
