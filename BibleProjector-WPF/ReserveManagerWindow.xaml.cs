@@ -110,7 +110,8 @@ namespace BibleProjector_WPF
 
         void Event_ReserveListKeyDown(object sender, KeyEventArgs e)
         {
-            ((ReserveManagerViewModel)DataContext).ListKeyInputed(e);
+            if (e.Key == Key.Delete)
+                ((ReserveManagerViewModel)DataContext).DeleteReserveData();
         }
 
         void Event_SelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -147,13 +147,7 @@ namespace BibleProjector_WPF.ViewModel
             reserveDataManager.moveSelectionDown();
         }
 
-        public void ListKeyInputed(KeyEventArgs e)
-        {
-            if (e.Key == Key.Delete)
-                DeleteReserveData();
-        }
-
-        public ReserveDataUnit[] getSelectionItems()
+        public ReserveCollectionUnit[] getSelectionItems()
         {
             return reserveDataManager.getSelectionItems();
         }
