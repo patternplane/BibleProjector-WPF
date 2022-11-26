@@ -234,7 +234,7 @@ namespace BibleProjector_WPF.ViewModel
             }
         }
 
-        // ================================ 데이터 생성 및 변경 ==================
+        // ================================ 데이터 생성 및 변경 ================================
 
         public void ChangeReserveData(module.ReserveDataUnit data)
         {
@@ -245,6 +245,13 @@ namespace BibleProjector_WPF.ViewModel
         public ReserveCollectionUnit(module.ReserveDataUnit reserveDataUnit)
         {
             this.reserveData = reserveDataUnit;
+        }
+
+        // ================================ 메소드 ================================
+
+        public void startShow()
+        {
+            
         }
 
         // INotifyPropertyChanged 인터페이스 관련
