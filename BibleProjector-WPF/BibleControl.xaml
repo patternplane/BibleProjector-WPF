@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         Title="성경" Height="336.375" Width="533.438"
         KeyDown="Window_KeyDown"
+        Activated="Window_Activated"
         LocationChanged="changeLocate"
         SizeChanged="changeSize">
     <Grid>
