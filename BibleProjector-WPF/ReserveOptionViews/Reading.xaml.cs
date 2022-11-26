@@ -24,5 +24,10 @@ namespace BibleProjector_WPF.ReserveOptionViews
         {
             InitializeComponent();
         }
+
+        void Event_RunButtonClick(object sender, RoutedEventArgs e)
+        {
+            ((ViewModel.ReserveOptionViewModels.Reading)this.DataContext).ReadingRun();
+        }
     }
 }
