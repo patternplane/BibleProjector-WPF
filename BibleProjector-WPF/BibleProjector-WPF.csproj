@@ -125,6 +125,7 @@
     <Compile Include="ViewModel\ReserveOptionViewModels\ExternPPT.cs" />
     <Compile Include="ViewModel\ReserveOptionViewModels\Null.cs" />
     <Compile Include="ViewModel\ReserveOptionViewModels\Reading.cs" />
+    <Compile Include="ViewModel\ReserveOptionViewModels\IReserveOptionViewModel.cs" />
     <Compile Include="ViewModel\ReserveOptionViewModels\Song.cs" />
     <Compile Include="ViewModel\SongControlViewModel.cs" />
     <Compile Include="ViewModel\ReadingControlViewModel.cs" />
