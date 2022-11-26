@@ -167,6 +167,10 @@ namespace BibleProjector_WPF.ViewModel
 
     public class ReserveCollectionUnit : INotifyPropertyChanged
     {
+        // ============================= 속성 ====================================
+
+        public module.ReserveDataUnit reserveData = null;
+
         public String DisplayInfo
         {
             get { return completedDisplayInfo(); }
@@ -176,9 +180,23 @@ namespace BibleProjector_WPF.ViewModel
         {
             return "(" + reserveTypeToString(reserveData.reserveType) + ") " + reserveData.getContentInfo();
         }
-        public void refreshDisplayInfo()
+        string reserveTypeToString(ReserveType type)
         {
-            OnPropertyChanged("DisplayInfo");
+            switch (type)
+            {
+                case ReserveType.NULL:
+                    return "빈 데이터";
+                case ReserveType.Bible:
+                    return "성경";
+                case ReserveType.Reading:
+                    return "교독문";
+                case ReserveType.Song:
+                    return "찬양";
+                case ReserveType.ExternPPT:
+                    return "PPT";
+                default:
+                    return "오류";
+        }
         }
 
         public ReserveType reserveType
@@ -216,30 +234,17 @@ namespace BibleProjector_WPF.ViewModel
             }
         }
 
-        public module.ReserveDataUnit reserveData = null;
+        // ================================ 데이터 생성 및 변경 ==================
+
+        public void ChangeReserveData(module.ReserveDataUnit data)
+        {
+            this.reserveData = data;
+            OnPropertyChanged("");
+        }
 
         public ReserveCollectionUnit(module.ReserveDataUnit reserveDataUnit)
         {
             this.reserveData = reserveDataUnit;
-        }
-
-        string reserveTypeToString(ReserveType type)
-        {
-            switch (type)
-            {
-                case ReserveType.NULL:
-                    return "빈 데이터";
-                case ReserveType.Bible:
-                    return "성경";
-                case ReserveType.Reading:
-                    return "교독문";
-                case ReserveType.Song:
-                    return "찬양";
-                case ReserveType.ExternPPT:
-                    return "PPT";
-                default :
-                    return "오류";
-            }
         }
 
         // INotifyPropertyChanged 인터페이스 관련
