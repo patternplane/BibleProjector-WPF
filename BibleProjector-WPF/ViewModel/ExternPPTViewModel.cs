@@ -14,8 +14,8 @@ namespace BibleProjector_WPF.ViewModel
         public void RunAddPPT()
         {
             foreach (string filePath in new module.ExternPPTManager().getNewValidationPPT(
-                ReserveManagerViewModel.instance.ExternPPT_isNotOverlaped))
-                ReserveManagerViewModel.instance.AddReserveData(
+                ReserveDataManager.instance.ExternPPT_isNotOverlaped))
+                ReserveDataManager.instance.addReserve(
                     new module.ExternPPTReserveDataUnit(filePath));
         }
     }

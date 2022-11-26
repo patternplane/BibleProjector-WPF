@@ -50,7 +50,7 @@ namespace BibleProjector_WPF.ViewModel
         {
             if (type == ReserveType.ExternPPT)
             {
-                if ((new ExternPPTManager().checkAvailPPT(SaveData, ExternPPT_isNotOverlaped)) != 0)
+                if ((new ExternPPTManager().checkAvailPPT(SaveData, reserveDataManager.ExternPPT_isNotOverlaped)) != 0)
                     return false;
                 else
                     return true;
@@ -114,16 +114,6 @@ namespace BibleProjector_WPF.ViewModel
         public ReserveSelectionsType selectionType { get { return _selectionType; } set { _selectionType = value; OnPropertyChanged("selectionType"); } }
 
         // ===================================== 메소드 ====================================
-
-        public bool ExternPPT_isNotOverlaped(string filePath)
-        {
-            foreach (ReserveCollectionUnit item in ReserveDataManager.ReserveList)
-                if (item.reserveType == module.ReserveType.ExternPPT
-                    && ((module.ExternPPTReserveDataUnit)item.reserveData).PPTfilePath.CompareTo(filePath) == 0)
-                    return false;
-
-            return true;
-        }
 
         public void AddReserveData(module.ReserveDataUnit data)
         {

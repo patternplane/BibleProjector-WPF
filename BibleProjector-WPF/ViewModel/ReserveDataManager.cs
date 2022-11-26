@@ -28,6 +28,9 @@ namespace BibleProjector_WPF.ViewModel
 
     public class ReserveDataManager
     {
+        // 이거 말고 더 좋은 방법 있을텐데
+        static public ReserveDataManager instance;
+
         ObservableCollection<ReserveCollectionUnit> reserveList;
         public ObservableCollection<ReserveCollectionUnit> ReserveList
         {
@@ -37,7 +40,19 @@ namespace BibleProjector_WPF.ViewModel
 
         public ReserveDataManager()
         {
+            instance = this;
+
             reserveList = new ObservableCollection<ReserveCollectionUnit>();
+        }
+
+        public bool ExternPPT_isNotOverlaped(string filePath)
+        {
+            foreach (ReserveCollectionUnit item in ReserveList)
+                if (item.reserveType == module.ReserveType.ExternPPT
+                    && ((module.ExternPPTReserveDataUnit)item.reserveData).PPTfilePath.CompareTo(filePath) == 0)
+                    return false;
+
+            return true;
         }
 
         public void addReserve(module.ReserveDataUnit reserveData)
