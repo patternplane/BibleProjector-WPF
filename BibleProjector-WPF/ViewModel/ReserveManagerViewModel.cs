@@ -100,9 +100,9 @@ namespace BibleProjector_WPF.ViewModel
             private set { reserveDataManager = value; }
         }
 
-        object[] ROViewModels = new object[5];
-        object reserveOptionViewModel;
-        public object ReserveOptionViewModel
+        IReserveOptionViewModel[] ROViewModels = new IReserveOptionViewModel[5];
+        IReserveOptionViewModel reserveOptionViewModel;
+        public IReserveOptionViewModel ReserveOptionViewModel
         {
             get { return reserveOptionViewModel; } 
             set { reserveOptionViewModel = value;
@@ -196,6 +196,7 @@ namespace BibleProjector_WPF.ViewModel
                     break;
             }
 
+            ReserveOptionViewModel.GiveSelection(getSelectionItems());
             selectionType = type;
         }
 

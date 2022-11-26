@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
 {
-    class ExternPPT : INotifyPropertyChanged
+    class ExternPPT : IReserveOptionViewModel,INotifyPropertyChanged
     {
         // 컨트롤
         static public ExternPPTControl Ctrl_ExternPPT = null;
@@ -110,6 +110,11 @@ namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
                         );
                 Ctrl_ExternPPT.Show();
             }
+        }
+
+        public void GiveSelection(ReserveCollectionUnit[] data)
+        {
+            // 처리할 것 없음
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

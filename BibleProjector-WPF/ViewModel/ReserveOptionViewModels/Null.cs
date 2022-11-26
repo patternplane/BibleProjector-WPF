@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
 {
-    internal class Null
+    internal class Null : IReserveOptionViewModel
     {
+        public void GiveSelection(ReserveCollectionUnit[] data)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
