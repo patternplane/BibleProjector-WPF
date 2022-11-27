@@ -93,7 +93,7 @@ namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
                 System.Windows.MessageBox.Show("출력할 PPT를 선택해주세요!", "출력할 외부PPT 선택되지 않음", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
             else
                 new module.ShowStarter().ExternPPTShowStart(
-                    filePaths[0]
+                    System.IO.Path.GetFileName(filePaths[0])
                     , int.Parse(SlideStartNum_Text));
         }
 
