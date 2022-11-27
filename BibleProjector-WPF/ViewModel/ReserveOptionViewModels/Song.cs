@@ -10,7 +10,7 @@ namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
     {
         public void GiveSelection(ReserveCollectionUnit[] data)
         {
-            throw new NotImplementedException();
+            return;
         }
     }
 }
