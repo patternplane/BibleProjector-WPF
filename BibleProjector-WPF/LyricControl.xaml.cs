@@ -23,9 +23,6 @@ namespace BibleProjector_WPF
         // ViewModel
         ViewModel.LyricViewModel VM_LyricViewModel;
 
-        // 컨트롤
-        static public SongControl Ctrl_Song = null;
-
         // ============================================= 세팅 및 종료 ============================================= 
 
         public LyricControl()
@@ -97,22 +94,11 @@ namespace BibleProjector_WPF
                 MessageBox.Show("출력할 찬양곡을 선택해주세요!", "찬양곡 선택되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
             else
             {
-                // 곡별 사용할 틀에 대한 설계가 없어 수정되지 않음
-                if (Ctrl_Song == null)
-                {
-                    Ctrl_Song = new SongControl(
-                        VM_LyricViewModel.SelectedLyric.makeSongData(VM_LyricViewModel.LinePerSlide)
-                        , VM_LyricViewModel.SongFrameSelection.Path
-                        , VM_LyricViewModel.SelectedLyric.GetType() == typeof(ViewModel.SingleHymn));
-                    //Ctrl_Song.Owner = MainWindow.ProgramMainWindow;
-                }
-                else
-                    Ctrl_Song.ShowSong(
+                new module.ShowStarter().SongShowStart(
                         VM_LyricViewModel.SelectedLyric.makeSongData(VM_LyricViewModel.LinePerSlide)
                         , VM_LyricViewModel.SongFrameSelection.Path
                         , VM_LyricViewModel.SelectedLyric.GetType() == typeof(ViewModel.SingleHymn));
                 VM_LyricViewModel.currentLyricOuted();
-                Ctrl_Song.Show();
             }
         }
 

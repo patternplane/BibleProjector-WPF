@@ -45,11 +45,6 @@ namespace BibleProjector_WPF
         ViewModel.BibleReserveData VM_BibleReserveData;
 
 
-
-        // 컨트롤
-        BibleControl Ctrl_Bible = null;
-        ReadingControl Ctrl_Reading = null;
-
         // 설정 창
         BibleModifyWindow SubWindow_BibleModify = null;
 
@@ -164,16 +159,10 @@ namespace BibleProjector_WPF
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            if (Ctrl_Bible != null)
-                Ctrl_Bible.ForceClose();
-            if (Ctrl_Reading != null)
-                Ctrl_Reading.ForceClose();
-            if (LyricControl.Ctrl_Song != null)
-                LyricControl.Ctrl_Song.ForceClose();
+            new module.ControlWindowManager().ForceClose();
+
             if (SubWindow_BibleModify != null)
                 SubWindow_BibleModify.ForceClose();
-            if (ViewModel.ReserveOptionViewModels.ExternPPT.Ctrl_ExternPPT != null)
-                ViewModel.ReserveOptionViewModels.ExternPPT.Ctrl_ExternPPT.ForceClose();
             if (Window_Reserve != null)
                 Window_Reserve.ForceClose();
 
@@ -504,16 +493,7 @@ namespace BibleProjector_WPF
             else if (VM_BibleSelectData.Verse.CompareTo("") == 0)
                 MessageBox.Show("출력할 성경구절을 선택해주세요!", "성경 선택되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
             else
-            {
-                if (Ctrl_Bible == null)
-                {
-                    Ctrl_Bible = new BibleControl(VM_BibleSelectData.Book + VM_BibleSelectData.Chapter + VM_BibleSelectData.Verse);
-                    //Ctrl_Bible.Owner = this;
-                }
-                else
-                    Ctrl_Bible.ShowBible(VM_BibleSelectData.Book + VM_BibleSelectData.Chapter + VM_BibleSelectData.Verse);
-                Ctrl_Bible.Show();
-            }
+                new module.ShowStarter().BibleShowStart(VM_BibleSelectData.Book + VM_BibleSelectData.Chapter + VM_BibleSelectData.Verse);
         }
 
         // ======================================== 교독문 처리
@@ -530,16 +510,7 @@ namespace BibleProjector_WPF
             else if (ReadingListBox.SelectedIndex == -1)
                 MessageBox.Show("출력할 교독문을 선택해주세요!", "교독문 선택되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
             else
-            {
-                if (Ctrl_Reading == null)
-                {
-                    Ctrl_Reading = new ReadingControl(ReadingListBox.SelectedIndex);
-                    //Ctrl_Reading.Owner = this;
-                }
-                else
-                    Ctrl_Reading.ShowReading(ReadingListBox.SelectedIndex);
-                Ctrl_Reading.Show();
-            }
+                new module.ShowStarter().ReadingShowStart(ReadingListBox.SelectedIndex);
         }
 
         // ======================================== 교독문 예약처리

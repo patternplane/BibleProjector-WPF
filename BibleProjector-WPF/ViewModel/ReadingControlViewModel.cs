@@ -12,11 +12,6 @@ namespace BibleProjector_WPF.ViewModel
     {
         // ================================================ 세팅 ================================================
 
-        public ReadingControlViewModel(int ReadingNumber)
-        {
-            showReading(ReadingNumber);
-        }
-
         public void showReading(int ReadingNumber)
         {
             this.ReadingNumber = ReadingNumber;

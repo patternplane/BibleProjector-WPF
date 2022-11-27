@@ -66,10 +66,12 @@
     <Compile Include="ExternPPT.xaml.cs">
       <DependentUpon>ExternPPT.xaml</DependentUpon>
     </Compile>
+    <Compile Include="module\ControlWindowManager.cs" />
     <Compile Include="module\ExternPPTManager.cs" />
     <Compile Include="module\LayoutInfo.cs" />
     <Compile Include="module\ProgramOption.cs" />
     <Compile Include="module\ReserveDataUnits.cs" />
+    <Compile Include="module\ShowStarter.cs" />
     <Compile Include="Option.xaml.cs">
       <DependentUpon>Option.xaml</DependentUpon>
     </Compile>

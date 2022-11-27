@@ -12,11 +12,6 @@ namespace BibleProjector_WPF.ViewModel
     {
         // ================================================ 세팅 ================================================
 
-        public BibleControlViewModel(string Kjjeul)
-        {
-            showBible(Kjjeul);
-        }
-
         public void showBible(string Kjjeul)
         {
             this.Kjjeul = Kjjeul;

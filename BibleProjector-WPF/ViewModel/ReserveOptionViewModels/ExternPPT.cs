@@ -9,9 +9,6 @@ namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
 {
     class ExternPPT : IReserveOptionViewModel,INotifyPropertyChanged
     {
-        // 컨트롤
-        static public ExternPPTControl Ctrl_ExternPPT = null;
-
         public ExternPPT()
         {
             ReserveManagerViewModel.instance.PropertyChanged += ApplyPropertyChanged;
@@ -83,9 +80,10 @@ namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
 
             new module.ExternPPTManager().RefreshPPT(filePaths);
 
-            if (Ctrl_ExternPPT != null)
+            ExternPPTControlViewModel vm_ExternPPTControl = new module.ControlWindowManager().getExternPPTControlViewModel();
+            if (vm_ExternPPTControl != null)
                 foreach (string path in filePaths)
-                    Ctrl_ExternPPT.RefreshExternPPT(System.IO.Path.GetFileName(path));
+                    vm_ExternPPTControl.RefreshExternPPT(System.IO.Path.GetFileName(path));
         }
 
         public void PPTRun()
@@ -94,22 +92,9 @@ namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
             if (filePaths.Count() == 0)
                 System.Windows.MessageBox.Show("출력할 PPT를 선택해주세요!", "출력할 외부PPT 선택되지 않음", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
             else
-            {
-                if (Ctrl_ExternPPT == null)
-                {
-                    Ctrl_ExternPPT = new ExternPPTControl(
-                        filePaths[0]
-                        , int.Parse(SlideStartNum_Text)
-                        );
-                    //Ctrl_ExternPPT.Owner = MainWindow.ProgramMainWindow;
-                }
-                else
-                    Ctrl_ExternPPT.ShowExternPPT(
-                        filePaths[0]
-                        , int.Parse(SlideStartNum_Text)
-                        );
-                Ctrl_ExternPPT.Show();
-            }
+                new module.ShowStarter().ExternPPTShowStart(
+                    filePaths[0]
+                    , int.Parse(SlideStartNum_Text));
         }
 
         public void GiveSelection(ReserveCollectionUnit[] data)

@@ -14,11 +14,6 @@ namespace BibleProjector_WPF.ViewModel
 
         // ================================================ 세팅 ================================================
 
-        public ExternPPTControlViewModel(string fileName, int StartSlide)
-        {
-            ShowExternPPT(fileName,StartSlide);
-        }
-
         public void ShowExternPPT(string fileName, int StartSlide)
         {
             currentFileName = fileName;

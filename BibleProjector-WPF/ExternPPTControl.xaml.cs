@@ -29,24 +29,14 @@ namespace BibleProjector_WPF
                 this.Close();
         }
 
-        public ExternPPTControl(string fileName,int StartSlide)
+        public ExternPPTControl()
         {
             ExternPPTControlAccess = this;
 
             InitializeComponent();
-            this.DataContext = VM_ExternPPTControl = new ViewModel.ExternPPTControlViewModel(fileName, StartSlide);
+            this.DataContext = VM_ExternPPTControl = new ViewModel.ExternPPTControlViewModel();
             
             setLayout();
-        }
-
-        public void ShowExternPPT (string fileName, int StartSlide)
-        {
-            VM_ExternPPTControl.ShowExternPPT(fileName, StartSlide);
-        }
-
-        public void RefreshExternPPT(string fileName)
-        {
-            VM_ExternPPTControl.RefreshExternPPT(fileName);
         }
 
         void setLayout()
