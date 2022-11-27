@@ -118,5 +118,10 @@ namespace BibleProjector_WPF
         {
             ((ReserveManagerViewModel)DataContext).ListSelectionChanged();
         }
+
+        void Event_ItemDoubleClick(object sender, RoutedEventArgs e)
+        {
+            ((ReserveManagerViewModel)DataContext).startShow();
+        }
     }
 }

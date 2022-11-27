@@ -24,10 +24,5 @@ namespace BibleProjector_WPF
         {
             InitializeComponent();
         }
-
-        void Event_ItemDoubleClick(object sender, RoutedEventArgs e)
-        {
-            ((ViewModel.ReserveCollectionUnit)this.DataContext).startShow();
-        }
     }
 }

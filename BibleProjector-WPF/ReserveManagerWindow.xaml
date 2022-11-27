@@ -50,6 +50,7 @@
                                     <Style TargetType="ListViewItem">
                                         <Setter Property="IsSelected" Value="{Binding isSelected}"></Setter>
                                         <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                                        <EventSetter Event="MouseDoubleClick" Handler="Event_ItemDoubleClick"></EventSetter>
                                     </Style>
                                 </ListView.ItemContainerStyle>
                                 <ListView.ItemTemplate>

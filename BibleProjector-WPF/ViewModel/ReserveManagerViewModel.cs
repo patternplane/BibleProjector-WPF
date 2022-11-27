@@ -115,6 +115,10 @@ namespace BibleProjector_WPF.ViewModel
 
         // ===================================== 메소드 ====================================
 
+        public void startShow()
+        {
+        }
+
         public void AddReserveData(module.ReserveDataUnit data)
         {
             reserveDataManager.addReserve(data);

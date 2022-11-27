@@ -247,13 +247,6 @@ namespace BibleProjector_WPF.ViewModel
             this.reserveData = reserveDataUnit;
         }
 
-        // ================================ 메소드 ================================
-
-        public void startShow()
-        {
-            
-        }
-
         // INotifyPropertyChanged 인터페이스 관련
 
         public event PropertyChangedEventHandler PropertyChanged;
