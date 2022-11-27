@@ -635,8 +635,11 @@ namespace BibleProjector_WPF.ViewModel
                 LyricList.Insert(i, newLyric);
         }
 
-        public bool RunDelete()
+        public void RunDelete()
         {
+            if (MessageBox.Show("현재 선택된 곡을 삭제하시겠습니까?", "찬양곡 삭제", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
+                return;
+
             SingleLyric deleteItem = currentLyric;
             if (deleteLyric(currentLyric))
             {
@@ -648,7 +651,8 @@ namespace BibleProjector_WPF.ViewModel
                 }
             }
 
-            return (deleteItem == outedLyric) ;
+            if (deleteItem == outedLyric)
+                new module.ControlWindowManager().closeSongControl();
         }
 
         public void RunSetFromSearchValue()

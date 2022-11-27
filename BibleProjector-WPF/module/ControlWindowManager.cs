@@ -14,6 +14,8 @@ namespace BibleProjector_WPF.module
         static SongControl Ctrl_Song = null;
         static ExternPPTControl Ctrl_ExternPPT = null;
 
+        // ================================== 컨트롤 실행 ================================== 
+
         public BibleControlViewModel showBibleControl()
         {
             if (Ctrl_Bible == null)
@@ -47,12 +49,26 @@ namespace BibleProjector_WPF.module
             return (ExternPPTControlViewModel)Ctrl_ExternPPT.DataContext;
         }
 
+        // ================================== 컨트롤 ViewModel ================================== 
+
         public ExternPPTControlViewModel getExternPPTControlViewModel()
         {
             if (Ctrl_ExternPPT == null)
                 return null;
             return (ExternPPTControlViewModel)Ctrl_ExternPPT.DataContext;
         }
+
+        // ================================== 컨트롤 윈도우 조작 ================================== 
+
+        public void closeSongControl()
+        {
+            if (Ctrl_Song == null)
+                return;
+
+            Ctrl_Song.Close();
+        }
+
+        // ================================== 프로그램 종료 ================================== 
 
         public void ForceClose()
         {
