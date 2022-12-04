@@ -35,7 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>아이콘2.ico</ApplicationIcon>
+    <ApplicationIcon>1.1.1.0 아이콘.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -65,6 +65,7 @@
     <Compile Include="ExternPPT.xaml.cs">
       <DependentUpon>ExternPPT.xaml</DependentUpon>
     </Compile>
+    <Compile Include="module\HelpTextData.cs" />
     <Compile Include="module\LayoutInfo.cs" />
     <Compile Include="module\ProgramOption.cs" />
     <Compile Include="Option.xaml.cs">
@@ -218,6 +219,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="아이콘2.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="1.1.1.0 아이콘.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
