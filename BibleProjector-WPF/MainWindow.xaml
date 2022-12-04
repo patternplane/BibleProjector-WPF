@@ -224,8 +224,16 @@
                 </Grid>
             </TabItem>
 
+            <!--옵션-->
             <TabItem Header="설정">
                 <local:Option></local:Option>
+            </TabItem>
+
+            <!--도움말-->
+            <TabItem BorderBrush="#FFF7B3B3" Background="#FFF7B3B3" Header="도움말">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" x:Name="HelpViewer">
+                    <Binding Path="HelpText"></Binding>
+                </ScrollViewer>
             </TabItem>
         </TabControl>
     </Grid>

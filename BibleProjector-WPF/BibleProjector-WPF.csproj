@@ -65,6 +65,7 @@
     <Compile Include="ExternPPT.xaml.cs">
       <DependentUpon>ExternPPT.xaml</DependentUpon>
     </Compile>
+    <Compile Include="module\HelpTextData.cs" />
     <Compile Include="module\LayoutInfo.cs" />
     <Compile Include="module\ProgramOption.cs" />
     <Compile Include="Option.xaml.cs">
