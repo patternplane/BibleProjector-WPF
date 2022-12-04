@@ -142,6 +142,32 @@ namespace BibleProjector_WPF.ViewModel
             Powerpoint.ExternPPTs.TopMost(currentFileName);
         }
 
+        int inputedNum = 0;
+        public void NumInput(int num)
+        {
+            inputedNum = inputedNum * 10 + num;
+            if (inputedNum < 0)
+                inputedNum = int.MaxValue;
+        }
+
+        public void NumInput_Enter()
+        {
+            if (inputedNum > 0)
+            {
+                if (inputedNum > PPTImages.Count)
+                    CurrentPageIndex = PPTImages.Count - 1;
+                else
+                    CurrentPageIndex = inputedNum - 1;
+
+                inputedNum = 0;
+            }
+        }
+
+        public void NumInput_Remove()
+        {
+            inputedNum = 0;
+        }
+
         // ================================================ 동작 ================================================
 
         void SlideShowRun()
