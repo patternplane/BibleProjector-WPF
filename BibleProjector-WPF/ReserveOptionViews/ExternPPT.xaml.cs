@@ -44,7 +44,7 @@ namespace BibleProjector_WPF.ReserveOptionViews
         void PPTRun_Click(object sender, RoutedEventArgs e)
         {
             ((ViewModel.ReserveOptionViewModels.ExternPPT)this.DataContext)
-                .PPTRun();
+                .ShowContent();
         }
     }
 }

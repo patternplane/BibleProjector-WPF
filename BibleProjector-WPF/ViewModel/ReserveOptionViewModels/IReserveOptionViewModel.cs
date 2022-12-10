@@ -9,5 +9,6 @@ namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
     internal interface IReserveOptionViewModel
     {
         void GiveSelection(ReserveCollectionUnit[] data);
+        void ShowContent();
     }
 }

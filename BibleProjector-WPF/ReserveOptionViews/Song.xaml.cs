@@ -27,7 +27,7 @@ namespace BibleProjector_WPF.ReserveOptionViews
 
         public void Event_ShowButtonClick(object sender, RoutedEventArgs e)
         {
-            ((ViewModel.ReserveOptionViewModels.Song)this.DataContext).ShowLyric();
+            ((ViewModel.ReserveOptionViewModels.Song)this.DataContext).ShowContent();
         }
     }
 }

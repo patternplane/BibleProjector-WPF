@@ -45,7 +45,7 @@ namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
             selectionValue.ChangeReserveData(new module.SongReserveDataUnit(lyric));
         }
 
-        public void ShowLyric()
+        public void ShowContent()
         {
             SingleLyric songSelection = ((module.SongReserveDataUnit)selectionValue.reserveData).lyric;
 

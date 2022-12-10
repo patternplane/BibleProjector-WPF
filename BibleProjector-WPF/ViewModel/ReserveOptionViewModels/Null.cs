@@ -12,5 +12,10 @@ namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
         {
             return;
         }
+
+        public void ShowContent()
+        {
+            return;
+        }
     }
 }

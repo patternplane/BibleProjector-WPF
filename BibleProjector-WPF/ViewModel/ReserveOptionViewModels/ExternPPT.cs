@@ -87,7 +87,7 @@ namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
                     vm_ExternPPTControl.RefreshExternPPT(System.IO.Path.GetFileName(path));
         }
 
-        public void PPTRun()
+        public void ShowContent()
         {
             string[] filePaths = getSelectedPaths();
             if (filePaths.Count() == 0)
