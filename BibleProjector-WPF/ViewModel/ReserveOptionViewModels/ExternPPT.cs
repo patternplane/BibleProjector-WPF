@@ -16,6 +16,8 @@ namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
 
         // ================================== 속성 =================================
 
+        ReserveCollectionUnit[] selection;
+
         // 시작 슬라이드 번호 기입
         private string SlideStartNum_Text_in = "1";
         public string SlideStartNum_Text
@@ -53,14 +55,13 @@ namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
 
         string[] getSelectedPaths()
         {
-            List<string> filePaths = new List<string>(10);
-            if (ReserveManagerViewModel.instance.getTypeOfSelection() == ReserveSelectionsType.ExternPPT_Single
-                || ReserveManagerViewModel.instance.getTypeOfSelection() == ReserveSelectionsType.ExternPPT_Multi)
-            {
-                foreach (ReserveCollectionUnit item in ReserveManagerViewModel.instance.getSelectionItems())
-                    filePaths.Add(((module.ExternPPTReserveDataUnit)item.reserveData).PPTfilePath);
-            }
-            return filePaths.ToArray();
+            string[] paths = new string[selection.Length];
+
+            int i = 0;
+            foreach (ReserveCollectionUnit unit in selection)
+                paths[i++] = ((module.ExternPPTReserveDataUnit)unit.reserveData).PPTfilePath;
+
+            return paths;
         }
 
         public void RunModifyOpenPPT()
@@ -99,7 +100,7 @@ namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
 
         public void GiveSelection(ReserveCollectionUnit[] data)
         {
-            // 처리할 것 없음
+            selection = data;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
