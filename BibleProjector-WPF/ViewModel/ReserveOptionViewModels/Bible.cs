@@ -1,18 +1,84 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
 {
-    internal class Bible : IReserveOptionViewModel
+    internal class Bible : IReserveOptionViewModel, INotifyPropertyChanged
     {
-        module.BibleReserveDataUnit selection;
+        ReserveCollectionUnit selection;
+        module.BibleReserveDataUnit bibleData { get { return (module.BibleReserveDataUnit)selection.reserveData; } }
+
+        // ==================== 속성 ==================== 
+
+        public string[] KuenList { get; set; } = Database.getBibleTitles_string();
+        int[] _JangList;
+        public int[] JangList { get { return _JangList; } set { _JangList = value; } }
+        int[] _JeulList;
+        public int[] JeulList { get { return _JeulList; } set { _JeulList = value; } }
+
+        int _KuenSelection_index;
+        public int KuenSelection_index { get { return _KuenSelection_index; } set { _KuenSelection_index = value; KuenChanged(); } }
+        int _JangSelection;
+        public int JangSelection { get { return _JangSelection; } set { _JangSelection = value; JangChanged(); } }
+        int _JeulSelection;
+        public int JeulSelection { get { return _JeulSelection; } set { _JeulSelection = value; JeulChanged(); } }
+
+        void KuenChanged()
+        {
+            JangList = null;
+            NotifyPropertyChanged(nameof(JangList));
+            JeulList = null;
+            NotifyPropertyChanged(nameof(JeulList));
+
+            int JangCount = Database.getChapterCount((KuenSelection_index + 1).ToString("00")); ;
+            JangList = new int[JangCount];
+
+            for (int i = 1; i <= JangCount; i++)
+                JangList[i-1] = i;
+            NotifyPropertyChanged(nameof(JangList));
+        }
+
+        void JangChanged()
+        {
+            JeulList = null;
+            NotifyPropertyChanged(nameof(JeulList));
+
+            int JeulCount = Database.getVerseCount((KuenSelection_index + 1).ToString("00") + JangSelection.ToString("000"));
+            JeulList = new int[JeulCount];
+
+            for (int i = 1; i <= JeulCount; i++)
+                JeulList[i - 1] = i;
+            NotifyPropertyChanged(nameof(JeulList));
+        }
+
+        void JeulChanged()
+        {
+            selection.ChangeReserveData(new module.BibleReserveDataUnit(
+                (KuenSelection_index + 1).ToString("00")
+                , JangSelection.ToString("000")
+                , JeulSelection.ToString("000")));
+        }
+
+        // ==================== 메소드 ==================== 
 
         public void GiveSelection(ReserveCollectionUnit[] data)
         {
-            selection = (module.BibleReserveDataUnit)data[0].reserveData;
+            selection = data[0];
+
+            _KuenSelection_index = (int.Parse(bibleData.Book) - 1);
+            NotifyPropertyChanged(nameof(KuenSelection_index));
+            KuenChanged();
+
+            _JangSelection = int.Parse(bibleData.Chapter);
+            NotifyPropertyChanged(nameof(JangSelection));
+            JangChanged();
+
+            _JeulSelection = int.Parse(bibleData.Verse);
+            NotifyPropertyChanged(nameof(JeulSelection));
         }
 
         public void ShowContent()
@@ -21,9 +87,18 @@ namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
                     System.Windows.MessageBox.Show("성경 출력 틀ppt를 등록해주세요!", "ppt틀 등록되지 않음", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
             else
                 new module.ShowStarter().BibleShowStart(
-                    selection.Book
-                    + selection.Chapter
-                    + selection.Verse);
+                    bibleData.Book
+                    + bibleData.Chapter
+                    + bibleData.Verse);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string propertyName = "")
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
     }
 }
