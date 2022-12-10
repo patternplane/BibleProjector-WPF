@@ -117,6 +117,35 @@ namespace BibleProjector_WPF.ViewModel
 
         public void startShow()
         {
+            ReserveCollectionUnit[] selections = getSelectionItems();
+            ReserveCollectionUnit selection;
+            if (selections.Count() == 1)
+            {
+                selection = selections[0];
+
+                switch (selection.reserveType)
+                {
+                    case ReserveType.Bible:
+                        new ShowStarter().BibleShowStart(
+                            ((BibleReserveDataUnit)selection.reserveData).Book
+                            + ((BibleReserveDataUnit)selection.reserveData).Chapter
+                            + ((BibleReserveDataUnit)selection.reserveData).Verse);
+                        break;
+                    case ReserveType.Reading:
+                        new ShowStarter().ReadingShowStart(((ReadingReserveDataUnit)selection.reserveData).readingIndex);
+                        break;
+                    case ReserveType.Song:
+                        ((ReserveOptionViewModels.Song)ROViewModels[(int)ReserveType.Song]).ShowLyric();
+                        break;
+                    case ReserveType.ExternPPT:
+                        new ShowStarter().ExternPPTShowStart(
+                            ((ExternPPTReserveDataUnit)selection.reserveData).PPTfilePath
+                            , int.Parse(((ReserveOptionViewModels.ExternPPT)ROViewModels[(int)ReserveType.ExternPPT]).SlideStartNum_Text));
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
 
         public void AddReserveData(module.ReserveDataUnit data)
