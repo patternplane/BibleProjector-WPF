@@ -697,7 +697,13 @@ namespace BibleProjector_WPF.ViewModel
         public void RunAddReserveFromSelection()
         {
             if (SelectedLyric != null)
+            {
                 LyricReserveList.Add(new LyricReserve(SelectedLyric));
+
+                // 예약창에 보내는 데이터
+                ViewModel.ReserveManagerViewModel.instance.ReserveDataManager.addReserve(
+                    new module.SongReserveDataUnit(SelectedLyric));
+            }
         }
 
         // ============================================ 메소드 ==============================================
