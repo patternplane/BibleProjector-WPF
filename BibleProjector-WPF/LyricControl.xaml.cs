@@ -79,23 +79,12 @@ namespace BibleProjector_WPF
 
         void LyricReserveListBox_DoubleClick(object sender, MouseButtonEventArgs e)
         {
-            LyricShowButton_Click(null, null);
+            VM_LyricViewModel.RunShowLyric();
         }
 
         void LyricShowButton_Click(object sender, RoutedEventArgs e)
         {
-            if (VM_LyricViewModel.SongFrameSelection == null)
-                MessageBox.Show("찬양 출력 틀ppt를 등록해주세요!", "ppt 틀 선택되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
-            else if (VM_LyricViewModel.SelectedLyric == null)
-                MessageBox.Show("출력할 찬양곡을 선택해주세요!", "찬양곡 선택되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
-            else
-            {
-                new module.ShowStarter().SongShowStart(
-                    VM_LyricViewModel.SelectedLyric.makeSongData(VM_LyricViewModel.LinePerSlide)
-                    , VM_LyricViewModel.SongFrameSelection.Path
-                    , VM_LyricViewModel.SelectedLyric.GetType() == typeof(ViewModel.SingleHymn));
-                VM_LyricViewModel.currentLyricOuted();
-            }
+            VM_LyricViewModel.RunShowLyric();
         }
 
         // ============================================ 예약처리 ==========================================

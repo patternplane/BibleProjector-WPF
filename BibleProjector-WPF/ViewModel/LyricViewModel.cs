@@ -596,6 +596,11 @@ namespace BibleProjector_WPF.ViewModel
 
         // ============================================ 이벤트에 쓰일 함수 ==============================================
 
+        public void RunShowLyric()
+        {
+            ShowLyric(SelectedLyric, SongFrameSelection, LinePerSlide);
+        }
+
         public void RunSearch()
         {
             if (searchStart(SearchText))
@@ -696,6 +701,22 @@ namespace BibleProjector_WPF.ViewModel
         }
 
         // ============================================ 메소드 ==============================================
+
+        void ShowLyric(SingleLyric lyric, module.ProgramOption.SongFrameFile FrameFile, int linePerSlide)
+        {
+            if (FrameFile == null)
+                MessageBox.Show("찬양 출력 틀ppt를 등록해주세요!", "ppt 틀 선택되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
+            else if (lyric == null)
+                MessageBox.Show("출력할 찬양곡을 선택해주세요!", "찬양곡 선택되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
+            else
+            {
+                new module.ShowStarter().SongShowStart(
+                    lyric.makeSongData(linePerSlide)
+                    , FrameFile.Path
+                    , lyric.GetType() == typeof(ViewModel.SingleHymn));
+                currentLyricOuted();
+            }
+        }
 
         SingleLyric makeEnableLyric(String title, String content)
         {
