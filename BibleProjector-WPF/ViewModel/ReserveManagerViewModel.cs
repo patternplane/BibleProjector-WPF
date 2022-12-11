@@ -75,6 +75,22 @@ namespace BibleProjector_WPF.ViewModel
                             type,
                             rawData[i + 1]));
             }
+
+            // 이후 지원 종료할 예정인, 이전 버전의 저장값 불러오는 기능
+            foreach (string token in ProgramData.getBibleReserveData().Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                string[] data = token.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                AddReserveData(new BibleReserveDataUnit(data[0], data[1], data[2]));
+            }
+
+            foreach (string lyricNumber in ProgramData.getLyricReserveData().TrimEnd().Split(new string[] { LyricViewModel.SEPARATOR }, StringSplitOptions.RemoveEmptyEntries))
+                AddReserveData(new SongReserveDataUnit(lyricNumber));
+
+            string SEPARATOR;
+            foreach (string data in module.ProgramData.getExternPPTData().Split(new string[] { (SEPARATOR = "∂") }, StringSplitOptions.RemoveEmptyEntries))
+                if (checkBeforeMakeReserve(ReserveType.ExternPPT, data))
+                    AddReserveData(ReserveDataUnit.ReserveDataUnitFactory( ReserveType.ExternPPT, data));
+
         }
 
         // 프로그램 종료시 저장값 생성 메소드

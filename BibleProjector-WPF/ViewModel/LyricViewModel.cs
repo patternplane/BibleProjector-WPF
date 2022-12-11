@@ -185,8 +185,7 @@ namespace BibleProjector_WPF.ViewModel
     class LyricViewModel : INotifyPropertyChanged
     {
         // 파일 입출력시 구분자
-        private const string SEPARATOR = "∂";
-        private const string RESERVER = "∇";
+        public const string SEPARATOR = "∂";
         private const string HYMN_SEPARATOR = "∫";
         // 검색창 기본 텍스트
         private const string DEFAUL_SEARCH_TEXT = "(가사 또는 제목으로 검색)";
@@ -208,23 +207,10 @@ namespace BibleProjector_WPF.ViewModel
         {
             List<SingleLyric> PrimitiveLyricList = getLyricList();
             List<SingleHymn> PrimitiveHymnList = getHymnList();
-            List<LyricReserve> PrimitiveReserveList = getReserveData();
-
-            foreach (LyricReserve r in PrimitiveReserveList)
-            {
-                // 찬송가는 음수로 표기
-                if (r.lyricNumber < 0)
-                    r.lyric = PrimitiveHymnList[ -r.lyricNumber - 1];
-
-                // 일반 가사는 양수
-                else
-                    r.lyric = PrimitiveLyricList[r.lyricNumber];
-            }
 
             PrimitiveLyricList.Sort(delegate (SingleLyric a, SingleLyric b) { return a.title.CompareTo(b.title); });
             LyricList = new BindingList<SingleLyric>(PrimitiveLyricList);
             HymnList = new BindingList<SingleHymn>(PrimitiveHymnList);
-            //LyricReserveList = new BindingList<LyricReserve>(PrimitiveReserveList);
         }
 
         List<SingleLyric> getLyricList()
@@ -263,23 +249,6 @@ namespace BibleProjector_WPF.ViewModel
             return PrimitiveHymnList;
         }
 
-        List<LyricReserve> getReserveData()
-        {
-            List<LyricReserve> PrimitiveReserveList = new List<LyricReserve>();
-
-            string rawData = module.ProgramData.getLyricReserveData().TrimEnd();
-
-            LyricReserve reserveData;
-            foreach (string data in rawData.Split(new string[] { SEPARATOR }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                reserveData = new LyricReserve(null);
-                reserveData.lyricNumber = int.Parse(data);
-                PrimitiveReserveList.Add(reserveData);
-            }
-
-            return PrimitiveReserveList;
-        }
-
         // ============================================ 종료 및 저장 ==============================================
 
         public string getSaveData_Lyric()
@@ -311,25 +280,6 @@ namespace BibleProjector_WPF.ViewModel
                     str.Append(hymn.content);
                 }
                 str.Append(SEPARATOR);
-            }
-
-            return str.ToString();
-        }
-
-        public string getSaveData_Reserve()
-        {
-
-            StringBuilder str = new StringBuilder(50).Clear();
-
-            foreach (ReserveCollectionUnit r in LyricReserveList)
-            {
-                /*if (r.lyric.GetType() == typeof(SingleHymn)) {
-                    str.Append("-");
-                    str.Append(r.lyric.title);
-                }
-                else
-                    str.Append(LyricList.IndexOf(r.lyric));
-                str.Append(SEPARATOR);*/
             }
 
             return str.ToString();

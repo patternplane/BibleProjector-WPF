@@ -16,8 +16,6 @@ namespace BibleProjector_WPF.ViewModel
 
         public BibleReserveData()
         {
-            module.ProgramData.getBibleReserveData(this);
-
             ReserveDataManager.subscriptToListChange(ListUpdate);
         }
 
@@ -33,24 +31,6 @@ namespace BibleProjector_WPF.ViewModel
         {
             if ((e.changeType & Event.ReserveUpdateType.Bible) > 0)
                 BibleReserveList = getBibleReserveList();
-        }
-
-        // ======================== ?? ========================
-
-        // 데이터 저장할 때 출력 규격
-        public string getSaveData()
-        {
-            StringBuilder str = new StringBuilder(50).Clear();
-            foreach (ReserveCollectionUnit item in BibleReserveList)
-            {
-                /*str.Append(item.Book);
-                str.Append(" ");
-                str.Append(item.Chapter);
-                str.Append(" ");
-                str.Append(item.Verse);
-                str.Append("\r\n");*/
-            }
-            return str.ToString();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

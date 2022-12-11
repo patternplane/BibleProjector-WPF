@@ -13,70 +13,40 @@ namespace BibleProjector_WPF.module
     class ProgramData
     {
         // 데이터를 가진 객체에 접근하기 위한 참조변수들
-        static ViewModel.BibleReserveData VM_BibleReserve;
         static ViewModel.LyricViewModel VM_LyricViewModel;
-
-        // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-        // ■■■■■■■■■■■■■ 공사부근 : 여러 곳의 예약을 하나로 통합중  ■■■■■■■■■■■■■■
-        // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-
         static ViewModel.ReserveManagerViewModel VM_ReserveManager;
-
-        // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
         // =========================================== 파일 경로 =========================================== 
 
         // 파일 경로들
         const string PROGRAM_DATA_PATH = ".\\programData";
 
-        const string BIBLE_RESERVE_DATA = PROGRAM_DATA_PATH + "\\BibleReserve";
         const string LYRIC_DATA = PROGRAM_DATA_PATH + "\\Lyrics";
-        const string LYRIC_RESERVE_DATA = PROGRAM_DATA_PATH + "\\LyricReserve";
         const string HYMN_DATA = PROGRAM_DATA_PATH + "\\Hymns";
         const string OPTION_DATA = PROGRAM_DATA_PATH + "\\Option";
         const string LAYOUT_DATA = PROGRAM_DATA_PATH + "\\LayoutData";
-
-        // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-        // ■■■■■■■■■■■■■ 공사부근 : 여러 곳의 예약을 하나로 통합중  ■■■■■■■■■■■■■■
-        // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-
         const string RESERVE_DATA = PROGRAM_DATA_PATH + "\\ReserveData";
 
-        // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+        // 이전 버전의 프로그램 저장값을 지원하기 위한 장치
+        // 더 이상 추가 지원하지 않을 기능들
+        const string LYRIC_RESERVE_DATA = PROGRAM_DATA_PATH + "\\LyricReserve";
+        const string BIBLE_RESERVE_DATA = PROGRAM_DATA_PATH + "\\BibleReserve";
+        const string EXTERN_PPT_DATA = PROGRAM_DATA_PATH + "\\ExternPPTpaths";
 
         // =========================================== 프로그램 종료시 ===========================================
 
         static public void saveProgramData()
         {
-            saveBibleReserveData();
             saveLyricData();
             saveOptionData();
             saveLayoutData();
-
-            // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-            // ■■■■■■■■■■■■■ 공사부근 : 여러 곳의 예약을 하나로 통합중  ■■■■■■■■■■■■■■
-            // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-
             saveReserveData();
-
-            // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-        }
-
-        static void saveBibleReserveData()
-        {
-            StreamWriter file = new StreamWriter(BIBLE_RESERVE_DATA, false);
-            file.Write(VM_BibleReserve.getSaveData());
-            file.Close();
         }
 
         static void saveLyricData()
         {
             StreamWriter file = new StreamWriter(LYRIC_DATA, false);
             file.Write(VM_LyricViewModel.getSaveData_Lyric());
-            file.Close();
-
-            file = new StreamWriter(LYRIC_RESERVE_DATA, false);
-            file.Write(VM_LyricViewModel.getSaveData_Reserve());
             file.Close();
 
             file = new StreamWriter(HYMN_DATA, false);
@@ -105,18 +75,12 @@ namespace BibleProjector_WPF.module
             file.Close();
         }
 
-        // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-        // ■■■■■■■■■■■■■ 공사부근 : 여러 곳의 예약을 하나로 통합중  ■■■■■■■■■■■■■■
-        // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-
         static void saveReserveData()
         {
             StreamWriter file = new StreamWriter(RESERVE_DATA, false);
             file.Write(VM_ReserveManager.getSaveData());
             file.Close();
         }
-
-        // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
         // =========================================== 별도 메소드 =========================================== 
 
@@ -144,21 +108,10 @@ namespace BibleProjector_WPF.module
             return fileContent.ToString();
         }
 
-        public static string getBibleReserveData(ViewModel.BibleReserveData bibleReserveData)
-        {
-            VM_BibleReserve = bibleReserveData;
-            return getDataFromFile(BIBLE_RESERVE_DATA);
-        }
-
         public static string getLyricData(ViewModel.LyricViewModel lyricViewModel)
         {
             VM_LyricViewModel = lyricViewModel;
             return getDataFromFile(LYRIC_DATA);
-        }
-
-        public static string getLyricReserveData()
-        {
-            return getDataFromFile(LYRIC_RESERVE_DATA);
         }
 
         public static string getHymnData()
@@ -176,16 +129,33 @@ namespace BibleProjector_WPF.module
             return getDataFromFile(LAYOUT_DATA);
         }
 
-        // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-        // ■■■■■■■■■■■■■ 공사부근 : 여러 곳의 예약을 하나로 통합중  ■■■■■■■■■■■■■■
-        // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-
         public static string getReserveData(ViewModel.ReserveManagerViewModel ReserveManagerViewModel)
         {
             VM_ReserveManager = ReserveManagerViewModel;
             return getDataFromFile(RESERVE_DATA);
         }
 
-        // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+        // 더 이상 추가 지원하지 않을 기능들
+
+        public static string getLyricReserveData()
+        {
+            string data = getDataFromFile(LYRIC_RESERVE_DATA);
+            File.Delete(LYRIC_RESERVE_DATA);
+            return data;
+        }
+
+        public static string getBibleReserveData()
+        {
+            string data = getDataFromFile(BIBLE_RESERVE_DATA);
+            File.Delete(BIBLE_RESERVE_DATA);
+            return data;
+        }
+
+        public static string getExternPPTData()
+        {
+            string data = getDataFromFile(EXTERN_PPT_DATA);
+            File.Delete(EXTERN_PPT_DATA);
+            return data;
+        }
     }
 }
