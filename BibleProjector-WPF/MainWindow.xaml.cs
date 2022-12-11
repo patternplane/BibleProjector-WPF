@@ -321,11 +321,13 @@ namespace BibleProjector_WPF
         void BibleReserveAddButton_Click(object sender, RoutedEventArgs e)
         {
             if (VM_BibleCurrentSelectingData.isBibleSelected())
+            {
                 VM_BibleReserveData.BibleReserveList.Add(new ViewModel.BibleReserveData.BibleReserveContent(VM_BibleCurrentSelectingData.Book, VM_BibleCurrentSelectingData.Chapter, VM_BibleCurrentSelectingData.Verse));
 
             // 예약창에 적용하는 데이터
             ViewModel.ReserveManagerViewModel.instance.ReserveDataManager.addReserve(
                 new module.BibleReserveDataUnit(VM_BibleCurrentSelectingData.Book, VM_BibleCurrentSelectingData.Chapter, VM_BibleCurrentSelectingData.Verse));
+        }
         }
 
         void BibleReserveDeleteButton_Click(object sender, RoutedEventArgs e)
