@@ -146,7 +146,9 @@
                                 </Grid.RowDefinitions>
                                 <Button Grid.Row="0" x:Name="BibleReserveAddButton" Background="#FFCBFFB9" >성경구절 예약</Button>
                                 <ListBox Grid.Row="2" SelectionMode="Extended" ScrollViewer.VerticalScrollBarVisibility="auto" 
-                                 x:Name="BibleReserveListBox" >
+                                 x:Name="BibleReserveListBox" 
+                                         ItemsSource="{Binding BibleReserveList}"
+                                         DisplayMemberPath="DisplayInfo">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="ListBoxItem">
                                             <EventSetter Event="MouseDoubleClick" Handler="BibleReserveListBox_DoubleClick"></EventSetter>

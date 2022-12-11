@@ -14,6 +14,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using System.ComponentModel;
+using BibleProjector_WPF.ViewModel;
+using System.Collections.ObjectModel;
 
 namespace BibleProjector_WPF
 {
@@ -94,7 +96,7 @@ namespace BibleProjector_WPF
             string error = Powerpoint.Initialize();
             if (error.CompareTo("") != 0)
                 MessageBox.Show("다음을 확인해주세요 : \r\n" + error, "ppt틀 등록되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
-
+            
             InitializeComponent();
 
             BibleInitialize();
@@ -117,9 +119,7 @@ namespace BibleProjector_WPF
 
             Bible_CurrentDisplayTextBoxies_Grid.DataContext = VM_BibleSelectData = new ViewModel.BibleSelectData();
 
-            VM_BibleReserveData = new ViewModel.BibleReserveData();
-            BibleReserveListBox.ItemsSource = VM_BibleReserveData.BibleReserveList;
-            BibleReserveListBox.DisplayMemberPath = "DisplayData";
+            BibleReserveListBox.DataContext = VM_BibleReserveData = new ViewModel.BibleReserveData();
         }
 
         void ReadingInitialize()
@@ -318,16 +318,31 @@ namespace BibleProjector_WPF
 
         // ======================================== 성경 예약 처리
 
+        Collection<ReserveCollectionUnit> getSortedSelection(ItemCollection items, System.Collections.IList rawSelection)
+        {
+            List<int> itemindex = new List<int>(rawSelection.Count);
+
+            for (int i = 0; i < rawSelection.Count; i++)
+                itemindex.Add(items.IndexOf(rawSelection[i]));
+            itemindex.Sort();
+
+            Collection<ReserveCollectionUnit> sortedItems = new Collection<ReserveCollectionUnit>();
+            foreach (int i in itemindex)
+                sortedItems.Add((ReserveCollectionUnit)items[i]);
+
+            return sortedItems;
+        }
+
         void BibleReserveAddButton_Click(object sender, RoutedEventArgs e)
         {
             if (VM_BibleCurrentSelectingData.isBibleSelected())
             {
-                VM_BibleReserveData.BibleReserveList.Add(new ViewModel.BibleReserveData.BibleReserveContent(VM_BibleCurrentSelectingData.Book, VM_BibleCurrentSelectingData.Chapter, VM_BibleCurrentSelectingData.Verse));
+                //VM_BibleReserveData.BibleReserveList.Add(new ViewModel.BibleReserveData.BibleReserveContent(VM_BibleCurrentSelectingData.Book, VM_BibleCurrentSelectingData.Chapter, VM_BibleCurrentSelectingData.Verse));
 
-            // 예약창에 적용하는 데이터
-            ViewModel.ReserveManagerViewModel.instance.ReserveDataManager.addReserve(
-                new module.BibleReserveDataUnit(VM_BibleCurrentSelectingData.Book, VM_BibleCurrentSelectingData.Chapter, VM_BibleCurrentSelectingData.Verse));
-        }
+                // 예약창에 적용하는 데이터
+                ViewModel.ReserveManagerViewModel.instance.ReserveDataManager.addReserve(
+                    new module.BibleReserveDataUnit(VM_BibleCurrentSelectingData.Book, VM_BibleCurrentSelectingData.Chapter, VM_BibleCurrentSelectingData.Verse));
+            }
         }
 
         void BibleReserveDeleteButton_Click(object sender, RoutedEventArgs e)
@@ -337,13 +352,16 @@ namespace BibleProjector_WPF
             if (MessageBox.Show("선택된 예약구절을 삭제하시겠습니까?","성경 예약 삭제",MessageBoxButton.OKCancel,MessageBoxImage.Question) != MessageBoxResult.OK)
                 return;
 
-            List<int> itemindex = new List<int>(10);
+            ViewModel.ReserveDataManager.instance.deleteItems(
+                getSortedSelection(BibleReserveListBox.Items, BibleReserveListBox.SelectedItems));
+
+            /*List<int> itemindex = new List<int>(10);
             foreach (object item in BibleReserveListBox.SelectedItems)
                 itemindex.Add(BibleReserveListBox.Items.IndexOf(item));
-            itemindex.Sort();
-
-            for (int i = itemindex.Count-1; i >= 0 ; i--)
-                VM_BibleReserveData.BibleReserveList.Remove(VM_BibleReserveData.BibleReserveList[itemindex[i]]);
+            itemindex.Sort();*/
+            
+            /*for (int i = itemindex.Count - 1; i >= 0; i--)
+                VM_BibleReserveData.BibleReserveList.Remove(VM_BibleReserveData.BibleReserveList[itemindex[i]]);*/
         }
 
         void BibleReserveItemUpButton_Click(object sender, RoutedEventArgs e)
@@ -351,7 +369,10 @@ namespace BibleProjector_WPF
             if (BibleReserveListBox.SelectedItems.Count == 0)
                 return;
 
-            List<int> itemindex = new List<int>(10);
+            ViewModel.ReserveDataManager.instance.moveUpInCategory(
+                getSortedSelection(BibleReserveListBox.Items, BibleReserveListBox.SelectedItems));
+
+            /*List<int> itemindex = new List<int>(10);
             foreach (object item in BibleReserveListBox.SelectedItems)
                 itemindex.Add(BibleReserveListBox.Items.IndexOf(item));
             itemindex.Sort();
@@ -368,9 +389,9 @@ namespace BibleProjector_WPF
                 desIndex = itemindex[i];
                 for (;i < itemindex.Count && desIndex == itemindex[i]; i++, desIndex++);
 
-                VM_BibleReserveData.BibleReserveList.Insert(desIndex, VM_BibleReserveData.BibleReserveList[moveItem]);
-                VM_BibleReserveData.BibleReserveList.RemoveAt(moveItem);
-            }
+                *//*VM_BibleReserveData.BibleReserveList.Insert(desIndex, VM_BibleReserveData.BibleReserveList[moveItem]);
+                VM_BibleReserveData.BibleReserveList.RemoveAt(moveItem);*//*
+            }*/
         }
 
         void BibleReserveItemDownButton_Click(object sender, RoutedEventArgs e)
@@ -378,13 +399,16 @@ namespace BibleProjector_WPF
             if (BibleReserveListBox.SelectedItems.Count == 0)
                 return;
 
-            List<int> itemindex = new List<int>(10);
+            ViewModel.ReserveDataManager.instance.moveDownInCategory(
+                getSortedSelection(BibleReserveListBox.Items, BibleReserveListBox.SelectedItems));
+
+            /*List<int> itemindex = new List<int>(10);
             foreach (object item in BibleReserveListBox.SelectedItems)
                 itemindex.Add(BibleReserveListBox.Items.IndexOf(item));
             itemindex.Sort();
 
-            if (itemindex.Last() == VM_BibleReserveData.BibleReserveList.Count -1 )
-                return;
+            *//*if (itemindex.Last() == VM_BibleReserveData.BibleReserveList.Count -1 )
+                return;*//*
 
             int i = itemindex.Count-1;
             int moveItem;
@@ -395,9 +419,9 @@ namespace BibleProjector_WPF
                 desIndex = itemindex[i];
                 for (i--; i >= 0 && desIndex == itemindex[i]; i--, desIndex--);
 
-                VM_BibleReserveData.BibleReserveList.Insert(desIndex, VM_BibleReserveData.BibleReserveList[moveItem]);
-                VM_BibleReserveData.BibleReserveList.RemoveAt(moveItem + 1);
-            }
+                *//*VM_BibleReserveData.BibleReserveList.Insert(desIndex, VM_BibleReserveData.BibleReserveList[moveItem]);
+                VM_BibleReserveData.BibleReserveList.RemoveAt(moveItem + 1);*//*
+            }*/
         }
 
         void BibleReserveListBox_GotFocus(object sender, RoutedEventArgs e)
@@ -411,7 +435,7 @@ namespace BibleProjector_WPF
             }
             else
             {
-                ViewModel.BibleReserveData.BibleReserveContent item = (ViewModel.BibleReserveData.BibleReserveContent)((ListBox)sender).SelectedItem;
+                module.BibleReserveDataUnit item = (module.BibleReserveDataUnit)(((ViewModel.ReserveCollectionUnit)(((ListBox)sender).SelectedItem)).reserveData);
                 VM_BibleSelectData.Book = item.Book;
                 VM_BibleSelectData.Chapter = item.Chapter;
                 VM_BibleSelectData.Verse = item.Verse;
@@ -431,7 +455,7 @@ namespace BibleProjector_WPF
             }
             else
             {
-                ViewModel.BibleReserveData.BibleReserveContent item = (ViewModel.BibleReserveData.BibleReserveContent)((ListBox)sender).SelectedItem;
+                module.BibleReserveDataUnit item = (module.BibleReserveDataUnit)(((ViewModel.ReserveCollectionUnit)(((ListBox)sender).SelectedItem)).reserveData);
                 VM_BibleSelectData.Book = item.Book;
                 VM_BibleSelectData.Chapter = item.Chapter;
                 VM_BibleSelectData.Verse = item.Verse;

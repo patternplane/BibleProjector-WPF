@@ -31,6 +31,8 @@ namespace BibleProjector_WPF.ViewModel
         // 이거 말고 더 좋은 방법 있을텐데
         static public ReserveDataManager instance;
 
+        // ======================== 바인딩 속성 ======================== 
+
         ObservableCollection<ReserveCollectionUnit> reserveList;
         public ObservableCollection<ReserveCollectionUnit> ReserveList
         {
@@ -38,12 +40,31 @@ namespace BibleProjector_WPF.ViewModel
             private set { reserveList = value; }
         }
 
+        // ======================== 리스트 변경 이벤트 ======================== 
+
+        static event Event.ReserveListChangedEventHandler listUpdated;
+
+        void onListUpdated(Event.ReserveUpdateType changeType)
+        {
+            if (listUpdated != null)
+                listUpdated(this,new Event.ReserveListChangedEventArgs(changeType));
+        }
+
+        static public void subscriptToListChange(Event.ReserveListChangedEventHandler handler)
+        {
+            listUpdated += handler;
+        }
+
+        // ======================== 생성자 ======================== 
+
         public ReserveDataManager()
         {
             instance = this;
 
             reserveList = new ObservableCollection<ReserveCollectionUnit>();
         }
+
+        // ======================== 메소드 ========================
 
         public bool ExternPPT_isNotOverlaped(string filePath)
         {
@@ -58,42 +79,131 @@ namespace BibleProjector_WPF.ViewModel
         public void addReserve(module.ReserveDataUnit reserveData)
         {
             reserveList.Add(new ReserveCollectionUnit(reserveData));
+            onListUpdated(new Event.ReserveTypeConverter().RTToRUT(reserveData.reserveType));
         }
 
         public void moveSelectionUp()
         {
-            for(int i = 0; i < reserveList.Count; i++)
+            Event.ReserveUpdateType type = Event.ReserveUpdateType.None;
+            Event.ReserveTypeConverter typeConverter = new Event.ReserveTypeConverter();
+
+            for (int i = 0; i < reserveList.Count; i++)
                 if (reserveList[i].isSelected) 
                 {
                     if (i == 0)
                         break;
 
+                    type = type | typeConverter.RTToRUT(reserveList[i].reserveType);
+
                     reserveList.Insert(i - 1, reserveList[i]);
                     reserveList.RemoveAt(i+1);
                 }
+
+            onListUpdated(type);
+        }
+
+        public void moveUpInCategory(Collection<ReserveCollectionUnit> Items)
+        {
+            List<ReserveCollectionUnit> filteredList = reserveList.Where(item => (item.reserveType == Items.First().reserveType)).ToList();
+
+            int firstItem = filteredList.IndexOf(Items.First());
+            if (firstItem == 0)
+                return;
+
+            int preItemIndex = reserveList.IndexOf(filteredList[firstItem - 1]);
+            int currentItemIndex;
+            for (int i = 0; i < Items.Count; i++)
+            {
+                currentItemIndex = reserveList.IndexOf(Items[i]);
+                
+                ReserveCollectionUnit temp = reserveList[preItemIndex];
+                reserveList[preItemIndex] = reserveList[currentItemIndex];
+                reserveList[currentItemIndex] = temp;
+
+                preItemIndex = currentItemIndex;
+            }
+
+            onListUpdated(new Event.ReserveTypeConverter().RTToRUT(Items.First().reserveType));
         }
 
         public void moveSelectionDown()
         {
+            Event.ReserveUpdateType type = Event.ReserveUpdateType.None;
+            Event.ReserveTypeConverter typeConverter = new Event.ReserveTypeConverter();
+
             for (int i = reserveList.Count-1; i >= 0; i--)
                 if (reserveList[i].isSelected)
                 {
                     if (i == reserveList.Count-1)
                         break;
 
+                    type = type | typeConverter.RTToRUT(reserveList[i].reserveType);
+
                     reserveList.Insert(i + 2, reserveList[i]);
                     reserveList.RemoveAt(i);
                 }
+
+            onListUpdated(type);
+        }
+
+        public void moveDownInCategory(Collection<ReserveCollectionUnit> Items)
+        {
+            List<ReserveCollectionUnit> filteredList = reserveList.Where(item => (item.reserveType == Items.First().reserveType)).ToList();
+
+            int lastItem = filteredList.IndexOf(Items.Last());
+            if (lastItem == (filteredList.Count - 1))
+                return;
+
+            int preItemIndex = reserveList.IndexOf(filteredList[lastItem + 1]);
+            int currentItemIndex;
+            for (int i = Items.Count - 1; i >= 0; i--)
+            {
+                currentItemIndex = reserveList.IndexOf(Items[i]);
+
+                ReserveCollectionUnit temp = reserveList[preItemIndex];
+                reserveList[preItemIndex] = reserveList[currentItemIndex];
+                reserveList[currentItemIndex] = temp;
+
+                preItemIndex = currentItemIndex;
+            }
+
+            onListUpdated(new Event.ReserveTypeConverter().RTToRUT(Items.First().reserveType));
         }
 
         public void deleteSelection()
         {
+            Event.ReserveUpdateType type = Event.ReserveUpdateType.None;
+            Event.ReserveTypeConverter typeConverter = new Event.ReserveTypeConverter();
+
             for (int i = reserveList.Count - 1; i >= 0; i--)
                 if (reserveList[i].isSelected)
                 {
+                    type = type | typeConverter.RTToRUT(reserveList[i].reserveType);
+
                     reserveList[i].reserveData.ProcessBeforeDeletion();
                     reserveList.RemoveAt(i);
                 }
+
+            onListUpdated(type);
+        }
+
+        public void deleteItems(Collection<ReserveCollectionUnit> Items)
+        {
+            Event.ReserveUpdateType type = Event.ReserveUpdateType.None;
+            Event.ReserveTypeConverter typeConverter = new Event.ReserveTypeConverter();
+
+            int selectedIndex;
+            for (int i = Items.Count - 1; i >= 0; i--)
+            {
+                selectedIndex = reserveList.IndexOf(Items[i]);
+
+                type = type | typeConverter.RTToRUT(reserveList[selectedIndex].reserveType);
+
+                reserveList[selectedIndex].reserveData.ProcessBeforeDeletion();
+                reserveList.RemoveAt(selectedIndex);
+            }
+
+            onListUpdated(type);
         }
 
         public ReserveCollectionUnit[] getSelectionItems()

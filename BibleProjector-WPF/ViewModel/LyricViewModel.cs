@@ -192,9 +192,11 @@ namespace BibleProjector_WPF.ViewModel
         private const string DEFAUL_SEARCH_TEXT = "(가사 또는 제목으로 검색)";
 
         // ============================================ 세팅 ==============================================
-
+        
         public LyricViewModel()
         {
+            ReserveDataManager.subscriptToListChange(ListUpdate);
+
             getData();
             /*
             if (LyricList == null)
@@ -222,7 +224,7 @@ namespace BibleProjector_WPF.ViewModel
             PrimitiveLyricList.Sort(delegate (SingleLyric a, SingleLyric b) { return a.title.CompareTo(b.title); });
             LyricList = new BindingList<SingleLyric>(PrimitiveLyricList);
             HymnList = new BindingList<SingleHymn>(PrimitiveHymnList);
-            LyricReserveList = new BindingList<LyricReserve>(PrimitiveReserveList);
+            //LyricReserveList = new BindingList<LyricReserve>(PrimitiveReserveList);
         }
 
         List<SingleLyric> getLyricList()
@@ -319,15 +321,15 @@ namespace BibleProjector_WPF.ViewModel
 
             StringBuilder str = new StringBuilder(50).Clear();
 
-            foreach (LyricReserve r in LyricReserveList)
+            foreach (ReserveCollectionUnit r in LyricReserveList)
             {
-                if (r.lyric.GetType() == typeof(SingleHymn)) {
+                /*if (r.lyric.GetType() == typeof(SingleHymn)) {
                     str.Append("-");
                     str.Append(r.lyric.title);
                 }
                 else
                     str.Append(LyricList.IndexOf(r.lyric));
-                str.Append(SEPARATOR);
+                str.Append(SEPARATOR);*/
             }
 
             return str.ToString();
@@ -562,15 +564,29 @@ namespace BibleProjector_WPF.ViewModel
         // =================================== 예약 탭
 
         // 예약 리스트
-        public BindingList<LyricReserve> LyricReserveList { get; set; }
+        ReserveCollectionUnit[] _LyricReserveList;
+        public ReserveCollectionUnit[] LyricReserveList { get { return _LyricReserveList; } set { _LyricReserveList = value; NotifyPropertyChanged(nameof(LyricReserveList)); } }
         // 현재 (출력)선택값
-        private LyricReserve LyricReserveSelection_in;
-        public LyricReserve LyricReserveSelection { get { return LyricReserveSelection_in; } set { LyricReserveSelection_in = value;
+        private ReserveCollectionUnit LyricReserveSelection_in;
+        public ReserveCollectionUnit LyricReserveSelection { get { return LyricReserveSelection_in; } set { LyricReserveSelection_in = value;
                 if (LyricReserveSelection_in != null)
-                    SelectedLyric = LyricReserveSelection_in.lyric;
+                    SelectedLyric = ((module.SongReserveDataUnit)LyricReserveSelection_in.reserveData).lyric;
                 else
                     SelectedLyric = null;
             }
+        }
+
+        ReserveCollectionUnit[] getSongReserveList()
+        {
+            return ReserveDataManager.instance.ReserveList.Where
+                (obj => (obj.reserveType == module.ReserveType.Song)).ToArray();
+        }
+
+
+        void ListUpdate(object sender, Event.ReserveListChangedEventArgs e)
+        {
+            if ((e.changeType & Event.ReserveUpdateType.Song) > 0)
+                LyricReserveList = getSongReserveList();
         }
 
         // =================================== 출력란
@@ -698,7 +714,7 @@ namespace BibleProjector_WPF.ViewModel
         {
             if (SelectedLyric != null)
             {
-                LyricReserveList.Add(new LyricReserve(SelectedLyric));
+                //LyricReserveList.Add(new LyricReserve(SelectedLyric));
 
                 // 예약창에 보내는 데이터
                 ViewModel.ReserveManagerViewModel.instance.ReserveDataManager.addReserve(
