@@ -108,12 +108,12 @@ namespace BibleProjector_WPF.module
             bool hasDuplicated = false;
             bool hasTooBigFile = false;
             int errorCode;
-            foreach (string fileName in FD_ExternPPT.FileNames)
+            foreach (string filePath in FD_ExternPPT.FileNames)
             {
-                errorCode = checkAvailPPT(fileName,checkFunc);
+                errorCode = checkAvailPPT(filePath, checkFunc);
 
                 if (errorCode == 0)
-                    successFiles.Add(fileName);
+                    successFiles.Add(filePath);
                 else if (errorCode == 1)
                     hasTooBigFile = true;
                 else
@@ -131,15 +131,15 @@ namespace BibleProjector_WPF.module
         /// <summary>
         /// ppt파일이 등록 가능한지 판별하여 그 결과 에러코드를 반환합니다.
         /// </summary>
-        /// <param name="fileName"></param>
+        /// <param name="filePath"></param>
         /// <returns>성공 : 0, 허용 슬라이드 수 초과 : 1, 중복 등록 시도 : 2, 파일 없음 : 3</returns>
-        public int checkAvailPPT(string fileName, isNotOverlaped checkFunc)
+        public int checkAvailPPT(string filePath, isNotOverlaped checkFunc)
         {
-            if (!(new FileInfo(fileName).Exists))
+            if (!(new FileInfo(filePath).Exists))
                 return 3;
-            else if (!checkFunc(fileName))
+            else if (!checkFunc(filePath))
                 return 2;
-            else if (Powerpoint.getSlideCountFromFile(fileName) > MAX_SLIDE_COUNT)
+            else if (Powerpoint.getSlideCountFromFile(filePath) > MAX_SLIDE_COUNT)
                 return 1;
             else
                 return 0;
