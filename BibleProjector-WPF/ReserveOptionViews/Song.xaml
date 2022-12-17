@@ -46,7 +46,7 @@
                 </Grid.RowDefinitions>
 
                 <Label HorizontalContentAlignment="Center" VerticalContentAlignment="Center">PPT 틀</Label>
-                <ComboBox Grid.Row="1" ItemsSource="{Binding SongFrameList}" DisplayMemberPath="Path" SelectedItem="{Binding SongFrameSelection}"></ComboBox>
+                <ComboBox Grid.Row="1" ItemsSource="{Binding SongFrameList}" DisplayMemberPath="FileName" SelectedItem="{Binding SongFrameSelection}"></ComboBox>
             </Grid>
 
             <Button Grid.Column="4" Click="Event_ShowButtonClick">출력!</Button>

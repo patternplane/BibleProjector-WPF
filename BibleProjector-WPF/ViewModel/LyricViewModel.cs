@@ -681,7 +681,7 @@ namespace BibleProjector_WPF.ViewModel
 
         // ============================================ 메소드 ==============================================
 
-        void ShowLyric(SingleLyric lyric, module.ProgramOption.SongFrameFile FrameFile, int linePerSlide)
+        void ShowLyric(SingleLyric lyric, module.SongFrameFile FrameFile, int linePerSlide)
         {
             if (FrameFile == null)
                 MessageBox.Show("찬양 출력 틀ppt를 등록해주세요!", "ppt 틀 선택되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);

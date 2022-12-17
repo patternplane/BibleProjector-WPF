@@ -24,7 +24,7 @@
                 <ColumnDefinition Width="73*"/>
             </Grid.ColumnDefinitions>
             <Button Content="외부 ppt&#10;  등록"
-                    Click="AddExternPPT_Click">
+                    Click="AddExternPPT_Click" Background="#FFCBFFB9">
             </Button>
             <Grid Grid.Column="2">
                 <Grid.RowDefinitions>

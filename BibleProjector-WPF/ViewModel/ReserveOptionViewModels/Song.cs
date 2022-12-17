@@ -25,9 +25,10 @@ namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
                     _LinePerPageText = int.Parse(num);
             } }
         
-        public BindingList<module.ProgramOption.SongFrameFile> SongFrameList { get; set; }
+        public BindingList<module.SongFrameFile> SongFrameList { get; set; }
             = module.ProgramOption.SongFrameFiles;
-        public module.ProgramOption.SongFrameFile SongFrameSelection { get; set; }
+        module.SongFrameFile _SongFrameSelection;
+        public module.SongFrameFile SongFrameSelection { get { return _SongFrameSelection; } set { _SongFrameSelection = value; onPropertyChanged(nameof(SongFrameSelection)); } }
 
         public BindingList<SingleLyric> CCMList { get; set; }
             = LyricViewModel.LyricList;
@@ -65,7 +66,15 @@ namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
         public void GiveSelection(ReserveCollectionUnit[] data)
         {
             selectionValue = data[0];
-        }
+
+            if (((module.SongReserveDataUnit)(selectionValue.reserveData)).isHymn)
+            {
+                if (module.ProgramOption.DefaultHymnFrame != null)
+                    SongFrameSelection = module.ProgramOption.DefaultHymnFrame;
+            }
+            else if (module.ProgramOption.DefaultCCMFrame != null)
+                SongFrameSelection = module.ProgramOption.DefaultCCMFrame;
+    }
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void onPropertyChanged(string propertyName = "")
