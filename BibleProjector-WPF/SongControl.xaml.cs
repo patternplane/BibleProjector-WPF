@@ -29,6 +29,12 @@ namespace BibleProjector_WPF
                 this.Close();
         }
 
+        public void CloseByRemovedLyric(ViewModel.SingleLyric lyric)
+        {
+            if (VM_SongControl.isRunningLyric(lyric))
+                this.Close();
+        }
+
         public SongControl()
         {
             SongControlAccess = this;

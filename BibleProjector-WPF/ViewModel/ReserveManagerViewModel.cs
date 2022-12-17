@@ -86,8 +86,8 @@ namespace BibleProjector_WPF.ViewModel
             foreach (string lyricNumber in ProgramData.getLyricReserveData().TrimEnd().Split(new string[] { LyricViewModel.SEPARATOR }, StringSplitOptions.RemoveEmptyEntries))
                 AddReserveData(new SongReserveDataUnit(lyricNumber));
 
-            string SEPARATOR;
-            foreach (string data in module.ProgramData.getExternPPTData().Split(new string[] { (SEPARATOR = "∂") }, StringSplitOptions.RemoveEmptyEntries))
+            string SEPARATOR = "∂";
+            foreach (string data in module.ProgramData.getExternPPTData().Split(new string[] { (SEPARATOR ) }, StringSplitOptions.RemoveEmptyEntries))
                 if (checkBeforeMakeReserve(ReserveType.ExternPPT, data))
                     AddReserveData(ReserveDataUnit.ReserveDataUnitFactory( ReserveType.ExternPPT, data));
 

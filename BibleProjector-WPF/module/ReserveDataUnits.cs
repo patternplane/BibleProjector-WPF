@@ -27,6 +27,12 @@ namespace BibleProjector_WPF.module
         public abstract string getFileSaveText();
         public abstract void ProcessBeforeDeletion();
 
+        protected abstract bool checkSameData(object data);
+        public bool isSameData(object data)
+        {
+            return checkSameData(data);
+        }
+
         static public ReserveDataUnit ReserveDataUnitFactory(ReserveType type, string FileSaveData)
         {
             switch (type) 
@@ -65,6 +71,11 @@ namespace BibleProjector_WPF.module
         public override void ProcessBeforeDeletion()
         {
             return;
+        }
+
+        protected override bool checkSameData(object data)
+        {
+            return (data == null);
         }
     }
 
@@ -114,6 +125,15 @@ namespace BibleProjector_WPF.module
         {
             return;
         }
+
+        protected override bool checkSameData(object data)
+        {
+            if (data.GetType() == typeof(string)
+                && (Book + Chapter + Verse).CompareTo((string)data) == 0)
+                return true;
+            else
+                return false;
+        }
     }
 
     public class ReadingReserveDataUnit : ReserveDataUnit
@@ -151,6 +171,15 @@ namespace BibleProjector_WPF.module
         public override void ProcessBeforeDeletion()
         {
             return;
+        }
+
+        protected override bool checkSameData(object data)
+        {
+            if (data.GetType() == typeof(int)
+                && (int)data == readingIndex)
+               return true;
+            else 
+                return false;
         }
     }
     
@@ -205,6 +234,15 @@ namespace BibleProjector_WPF.module
         {
             return;
         }
+
+        protected override bool checkSameData(object data)
+        {
+            if (data.GetType() == typeof(SingleLyric)
+                && (SingleLyric)data == this.lyric)
+                return true;
+            else
+                return false;
+        }
     }
     
     public class ExternPPTReserveDataUnit : ReserveDataUnit
@@ -237,6 +275,15 @@ namespace BibleProjector_WPF.module
         public override void ProcessBeforeDeletion()
         {
             new ExternPPTManager().UnlinkPPT(PPTfilePath);
+        }
+
+        protected override bool checkSameData(object data)
+        {
+            if (data.GetType() == typeof(string)
+                && ((string)data).CompareTo(PPTfilePath) == 0)
+                return true;
+            else
+                return false;
         }
     }
 

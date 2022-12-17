@@ -21,11 +21,10 @@ namespace BibleProjector_WPF.module
             cwm.showReadingControl().showReading(ReadingIndex);
         }
 
-        public void SongShowStart(string[][][] songData, string path, bool isHymn)
+        public void SongShowStart(ViewModel.SingleLyric lyric, int linePerSlide, string FrameFilePath)
         {
-            // 곡별 사용할 틀에 대한 설계가 없어 수정되지 않음 -> ??
             ControlWindowManager cwm = new ControlWindowManager();
-            cwm.showSongControl().showSong(songData, System.IO.Path.GetFileName(path), isHymn);
+            cwm.showSongControl().showSong(lyric, linePerSlide, FrameFilePath);
         }
 
         public void ExternPPTShowStart(string fileName, int StartSlide)

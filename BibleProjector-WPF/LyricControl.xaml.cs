@@ -177,6 +177,9 @@ namespace BibleProjector_WPF
         {
             if (e.Key == Key.Delete)
                 ReserveDelete();
+            if (e.Key == Key.Enter)
+                VM_LyricViewModel.RunShowLyric();
+
         }
 
         void ReserveDelete()
