@@ -316,32 +316,6 @@ namespace BibleProjector_WPF.ViewModel
             }
         }
 
-        /// <summary>
-        /// 곡 예약의 한 단위를 나타냅니다.
-        /// </summary>
-        public class LyricReserve : INotifyPropertyChanged
-        {
-            static int ReserveGenCount = 0;
-            public LyricReserve(SingleLyric lyric)
-            {
-                this.personalNumber = ReserveGenCount++;
-                this.lyric = lyric;
-            }
-            public int personalNumber;
-            public int lyricNumber;
-            private SingleLyric lyric_in;
-            public SingleLyric lyric { get { return lyric_in; } set { lyric_in = value; NotifyPropertyChanged(); } }
-
-            public event PropertyChangedEventHandler PropertyChanged;
-            private void NotifyPropertyChanged(string propertyName = "")
-            {
-                if (PropertyChanged != null)
-                {
-                    PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-                }
-            }
-        }
-
         // =================================== 공용
 
         // 출력 곡 선택값
@@ -351,13 +325,16 @@ namespace BibleProjector_WPF.ViewModel
             get { return SelectedLyric_in; }
             set
             {
-                if (value.GetType() == typeof(SingleHymn)) 
+                if (value != null)
                 {
-                    if (module.ProgramOption.DefaultHymnFrame != null)
-                        SongFrameSelection = module.ProgramOption.DefaultHymnFrame;
+                    if (value.GetType() == typeof(SingleHymn))
+                    {
+                        if (module.ProgramOption.DefaultHymnFrame != null)
+                            SongFrameSelection = module.ProgramOption.DefaultHymnFrame;
+                    }
+                    else if (module.ProgramOption.DefaultCCMFrame != null)
+                        SongFrameSelection = module.ProgramOption.DefaultCCMFrame;
                 }
-                else if (module.ProgramOption.DefaultCCMFrame != null)
-                    SongFrameSelection = module.ProgramOption.DefaultCCMFrame;
                 SelectedLyric_in = value;
                 NotifyPropertyChanged();
             }
@@ -689,10 +666,7 @@ namespace BibleProjector_WPF.ViewModel
                 MessageBox.Show("출력할 찬양곡을 선택해주세요!", "찬양곡 선택되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
             else
             {
-                new module.ShowStarter().SongShowStart(
-                    lyric.makeSongData(linePerSlide)
-                    , FrameFile.Path
-                    , lyric.GetType() == typeof(ViewModel.SingleHymn));
+                new module.ShowStarter().SongShowStart(lyric, linePerSlide, FrameFile.Path);
                 currentLyricOuted();
             }
         }
@@ -721,6 +695,8 @@ namespace BibleProjector_WPF.ViewModel
             if (item != null)
             {
                 LyricList.Remove(item);
+                ReserveDataManager.instance.deleteItemsByData(item);
+                SongControl.SongControlAccess.CloseByRemovedLyric(item);
                 return true;
             }
             return false;

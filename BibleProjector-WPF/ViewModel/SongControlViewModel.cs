@@ -12,18 +12,25 @@ namespace BibleProjector_WPF.ViewModel
     {
         // ================================================ 세팅 ================================================
 
-        public void showSong(string[][][] songData, string FrameFileName, bool isHymn)
+        public void showSong(SingleLyric lyric, int linePerSlide, string FrameFilePath)
         {
+            this.currentLyric = lyric;
+
             // 반드시 songData는 모든 슬라이드마다 0. 제목, 1. 가사 일 것!
             // songData 규격 : [슬라이드 번호][정보 종류][커맨드(0)냐 내용(1)이냐]
-            this.currentPPTName = FrameFileName;
-            this.songData = songData;
-            newSongSetting(isHymn);
+            this.currentPPTName = System.IO.Path.GetFileName(FrameFilePath);
+            this.songData = lyric.makeSongData(linePerSlide);
+            newSongSetting(lyric.GetType() == typeof(ViewModel.SingleHymn));
         }
 
         public void hideSong()
         {
             SlideShowHide();
+        }
+
+        public bool isRunningLyric(SingleLyric lyric)
+        {
+            return (this.currentLyric == lyric);
         }
 
         private void newSongSetting(bool isHymn)
@@ -49,6 +56,8 @@ namespace BibleProjector_WPF.ViewModel
             isTextShow = true;
             isDisplayShow = true;
         }
+
+        SingleLyric currentLyric;
 
         string[][][] songData;
         string currentPPTName;
