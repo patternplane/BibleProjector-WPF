@@ -206,6 +206,29 @@ namespace BibleProjector_WPF.ViewModel
             onListUpdated(type);
         }
 
+        public void deleteItemsByData(object data)
+        {
+            Collection<ReserveCollectionUnit> deleteList = new Collection<ReserveCollectionUnit>();
+
+            foreach (ReserveCollectionUnit item in reserveList)
+                if (item.reserveData.isSameData(data))
+                    deleteList.Add(item);
+
+            deleteItems(deleteList);
+        }
+
+        public void deleteItemsByData(Collection<object> dataList)
+        {
+            Collection<ReserveCollectionUnit> deleteList = new Collection<ReserveCollectionUnit>();
+            
+            foreach (ReserveCollectionUnit item in reserveList)
+                foreach (object data in dataList)
+                    if (item.reserveData.isSameData(data))
+                        deleteList.Add(item);
+
+            deleteItems(deleteList);
+        }
+
         public ReserveCollectionUnit[] getSelectionItems()
         {
             List<ReserveCollectionUnit> list = new List<ReserveCollectionUnit>();

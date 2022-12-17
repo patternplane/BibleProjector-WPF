@@ -56,10 +56,7 @@ namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
                 System.Windows.MessageBox.Show("출력할 찬양곡을 선택해주세요!", "찬양곡 선택되지 않음", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
             else
             {
-                new module.ShowStarter().SongShowStart(
-                    songSelection.makeSongData(int.Parse(LinePerPageText))
-                    , SongFrameSelection.Path
-                    , songSelection.GetType() == typeof(SingleHymn));
+                new module.ShowStarter().SongShowStart(songSelection, int.Parse(LinePerPageText), SongFrameSelection.Path);
             }
         }
 
