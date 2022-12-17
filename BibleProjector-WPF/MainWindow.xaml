@@ -208,6 +208,7 @@
                                 <ListBox.ItemContainerStyle>
                                     <Style TargetType="ListBoxItem">
                                         <EventSetter Event="MouseDoubleClick" Handler="ReadingListBox_DoubleClick"></EventSetter>
+                                        <EventSetter Event="KeyDown" Handler="ReadingListBox_KeyDown"/>
                                     </Style>
                                 </ListBox.ItemContainerStyle>
                             </ListBox>
