@@ -13,25 +13,21 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace BibleProjector_WPF
+namespace BibleProjector_WPF.ReserveOptionViews
 {
     /// <summary>
-    /// ExternPPT.xaml에 대한 상호 작용 논리
+    /// Reading.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class ExternPPT : UserControl
+    public partial class Reading : UserControl
     {
-        ViewModel.ExternPPTViewModel VM_ExternPPT = null;
-
-        public ExternPPT()
+        public Reading()
         {
             InitializeComponent();
-
-            this.DataContext = VM_ExternPPT = new ViewModel.ExternPPTViewModel();
         }
 
-        void AddExternPPT_Click(object sender, RoutedEventArgs e)
+        void Event_RunButtonClick(object sender, RoutedEventArgs e)
         {
-            VM_ExternPPT.RunAddPPT();
+            ((ViewModel.ReserveOptionViewModels.Reading)this.DataContext).ShowContent();
         }
     }
 }
