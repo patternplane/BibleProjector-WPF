@@ -23,19 +23,14 @@ namespace BibleProjector_WPF
 
         private ViewModel.BibleControlViewModel VM_BibleControl;
 
-        public BibleControl(string Kjjeul)
+        public BibleControl()
         {
             BibleControlAccess = this;
 
             InitializeComponent();
-            this.DataContext = VM_BibleControl = new ViewModel.BibleControlViewModel(Kjjeul);
+            this.DataContext = VM_BibleControl = new ViewModel.BibleControlViewModel();
 
             setLayout();
-        }
-
-        public void ShowBible(string Kjjeul)
-        {
-            VM_BibleControl.showBible(Kjjeul);
         }
 
         void setLayout()

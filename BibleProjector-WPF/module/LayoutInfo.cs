@@ -23,6 +23,7 @@ namespace BibleProjector_WPF.module
         static public SingleLayoutData Layout_ReadingControl = new SingleLayoutData { Width = -1, Height = -1, x = 0, y = 0 };
         static public SingleLayoutData Layout_SongControl = new SingleLayoutData { Width = -1, Height = -1, x = 0, y = 0 };
         static public SingleLayoutData Layout_ExternPPTControl = new SingleLayoutData { Width = -1, Height = -1, x = 0, y = 0 };
+        static public SingleLayoutData Layout_ReserveWindow = new SingleLayoutData { Width = -1, Height = -1, x = 0, y = 0 };
 
         static void SingleInitializer(SingleLayoutData layout, double width, double height, double x, double y)
         {
@@ -56,7 +57,7 @@ namespace BibleProjector_WPF.module
         static public void Initialize()
         {
             string[] data = module.ProgramData.getLayoutData().Split(new string[] { SEPARATOR},StringSplitOptions.None);
-            if (data.Length != 20)
+            if (data.Length < 20)
                 return;
 
             SingleInitializer(
@@ -93,85 +94,66 @@ namespace BibleProjector_WPF.module
                 , double.Parse(data[17])
                 , double.Parse(data[18])
                 , double.Parse(data[19]));
+
+            // 예약창 생긴 이후로 추가된 부분
+            if (data.Length > 20)
+                SingleInitializer(
+                Layout_ReserveWindow
+                , double.Parse(data[20])
+                , double.Parse(data[21])
+                , double.Parse(data[22])
+                , double.Parse(data[23]));
         }
 
+        static void layoutStringAppender(StringBuilder str, SingleLayoutData layout)
+        {
+            str.Append(layout.Width);
+            str.Append(SEPARATOR);
+            str.Append(layout.Height);
+            str.Append(SEPARATOR);
+            str.Append(layout.x);
+            str.Append(SEPARATOR);
+            str.Append(layout.y);
+        }
         static public string getSaveData()
         {
             StringBuilder str = new StringBuilder(50);
 
-            str.Append(Layout_MainWindow.Width);
-            str.Append(SEPARATOR);
-            str.Append(Layout_MainWindow.Height);
-            str.Append(SEPARATOR);
-            str.Append(Layout_MainWindow.x);
-            str.Append(SEPARATOR);
-            str.Append(Layout_MainWindow.y);
+            layoutStringAppender(str,Layout_MainWindow);
             str.Append(SEPARATOR);
 
-            str.Append(Layout_BibleControl.Width);
-            str.Append(SEPARATOR);
-            str.Append(Layout_BibleControl.Height);
-            str.Append(SEPARATOR);
-            str.Append(Layout_BibleControl.x);
-            str.Append(SEPARATOR);
-            str.Append(Layout_BibleControl.y);
+            layoutStringAppender(str, Layout_BibleControl);
             str.Append(SEPARATOR);
 
-            str.Append(Layout_ReadingControl.Width);
-            str.Append(SEPARATOR);
-            str.Append(Layout_ReadingControl.Height);
-            str.Append(SEPARATOR);
-            str.Append(Layout_ReadingControl.x);
-            str.Append(SEPARATOR);
-            str.Append(Layout_ReadingControl.y);
+            layoutStringAppender(str, Layout_ReadingControl);
             str.Append(SEPARATOR);
 
-            str.Append(Layout_SongControl.Width);
-            str.Append(SEPARATOR);
-            str.Append(Layout_SongControl.Height);
-            str.Append(SEPARATOR);
-            str.Append(Layout_SongControl.x);
-            str.Append(SEPARATOR);
-            str.Append(Layout_SongControl.y);
+            layoutStringAppender(str, Layout_SongControl);
             str.Append(SEPARATOR);
 
-            str.Append(Layout_ExternPPTControl.Width);
+            layoutStringAppender(str, Layout_ExternPPTControl);
             str.Append(SEPARATOR);
-            str.Append(Layout_ExternPPTControl.Height);
-            str.Append(SEPARATOR);
-            str.Append(Layout_ExternPPTControl.x);
-            str.Append(SEPARATOR);
-            str.Append(Layout_ExternPPTControl.y);
+
+            layoutStringAppender(str, Layout_ReserveWindow);
 
             return str.ToString();
         }
 
+        static void removeLayoutData(SingleLayoutData layout)
+        {
+            layout.Width = -1;
+            layout.Height = -1;
+            layout.x = -1;
+            layout.y = -1;
+        }
         static public void removeAllLayoutData()
         {
-            Layout_MainWindow.Width = -1;
-            Layout_MainWindow.Height = -1;
-            Layout_MainWindow.x = -1;
-            Layout_MainWindow.y = -1;
-
-            Layout_BibleControl.Width = -1;
-            Layout_BibleControl.Height = -1;
-            Layout_BibleControl.x = -1;
-            Layout_BibleControl.y = -1;
-
-            Layout_ReadingControl.Width = -1;
-            Layout_ReadingControl.Height = -1;
-            Layout_ReadingControl.x = -1;
-            Layout_ReadingControl.y = -1;
-
-            Layout_SongControl.Width = -1;
-            Layout_SongControl.Height = -1;
-            Layout_SongControl.x = -1;
-            Layout_SongControl.y = -1;
-
-            Layout_ExternPPTControl.Width = -1;
-            Layout_ExternPPTControl.Height = -1;
-            Layout_ExternPPTControl.x = -1;
-            Layout_ExternPPTControl.y = -1;
+            removeLayoutData(Layout_MainWindow);
+            removeLayoutData(Layout_BibleControl);
+            removeLayoutData(Layout_ReadingControl);
+            removeLayoutData(Layout_SongControl);
+            removeLayoutData(Layout_ExternPPTControl);
+            removeLayoutData(Layout_ReserveWindow);
         }
     }
 }

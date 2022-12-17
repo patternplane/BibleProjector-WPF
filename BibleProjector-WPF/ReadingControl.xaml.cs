@@ -23,18 +23,14 @@ namespace BibleProjector_WPF
 
         private ViewModel.ReadingControlViewModel VM_ReadingControl;
 
-        public ReadingControl(int ReadingNumber)
+        public ReadingControl()
         {
             ReadingControlAccess = this;
 
             InitializeComponent();
-            this.DataContext = VM_ReadingControl = new ViewModel.ReadingControlViewModel(ReadingNumber);
-            setLayout();
-        }
+            this.DataContext = VM_ReadingControl = new ViewModel.ReadingControlViewModel();
 
-        public void ShowReading (int ReadingNumber)
-        {
-            VM_ReadingControl.showReading(ReadingNumber);
+            setLayout();
         }
 
         void setLayout()

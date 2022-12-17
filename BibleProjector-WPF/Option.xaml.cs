@@ -104,6 +104,7 @@ namespace BibleProjector_WPF
             module.LayoutInfo.removeAllLayoutData();
 
             MainWindow.ProgramMainWindow.ResetLayout();
+            ReserveManagerWindow.ReserveWindow.ResetLayout();
             if (BibleControl.BibleControlAccess != null)
                 BibleControl.BibleControlAccess.ResetLayout();
             if (ReadingControl.ReadingControlAccess != null)
