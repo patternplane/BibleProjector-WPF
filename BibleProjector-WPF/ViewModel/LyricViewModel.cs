@@ -10,19 +10,192 @@ using System.Windows.Input;
 
 namespace BibleProjector_WPF.ViewModel
 {
+    // 데이터 규격
+
+    /// <summary>
+    /// 곡의 한 단위를 나타냅니다.
+    /// </summary>
+    public class SingleLyric : INotifyPropertyChanged
+    {
+        public SingleLyric() { }
+
+        public SingleLyric(string title, string content)
+        {
+            this.title = title;
+            this.content = content;
+        }
+
+        public String title { get { return title_get(); } set { title_set(value); NotifyPropertyChanged(); } }
+        public String content { get { return content_get(); } set { content_set(value); NotifyPropertyChanged(); } }
+
+        // title
+        private string title_in;
+        protected virtual string title_get()
+        {
+            return title_in;
+        }
+        protected virtual void title_set(string value)
+        {
+            title_in = value;
+        }
+
+        // content
+        private string content_in;
+        protected virtual string content_get()
+        {
+            return content_in;
+        }
+        protected virtual void content_set(string value)
+        {
+            content_in = value;
+        }
+
+        public int getIndexInList()
+        {
+            return LyricViewModel.LyricList.IndexOf(this);
+        }
+
+        // 출력
+        public virtual string[][][] makeSongData(int linePerPage)
+        {
+            string[] pages = module.StringModifier.makePageWithLines(this.content, linePerPage);
+            string[][][] songData = new string[pages.Length][][];
+
+            for (int i = 0; i < pages.Length; i++)
+            {
+                songData[i] = new string[2][];
+
+                songData[i][0] = new string[2];
+                songData[i][0][0] = "{t}";
+                songData[i][0][1] = this.title;
+
+                songData[i][1] = new string[2];
+                songData[i][1][0] = "{c}";
+                songData[i][1][1] = pages[i];
+            }
+
+            return songData;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string propertyName = "")
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+
+    /// <summary>
+    /// 찬송가의 한 단위를 나타냅니다.
+    /// </summary>
+    public class SingleHymn : SingleLyric
+    {
+        public int VerseNum { get { return currentVerseNum(); } private set { } }
+
+        public SingleHymn(string title, string[] content) : base()
+        {
+            this.title_set(title);
+            Verse = content;
+        }
+
+        int currentVerse = 0;
+        string[] Verse;
+
+        // 절 작업
+        public int currentVerseNum()
+        {
+            return currentVerse + 1; // 실제 절로 변환
+        }
+        public int VerseCount()
+        {
+            return Verse.Length;
+        }
+        public void setVerseNum(int verse)
+        {
+            verse--; // 인덱스로 변환
+
+            if (verse < 0)
+                currentVerse = 0;
+            else if (verse >= Verse.Length)
+                currentVerse = Verse.Length - 1;
+            else
+                currentVerse = verse;
+        }
+        public void setPreviousVerseNum()
+        {
+            if (currentVerse > 0)
+                currentVerse--;
+        }
+        public void setNextVerseNum()
+        {
+            if (currentVerse < Verse.Length - 1)
+                currentVerse++;
+        }
+
+        // content 접근
+        protected override string content_get()
+        {
+            return Verse[currentVerse];
+        }
+        protected override void content_set(string value)
+        {
+            Verse[currentVerse] = value;
+        }
+
+        // 출력
+        public override string[][][] makeSongData(int linePerPage)
+        {
+            string[] pages;
+            List<string[][]> songData = new List<string[][]>(4);
+
+            for (int i = 0; i < Verse.Length; i++)
+            {
+                pages = module.StringModifier.makePageWithLines(Verse[i], linePerPage);
+
+                for (int j = 0; j < pages.Length; j++)
+                {
+                    songData.Add(new string[4][]);
+
+                    songData.Last()[0] = new string[2];
+                    songData.Last()[0][0] = "{t}";
+                    songData.Last()[0][1] = this.title;
+
+                    songData.Last()[1] = new string[2];
+                    songData.Last()[1][0] = "{c}";
+                    songData.Last()[1][1] = pages[j];
+
+                    songData.Last()[2] = new string[2];
+                    songData.Last()[2][0] = "{v}";
+                        songData.Last()[2][1] = (j == 0)?
+                            (i+1).ToString()
+                            :"";
+
+                    songData.Last()[3] = new string[2];
+                    songData.Last()[3][0] = "{va}";
+                        songData.Last()[3][1] = (i+1).ToString();
+                }
+            }
+
+            return songData.ToArray();
+        }
+    }
+
     class LyricViewModel : INotifyPropertyChanged
     {
         // 파일 입출력시 구분자
-        private const string SEPARATOR = "∂";
-        private const string RESERVER = "∇";
+        public const string SEPARATOR = "∂";
         private const string HYMN_SEPARATOR = "∫";
         // 검색창 기본 텍스트
         private const string DEFAUL_SEARCH_TEXT = "(가사 또는 제목으로 검색)";
 
         // ============================================ 세팅 ==============================================
-
+        
         public LyricViewModel()
         {
+            ReserveDataManager.subscriptToListChange(ListUpdate);
+
             getData();
             /*
             if (LyricList == null)
@@ -34,23 +207,10 @@ namespace BibleProjector_WPF.ViewModel
         {
             List<SingleLyric> PrimitiveLyricList = getLyricList();
             List<SingleHymn> PrimitiveHymnList = getHymnList();
-            List<LyricReserve> PrimitiveReserveList = getReserveData();
-
-            foreach (LyricReserve r in PrimitiveReserveList)
-            {
-                // 찬송가는 음수로 표기
-                if (r.lyricNumber < 0)
-                    r.lyric = PrimitiveHymnList[ -r.lyricNumber - 1];
-
-                // 일반 가사는 양수
-                else
-                    r.lyric = PrimitiveLyricList[r.lyricNumber];
-            }
 
             PrimitiveLyricList.Sort(delegate (SingleLyric a, SingleLyric b) { return a.title.CompareTo(b.title); });
             LyricList = new BindingList<SingleLyric>(PrimitiveLyricList);
             HymnList = new BindingList<SingleHymn>(PrimitiveHymnList);
-            LyricReserveList = new BindingList<LyricReserve>(PrimitiveReserveList);
         }
 
         List<SingleLyric> getLyricList()
@@ -89,23 +249,6 @@ namespace BibleProjector_WPF.ViewModel
             return PrimitiveHymnList;
         }
 
-        List<LyricReserve> getReserveData()
-        {
-            List<LyricReserve> PrimitiveReserveList = new List<LyricReserve>();
-
-            string rawData = module.ProgramData.getLyricReserveData().TrimEnd();
-
-            LyricReserve reserveData;
-            foreach (string data in rawData.Split(new string[] { SEPARATOR }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                reserveData = new LyricReserve(null);
-                reserveData.lyricNumber = int.Parse(data);
-                PrimitiveReserveList.Add(reserveData);
-            }
-
-            return PrimitiveReserveList;
-        }
-
         // ============================================ 종료 및 저장 ==============================================
 
         public string getSaveData_Lyric()
@@ -142,193 +285,7 @@ namespace BibleProjector_WPF.ViewModel
             return str.ToString();
         }
 
-        public string getSaveData_Reserve()
-        {
-
-            StringBuilder str = new StringBuilder(50).Clear();
-
-            foreach (LyricReserve r in LyricReserveList)
-            {
-                if (r.lyric.GetType() == typeof(SingleHymn)) {
-                    str.Append("-");
-                    str.Append(r.lyric.title);
-                }
-                else
-                    str.Append(LyricList.IndexOf(r.lyric));
-                str.Append(SEPARATOR);
-            }
-
-            return str.ToString();
-        }
-
         // ============================================ 속성 ==============================================
-
-        // =================================== 데이터 규격
-
-        /// <summary>
-        /// 곡의 한 단위를 나타냅니다.
-        /// </summary>
-        public class SingleLyric : INotifyPropertyChanged
-        {
-            public SingleLyric() { }
-
-            public SingleLyric(string title, string content)
-            {
-                this.title = title;
-                this.content = content;
-            }
-
-            public String title { get { return title_get(); } set { title_set(value); NotifyPropertyChanged(); } }
-            public String content { get { return content_get(); } set { content_set(value); NotifyPropertyChanged(); } }
-
-            // title
-            private string title_in;
-            protected virtual string title_get()
-            {
-                return title_in;
-            }
-            protected virtual void title_set(string value)
-            {
-                title_in = value;
-            }
-
-            // content
-            private string content_in;
-            protected virtual string content_get()
-            {
-                return content_in;
-            }
-            protected virtual void content_set(string value)
-            {
-                content_in = value;
-            }
-
-            // 출력
-            public virtual string[][][] makeSongData(int linePerPage)
-            {
-                string[] pages = module.StringModifier.makePageWithLines(this.content, linePerPage);
-                string[][][] songData = new string[pages.Length][][];
-
-                for (int i = 0; i < pages.Length; i++)
-                {
-                    songData[i] = new string[2][];
-
-                    songData[i][0] = new string[2];
-                    songData[i][0][0] = "{t}";
-                    songData[i][0][1] = this.title;
-
-                    songData[i][1] = new string[2];
-                    songData[i][1][0] = "{c}";
-                    songData[i][1][1] = pages[i];
-                }
-
-                return songData;
-            }
-
-            public event PropertyChangedEventHandler PropertyChanged;
-            private void NotifyPropertyChanged(string propertyName = "")
-            {
-                if (PropertyChanged != null)
-                {
-                    PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-                }
-            }
-        }
-
-        /// <summary>
-        /// 찬송가의 한 단위를 나타냅니다.
-        /// </summary>
-        public class SingleHymn : SingleLyric
-        {
-            public int VerseNum { get { return currentVerseNum(); } private set { } }
-
-            public SingleHymn(string title, string[] content) : base()
-            {
-                this.title_set(title);
-                Verse = content;
-            }
-
-            int currentVerse = 0;
-            string[] Verse;
-
-            // 절 작업
-            public int currentVerseNum()
-            {
-                return currentVerse + 1; // 실제 절로 변환
-            }
-            public int VerseCount()
-            {
-                return Verse.Length;
-            }
-            public void setVerseNum(int verse)
-            {
-                verse--; // 인덱스로 변환
-
-                if (verse < 0)
-                    currentVerse = 0;
-                else if (verse >= Verse.Length)
-                    currentVerse = Verse.Length - 1;
-                else
-                    currentVerse = verse;
-            }
-            public void setPreviousVerseNum()
-            {
-                if (currentVerse > 0)
-                    currentVerse--;
-            }
-            public void setNextVerseNum()
-            {
-                if (currentVerse < Verse.Length - 1)
-                    currentVerse++;
-            }
-
-            // content 접근
-            protected override string content_get()
-            {
-                return Verse[currentVerse];
-            }
-            protected override void content_set(string value)
-            {
-                Verse[currentVerse] = value;
-            }
-
-            // 출력
-            public override string[][][] makeSongData(int linePerPage)
-            {
-                string[] pages;
-                List<string[][]> songData = new List<string[][]>(4);
-
-                for (int i = 0; i < Verse.Length; i++)
-                {
-                    pages = module.StringModifier.makePageWithLines(Verse[i], linePerPage);
-
-                    for (int j = 0; j < pages.Length; j++)
-                    {
-                        songData.Add(new string[4][]);
-
-                        songData.Last()[0] = new string[2];
-                        songData.Last()[0][0] = "{t}";
-                        songData.Last()[0][1] = this.title;
-
-                        songData.Last()[1] = new string[2];
-                        songData.Last()[1][0] = "{c}";
-                        songData.Last()[1][1] = pages[j];
-
-                        songData.Last()[2] = new string[2];
-                        songData.Last()[2][0] = "{v}";
-                        songData.Last()[2][1] = (j == 0)?
-                            (i+1).ToString()
-                            :"";
-
-                        songData.Last()[3] = new string[2];
-                        songData.Last()[3][0] = "{va}";
-                        songData.Last()[3][1] = (i+1).ToString();
-                    }
-                }
-
-                return songData.ToArray();
-            }
-        }
 
         // 가사 선택값
         private SingleLyric currentLyric_in;
@@ -456,7 +413,7 @@ namespace BibleProjector_WPF.ViewModel
         }
 
         // 가사 리스트
-        public BindingList<SingleLyric> LyricList { get; set; }
+        static public BindingList<SingleLyric> LyricList { get; set; }
 
         // 검색 문구
         private string SearchText_in = DEFAUL_SEARCH_TEXT;
@@ -494,7 +451,7 @@ namespace BibleProjector_WPF.ViewModel
         // =================================== 찬송가 탭
 
         // 찬송가 리스트
-        public BindingList<SingleHymn> HymnList { get; set; }
+        static public BindingList<SingleHymn> HymnList { get; set; }
         private SingleHymn HymnSelection_in;
         public SingleHymn HymnSelection
         {
@@ -564,15 +521,29 @@ namespace BibleProjector_WPF.ViewModel
         // =================================== 예약 탭
 
         // 예약 리스트
-        public BindingList<LyricReserve> LyricReserveList { get; set; }
+        ReserveCollectionUnit[] _LyricReserveList;
+        public ReserveCollectionUnit[] LyricReserveList { get { return _LyricReserveList; } set { _LyricReserveList = value; NotifyPropertyChanged(nameof(LyricReserveList)); } }
         // 현재 (출력)선택값
-        private LyricReserve LyricReserveSelection_in;
-        public LyricReserve LyricReserveSelection { get { return LyricReserveSelection_in; } set { LyricReserveSelection_in = value;
+        private ReserveCollectionUnit LyricReserveSelection_in;
+        public ReserveCollectionUnit LyricReserveSelection { get { return LyricReserveSelection_in; } set { LyricReserveSelection_in = value;
                 if (LyricReserveSelection_in != null)
-                    SelectedLyric = LyricReserveSelection_in.lyric;
+                    SelectedLyric = ((module.SongReserveDataUnit)LyricReserveSelection_in.reserveData).lyric;
                 else
                     SelectedLyric = null;
             }
+        }
+
+        ReserveCollectionUnit[] getSongReserveList()
+        {
+            return ReserveDataManager.instance.ReserveList.Where
+                (obj => (obj.reserveType == module.ReserveType.Song)).ToArray();
+        }
+
+
+        void ListUpdate(object sender, Event.ReserveListChangedEventArgs e)
+        {
+            if ((e.changeType & Event.ReserveUpdateType.Song) > 0)
+                LyricReserveList = getSongReserveList();
         }
 
         // =================================== 출력란
@@ -598,6 +569,11 @@ namespace BibleProjector_WPF.ViewModel
 
         // ============================================ 이벤트에 쓰일 함수 ==============================================
 
+        public void RunShowLyric()
+        {
+            ShowLyric(SelectedLyric, SongFrameSelection, LinePerSlide);
+        }
+
         public void RunSearch()
         {
             if (searchStart(SearchText))
@@ -615,7 +591,7 @@ namespace BibleProjector_WPF.ViewModel
 
             if (newLyric != null)
             {
-                LyricList.Add(newLyric);
+                insertInOrder(newLyric);
                 if (lastSearchPattern != null)
                 {
                     refreshSearchItem(newLyric, lastSearchPattern);
@@ -624,9 +600,24 @@ namespace BibleProjector_WPF.ViewModel
                 currentLyric = newLyric;
             }
         }
-
-        public bool RunDelete()
+        void insertInOrder(SingleLyric newLyric) 
         {
+            int i = 0;
+            for(; i < LyricList.Count; i++)
+                if (newLyric.title.CompareTo(LyricList[i].title) <= 0)
+                {
+                    LyricList.Insert(i, newLyric);
+                    break;
+                }
+            if (i == LyricList.Count)
+                LyricList.Insert(i, newLyric);
+        }
+
+        public void RunDelete()
+        {
+            if (MessageBox.Show("현재 선택된 곡을 삭제하시겠습니까?", "찬양곡 삭제", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
+                return;
+
             SingleLyric deleteItem = currentLyric;
             if (deleteLyric(currentLyric))
             {
@@ -638,7 +629,8 @@ namespace BibleProjector_WPF.ViewModel
                 }
             }
 
-            return (deleteItem == outedLyric) ;
+            if (deleteItem == outedLyric)
+                new module.ControlWindowManager().closeSongControl();
         }
 
         public void RunSetFromSearchValue()
@@ -678,10 +670,32 @@ namespace BibleProjector_WPF.ViewModel
         public void RunAddReserveFromSelection()
         {
             if (SelectedLyric != null)
-                LyricReserveList.Add(new LyricReserve(SelectedLyric));
+            {
+                //LyricReserveList.Add(new LyricReserve(SelectedLyric));
+
+                // 예약창에 보내는 데이터
+                ViewModel.ReserveManagerViewModel.instance.ReserveDataManager.addReserve(
+                    new module.SongReserveDataUnit(SelectedLyric));
+            }
         }
 
         // ============================================ 메소드 ==============================================
+
+        void ShowLyric(SingleLyric lyric, module.ProgramOption.SongFrameFile FrameFile, int linePerSlide)
+        {
+            if (FrameFile == null)
+                MessageBox.Show("찬양 출력 틀ppt를 등록해주세요!", "ppt 틀 선택되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
+            else if (lyric == null)
+                MessageBox.Show("출력할 찬양곡을 선택해주세요!", "찬양곡 선택되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
+            else
+            {
+                new module.ShowStarter().SongShowStart(
+                    lyric.makeSongData(linePerSlide)
+                    , FrameFile.Path
+                    , lyric.GetType() == typeof(ViewModel.SingleHymn));
+                currentLyricOuted();
+            }
+        }
 
         SingleLyric makeEnableLyric(String title, String content)
         {

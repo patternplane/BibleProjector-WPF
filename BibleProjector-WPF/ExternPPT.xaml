@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:BibleProjector_WPF"
              mc:Ignorable="d" Height="529.918" Width="378.279">
 
-    <Grid x:Name="externPptMainGrid">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="15*"/>
             <RowDefinition Height="58*"/>
@@ -31,41 +31,7 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Button Grid.Row="0"
-                    Click="PPTOpen_Click">PPT 열기</Button>
-                <Button Grid.Row="1"
-                    Click="PPTDelete_Click">항목 삭제</Button>
             </Grid>
-            <Button Grid.Column="4" Content="선택된 ppt&#10; 새로고침"
-                    Click="Refresh_Click" Background="#FFCBFFB9"></Button>
-        </Grid>
-        <ListBox Grid.Row="3" 
-                 x:Name="ExternPPTListBox"
-                 ItemsSource="{Binding ExternPPTList}"
-                 SelectionMode="Extended"
-                 KeyDown="ExternPPTListBox_KeyDown">
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="ListBoxItem">
-                    <EventSetter Event="MouseDoubleClick" Handler="ExternPPTListBox_DoubleClick"></EventSetter>
-                </Style>
-            </ListBox.ItemContainerStyle>
-        </ListBox>
-        <Grid Grid.Row="5">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="89*"/>
-                <ColumnDefinition Width="33*"/>
-                <ColumnDefinition Width="146*"/>
-            </Grid.ColumnDefinitions>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Label>시작 슬라이드</Label>
-                <TextBox Grid.Row="1" Text="{Binding SlideStartNum_Text, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-            </Grid>
-            <Button Grid.Column="2" Content="ppt 실행"
-                    Click="PPTRun_Click"/>
         </Grid>
     </Grid>
 </UserControl>

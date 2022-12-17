@@ -197,13 +197,22 @@ namespace BibleProjector_WPF.ViewModel
 
             FD_SongFrame.InitialDirectory = System.IO.Path.GetDirectoryName(FD_SongFrame.FileName) + "\\";
 
-
+            StringBuilder overlappedFile = new StringBuilder();
             foreach (string newFilePath in FD_SongFrame.FileNames)
+            {
                 if (isValidFrameFile(newFilePath)) 
                 { 
                     SongFramePaths_List.Add(new module.SongFrameFile() { Path = newFilePath, FileName = System.IO.Path.GetFileName(newFilePath) });
                     Powerpoint.Song.setPresentation(newFilePath);
                 }
+                else
+                {
+                    overlappedFile.Append(newFilePath);
+                    overlappedFile.Append("\r\n");
+                }
+            }
+            if (overlappedFile.Length > 0)
+                System.Windows.MessageBox.Show("다음 파일들은 이미 사용중인 ppt 틀입니다.\r\n" + overlappedFile.ToString(), "중복된 파일 등록", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error); ;
         }
 
         public void refreshSongFrame(int[] itemIndex)

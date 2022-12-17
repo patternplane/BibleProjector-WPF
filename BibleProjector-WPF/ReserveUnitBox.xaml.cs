@@ -16,22 +16,13 @@ using System.Windows.Shapes;
 namespace BibleProjector_WPF
 {
     /// <summary>
-    /// ExternPPT.xaml에 대한 상호 작용 논리
+    /// ReserveUnitBox.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class ExternPPT : UserControl
+    public partial class ReserveUnitBox : UserControl
     {
-        ViewModel.ExternPPTViewModel VM_ExternPPT = null;
-
-        public ExternPPT()
+        public ReserveUnitBox()
         {
             InitializeComponent();
-
-            this.DataContext = VM_ExternPPT = new ViewModel.ExternPPTViewModel();
-        }
-
-        void AddExternPPT_Click(object sender, RoutedEventArgs e)
-        {
-            VM_ExternPPT.RunAddPPT();
         }
     }
 }

@@ -215,7 +215,7 @@
                         <Label Grid.Row="3" Grid.Column="0" Content="예약된&#10;목록" VerticalAlignment="Center" Height="42" Margin="0,56,0,47"  ></Label>
                         <ListBox Grid.Row="3" Grid.Column="1" SelectionMode="Extended"
                                  ItemsSource="{Binding LyricReserveList}"
-                                 DisplayMemberPath="lyric.title"
+                                 DisplayMemberPath="DisplayInfo"
                                  SelectedItem="{Binding LyricReserveSelection}"
                                  x:Name="LyricReserveListBox"
                                  KeyDown="ReserveDelete_KeyDown">

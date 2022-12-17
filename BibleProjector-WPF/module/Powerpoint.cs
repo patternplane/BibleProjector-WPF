@@ -1033,8 +1033,14 @@ namespace BibleProjector_WPF
 
             // ============================================ 세팅 및 종료 ============================================ 
 
-            static public void Initialize(string[] paths)
+            static bool isSetup = false;
+            static void Initialize()
             {
+                if (isSetup)
+                    return;
+                else
+                    isSetup = true;
+
                 if (System.IO.Directory.Exists(EXTERN_TEMP_DIRECTORY))
                     System.IO.Directory.Delete(EXTERN_TEMP_DIRECTORY, true);
                 System.IO.Directory.CreateDirectory(EXTERN_TEMP_DIRECTORY);
@@ -1042,13 +1048,11 @@ namespace BibleProjector_WPF
                 if (System.IO.Directory.Exists(EXTERN_THUMBNAIL_DIRECTORY))
                     System.IO.Directory.Delete(EXTERN_THUMBNAIL_DIRECTORY, true);
                 System.IO.Directory.CreateDirectory(EXTERN_THUMBNAIL_DIRECTORY);
-
-                foreach (string path in paths)
-                    ppt.Add(new ExternPPT(path));
             }
 
             static public void setPresentation(string path)
             {
+                Initialize();
                 ppt.Add(new ExternPPT(path));
             }
 
