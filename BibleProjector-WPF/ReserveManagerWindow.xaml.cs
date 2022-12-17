@@ -112,6 +112,8 @@ namespace BibleProjector_WPF
         {
             if (e.Key == Key.Delete)
                 ((ReserveManagerViewModel)DataContext).DeleteReserveData();
+            if (e.Key == Key.Enter)
+                ((ReserveManagerViewModel)DataContext).startShow();
         }
 
         void Event_SelectionChanged(object sender, SelectionChangedEventArgs e)

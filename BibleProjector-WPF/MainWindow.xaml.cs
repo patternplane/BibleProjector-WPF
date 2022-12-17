@@ -359,6 +359,8 @@ namespace BibleProjector_WPF
         {
             if (e.Key == Key.Delete)
                 BibleReserveDelete();
+            if (e.Key == Key.Enter)
+                BibleOutPut();
         }
 
         void BibleReserveDelete()
@@ -520,15 +522,20 @@ namespace BibleProjector_WPF
 
         void Bible_Verse_ListBox_DoubleClick(object sender, MouseButtonEventArgs e)
         {
-            BibleOutputButton_Click(null, null);
+            BibleOutPut();
         }
 
         void BibleReserveListBox_DoubleClick(object sender, MouseButtonEventArgs e)
         {
-            BibleOutputButton_Click(null, null);
+            BibleOutPut();
         }
 
         void BibleOutputButton_Click(object sender, RoutedEventArgs e)
+        {
+            BibleOutPut();
+        }
+
+        void BibleOutPut()
         {
             if (module.ProgramOption.BibleFramePath == null)
                 MessageBox.Show("성경 출력 틀ppt를 등록해주세요!", "ppt틀 등록되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -540,12 +547,23 @@ namespace BibleProjector_WPF
 
         // ======================================== 교독문 처리
 
+        void ReadingListBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                ReadingOutput();
+        }
+
         void ReadingListBox_DoubleClick(object sender, RoutedEventArgs e)
         {
-            ReadingOutputButton_Click(null, null);
+            ReadingOutput();
         }
 
         void ReadingOutputButton_Click(object sender, RoutedEventArgs e)
+        {
+            ReadingOutput();
+        }
+
+        void ReadingOutput()
         {
             if (module.ProgramOption.ReadingFramePath == null)
                 MessageBox.Show("교독문 출력 틀ppt를 등록해주세요!", "ppt틀 등록되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
