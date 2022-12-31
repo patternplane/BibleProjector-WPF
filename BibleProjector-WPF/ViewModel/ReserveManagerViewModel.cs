@@ -27,9 +27,9 @@ namespace BibleProjector_WPF.ViewModel
             
             // 옵션 탭
             ROViewModels[(int)ReserveType.NULL] = new ReserveOptionViewModels.Null();
-            ROViewModels[(int)ReserveType.Bible] = new ReserveOptionViewModels.Bible();
+            ROViewModels[(int)ReserveType.Bible] = new ReserveOptionViewModels.BibleSongBase();
             ROViewModels[(int)ReserveType.Reading] = new ReserveOptionViewModels.Reading();
-            ROViewModels[(int)ReserveType.Song] = new ReserveOptionViewModels.Song();
+            ROViewModels[(int)ReserveType.Song] = ROViewModels[(int)ReserveType.Bible];
             ROViewModels[(int)ReserveType.ExternPPT] = new ReserveOptionViewModels.ExternPPT();
             ReserveOptionViewModel = ROViewModels[(int)ReserveType.NULL];
 

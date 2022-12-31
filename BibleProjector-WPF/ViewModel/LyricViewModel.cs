@@ -206,11 +206,11 @@ namespace BibleProjector_WPF.ViewModel
         void getData()
         {
             List<SingleLyric> PrimitiveLyricList = getLyricList();
-            List<SingleHymn> PrimitiveHymnList = getHymnList();
+            List<SingleLyric> PrimitiveHymnList = getHymnList();
 
             PrimitiveLyricList.Sort(delegate (SingleLyric a, SingleLyric b) { return a.title.CompareTo(b.title); });
             LyricList = new BindingList<SingleLyric>(PrimitiveLyricList);
-            HymnList = new BindingList<SingleHymn>(PrimitiveHymnList);
+            HymnList = new BindingList<SingleLyric>(PrimitiveHymnList);
         }
 
         List<SingleLyric> getLyricList()
@@ -231,9 +231,9 @@ namespace BibleProjector_WPF.ViewModel
             return PrimitiveLyricList;
         }
 
-        List<SingleHymn> getHymnList()
+        List<SingleLyric> getHymnList()
         {
-            List<SingleHymn> PrimitiveHymnList = new List<SingleHymn>(10);
+            List<SingleLyric> PrimitiveHymnList = new List<SingleLyric>(10);
 
             string rawData = module.ProgramData.getHymnData();
 
@@ -428,7 +428,7 @@ namespace BibleProjector_WPF.ViewModel
         // =================================== 찬송가 탭
 
         // 찬송가 리스트
-        static public BindingList<SingleHymn> HymnList { get; set; }
+        static public BindingList<SingleLyric> HymnList { get; set; }
         private SingleHymn HymnSelection_in;
         public SingleHymn HymnSelection
         {

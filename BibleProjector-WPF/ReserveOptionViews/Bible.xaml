@@ -5,46 +5,24 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BibleProjector_WPF.ReserveOptionViews"
              mc:Ignorable="d" 
-             d:DesignHeight="465.983" d:DesignWidth="320.492">
+             d:DesignHeight="48.983" d:DesignWidth="365.492">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50*"/>
-            <RowDefinition Height="40*"/>
-            <RowDefinition Height="40*"/>
-            <RowDefinition Height="40*"/>
-            <RowDefinition Height="40*"/>
-            <RowDefinition Height="70*"/>
-            <RowDefinition Height="160*"/>
-        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="45*"/>
-            <ColumnDefinition Width="240*"/>
-            <ColumnDefinition Width="45*"/>
+            <ColumnDefinition Width="100*"/>
+            <ColumnDefinition Width="20*"/>
+            <ColumnDefinition Width="40*"/>
+            <ColumnDefinition Width="30*"/>
+            <ColumnDefinition Width="40*"/>
+            <ColumnDefinition Width="30*"/>
+            <ColumnDefinition Width="52*"/>
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Row="1" Grid.Column="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
+        <ComboBox ItemsSource="{Binding KuenList}" SelectedIndex="{Binding KuenSelection_index}" ></ComboBox>
+        <ComboBox Grid.Column="2" ItemsSource="{Binding JangList}" SelectedItem="{Binding JangSelection}"></ComboBox>
+        <Label Grid.Column="3" Content="장" VerticalAlignment="Center" Height="25" ></Label>
+        <ComboBox Grid.Column="4" ItemsSource="{Binding JeulList}" SelectedItem="{Binding JeulSelection}" />
+        <Label Grid.Column="5" Content="절" VerticalAlignment="Center" Height="25" />
+        <Button Grid.Column="6" FontSize="16" Click="Event_BibleShow" >출력!</Button>
 
-            <ComboBox ItemsSource="{Binding KuenList}" SelectedIndex="{Binding KuenSelection_index}" ></ComboBox>
-        </Grid>
-
-        <Grid Grid.Row="3" Grid.Column="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-
-            <ComboBox ItemsSource="{Binding JangList}" SelectedItem="{Binding JangSelection}"></ComboBox>
-            <Label Grid.Column="1" Content="장" VerticalAlignment="Center"></Label>
-            <ComboBox Grid.Column="2" ItemsSource="{Binding JeulList}" SelectedItem="{Binding JeulSelection}"></ComboBox>
-            <Label Grid.Column="3" Content="절" VerticalAlignment="Center"></Label>
-        </Grid>
-
-        <Button Grid.Column="1" Grid.Row="5" FontSize="16" Click="Event_BibleShow">출력!</Button>
     </Grid>
 </UserControl>

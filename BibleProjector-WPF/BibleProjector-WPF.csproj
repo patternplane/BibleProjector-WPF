@@ -69,6 +69,7 @@
       <DependentUpon>BibleModifyWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="CloseButtonDisabler.cs" />
+    <Compile Include="Converter\VisibilityConverter.cs" />
     <Compile Include="Event\ReserveListChanged.cs" />
     <Compile Include="ExternPPT.xaml.cs">
       <DependentUpon>ExternPPT.xaml</DependentUpon>
@@ -95,6 +96,9 @@
     <Compile Include="ReserveOptionViews\Bible.xaml.cs">
       <DependentUpon>Bible.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ReserveOptionViews\BibleSongBase.xaml.cs">
+      <DependentUpon>BibleSongBase.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ReserveOptionViews\ExternPPT.xaml.cs">
       <DependentUpon>ExternPPT.xaml</DependentUpon>
     </Compile>
@@ -106,6 +110,9 @@
     </Compile>
     <Compile Include="ReserveOptionViews\Reading.xaml.cs">
       <DependentUpon>Reading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ReserveOptionViews\SearchBase.xaml.cs">
+      <DependentUpon>SearchBase.xaml</DependentUpon>
     </Compile>
     <Compile Include="ReserveOptionViews\Song.xaml.cs">
       <DependentUpon>Song.xaml</DependentUpon>
@@ -137,6 +144,7 @@
     <Compile Include="ViewModel\ReserveOptionViewModels\Bible.cs" />
     <Compile Include="ViewModel\ReserveOptionViewModels\ExternPPT.cs" />
     <Compile Include="ViewModel\ReserveOptionViewModels\Null.cs" />
+    <Compile Include="ViewModel\ReserveOptionViewModels\BibleSongBase.cs" />
     <Compile Include="ViewModel\ReserveOptionViewModels\Reading.cs" />
     <Compile Include="ViewModel\ReserveOptionViewModels\IReserveOptionViewModel.cs" />
     <Compile Include="ViewModel\ReserveOptionViewModels\Song.cs" />
@@ -178,6 +186,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ReserveOptionViews\BibleSongBase.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ReserveOptionViews\ExternPPT.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -191,6 +203,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ReserveOptionViews\Reading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ReserveOptionViews\SearchBase.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

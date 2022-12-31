@@ -14,6 +14,10 @@ namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
 
         ReserveCollectionUnit selectionValue = null;
 
+        const int CCM_SONG_CODE = 0;
+        const int HYMN_SONG_CODE = 1;
+        BindingList<SingleLyric>[] songLists = { LyricViewModel.LyricList, LyricViewModel.HymnList };
+
         // =============================== 바인딩 속성 ================================
 
         int _LinePerPageText = 2;
@@ -30,14 +34,11 @@ namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
         module.SongFrameFile _SongFrameSelection;
         public module.SongFrameFile SongFrameSelection { get { return _SongFrameSelection; } set { _SongFrameSelection = value; onPropertyChanged(nameof(SongFrameSelection)); } }
 
-        public BindingList<SingleLyric> CCMList { get; set; }
-            = LyricViewModel.LyricList;
-        SingleLyric _CCMSelection;
-        public SingleLyric CCMSelection { get { return _CCMSelection; } set { _CCMSelection = value; ChangeLyricSelection(value); } }
-        public BindingList<SingleHymn> HymnList { get; set; } 
-            = LyricViewModel.HymnList;
-        SingleHymn _HymnSelection;
-        public SingleHymn HymnSelection { get { return _HymnSelection; } set { _HymnSelection = value; ChangeLyricSelection(value); } }
+        bool _isHymn;
+        public bool isHymn { get { return _isHymn; } set { _isHymn = value; onPropertyChanged(nameof(isHymn)); onPropertyChanged(nameof(SongList)); } }
+        public BindingList<SingleLyric> SongList { get { return ((isHymn) ? songLists[HYMN_SONG_CODE] : songLists[CCM_SONG_CODE]); } }
+        SingleLyric _SongSelection;
+        public SingleLyric SongSelection { get { return _SongSelection; } set { _SongSelection = value; if (value != null) ChangeLyricSelection(value); } }
 
         // =============================== 메소드 ================================
 
@@ -71,7 +72,15 @@ namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
             }
             else if (module.ProgramOption.DefaultCCMFrame != null)
                 SongFrameSelection = module.ProgramOption.DefaultCCMFrame;
-    }
+
+            module.SongReserveDataUnit reserveData = (module.SongReserveDataUnit)selectionValue.reserveData; 
+            if (reserveData.isHymn)
+                isHymn = true;
+            else
+                isHymn = false;
+            _SongSelection = reserveData.lyric;
+            onPropertyChanged(nameof(SongSelection));
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void onPropertyChanged(string propertyName = "")

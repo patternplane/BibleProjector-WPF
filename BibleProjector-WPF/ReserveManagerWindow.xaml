@@ -107,14 +107,11 @@
                     xmlns:rv="clr-namespace:BibleProjector_WPF.ReserveOptionViews"
                     xmlns:rvm="clr-namespace:BibleProjector_WPF.ViewModel.ReserveOptionViewModels">
                     <ContentControl.Resources>
-                        <DataTemplate DataType="{x:Type rvm:Bible}">
-                            <rv:Bible></rv:Bible>
+                        <DataTemplate DataType="{x:Type rvm:BibleSongBase}">
+                            <rv:BibleSongBase></rv:BibleSongBase>
                         </DataTemplate>
                         <DataTemplate DataType="{x:Type rvm:Reading}">
                             <rv:Reading></rv:Reading>
-                        </DataTemplate>
-                        <DataTemplate DataType="{x:Type rvm:Song}">
-                            <rv:Song></rv:Song>
                         </DataTemplate>
                         <DataTemplate DataType="{x:Type rvm:ExternPPT}">
                             <rv:ExternPPT></rv:ExternPPT>

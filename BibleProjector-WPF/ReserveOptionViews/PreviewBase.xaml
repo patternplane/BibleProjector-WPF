@@ -5,39 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BibleProjector_WPF.ReserveOptionViews"
              mc:Ignorable="d" 
-             d:DesignHeight="480" d:DesignWidth="320">
+             d:DesignHeight="235.328" d:DesignWidth="315.082">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="14*"/>
-            <RowDefinition Height="83*"/>
-            <RowDefinition Height="14*"/>
-            <RowDefinition Height="236*"/>
-            <RowDefinition Height="14*"/>
-            <RowDefinition Height="106*"/>
-            <RowDefinition Height="14*"/>
+            <RowDefinition Height="209*"/>
+            <RowDefinition Height="26"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="14*"/>
-            <ColumnDefinition Width="288*"/>
-            <ColumnDefinition Width="14*"/>
-        </Grid.ColumnDefinitions>
 
-        <Grid Grid.Row="1" Grid.Column="1" >
-            <!--데이터-->
-        </Grid>
-
-        <Grid Grid.Row="3" Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="209*"/>
-                <RowDefinition Height="26"/>
-            </Grid.RowDefinitions>
-
-            <TextBox></TextBox>
-            <Button Grid.Row="1" Content="중복 엔터 삭제" HorizontalAlignment="Right" Width="100"></Button>
-        </Grid>
-
-        <Grid Grid.Row="5" Grid.Column="1" >
-            <!--검색창-->
-        </Grid>
+        <TextBox Text="{Binding PreviewText, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        <Button Grid.Row="1" Content="중복 엔터 삭제" HorizontalAlignment="Right" Width="100"></Button>
     </Grid>
 </UserControl>
