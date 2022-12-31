@@ -95,6 +95,9 @@
     <Compile Include="ReserveOptionViews\Null.xaml.cs">
       <DependentUpon>Null.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ReserveOptionViews\PreviewBase.xaml.cs">
+      <DependentUpon>PreviewBase.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ReserveOptionViews\Reading.xaml.cs">
       <DependentUpon>Reading.xaml</DependentUpon>
     </Compile>
@@ -174,6 +177,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ReserveOptionViews\Null.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ReserveOptionViews\PreviewBase.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
