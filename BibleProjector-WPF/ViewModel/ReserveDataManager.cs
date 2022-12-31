@@ -112,13 +112,20 @@ namespace BibleProjector_WPF.ViewModel
 
             int preItemIndex = reserveList.IndexOf(filteredList[firstItem - 1]);
             int currentItemIndex;
+            bool isSeleted1, isSeleted2;
             for (int i = 0; i < Items.Count; i++)
             {
                 currentItemIndex = reserveList.IndexOf(Items[i]);
-                
+
+                isSeleted1 = reserveList[preItemIndex].isSelected;
+                isSeleted2 = reserveList[currentItemIndex].isSelected;
+
                 ReserveCollectionUnit temp = reserveList[preItemIndex];
                 reserveList[preItemIndex] = reserveList[currentItemIndex];
                 reserveList[currentItemIndex] = temp;
+
+                reserveList[currentItemIndex].isSelected = isSeleted1;
+                reserveList[preItemIndex].isSelected = isSeleted2;
 
                 preItemIndex = currentItemIndex;
             }
@@ -156,13 +163,20 @@ namespace BibleProjector_WPF.ViewModel
 
             int preItemIndex = reserveList.IndexOf(filteredList[lastItem + 1]);
             int currentItemIndex;
+            bool isSeleted1, isSeleted2;
             for (int i = Items.Count - 1; i >= 0; i--)
             {
                 currentItemIndex = reserveList.IndexOf(Items[i]);
 
+                isSeleted1 = reserveList[preItemIndex].isSelected;
+                isSeleted2 = reserveList[currentItemIndex].isSelected;
+
                 ReserveCollectionUnit temp = reserveList[preItemIndex];
                 reserveList[preItemIndex] = reserveList[currentItemIndex];
                 reserveList[currentItemIndex] = temp;
+
+                reserveList[currentItemIndex].isSelected = isSeleted1;
+                reserveList[preItemIndex].isSelected = isSeleted2;
 
                 preItemIndex = currentItemIndex;
             }
@@ -342,7 +356,7 @@ namespace BibleProjector_WPF.ViewModel
         public bool isSelected
         {
             get { return _isSelected; }
-            set { _isSelected = value; }
+            set { _isSelected = value; OnPropertyChanged(nameof(isSelected)); }
         }
 
         public string BackColor
