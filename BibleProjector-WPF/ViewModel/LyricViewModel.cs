@@ -696,7 +696,8 @@ namespace BibleProjector_WPF.ViewModel
             {
                 LyricList.Remove(item);
                 ReserveDataManager.instance.deleteItemsByData(item);
-                SongControl.SongControlAccess.CloseByRemovedLyric(item);
+                if (SongControl.SongControlAccess != null)
+                    SongControl.SongControlAccess.CloseByRemovedLyric(item);
                 return true;
             }
             return false;
