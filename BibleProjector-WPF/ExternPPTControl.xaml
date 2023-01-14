@@ -12,30 +12,85 @@
         SizeChanged="changeSize">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="16*"/>
-            <RowDefinition Height="39*"/>
-            <RowDefinition Height="14*"/>
-            <RowDefinition Height="148*"/>
-            <RowDefinition Height="15*"/>
-            <RowDefinition Height="52*"/>
-            <RowDefinition Height="21*"/>
+            <RowDefinition Height="15"/>
+            <RowDefinition Height="100*"/>
+            <RowDefinition Height="15"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="19*"/>
-            <ColumnDefinition Width="480*"/>
-            <ColumnDefinition Width="26*"/>
+            <ColumnDefinition Width="15"/>
+            <ColumnDefinition Width="175"/>
+            <ColumnDefinition Width="15"/>
+            <ColumnDefinition Width="350*"/>
+            <ColumnDefinition Width="15"/>
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Row="1 " Grid.Column="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="53*"/>
-                <ColumnDefinition Width="427*"/>
-            </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" Content="PPT : "></Label>
-            <TextBox Grid.Column="1" Focusable="False" Text="{Binding CurrentPPTInfo}"></TextBox>
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="45"/>
+                <RowDefinition Height="35*"/>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="30*"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="30*"/>
+            </Grid.RowDefinitions>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30*"/>
+                    <ColumnDefinition Width="110*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0" Content="PPT : "></Label>
+                <ScrollViewer Grid.Column="1" Focusable="false"  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden">
+                    <TextBox Focusable="false" Text="{Binding CurrentPPTInfo}"/>
+                </ScrollViewer>
+            </Grid>
+
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="80*"/>
+                    <RowDefinition Height="23*"/>
+                    <RowDefinition Height="80*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50*"/>
+                    <ColumnDefinition Width="8*"/>
+                    <ColumnDefinition Width="50*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Content="화면을&#10;가장 앞으로" Click="setSlideTopMost"></Button>
+                <ToggleButton Grid.Row="2"  IsChecked="{Binding isDisplayShow}">
+                    <ToggleButton.Style>
+                        <Style TargetType="ToggleButton">
+                            <Style.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter Property="Content" Value="화면 끄기"></Setter>
+                                    <Setter Property="FontWeight" Value="Bold"></Setter>
+                                    <Setter Property="FontSize" Value="14"></Setter>
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="False">
+                                    <Setter Property="Content" Value="화면 켜기"></Setter>
+                                    <Setter Property="FontWeight" Value="Normal"></Setter>
+                                    <Setter Property="FontSize" Value="14"></Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ToggleButton.Style>
+                </ToggleButton>
+            </Grid>
+
+            <Grid Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="85*"/>
+                    <ColumnDefinition Width="10*"/>
+                    <ColumnDefinition Width="85*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Content="이전&#10;페이지" Click="PreviousPageButton_Click"></Button>
+                <Button Grid.Column="2" Content="다음&#10;페이지" Click="NextPageButton_Click"></Button>
+            </Grid>
         </Grid>
 
-        <ListBox Grid.Row="3" Grid.Column="1" VerticalContentAlignment="Stretch" Focusable="False"
+        <ListBox Grid.Row="1" Grid.Column="3"  VerticalContentAlignment="Stretch" Focusable="False"
                  ScrollViewer.CanContentScroll="false"
                      ScrollViewer.HorizontalScrollBarVisibility="Visible"
                      ScrollViewer.VerticalScrollBarVisibility="Disabled"
@@ -69,42 +124,6 @@
             </ListBox.Style>
         </ListBox>
 
-
-        <Grid Grid.Row="5" Grid.Column="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="85*"/>
-                <ColumnDefinition Width="10*"/>
-                <ColumnDefinition Width="85*"/>
-                <ColumnDefinition Width="26*"/>
-                <ColumnDefinition Width="122*"/>
-                <ColumnDefinition Width="35*"/>
-                <ColumnDefinition Width="106*"/>
-            </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Content="이전&#10;페이지" Click="PreviousPageButton_Click"></Button>
-            <Button Grid.Column="2" Content="다음&#10;페이지" Click="NextPageButton_Click"></Button>
-
-            <Button Grid.Column="4" Content="화면을&#10;가장 앞으로" Click="setSlideTopMost"></Button>
-
-            <Grid Grid.Column="6">
-                <ToggleButton IsChecked="{Binding isDisplayShow}">
-                    <ToggleButton.Style>
-                        <Style TargetType="ToggleButton">
-                            <Style.Triggers>
-                                <Trigger Property="IsChecked" Value="True">
-                                    <Setter Property="Content" Value="화면 끄기"></Setter>
-                                    <Setter Property="FontWeight" Value="Bold"></Setter>
-                                    <Setter Property="FontSize" Value="14"></Setter>
-                                </Trigger>
-                                <Trigger Property="IsChecked" Value="False">
-                                    <Setter Property="Content" Value="화면 켜기"></Setter>
-                                    <Setter Property="FontWeight" Value="Normal"></Setter>
-                                    <Setter Property="FontSize" Value="14"></Setter>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ToggleButton.Style>
-                </ToggleButton>
-            </Grid>
-        </Grid>
     </Grid>
+
 </Window>

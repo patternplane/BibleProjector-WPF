@@ -12,30 +12,102 @@
         SizeChanged="changeSize">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="16*"/>
-            <RowDefinition Height="45*"/>
-            <RowDefinition Height="19*"/>
-            <RowDefinition Height="101*"/>
-            <RowDefinition Height="23*"/>
-            <RowDefinition Height="80*"/>
-            <RowDefinition Height="21*"/>
+            <RowDefinition Height="15"/>
+            <RowDefinition Height="100*"/>
+            <RowDefinition Height="15"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="19*"/>
-            <ColumnDefinition Width="480*"/>
-            <ColumnDefinition Width="26*"/>
+            <ColumnDefinition Width="15"/>
+            <ColumnDefinition Width="175"/>
+            <ColumnDefinition Width="15"/>
+            <ColumnDefinition Width="350*"/>
+            <ColumnDefinition Width="15"/>
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Row="1" Grid.Column="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="19*"/>
-                <ColumnDefinition Width="101*"/>
-            </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" Content="현재 위치 : "></Label>
-            <TextBox Grid.Column="1" Focusable="False" Text="{Binding CurrentBibleInfo}"></TextBox>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="45"/>
+                <RowDefinition Height="35*"/>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="30*"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="30*"/>
+            </Grid.RowDefinitions>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="65*"/>
+                    <ColumnDefinition Width="100*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0" Content="현재 위치 : "></Label>
+                <TextBox Grid.Column="1" Focusable="false" Text="{Binding CurrentBibleInfo}" TextWrapping="WrapWithOverflow"/>
+            </Grid>
+
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="80*"/>
+                    <RowDefinition Height="23*"/>
+                    <RowDefinition Height="80*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50*"/>
+                    <ColumnDefinition Width="8*"/>
+                    <ColumnDefinition Width="50*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Content="화면을&#10;가장 앞으로" Click="setSlideTopMost"></Button>
+                <CheckBox Grid.Column="2" VerticalContentAlignment="Center" Content="(이전 절의&#10;마지막&#10;페이지로)" IsChecked="{Binding preview_GoLastPage}" FontSize="10"/>
+                <ToggleButton Grid.Row="2" IsChecked="{Binding isDisplayShow}">
+                    <ToggleButton.Style>
+                        <Style TargetType="ToggleButton">
+                            <Style.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter Property="Content" Value="화면 끄기"></Setter>
+                                    <Setter Property="FontWeight" Value="Bold"></Setter>
+                                    <Setter Property="FontSize" Value="14"></Setter>
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="False">
+                                    <Setter Property="Content" Value="화면 켜기"></Setter>
+                                    <Setter Property="FontWeight" Value="Normal"></Setter>
+                                    <Setter Property="FontSize" Value="14"></Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ToggleButton.Style>
+                </ToggleButton>
+                <ToggleButton Grid.Row="2" Grid.Column="2" IsChecked="{Binding isTextShow}">
+                    <ToggleButton.Style>
+                        <Style TargetType="ToggleButton">
+                            <Style.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter Property="Content" Value="자막 숨기기"></Setter>
+                                    <Setter Property="FontWeight" Value="Bold"></Setter>
+                                    <Setter Property="FontSize" Value="14"></Setter>
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="False">
+                                    <Setter Property="Content" Value="자막 보이기"></Setter>
+                                    <Setter Property="FontWeight" Value="Normal"></Setter>
+                                    <Setter Property="FontSize" Value="14"></Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ToggleButton.Style>
+                </ToggleButton>
+            </Grid>
+
+            <Grid Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="85*"/>
+                    <ColumnDefinition Width="10*"/>
+                    <ColumnDefinition Width="85*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Content="이전&#10;페이지" Click="PreviousPageButton_Click"></Button>
+                <Button Grid.Column="2" Content="다음&#10;페이지" Click="NextPageButton_Click"></Button>
+            </Grid>
         </Grid>
 
-        <ListBox Grid.Row="3" Grid.Column="1" VerticalContentAlignment="Stretch" ScrollViewer.CanContentScroll="False" Focusable="False"
+        <ListBox Grid.Row="1" Grid.Column="3" VerticalContentAlignment="Stretch" ScrollViewer.CanContentScroll="False" Focusable="False"
                  ItemsSource="{Binding BiblePages}"
                  SelectedIndex="{Binding CurrentPageIndex}"
                  SelectionChanged="PageListBox_SelectionChanged">
@@ -60,73 +132,5 @@
                 </Style>
             </ListBox.Style>
         </ListBox>
-
-        <Grid Grid.Row="5" Grid.Column="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="85*"/>
-                <ColumnDefinition Width="10*"/>
-                <ColumnDefinition Width="85*"/>
-                <ColumnDefinition Width="26*"/>
-                <ColumnDefinition Width="122*"/>
-                <ColumnDefinition Width="35*"/>
-                <ColumnDefinition Width="106*"/>
-            </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Content="이전&#10;페이지" Click="PreviousPageButton_Click"></Button>
-            <Button Grid.Column="2" Content="다음&#10;페이지" Click="NextPageButton_Click"></Button>
-
-            <Grid Grid.Column="4">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="38*"/>
-                    <RowDefinition Height="14*"/>
-                    <RowDefinition Height="32*"/>
-                </Grid.RowDefinitions>
-                <Button Content="화면을&#10;가장 앞으로" Click="setSlideTopMost"></Button>
-                <CheckBox Grid.Row="2" Content="(이전 절의&#10;마지막페이지로)" IsChecked="{Binding preview_GoLastPage}"></CheckBox>
-            </Grid>
-
-            <Grid Grid.Column="6">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="36*"/>
-                    <RowDefinition Height="9*"/>
-                    <RowDefinition Height="36*"/>
-                </Grid.RowDefinitions>
-                <ToggleButton IsChecked="{Binding isDisplayShow}">
-                    <ToggleButton.Style>
-                        <Style TargetType="ToggleButton">
-                            <Style.Triggers>
-                                <Trigger Property="IsChecked" Value="True">
-                                    <Setter Property="Content" Value="화면 끄기"></Setter>
-                                    <Setter Property="FontWeight" Value="Bold"></Setter>
-                                    <Setter Property="FontSize" Value="14"></Setter>
-                                </Trigger>
-                                <Trigger Property="IsChecked" Value="False">
-                                    <Setter Property="Content" Value="화면 켜기"></Setter>
-                                    <Setter Property="FontWeight" Value="Normal"></Setter>
-                                    <Setter Property="FontSize" Value="14"></Setter>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ToggleButton.Style>
-                </ToggleButton>
-                <ToggleButton Grid.Row="2" IsChecked="{Binding isTextShow}">
-                    <ToggleButton.Style>
-                        <Style TargetType="ToggleButton">
-                            <Style.Triggers>
-                                <Trigger Property="IsChecked" Value="True">
-                                    <Setter Property="Content" Value="자막 숨기기"></Setter>
-                                    <Setter Property="FontWeight" Value="Bold"></Setter>
-                                    <Setter Property="FontSize" Value="14"></Setter>
-                                </Trigger>
-                                <Trigger Property="IsChecked" Value="False">
-                                    <Setter Property="Content" Value="자막 보이기"></Setter>
-                                    <Setter Property="FontWeight" Value="Normal"></Setter>
-                                    <Setter Property="FontSize" Value="14"></Setter>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ToggleButton.Style>
-                </ToggleButton>
-            </Grid>
-        </Grid>
     </Grid>
 </Window>
