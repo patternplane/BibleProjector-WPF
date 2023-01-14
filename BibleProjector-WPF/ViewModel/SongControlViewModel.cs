@@ -8,6 +8,12 @@ using System.ComponentModel;
 
 namespace BibleProjector_WPF.ViewModel
 {
+    class songPage
+    {
+        public bool isHeadVerse { get; set; }
+        public string content { get; set; }
+    }
+
     class SongControlViewModel : INotifyPropertyChanged
     {
         // ================================================ 세팅 ================================================
@@ -39,18 +45,18 @@ namespace BibleProjector_WPF.ViewModel
             SetSongData(songData);
 
             SongPages = null;
-            SongPages = new BindingList<string>();
+            SongPages = new BindingList<songPage>();
             if (isHymn)
                 foreach (string[][] data in songData)
                 {
                     if (data[2][1].Length == 0)
-                        SongPages.Add(data[1][1]);
-                    else 
-                        SongPages.Add("    " + data[2][1] + " 절\r\n\r\n" + data[1][1]);
+                        SongPages.Add(new songPage() { isHeadVerse = false, content = data[1][1] });
+                    else
+                        SongPages.Add(new songPage() { isHeadVerse = true, content = "    " + data[2][1] + " 절\r\n\r\n" + data[1][1] });
                 }
             else
                 foreach (string[][] data in songData)
-                    SongPages.Add(data[1][1]);
+                    SongPages.Add(new songPage() { isHeadVerse = false, content = data[1][1] });
             CurrentPageIndex = 0;
 
             isTextShow = true;
@@ -93,8 +99,8 @@ namespace BibleProjector_WPF.ViewModel
         public string CurrentSongInfo { get; set; }
 
         // 찬양곡 페이지 리스트박스
-        private BindingList<string> SongPages_in;
-        public BindingList<string> SongPages { get { return SongPages_in; } set { SongPages_in = value; NotifyPropertyChanged(); } }
+        private BindingList<songPage> SongPages_in;
+        public BindingList<songPage> SongPages { get { return SongPages_in; } set { SongPages_in = value; NotifyPropertyChanged(); } }
         private int CurrentPageIndex_in;
         public int CurrentPageIndex { get { return CurrentPageIndex_in; } set { CurrentPageIndex_in = value;
                 if (CurrentPageIndex_in != -1)

@@ -42,8 +42,21 @@
                  SelectionChanged="PageListBox_SelectionChanged">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Border BorderThickness="1,1,1,1" BorderBrush="Black" MinWidth="50"  Padding="5,0">
-                        <TextBlock Text="{Binding}" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                    <Border BorderThickness="1,1,1,1" MinWidth="50" Padding="5,0">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding isHeadVerse}" Value="true">
+                                        <Setter Property="BorderBrush" Value="#FF78913C"></Setter>
+                                        <Setter Property="Background" Value="#6E96E669"></Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding isHeadVerse}" Value="false">
+                                        <Setter Property="BorderBrush" Value="Black"></Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <TextBlock Text="{Binding content}" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
                     </Border>
                 </DataTemplate>
             </ListBox.ItemTemplate>
