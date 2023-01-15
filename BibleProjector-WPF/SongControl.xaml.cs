@@ -59,8 +59,8 @@ namespace BibleProjector_WPF
 
         public void ResetLayout()
         {
-            this.Width = 533.438;
-            this.Height = 336.375;
+            this.Width = 570;
+            this.Height = 340;
         }
 
         void changeSize(object sender, SizeChangedEventArgs e)
