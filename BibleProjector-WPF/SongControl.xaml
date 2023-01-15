@@ -27,11 +27,8 @@
         <Grid Grid.Row="1" Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="45"/>
-                <RowDefinition Height="35*"/>
-                <RowDefinition Height="100"/>
-                <RowDefinition Height="30*"/>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="30*"/>
+                <RowDefinition Height="10*" MinHeight="6" MaxHeight="10"/>
+                <RowDefinition Height="165*"/>
             </Grid.RowDefinitions>
 
             <Grid>
@@ -46,66 +43,78 @@
                 </ScrollViewer>
             </Grid>
 
-            <Grid Grid.Row="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="80*"/>
-                    <RowDefinition Height="23*"/>
-                    <RowDefinition Height="80*"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="50*"/>
-                    <ColumnDefinition Width="8*"/>
-                    <ColumnDefinition Width="50*"/>
-                </Grid.ColumnDefinitions>
+            <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40*" MinHeight="33" MaxHeight="45"/>
+                        <RowDefinition Height="10*" MinHeight="6" MaxHeight="10"/>
+                        <RowDefinition Height="40*" MinHeight="33" MaxHeight="45"/>
+                        <RowDefinition Height="20*" MinHeight="15" MaxHeight="20"/>
+                        <RowDefinition Height="40*" MinHeight="33" MaxHeight="45"/>
+                    </Grid.RowDefinitions>
 
-                <Button Content="화면을&#10;가장 앞으로" Click="setSlideTopMost"></Button>
-                <ToggleButton Grid.Row="2" IsChecked="{Binding isDisplayShow}">
-                    <ToggleButton.Style>
-                        <Style TargetType="ToggleButton">
-                            <Style.Triggers>
-                                <Trigger Property="IsChecked" Value="True">
-                                    <Setter Property="Content" Value="화면 끄기"></Setter>
-                                    <Setter Property="FontWeight" Value="Bold"></Setter>
-                                    <Setter Property="FontSize" Value="15"></Setter>
-                                </Trigger>
-                                <Trigger Property="IsChecked" Value="False">
-                                    <Setter Property="Content" Value="화면 켜기"></Setter>
-                                    <Setter Property="FontWeight" Value="Normal"></Setter>
-                                    <Setter Property="FontSize" Value="13"></Setter>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ToggleButton.Style>
-                </ToggleButton>
-                <ToggleButton Grid.Row="2" Grid.Column="2" IsChecked="{Binding isTextShow}" >
-                    <ToggleButton.Style>
-                        <Style TargetType="ToggleButton">
-                            <Style.Triggers>
-                                <Trigger Property="IsChecked" Value="True">
-                                    <Setter Property="Content" Value="자막 숨기기"></Setter>
-                                    <Setter Property="FontWeight" Value="Bold"></Setter>
-                                    <Setter Property="FontSize" Value="15"></Setter>
-                                </Trigger>
-                                <Trigger Property="IsChecked" Value="False">
-                                    <Setter Property="Content" Value="자막 보이기"></Setter>
-                                    <Setter Property="FontWeight" Value="Normal"></Setter>
-                                    <Setter Property="FontSize" Value="13"></Setter>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ToggleButton.Style>
-                </ToggleButton>
-            </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="85*"/>
+                            <ColumnDefinition Width="85*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Content="이전&#10;페이지" Click="PreviousPageButton_Click"></Button>
+                        <Button Grid.Column="2" Content="다음&#10;페이지" Click="NextPageButton_Click"></Button>
+                    </Grid>
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50*"/>
+                            <ColumnDefinition Width="8*"/>
+                            <ColumnDefinition Width="50*"/>
+                        </Grid.ColumnDefinitions>
+                        <ToggleButton IsChecked="{Binding isDisplayShow}">
+                            <ToggleButton.Style>
+                                <Style TargetType="ToggleButton">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsChecked" Value="True">
+                                            <Setter Property="Content" Value="화면 끄기"></Setter>
+                                            <Setter Property="FontWeight" Value="Bold"></Setter>
+                                            <Setter Property="FontSize" Value="14"></Setter>
+                                        </Trigger>
+                                        <Trigger Property="IsChecked" Value="False">
+                                            <Setter Property="Content" Value="화면 켜기"></Setter>
+                                            <Setter Property="FontWeight" Value="Normal"></Setter>
+                                            <Setter Property="FontSize" Value="13"></Setter>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ToggleButton.Style>
+                        </ToggleButton>
+                        <ToggleButton Grid.Column="2" IsChecked="{Binding isTextShow}" >
+                            <ToggleButton.Style>
+                                <Style TargetType="ToggleButton">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsChecked" Value="True">
+                                            <Setter Property="Content" Value="자막 숨기기"></Setter>
+                                            <Setter Property="FontWeight" Value="Bold"></Setter>
+                                            <Setter Property="FontSize" Value="14"></Setter>
+                                        </Trigger>
+                                        <Trigger Property="IsChecked" Value="False">
+                                            <Setter Property="Content" Value="자막 보이기"></Setter>
+                                            <Setter Property="FontWeight" Value="Normal"></Setter>
+                                            <Setter Property="FontSize" Value="13"></Setter>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ToggleButton.Style>
+                        </ToggleButton>
+                    </Grid>
 
-            <Grid Grid.Row="4">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="85*"/>
-                    <ColumnDefinition Width="10*"/>
-                    <ColumnDefinition Width="85*"/>
-                </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Content="이전&#10;페이지" Click="PreviousPageButton_Click"></Button>
-                <Button Grid.Column="2" Content="다음&#10;페이지" Click="NextPageButton_Click"></Button>
-            </Grid>
+                    <Grid Grid.Row="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50*"/>
+                            <ColumnDefinition Width="8*"/>
+                            <ColumnDefinition Width="50*"/>
+                        </Grid.ColumnDefinitions>
+                            <Button Content="화면을&#10;가장 앞으로" Click="setSlideTopMost"></Button>
+                    </Grid>
+                </Grid>
+            </ScrollViewer>
         </Grid>
 
         <ListBox Grid.Row="1" Grid.Column="3" VerticalContentAlignment="Stretch" ScrollViewer.CanContentScroll="False" Focusable="False"
