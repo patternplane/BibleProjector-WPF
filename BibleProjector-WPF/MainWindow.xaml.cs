@@ -55,9 +55,6 @@ namespace BibleProjector_WPF
 
         public static MainWindow ProgramMainWindow = null;
 
-        // 도움말 내용
-        public string HelpText { get; set; } = new module.HelpTextData().getHelpText();
-
         // =================================================== 윈도우 레이아웃 변경 ======================================================
 
         public void ResetLayout()
@@ -105,7 +102,6 @@ namespace BibleProjector_WPF
             BibleInitialize();
             ReadingInitialize();
             ReserveInitialize();
-            HelpViewer.DataContext = this;
 
             setLayout();
 

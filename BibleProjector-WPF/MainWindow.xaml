@@ -242,9 +242,7 @@
 
             <!--도움말-->
             <TabItem BorderBrush="#FFF7B3B3" Background="#FFF7B3B3" Header="도움말">
-                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" x:Name="HelpViewer">
-                    <Binding Path="HelpText"></Binding>
-                </ScrollViewer>
+                <local:ManualTab></local:ManualTab>
             </TabItem>
         </TabControl>
     </Grid>
