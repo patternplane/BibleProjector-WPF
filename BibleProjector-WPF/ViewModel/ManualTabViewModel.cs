@@ -13,7 +13,7 @@ namespace BibleProjector_WPF.ViewModel
 
         public ManualTabViewModel()
         {
-            ManualList = new module.HelpTextData().getManuals();
+            ManualList = new module.ManualData().GetManuals();
             OnPropertyChanged(nameof(ManualList));
         }
 

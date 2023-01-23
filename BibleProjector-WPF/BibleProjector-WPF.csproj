@@ -78,8 +78,8 @@
     </Compile>
     <Compile Include="module\ControlWindowManager.cs" />
     <Compile Include="module\ExternPPTManager.cs" />
-    <Compile Include="module\HelpTextData.cs" />
     <Compile Include="module\LayoutInfo.cs" />
+    <Compile Include="module\ManualData.cs" />
     <Compile Include="module\ProgramOption.cs" />
     <Compile Include="module\ReserveDataUnits.cs" />
     <Compile Include="module\ShowStarter.cs" />
