@@ -363,6 +363,10 @@ namespace BibleProjector_WPF.ViewModel
         {
             get { return RTypeToColor(this.reserveType); }
         }
+        public string ForeColor
+        {
+            get { return RTypeToColor2(this.reserveType); }
+        }
         string RTypeToColor(ReserveType type)
         {
             switch (type)
@@ -375,6 +379,23 @@ namespace BibleProjector_WPF.ViewModel
                     return "#FFCEEF76";
                 case ReserveType.ExternPPT:
                     return "#FFC8BFE7";
+                case ReserveType.NULL:
+                default:
+                    return "#FFC3C3C3";
+            }
+        }
+        string RTypeToColor2(ReserveType type)
+        {
+            switch (type)
+            {
+                case ReserveType.Bible:
+                    return "#FF69a9bA";
+                case ReserveType.Reading:
+                    return "#FFbFb480";
+                case ReserveType.Song:
+                    return "#FF9EbF46";
+                case ReserveType.ExternPPT:
+                    return "#FF988Fb7";
                 case ReserveType.NULL:
                 default:
                     return "#FFC3C3C3";

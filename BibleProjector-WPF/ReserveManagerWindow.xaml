@@ -54,7 +54,7 @@
                             </ListView.ItemContainerStyle>
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <local:ReserveUnitBox Margin="2,2,2,2"></local:ReserveUnitBox>
+                                    <local:ReserveUnitBox Margin="1"></local:ReserveUnitBox>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
