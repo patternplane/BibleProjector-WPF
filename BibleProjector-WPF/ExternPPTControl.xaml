@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BibleProjector_WPF"
         mc:Ignorable="d"
-        Title="외부 PPT" Height="340" Width="570"
+        Title="{Binding WindowTitle}" Height="340" Width="570"
         KeyDown="Window_KeyDown"
         Activated="Window_Activated"
         LocationChanged="changeLocate"
