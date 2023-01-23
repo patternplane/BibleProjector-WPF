@@ -27,8 +27,6 @@ namespace BibleProjector_WPF.module
         const string LAYOUT_DATA = PROGRAM_DATA_PATH + "\\LayoutData";
         const string RESERVE_DATA = PROGRAM_DATA_PATH + "\\ReserveData";
 
-        const string MANUAL_DATA = PROGRAM_DATA_PATH + "\\RawManual";
-
         // 이전 버전의 프로그램 저장값을 지원하기 위한 장치
         // 더 이상 추가 지원하지 않을 기능들
         const string LYRIC_RESERVE_DATA = PROGRAM_DATA_PATH + "\\LyricReserve";
@@ -135,11 +133,6 @@ namespace BibleProjector_WPF.module
         {
             VM_ReserveManager = ReserveManagerViewModel;
             return getDataFromFile(RESERVE_DATA);
-        }
-
-        public static string getManualData()
-        {
-            return getDataFromFile(MANUAL_DATA);
         }
 
         // 더 이상 추가 지원하지 않을 기능들
