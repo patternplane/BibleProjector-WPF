@@ -91,8 +91,8 @@ namespace BibleProjector_WPF.ViewModel
 
         // ================================================ 속성 ================================================
 
-        // 화면 끄기 토글버튼 - isChecked
-        private bool isDisplayShow_in;
+    // 화면 끄기 토글버튼 - isChecked
+    private bool isDisplayShow_in;
         public bool isDisplayShow { get { return isDisplayShow_in; } set { isDisplayShow_in = value;
                 if (isDisplayShow_in)
                     onDisplay();
@@ -114,6 +114,7 @@ namespace BibleProjector_WPF.ViewModel
 
         // 현재 성경 위치 표시 - Text
         public string CurrentBibleInfo { get; set; }
+        public string WindowTitle { get; set; } = "";
 
         // 성경 페이지 리스트박스
         private BindingList<string> BiblePages_in;
@@ -133,7 +134,8 @@ namespace BibleProjector_WPF.ViewModel
 
         void setCurrentBibleInfo(string book, int chapter, int verse)
         {
-            CurrentBibleInfo = string.Format("{0}  {1}장  {2}절",book,chapter,verse);
+            CurrentBibleInfo = string.Format("{0}  {1}장  {2}절", book, chapter, verse);
+            WindowTitle = string.Format("성경({0} {1}:{2})", Database.getAbrTitle(Kjjeul.Substring(0, 2)), chapter, verse);
         }
 
         // ================================================ 이벤트에 쓰일 함수 ================================================

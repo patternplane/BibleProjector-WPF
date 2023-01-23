@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BibleProjector_WPF"
         mc:Ignorable="d"
-        Title="교독문" Height="340" Width="570"
+        Title="{Binding WindowTitle}" Height="340" Width="570"
         KeyDown="Window_KeyDown"
         Activated="Window_Activated"
         LocationChanged="changeLocate"
@@ -18,13 +18,39 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="15"/>
-            <ColumnDefinition Width="175"/>
-            <ColumnDefinition Width="15"/>
             <ColumnDefinition Width="350*"/>
+            <ColumnDefinition Width="15"/>
+            <ColumnDefinition Width="175"/>
             <ColumnDefinition Width="15"/>
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Row="1" Grid.Column="1">
+        <ListBox Grid.Row="1" Grid.Column="1"  VerticalContentAlignment="Stretch" ScrollViewer.CanContentScroll="False" Focusable="False"
+                 ItemsSource="{Binding ReadingPages}"
+                 SelectedIndex="{Binding CurrentPageIndex}"
+                 SelectionChanged="PageListBox_SelectionChanged">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderThickness="1,1,1,1" BorderBrush="Black" MinWidth="50"  Padding="5,0">
+                        <TextBlock Text="{Binding}" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.Style>
+                <Style TargetType="ListBox">
+                    <Setter Property="ItemsPanel">
+                        <Setter.Value>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal"
+                                        VerticalAlignment="Stretch"
+                                        HorizontalAlignment="Left"/>
+                            </ItemsPanelTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.Style>
+        </ListBox>
+
+        <Grid Grid.Row="1" Grid.Column="3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="45"/>
                 <RowDefinition Height="10*" MinHeight="6" MaxHeight="10"/>
@@ -49,17 +75,17 @@
                         <RowDefinition Height="40*" MinHeight="33" MaxHeight="45"/>
                         <RowDefinition Height="10*" MinHeight="6" MaxHeight="10"/>
                         <RowDefinition Height="40*" MinHeight="33" MaxHeight="45"/>
-                        <RowDefinition Height="20*" MinHeight="15" MaxHeight="20"/>
-                        <RowDefinition Height="40*" MinHeight="33" MaxHeight="45"/>
+                        <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
 
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="85*"/>
-                            <ColumnDefinition Width="85*"/>
+                            <ColumnDefinition Width="50*"/>
+                            <ColumnDefinition Width="8*"/>
+                            <ColumnDefinition Width="50*"/>
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Content="이전&#10;페이지" Click="PreviousPageButton_Click"></Button>
-                        <Button Grid.Column="2" Content="다음&#10;페이지" Click="NextPageButton_Click"></Button>
+                        <Button Grid.Column="0" Content="◀" FontSize="25" Click="PreviousPageButton_Click"></Button>
+                        <Button Grid.Column="2" Content="▶" FontSize="25" Click="NextPageButton_Click"></Button>
                     </Grid>
                     <Grid Grid.Row="2">
                         <Grid.ColumnDefinitions>
@@ -111,38 +137,12 @@
                             <ColumnDefinition Width="8*"/>
                             <ColumnDefinition Width="50*"/>
                         </Grid.ColumnDefinitions>
-
-                        <Button Content="화면을&#10;가장 앞으로" Click="setSlideTopMost"></Button>
+                        <!--불필요하게 되어 삭제-->
+                        <!--<Button Content="화면을&#10;가장 앞으로" Click="setSlideTopMost"></Button>-->
                     </Grid>
                 </Grid>
             </ScrollViewer>
 
         </Grid>
-
-        <ListBox Grid.Row="1" Grid.Column="3"  VerticalContentAlignment="Stretch" ScrollViewer.CanContentScroll="False" Focusable="False"
-                 ItemsSource="{Binding ReadingPages}"
-                 SelectedIndex="{Binding CurrentPageIndex}"
-                 SelectionChanged="PageListBox_SelectionChanged">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Border BorderThickness="1,1,1,1" BorderBrush="Black" MinWidth="50"  Padding="5,0">
-                        <TextBlock Text="{Binding}" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
-                    </Border>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-            <ListBox.Style>
-                <Style TargetType="ListBox">
-                    <Setter Property="ItemsPanel">
-                        <Setter.Value>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Horizontal"
-                                        VerticalAlignment="Stretch"
-                                        HorizontalAlignment="Left"/>
-                            </ItemsPanelTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </ListBox.Style>
-        </ListBox>
     </Grid>
 </Window>

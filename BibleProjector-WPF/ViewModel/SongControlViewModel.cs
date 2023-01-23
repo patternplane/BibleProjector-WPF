@@ -41,7 +41,7 @@ namespace BibleProjector_WPF.ViewModel
 
         private void newSongSetting(bool isHymn)
         {
-            setCurrentSongInfo(songData[0][0][1]);
+            setCurrentSongInfo(songData[0][0][1], isHymn);
             SetSongData(songData);
 
             SongPages = null;
@@ -96,7 +96,8 @@ namespace BibleProjector_WPF.ViewModel
         }
 
         // 현재 찬양곡 제목표시
-        public string CurrentSongInfo { get; set; }
+        // public string CurrentSongInfo { get; set; }
+        public string WindowTitle { get; set; } = "";
 
         // 찬양곡 페이지 리스트박스
         private BindingList<songPage> SongPages_in;
@@ -111,9 +112,12 @@ namespace BibleProjector_WPF.ViewModel
 
         // ================================================ 속성 메소드 ================================================
 
-        void setCurrentSongInfo(string title)
+        void setCurrentSongInfo(string title, bool isHymn)
         {
-            CurrentSongInfo = title;
+            if (isHymn)
+                WindowTitle = "찬송가 " + title + "장";
+            else
+                WindowTitle = "찬양(" + title + ")";
         }
 
         // ================================================ 이벤트에 쓰일 함수 ================================================
