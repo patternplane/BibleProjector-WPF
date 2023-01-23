@@ -128,6 +128,9 @@
     <Compile Include="module\ProgramData.cs" />
     <Compile Include="module\StringModifier.cs" />
     <Compile Include="module\StringKMP.cs" />
+    <Compile Include="ManualContent.xaml.cs">
+      <DependentUpon>ManualContent.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\BibleModifyViewModel.cs" />
     <Compile Include="ViewModel\ExternPPTViewModel.cs" />
     <Compile Include="ViewModel\ManualTabViewModel.cs" />
@@ -234,6 +237,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="ExternPPTLoading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ManualContent.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

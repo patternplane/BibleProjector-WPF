@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +26,28 @@ namespace BibleProjector_WPF
             InitializeComponent();
 
             this.DataContext = new ViewModel.ManualTabViewModel();
+            ((ViewModel.ManualTabViewModel)this.DataContext).PropertyChanged += ItemSourceBinder;
+            tabUpdate();
+        }
+
+        void ItemSourceBinder(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName.CompareTo("ManualList") == 0)
+                tabUpdate();
+        }
+
+        void tabUpdate()
+        {
+            ManualTabControl.Items.Clear();
+
+            foreach (module.Manual man in ((ViewModel.ManualTabViewModel)this.DataContext).ManualList)
+                ManualTabControl.Items.Add(
+                    new TabItem()
+                    {
+                        Header = man.Title
+                        ,
+                        Content = new ManualContent(man.Content)
+                    });
         }
     }
 }
