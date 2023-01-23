@@ -52,7 +52,7 @@ namespace BibleProjector_WPF.ViewModel
                     if (data[2][1].Length == 0)
                         SongPages.Add(new songPage() { isHeadVerse = false, content = data[1][1] });
                     else
-                        SongPages.Add(new songPage() { isHeadVerse = true, content = "    " + data[2][1] + " 절\r\n\r\n" + data[1][1] });
+                        SongPages.Add(new songPage() { isHeadVerse = true, content = "    " + data[2][1] + " 절\r\n" + data[1][1] + "\r\n" });
                 }
             else
                 foreach (string[][] data in songData)
