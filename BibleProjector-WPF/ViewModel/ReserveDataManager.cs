@@ -70,7 +70,8 @@ namespace BibleProjector_WPF.ViewModel
         {
             foreach (ReserveCollectionUnit item in ReserveList)
                 if (item.reserveType == module.ReserveType.ExternPPT
-                    && ((module.ExternPPTReserveDataUnit)item.reserveData).PPTfilePath.CompareTo(filePath) == 0)
+                    && System.IO.Path.GetFileName(((module.ExternPPTReserveDataUnit)item.reserveData).PPTfilePath)
+                    .CompareTo(System.IO.Path.GetFileName(filePath)) == 0)
                     return false;
 
             return true;

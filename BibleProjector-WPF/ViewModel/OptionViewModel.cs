@@ -103,12 +103,13 @@ namespace BibleProjector_WPF.ViewModel
 
         bool isValidFrameFile(string path)
         {
-            if (BibleFramePath_Text != null && BibleFramePath_Text.CompareTo(path) == 0)
+            string fileName = System.IO.Path.GetFileName(path);
+            if (BibleFramePath_Text != null && System.IO.Path.GetFileName(BibleFramePath_Text).CompareTo(fileName) == 0)
                 return false;
-            if (ReadingFramePath_Text != null && ReadingFramePath_Text.CompareTo(path) == 0)
+            if (ReadingFramePath_Text != null && System.IO.Path.GetFileName(ReadingFramePath_Text).CompareTo(fileName) == 0)
                 return false;
             foreach (module.SongFrameFile f in SongFramePaths_List)
-                if (f.Path.CompareTo(path) == 0)
+                if (f.FileName.CompareTo(fileName) == 0)
                     return false;
 
             return true;
