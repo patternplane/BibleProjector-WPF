@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BibleProjector_WPF"
         mc:Ignorable="d"
-        Title="자막 예약" Height="501" Width="532"
+        Title="예약창" Height="501" Width="532"
         LocationChanged="changeLocate"
         SizeChanged="changeSize">
     <Grid Background="#FFD8FDCA">
@@ -54,7 +54,7 @@
                             </ListView.ItemContainerStyle>
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <local:ReserveUnitBox Margin="2,2,2,2"></local:ReserveUnitBox>
+                                    <local:ReserveUnitBox Margin="1"></local:ReserveUnitBox>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>

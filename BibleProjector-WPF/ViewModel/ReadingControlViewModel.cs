@@ -63,6 +63,7 @@ namespace BibleProjector_WPF.ViewModel
 
         // 현재 교독문 위치 표시 - Text
         public string CurrentReadingInfo { get; set; }
+        public string WindowTitle { get; set; } = "";
 
         // 교독문 페이지 리스트박스
         private BindingList<string> ReadingPages_in;
@@ -82,6 +83,7 @@ namespace BibleProjector_WPF.ViewModel
         void setCurrentReadingInfo(int ReadingNumber)
         {
             CurrentReadingInfo = Database.getReadingTitle(ReadingNumber);
+            WindowTitle = "교독문(" + CurrentReadingInfo + ")";
         }
 
         // ================================================ 이벤트에 쓰일 함수 ================================================
