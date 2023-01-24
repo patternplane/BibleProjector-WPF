@@ -161,8 +161,8 @@ namespace BibleProjector_WPF.module
                             {
                                 Path = items[i + 1],
                                 FileName = System.IO.Path.GetFileName(items[i + 1]),
-                                isCCMFrame = int.Parse(items[i]) == IS_CCM_FRAME,
-                                isHymnFrame = int.Parse(items[i]) == IS_HYMN_FRAME
+                                isCCMFrame = ((int.Parse(items[i]) & IS_CCM_FRAME) != 0),
+                                isHymnFrame = ((int.Parse(items[i]) & IS_HYMN_FRAME) != 0)
                             });
                     }
                 }
@@ -196,7 +196,7 @@ namespace BibleProjector_WPF.module
             foreach (SongFrameFile f in SongFrameFiles)
             {
                 str.Append(SEPARATOR);
-                str.Append(((f.isCCMFrame ? IS_CCM_FRAME : (f.isHymnFrame ? IS_HYMN_FRAME : 0))));
+                str.Append((f.isCCMFrame ? IS_CCM_FRAME : 0) | (f.isHymnFrame ? IS_HYMN_FRAME : 0));
                 str.Append(SEPARATOR);
                 str.Append(f.Path);
             }
