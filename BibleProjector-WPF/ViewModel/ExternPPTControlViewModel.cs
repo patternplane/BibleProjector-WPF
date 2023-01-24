@@ -90,7 +90,8 @@ namespace BibleProjector_WPF.ViewModel
         }
 
         // 현재 ppt 이름 표시 - Text
-        public string CurrentPPTInfo { get; set; }
+        // public string CurrentPPTInfo { get; set; }
+        public string WindowTitle { get; set; } = "";
 
         // ppt 페이지 리스트박스
         private BindingList<SingleSlidePreview> PPTImages_in = new BindingList<SingleSlidePreview>();
@@ -115,7 +116,7 @@ namespace BibleProjector_WPF.ViewModel
 
         void setCurrentPPTInfo(string fileName)
         {
-            CurrentPPTInfo = fileName;
+            WindowTitle = "PPT(" + fileName + ")" ;
         }
 
         // ================================================ 이벤트에 쓰일 함수 ================================================
