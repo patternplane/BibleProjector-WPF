@@ -243,12 +243,13 @@ namespace BibleProjector_WPF.ViewModel
                 if (SongControl.SongControlAccess != null)
                     SongControl.SongControlAccess.DeletingCheckAndClose(System.IO.Path.GetFileName(SongFramePaths_List[itemIndex[i]].Path));
                 Powerpoint.Song.closeSingle(SongFramePaths_List[itemIndex[i]].Path);
-                SongFramePaths_List.RemoveAt(itemIndex[i]);
 
                 // 너무 난잡한 구조다!
                 // 한창 MVVM 공부하며 시간에 쫒겨 개발할 시절에 짠 코드라
                 // 찬양곡 관련 부분들이 매우 개선 필요
-                module.ProgramOption.process_deleteSongFrame(SongFramePaths_List[i]);
+                module.ProgramOption.process_deleteSongFrame(SongFramePaths_List[itemIndex[i]]);
+
+                SongFramePaths_List.RemoveAt(itemIndex[i]);
             }
         }
 
