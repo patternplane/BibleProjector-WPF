@@ -14,8 +14,6 @@
             <ColumnDefinition Width="101*"/>
             <ColumnDefinition Width="10*"/>
             <ColumnDefinition Width="105*"/>
-            <ColumnDefinition Width="12*"/>
-            <ColumnDefinition Width="96*"/>
         </Grid.ColumnDefinitions>
 
         <Grid>
@@ -34,7 +32,7 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <Label HorizontalContentAlignment="Center" VerticalContentAlignment="Center">페이지별 줄 수</Label>
+            <Label HorizontalContentAlignment="Center" VerticalContentAlignment="Center">가사 줄 수</Label>
             <TextBox Grid.Row="1" Text="{Binding LinePerPageText}"></TextBox>
         </Grid>
 
@@ -47,7 +45,5 @@
             <Label HorizontalContentAlignment="Center" VerticalContentAlignment="Center">PPT 틀</Label>
             <ComboBox Grid.Row="1" ItemsSource="{Binding SongFrameList}" DisplayMemberPath="FileName" SelectedItem="{Binding SongFrameSelection}"></ComboBox>
         </Grid>
-
-        <Button Grid.Column="6" Click="Event_ShowButtonClick">출력!</Button>
     </Grid>
 </UserControl>

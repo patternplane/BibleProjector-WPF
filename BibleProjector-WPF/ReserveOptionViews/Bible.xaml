@@ -14,7 +14,6 @@
             <ColumnDefinition Width="30*"/>
             <ColumnDefinition Width="40*"/>
             <ColumnDefinition Width="30*"/>
-            <ColumnDefinition Width="52*"/>
         </Grid.ColumnDefinitions>
 
         <ComboBox ItemsSource="{Binding KuenList}" SelectedIndex="{Binding KuenSelection_index}" ></ComboBox>
@@ -22,7 +21,6 @@
         <Label Grid.Column="3" Content="장" VerticalAlignment="Center" Height="25" ></Label>
         <ComboBox Grid.Column="4" ItemsSource="{Binding JeulList}" SelectedItem="{Binding JeulSelection}" />
         <Label Grid.Column="5" Content="절" VerticalAlignment="Center" Height="25" />
-        <Button Grid.Column="6" FontSize="16" Click="Event_BibleShow" >출력!</Button>
 
     </Grid>
 </UserControl>
