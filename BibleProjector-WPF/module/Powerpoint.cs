@@ -1289,7 +1289,7 @@ namespace BibleProjector_WPF
             void makeThumbNail()
             {
                 deleteThumbNail();
-                ppt.SaveAs(getThumbnailPath(), PpSaveAsFileType.ppSaveAsJPG);
+                ppt.SaveAs(System.IO.Path.GetFullPath(EXTERN_THUMBNAIL_DIRECTORY+ppt.Name), PpSaveAsFileType.ppSaveAsJPG);
             }
 
             // ============================================ 메소드 ============================================
