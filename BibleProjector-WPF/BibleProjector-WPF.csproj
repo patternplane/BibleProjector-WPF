@@ -76,6 +76,8 @@
     <Compile Include="ManualTab.xaml.cs">
       <DependentUpon>ManualTab.xaml</DependentUpon>
     </Compile>
+    <Compile Include="module\BibleSearch.cs" />
+    <Compile Include="module\BibleSearchData.cs" />
     <Compile Include="module\ControlWindowManager.cs" />
     <Compile Include="module\ExternPPTManager.cs" />
     <Compile Include="module\LayoutInfo.cs" />
@@ -132,6 +134,7 @@
       <DependentUpon>ManualContent.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\BibleModifyViewModel.cs" />
+    <Compile Include="ViewModel\BibleSearchViewModel.cs" />
     <Compile Include="ViewModel\ExternPPTViewModel.cs" />
     <Compile Include="ViewModel\ManualTabViewModel.cs" />
     <Compile Include="ViewModel\OptionViewModel.cs" />

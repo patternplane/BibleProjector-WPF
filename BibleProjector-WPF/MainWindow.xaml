@@ -103,7 +103,9 @@
                     </ListBox>
                     <Grid Grid.Row="1" Grid.Column="8" >
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="113*"/>
+                            <RowDefinition Height="80*"/>
+                            <RowDefinition Height="19*"/>
+                            <RowDefinition Height="40*"/>
                             <RowDefinition Height="19*"/>
                             <RowDefinition Height="297*"/>
                             <RowDefinition Height="19*"/>
@@ -115,7 +117,7 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="31*"/>
                                     <RowDefinition Height="15*"/>
-                                    <RowDefinition Height="67*"/>
+                                    <RowDefinition Height="45*"/>
                                 </Grid.RowDefinitions>
                                 <Grid x:Name="Bible_CurrentDisplayTextBoxies_Grid">
                                     <Grid.ColumnDefinitions>
@@ -134,8 +136,32 @@
                             </Grid>
                         </Border>
 
+                        <Border x:Name="BibleSearchBorder" Grid.Row="2" BorderThickness="1" BorderBrush="#FFAEAEAE" Padding="1">
+                            <Grid>
+                                <TextBox Text="{Binding searchText, UpdateSourceTrigger=PropertyChanged}" TextChanged="BibleSearchTextChaned"/>
+                                <Popup StaysOpen="False" IsOpen="{Binding popupOpen}">
+                                    <ListBox ItemsSource="{Binding searchList}">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition/>
+                                                        <ColumnDefinition/>
+                                                        <ColumnDefinition/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Label Content="{Binding Path=.}"/>
+                                                    <Button Grid.Column="1">출력</Button>
+                                                    <Button Grid.Column="2">예약</Button>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </Popup>
+                            </Grid>
+                        </Border>
+
                         <!--성경 예약부분-->
-                        <Border Grid.Row="2" BorderThickness="1" BorderBrush="#FFAEAEAE" Padding="1">
+                        <Border Grid.Row="4" BorderThickness="1" BorderBrush="#FFAEAEAE" Padding="1">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="50*"/>
