@@ -238,7 +238,8 @@ namespace BibleProjector_WPF
                             || module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "{ch}", module.StringKMP.DefaultStringCompaerFunc)
                             || module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "{v}", module.StringKMP.DefaultStringCompaerFunc)
                             || module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "{va}", module.StringKMP.DefaultStringCompaerFunc)
-                            || module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "{c}", module.StringKMP.DefaultStringCompaerFunc))
+                            || module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "{c}", module.StringKMP.DefaultStringCompaerFunc)
+                            || module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "{cm}", module.StringKMP.DefaultStringCompaerFunc))
                 {
                     TextShapes.Add(s);
                     Format.Add(s.TextFrame.TextRange.Text);
@@ -331,22 +332,14 @@ namespace BibleProjector_WPF
             {
                 for (int i = 0; i < TextShapes.Count; i++)
                 {
-                    if (isFirstPage)
-                        TextShapes[i].TextFrame.TextRange.Text =
-                        Format[i]
+                    TextShapes[i].TextFrame.TextRange.Text =
+                       Format[i]
                             .Replace("{b}", currentBible)
                             .Replace("{ch}", currentChapter)
                             .Replace("{va}", currentVerse)
                             .Replace("{c}", currentContent)
-                            .Replace("{v}", currentVerse);
-                    else
-                        TextShapes[i].TextFrame.TextRange.Text =
-                            Format[i]
-                            .Replace("{b}", currentBible)
-                            .Replace("{ch}", currentChapter)
-                            .Replace("{va}", currentVerse)
-                            .Replace("{c}", currentContent)
-                            .Replace("{v}", "");
+                            .Replace("{v}", (isFirstPage ? currentVerse :""))
+                            .Replace("{cm}", ((currentBible.CompareTo("시편")==0)?"편":"장")); // 굳이 시편 코드를 직접 기입해야 하나. Bible 관리 객체 어디갔냐.
                 }
             }
 
