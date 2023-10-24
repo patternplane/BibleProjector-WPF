@@ -133,6 +133,7 @@
     <Compile Include="ManualContent.xaml.cs">
       <DependentUpon>ManualContent.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UnitTester\Tester.cs" />
     <Compile Include="ViewModel\BibleModifyViewModel.cs" />
     <Compile Include="ViewModel\BibleSearchViewModel.cs" />
     <Compile Include="ViewModel\ExternPPTViewModel.cs" />
@@ -293,5 +294,6 @@
   <ItemGroup>
     <Resource Include="1.1.1.0 아이콘.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
