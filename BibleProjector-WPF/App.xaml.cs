@@ -33,6 +33,12 @@ namespace BibleProjector_WPF
             }
         }
 
+        // 테스트로 넘기는 기능
+        void Startup_test(object sender,StartupEventArgs e)
+        {
+            UnitTester.Tester.TestStart();
+        }
+
         void ProgramExit(object sender, ExitEventArgs e)
         {
             Console.WriteLine("프로그램 정상 종료");
