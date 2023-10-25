@@ -6,6 +6,60 @@ using System.Threading.Tasks;
 
 namespace BibleProjector_WPF.module
 {
+    class BibleTitleSeparator
+    {
+        List<string> units = new List<string>(3);
+
+        /// <summary>
+        /// 구분자(대부분의 공백과 특수문자 전반)를 기준으로 단어를 분리하되,
+        /// 숫자와 문자는 붙어있어도 따로 분리합니다.
+        /// </summary>
+        /// <param name="prase"></param>
+        /// <returns></returns>
+        public string[] trimPrase(string prase)
+        {
+            units.Clear();
+
+            for (int i = 0, startindex = 0; i < prase.Length; i++)
+            {
+                if (isSeperator(prase[i]))
+                {
+                    if (i != startindex)
+                    {
+                        units.Add(prase.Substring(startindex, i - startindex));
+
+                        startindex = i + 1;
+                    }
+                    else
+                        startindex++;
+                }
+                else if (i != startindex && char.IsDigit(prase[i - 1]) != char.IsDigit(prase[i]))
+                {
+                    units.Add(prase.Substring(startindex, i - startindex));
+
+                    startindex = i--;
+                }
+                else if (i == prase.Length - 1)
+                {
+                    units.Add(prase.Substring(startindex, i - startindex + 1));
+                }
+            }
+            
+            return units.ToArray();
+        }
+
+        bool isSeperator(char a)
+        {
+            if (char.IsSymbol(a)
+                || char.IsWhiteSpace(a)
+                || char.IsPunctuation(a)
+                || char.IsSeparator(a))
+                return true;
+            
+            return false;
+        }
+    }
+
     class BibleSearch
     {
         // 검색 맵
@@ -286,52 +340,55 @@ namespace BibleProjector_WPF.module
             58
         };
 
-        // 분석값들
+        // 분석값들 및 단계
         string title;
-        string chapter;
-        string verse;
+        int chapter;
+        int verse;
+        int dataStage; // 0: x, 1: 제목까지, 2: 장까지, 3: 절까지
 
         public BibleSearchData[] getSearchResult(string searchPrase)
         {
+            setSearchData(searchPrase);
 
+            // --------------------------------- 미완성 테스트 ---------------------------------
+
+            int test = 0;
+            for (test = 0; test < bibleTitles_l.Length; test++)
+            {
+                if (bibleTitles_l[test].CompareTo(title) > 0)
+                    break;
+            }
+
+            string a = bibleTitles_l[test - 1];
+
+            return null;
+
+            // --------------------------------- 미완성 테스트 ---------------------------------
         }
 
-        void trimPrase(string prase)
+        void setSearchData(string searchPrase) 
         {
-            for(int i = 0, startindex = 0 ; i < prase.Length; i++)
+            string[] prases = new BibleTitleSeparator().trimPrase(searchPrase);
+
+            dataStage = 0;
+            int temp;
+            if (prases.Length > 0)
             {
-                if (isSeperator(prase[i]))
-                {
-                    prase.Substring(startindex, i - startindex); // 처리할 것
-
-                    startindex = i + 1;
-                }
-                else if (i != startindex && char.IsDigit(prase[i - 1]) != char.IsDigit(prase[i]))
-                {
-                    prase.Substring(startindex, i - startindex); // 처리할 것
-
-                    startindex = i--;
-                }
-                else if (i == prase.Length - 1)
-                {
-                    prase.Substring(startindex, i - startindex + 1); // 처리할 것
-                }
+                title = prases[0];
+                dataStage++;
             }
-        }
-
-        bool isSeperator(char a)
-        {
-            switch (a)
-            {
-                case ' ':
-                case '/':
-                case '.':
-                case ':':
-                case ';':
-                case '\'':
-                default:
-                    return false;
-            }
+            if (prases.Length > 1)
+                if (int.TryParse(prases[1], out temp))
+                {
+                    chapter = temp;
+                    dataStage++;
+                }
+            if (prases.Length > 2)
+                if (int.TryParse(prases[2], out temp))
+                {
+                    verse = temp;
+                    dataStage++;
+                }
         }
     }
 }
