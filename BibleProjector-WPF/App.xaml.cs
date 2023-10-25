@@ -37,6 +37,8 @@ namespace BibleProjector_WPF
         void Startup_test(object sender,StartupEventArgs e)
         {
             UnitTester.Tester.TestStart();
+
+            Application.Current.Shutdown();
         }
 
         void ProgramExit(object sender, ExitEventArgs e)
