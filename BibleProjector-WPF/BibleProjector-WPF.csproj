@@ -85,6 +85,7 @@
     <Compile Include="module\ProgramOption.cs" />
     <Compile Include="module\ReserveDataUnits.cs" />
     <Compile Include="module\ShowStarter.cs" />
+    <Compile Include="module\CharCompare.cs" />
     <Compile Include="Option.xaml.cs">
       <DependentUpon>Option.xaml</DependentUpon>
     </Compile>
