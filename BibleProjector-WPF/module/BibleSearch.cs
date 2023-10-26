@@ -344,50 +344,63 @@ namespace BibleProjector_WPF.module
         string title;
         int chapter;
         int verse;
-        int dataStage; // 0: x, 1: 제목까지, 2: 장까지, 3: 절까지
 
         public BibleSearchData[] getSearchResult(string searchPrase)
         {
             setSearchData(searchPrase);
 
-            // --------------------------------- 미완성 테스트 ---------------------------------
+            List<BibleSearchData> result = new List<BibleSearchData>(5);
+            CharCompare comp = new CharCompare();
 
-            int test = 0;
-            for (test = 0; test < bibleTitles_l.Length; test++)
+            for(int i = 0; i < bibleTitles_l.Length; i++)
+                if (comp.IsContain_WithKor(title, bibleTitles_l[i]))
+                    result.Add(makeSearchResult(bibleTitleIndex_l[i].ToString("00")));
+            for (int i = 0; i < bibleTitles_s.Length; i++)
+                if (comp.IsContain_WithKor(title, bibleTitles_s[i]))
+                    result.Add(makeSearchResult(bibleTitleIndex_s[i].ToString("00")));
+
+            return result.ToArray();
+        }
+
+        BibleSearchData makeSearchResult(string Kuen)
+        {
+            if (chapter != -1
+                && chapter <= Database.getChapterCount(Kuen))
             {
-                if (bibleTitles_l[test].CompareTo(title) > 0)
-                    break;
+                string Jang = chapter.ToString("000");
+
+                if (verse != -1
+                    && verse <= Database.getVerseCount(Kuen + Jang))
+                {
+                    string Jeul = verse.ToString("000");
+
+                    return new BibleSearchData(Kuen, Jang, Jeul);
+                }
+                else
+                    return new BibleSearchData(Kuen, Jang, null);
             }
-
-            string a = bibleTitles_l[test - 1];
-
-            return null;
-
-            // --------------------------------- 미완성 테스트 ---------------------------------
+            else
+                return new BibleSearchData(Kuen, null, null);
         }
 
         void setSearchData(string searchPrase) 
         {
             string[] prases = new BibleTitleSeparator().trimPrase(searchPrase);
 
-            dataStage = 0;
+            title = null;
+            chapter = -1;
+            verse = -1;
+
             int temp;
             if (prases.Length > 0)
-            {
                 title = prases[0];
-                dataStage++;
-            }
             if (prases.Length > 1)
                 if (int.TryParse(prases[1], out temp))
                 {
                     chapter = temp;
-                    dataStage++;
-                }
-            if (prases.Length > 2)
-                if (int.TryParse(prases[2], out temp))
-                {
-                    verse = temp;
-                    dataStage++;
+                    if (prases.Length > 2)
+                        if (int.TryParse(prases[2], out temp))
+                            verse = temp;
                 }
         }
     }

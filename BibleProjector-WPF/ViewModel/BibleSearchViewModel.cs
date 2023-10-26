@@ -15,18 +15,25 @@ namespace BibleProjector_WPF.ViewModel
         string searchText_in = "";
         public string searchText { get { return searchText_in; } set { searchText_in = value; } }
 
-        public ObservableCollection<string> searchList { get; set; } = new ObservableCollection<string>(new string[] { "hello"});
+        public ObservableCollection<module.BibleSearchData> searchList { get; set; } = new ObservableCollection<module.BibleSearchData>();
 
         public bool popupOpen { get; set; } = false;
+
+        module.BibleSearch searcher = new module.BibleSearch();
 
         // ====================================== 메소드
 
         public void searchTextChanged()
         {
-            
+            searchList.Clear();
+            if (searchText.Length != 0)
+            {
+                foreach (module.BibleSearchData r in searcher.getSearchResult(searchText))
+                    searchList.Add(r);
 
-            popupOpen = true;
-            NotifyPropertyChanged("popupOpen");
+                popupOpen = true;
+                NotifyPropertyChanged("popupOpen");
+            }
         }
 
         // ====================================== INotifyPropertyChanged 인터페이스 구현
