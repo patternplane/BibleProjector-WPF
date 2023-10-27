@@ -13,21 +13,36 @@ namespace BibleProjector_WPF.module
         /// <summary>
         /// 구분자(대부분의 공백과 특수문자 전반)를 기준으로 단어를 분리하되,
         /// 숫자와 문자는 붙어있어도 따로 분리합니다.
+        /// 또한 처음 단어 이후에는 숫자만 인식합니다.
         /// </summary>
         /// <param name="prase"></param>
         /// <returns></returns>
         public string[] trimPrase(string prase)
         {
             units.Clear();
+            bool getOnlyNumber = false;
+            bool onlyNumber = true;
 
-            for (int i = 0, startindex = 0; i < prase.Length; i++)
+            for (int i = 0, startindex = 0; i <= prase.Length; i++)
             {
-                if (isSeperator(prase[i]))
+                if (i == prase.Length)
+                {
+                    if (!getOnlyNumber || onlyNumber)
+                        units.Add(prase.Substring(startindex, i - startindex));
+
+                    break;
+                }
+                else if (isSeperator(prase[i]))
                 {
                     if (i != startindex)
                     {
-                        units.Add(prase.Substring(startindex, i - startindex));
+                        if (!getOnlyNumber || onlyNumber)
+                        {
+                            units.Add(prase.Substring(startindex, i - startindex));
+                            getOnlyNumber = true;
+                        }
 
+                        onlyNumber = true;
                         startindex = i + 1;
                     }
                     else
@@ -35,14 +50,17 @@ namespace BibleProjector_WPF.module
                 }
                 else if (i != startindex && char.IsDigit(prase[i - 1]) != char.IsDigit(prase[i]))
                 {
-                    units.Add(prase.Substring(startindex, i - startindex));
+                    if (!getOnlyNumber || onlyNumber)
+                    {
+                        units.Add(prase.Substring(startindex, i - startindex));
+                        getOnlyNumber = true;
+                    }
 
+                    onlyNumber = true;
                     startindex = i--;
                 }
-                else if (i == prase.Length - 1)
-                {
-                    units.Add(prase.Substring(startindex, i - startindex + 1));
-                }
+                else if (!char.IsDigit(prase[i]))
+                    onlyNumber = false;
             }
             
             return units.ToArray();
