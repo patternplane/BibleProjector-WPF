@@ -323,8 +323,9 @@ namespace BibleProjector_WPF
 
         // ======================================== 성경 검색 처리
 
-        void BibleSearchTextChaned(object sender, TextChangedEventArgs e)
+        void BibleSearchPreKeyUp(object sender, KeyEventArgs e)
         {
+            BibleSearchTextBox.GetBindingExpression(TextBox.TextProperty).UpdateSource();
             VM_BibleSearch.searchTextChanged();
         }
 

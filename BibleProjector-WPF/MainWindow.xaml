@@ -138,7 +138,7 @@
 
                         <Border x:Name="BibleSearchBorder" Grid.Row="2" BorderThickness="1" BorderBrush="#FFAEAEAE" Padding="1">
                             <Grid>
-                                <TextBox Text="{Binding searchText, UpdateSourceTrigger=PropertyChanged}" TextChanged="BibleSearchTextChaned"/>
+                                <TextBox x:Name="BibleSearchTextBox" Text="{Binding searchText, UpdateSourceTrigger=Explicit}" PreviewKeyUp="BibleSearchPreKeyUp"/>
                                 <Popup StaysOpen="False" IsOpen="{Binding popupOpen}">
                                     <ListBox ItemsSource="{Binding searchList}">
                                         <ListBox.ItemTemplate>
