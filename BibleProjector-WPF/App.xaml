@@ -6,7 +6,7 @@
              Exit="ProgramExit"
              DispatcherUnhandledException="ExitFromError"
              
-             StartupUri="MainWindow.xaml>
+             StartupUri="MainWindow.xaml">
     <!--Startup="Startup_test"-->
     <Application.Resources>
          

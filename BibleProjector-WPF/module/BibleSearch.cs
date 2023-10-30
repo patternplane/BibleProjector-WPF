@@ -363,24 +363,37 @@ namespace BibleProjector_WPF.module
         int chapter;
         int verse;
 
+        const int SEARCH_DISTANCE_LIMIT = 1;
         public BibleSearchData[] getSearchResult(string searchPrase)
         {
             setSearchData(searchPrase);
 
             List<BibleSearchData> result = new List<BibleSearchData>(5);
-            CharCompare comp = new CharCompare();
+            LevenshteinDistance ld = new LevenshteinDistance();
+            KorString ks = new KorString();
 
-            for(int i = 0; i < bibleTitles_l.Length; i++)
-                if (comp.IsContain_WithKor(title, bibleTitles_l[i]))
-                    result.Add(makeSearchResult(bibleTitleIndex_l[i].ToString("00")));
+            int searchDis = 0;
+            int titleLen;
+            for (int i = 0; i < bibleTitles_l.Length; i++)
+            {
+                titleLen = ks.GetAddCost(title);
+                if ((searchDis = ld.getLevenDis_min(title, bibleTitles_l[i])) <= ((titleLen / 2.5) * SEARCH_DISTANCE_LIMIT))
+                    result.Add(makeSearchResult(bibleTitleIndex_l[i].ToString("00"), searchDis));
+            }
             for (int i = 0; i < bibleTitles_s.Length; i++)
-                if (comp.IsContain_WithKor(title, bibleTitles_s[i]))
-                    result.Add(makeSearchResult(bibleTitleIndex_s[i].ToString("00")));
+            {
+                titleLen = ks.GetAddCost(title);
+                if ((searchDis = ld.getLevenDis_min(title, bibleTitles_s[i])) <= ((titleLen / 2.5) * SEARCH_DISTANCE_LIMIT))
+                    result.Add(makeSearchResult(bibleTitleIndex_s[i].ToString("00"), searchDis));
+            }
+
+            result.Sort((a, b) => (a.searchDistance > b.searchDistance ? 1 :
+            (a.searchDistance == b.searchDistance ? 0 : -1)));
 
             return result.ToArray();
         }
 
-        BibleSearchData makeSearchResult(string Kuen)
+        BibleSearchData makeSearchResult(string Kuen, int searchDis)
         {
             if (chapter != -1
                 && chapter <= Database.getChapterCount(Kuen))
@@ -392,13 +405,13 @@ namespace BibleProjector_WPF.module
                 {
                     string Jeul = verse.ToString("000");
 
-                    return new BibleSearchData(Kuen, Jang, Jeul);
+                    return new BibleSearchData(Kuen, Jang, Jeul, searchDis);
                 }
                 else
-                    return new BibleSearchData(Kuen, Jang, null);
+                    return new BibleSearchData(Kuen, Jang, null, searchDis);
             }
             else
-                return new BibleSearchData(Kuen, null, null);
+                return new BibleSearchData(Kuen, null, null, searchDis);
         }
 
         void setSearchData(string searchPrase) 

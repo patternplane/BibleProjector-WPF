@@ -10,11 +10,12 @@ namespace BibleProjector_WPF.module
     class BibleSearchData : INotifyPropertyChanged
     {
 
-        public BibleSearchData(string Kuen, string Jang, string Jeul)
+        public BibleSearchData(string Kuen, string Jang, string Jeul, int searchDistance)
         {
             this.Kuen = Kuen;
             this.Jang = Jang;
             this.Jeul = Jeul;
+            this.searchDistance = searchDistance;
 
             displayData = Database.getTitle(Kuen);
             if (Jang != null)
@@ -26,6 +27,7 @@ namespace BibleProjector_WPF.module
         public string Kuen;
         public string Jang;
         public string Jeul;
+        public int searchDistance;
         string displayData_i;
         public string displayData { get { return displayData_i; } set { displayData_i = value; } }
 
