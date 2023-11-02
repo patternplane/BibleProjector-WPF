@@ -80,282 +80,91 @@ namespace BibleProjector_WPF.module
 
     class BibleSearch
     {
+
         // 검색 맵
-        string[] bibleTitles_s =
+        struct BibleTitleInfo{
+            public string fullName;
+            public string shortName;
+            public int titleNumber;
+            public bool isChecked;
+
+            public BibleTitleInfo(string fullName, string shortName, int titleNumber)
+            {
+                this.fullName = fullName;
+                this.shortName = shortName;
+                this.titleNumber = titleNumber;
+                this.isChecked = false;
+            }
+        }
+
+        BibleTitleInfo[] bibleTitles =
         {
-            "갈",
-            "겔",
-            "계",
-            "고전",
-            "고후",
-            "골",
-            "나",
-            "눅",
-            "느",
-            "단",
-            "대상",
-            "대하",
-            "딛",
-            "딤전",
-            "딤후",
-            "레",
-            "렘",
-            "롬",
-            "룻",
-            "마",
-            "막",
-            "말",
-            "몬",
-            "미",
-            "민",
-            "벧전",
-            "벧후",
-            "빌",
-            "사",
-            "살전",
-            "살후",
-            "삼상",
-            "삼하",
-            "삿",
-            "수",
-            "스",
-            "슥",
-            "습",
-            "시",
-            "신",
-            "아",
-            "암",
-            "애",
-            "약",
-            "에",
-            "엡",
-            "옵",
-            "왕상",
-            "왕하",
-            "요",
-            "요삼",
-            "요이",
-            "요일",
-            "욘",
-            "욜",
-            "욥",
-            "유",
-            "잠",
-            "전",
-            "창",
-            "출",
-            "학",
-            "합",
-            "행",
-            "호",
-            "히"
-        };
-        int[] bibleTitleIndex_s =
-        {
-            48,
-            26,
-            66,
-            46,
-            47,
-            51,
-            34,
-            42,
-            16,
-            27,
-            13,
-            14,
-            56,
-            54,
-            55,
-            3,
-            24,
-            45,
-            8,
-            40,
-            41,
-            39,
-            57,
-            33,
-            4,
-            60,
-            61,
-            50,
-            23,
-            52,
-            53,
-            9,
-            10,
-            7,
-            6,
-            15,
-            38,
-            36,
-            19,
-            5,
-            22,
-            30,
-            25,
-            59,
-            17,
-            49,
-            31,
-            11,
-            12,
-            43,
-            64,
-            63,
-            62,
-            32,
-            29,
-            18,
-            65,
-            20,
-            21,
-            1,
-            2,
-            37,
-            35,
-            44,
-            28,
-            58
-        };
-        string[] bibleTitles_l =
-        {
-            "갈라디아서",
-            "고린도전서",
-            "고린도후서",
-            "골로새서",
-            "나훔",
-            "누가복음",
-            "느헤미야",
-            "다니엘",
-            "데살로니가전서",
-            "데살로니가후서",
-            "디도서",
-            "디모데전서",
-            "디모데후서",
-            "레위기",
-            "로마서",
-            "룻기",
-            "마가복음",
-            "마태복음",
-            "말라기",
-            "미가",
-            "민수기",
-            "베드로전서",
-            "베드로후서",
-            "빌레몬서",
-            "빌립보서",
-            "사도행전",
-            "사무엘상",
-            "사무엘하",
-            "사사기",
-            "스가랴",
-            "스바냐",
-            "시편",
-            "신명기",
-            "아가",
-            "아모스",
-            "야고보서",
-            "에베소서",
-            "에스겔",
-            "에스더",
-            "에스라",
-            "여호수아",
-            "역대상",
-            "역대하",
-            "열왕기상",
-            "열왕기하",
-            "예레미야",
-            "예레미야애가",
-            "오바댜",
-            "요나",
-            "요엘",
-            "요한계시록",
-            "요한복음",
-            "요한삼서",
-            "요한이서",
-            "요한일서",
-            "욥기",
-            "유다서",
-            "이사야",
-            "잠언",
-            "전도서",
-            "창세기",
-            "출애굽기",
-            "하박국",
-            "학개",
-            "호세아",
-            "히브리서"
-        };
-        int[] bibleTitleIndex_l =
-        {
-            48,
-            46,
-            47,
-            51,
-            34,
-            42,
-            16,
-            27,
-            52,
-            53,
-            56,
-            54,
-            55,
-            3,
-            45,
-            8,
-            41,
-            40,
-            39,
-            33,
-            4,
-            60,
-            61,
-            57,
-            50,
-            44,
-            9,
-            10,
-            7,
-            38,
-            36,
-            19,
-            5,
-            22,
-            30,
-            59,
-            49,
-            26,
-            17,
-            15,
-            6,
-            13,
-            14,
-            11,
-            12,
-            24,
-            25,
-            31,
-            32,
-            29,
-            66,
-            43,
-            64,
-            63,
-            62,
-            18,
-            65,
-            23,
-            20,
-            21,
-            1,
-            2,
-            35,
-            37,
-            28,
-            58
+            new BibleTitleInfo("창세기","창",1),
+            new BibleTitleInfo("출애굽기","출",2),
+            new BibleTitleInfo("레위기","레",3),
+            new BibleTitleInfo("민수기","민",4),
+            new BibleTitleInfo("신명기","신",5),
+            new BibleTitleInfo("여호수아","수",6),
+            new BibleTitleInfo("사사기","삿",7),
+            new BibleTitleInfo("룻기","룻",8),
+            new BibleTitleInfo("사무엘상","삼상",9),
+            new BibleTitleInfo("사무엘하","삼하",10),
+            new BibleTitleInfo("열왕기상","왕상",11),
+            new BibleTitleInfo("열왕기하","왕하",12),
+            new BibleTitleInfo("역대상","대상",13),
+            new BibleTitleInfo("역대하","대하",14),
+            new BibleTitleInfo("에스라","스",15),
+            new BibleTitleInfo("느헤미야","느",16),
+            new BibleTitleInfo("에스더","에",17),
+            new BibleTitleInfo("욥기","욥",18),
+            new BibleTitleInfo("시편","시",19),
+            new BibleTitleInfo("잠언","잠",20),
+            new BibleTitleInfo("전도서","전",21),
+            new BibleTitleInfo("아가","아",22),
+            new BibleTitleInfo("이사야","사",23),
+            new BibleTitleInfo("예레미야","렘",24),
+            new BibleTitleInfo("예레미야애가","애",25),
+            new BibleTitleInfo("에스겔","겔",26),
+            new BibleTitleInfo("다니엘","단",27),
+            new BibleTitleInfo("호세아","호",28),
+            new BibleTitleInfo("요엘","욜",29),
+            new BibleTitleInfo("아모스","암",30),
+            new BibleTitleInfo("오바댜","옵",31),
+            new BibleTitleInfo("요나","욘",32),
+            new BibleTitleInfo("미가","미",33),
+            new BibleTitleInfo("나훔","나",34),
+            new BibleTitleInfo("하박국","합",35),
+            new BibleTitleInfo("스바냐","습",36),
+            new BibleTitleInfo("학개","학",37),
+            new BibleTitleInfo("스가랴","슥",38),
+            new BibleTitleInfo("말라기","말",39),
+            new BibleTitleInfo("마태복음","마",40),
+            new BibleTitleInfo("마가복음","막",41),
+            new BibleTitleInfo("누가복음","눅",42),
+            new BibleTitleInfo("요한복음","요",43),
+            new BibleTitleInfo("사도행전","행",44),
+            new BibleTitleInfo("로마서","롬",45),
+            new BibleTitleInfo("고린도전서","고전",46),
+            new BibleTitleInfo("고린도후서","고후",47),
+            new BibleTitleInfo("갈라디아서","갈",48),
+            new BibleTitleInfo("에베소서","엡",49),
+            new BibleTitleInfo("빌립보서","빌",50),
+            new BibleTitleInfo("골로새서","골",51),
+            new BibleTitleInfo("데살로니가전서","살전",52),
+            new BibleTitleInfo("데살로니가후서","살후",53),
+            new BibleTitleInfo("디모데전서","딤전",54),
+            new BibleTitleInfo("디모데후서","딤후",55),
+            new BibleTitleInfo("디도서","딛",56),
+            new BibleTitleInfo("빌레몬서","몬",57),
+            new BibleTitleInfo("히브리서","히",58),
+            new BibleTitleInfo("야고보서","약",59),
+            new BibleTitleInfo("베드로전서","벧전",60),
+            new BibleTitleInfo("베드로후서","벧후",61),
+            new BibleTitleInfo("요한일서","요일",62),
+            new BibleTitleInfo("요한이서","요이",63),
+            new BibleTitleInfo("요한삼서","요삼",64),
+            new BibleTitleInfo("유다서","유",65),
+            new BibleTitleInfo("요한계시록","계",66)
         };
 
         // 분석값들 및 단계
@@ -372,19 +181,30 @@ namespace BibleProjector_WPF.module
             LevenshteinDistance ld = new LevenshteinDistance();
             KorString ks = new KorString();
 
-            int searchDis = 0;
+            int searchDis_s = 0;
+            int searchDis_l = 0;
+            int searchDis;
+            bool isShort;
             int titleLen;
-            for (int i = 0; i < bibleTitles_l.Length; i++)
+            for (int i = 0; i < bibleTitles.Length; i++)
+                bibleTitles[i].isChecked = false;
+            for (int i = 0; i < bibleTitles.Length; i++)
             {
+                if ((searchDis_s = ld.getLevenDis_min(title, bibleTitles[i].shortName))
+                    < (searchDis_l = ld.getLevenDis_min(title, bibleTitles[i].fullName)))
+                {
+                    searchDis = searchDis_s;
+                    isShort = true;
+                }
+                else
+                {
+                    searchDis = searchDis_l;
+                    isShort = false;
+                }
+
                 titleLen = ks.GetAddCost(title);
-                if ((searchDis = ld.getLevenDis_min(title, bibleTitles_l[i])) <= ((titleLen / 2.5) * SEARCH_DISTANCE_LIMIT))
-                    result.Add(makeSearchResult(bibleTitleIndex_l[i].ToString("00"), searchDis));
-            }
-            for (int i = 0; i < bibleTitles_s.Length; i++)
-            {
-                titleLen = ks.GetAddCost(title);
-                if ((searchDis = ld.getLevenDis_min(title, bibleTitles_s[i])) <= ((titleLen / 2.5) * SEARCH_DISTANCE_LIMIT))
-                    result.Add(makeSearchResult(bibleTitleIndex_s[i].ToString("00"), searchDis));
+                if (searchDis <= ((titleLen / 2.5) * SEARCH_DISTANCE_LIMIT))
+                    result.Add(makeSearchResult(bibleTitles[i].titleNumber.ToString("00"), isShort, searchDis));
             }
 
             result.Sort((a, b) => (a.searchDistance > b.searchDistance ? 1 :
@@ -393,7 +213,7 @@ namespace BibleProjector_WPF.module
             return result.ToArray();
         }
 
-        BibleSearchData makeSearchResult(string Kuen, int searchDis)
+        BibleSearchData makeSearchResult(string Kuen, bool isShort, int searchDis)
         {
             if (chapter != -1
                 && chapter <= Database.getChapterCount(Kuen))
@@ -405,13 +225,13 @@ namespace BibleProjector_WPF.module
                 {
                     string Jeul = verse.ToString("000");
 
-                    return new BibleSearchData(Kuen, Jang, Jeul, searchDis);
+                    return new BibleSearchData(Kuen, Jang, Jeul, isShort, searchDis);
                 }
                 else
-                    return new BibleSearchData(Kuen, Jang, null, searchDis);
+                    return new BibleSearchData(Kuen, Jang, null, isShort, searchDis);
             }
             else
-                return new BibleSearchData(Kuen, null, null, searchDis);
+                return new BibleSearchData(Kuen, null, null, isShort, searchDis);
         }
 
         void setSearchData(string searchPrase) 
