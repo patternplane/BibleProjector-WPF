@@ -76,13 +76,18 @@
     <Compile Include="ManualTab.xaml.cs">
       <DependentUpon>ManualTab.xaml</DependentUpon>
     </Compile>
+    <Compile Include="module\BibleSearch.cs" />
+    <Compile Include="module\BibleSearchData.cs" />
     <Compile Include="module\ControlWindowManager.cs" />
     <Compile Include="module\ExternPPTManager.cs" />
+    <Compile Include="module\KorString.cs" />
     <Compile Include="module\LayoutInfo.cs" />
+    <Compile Include="module\LevenshteinDistance.cs" />
     <Compile Include="module\ManualData.cs" />
     <Compile Include="module\ProgramOption.cs" />
     <Compile Include="module\ReserveDataUnits.cs" />
     <Compile Include="module\ShowStarter.cs" />
+    <Compile Include="module\CharCompare.cs" />
     <Compile Include="Option.xaml.cs">
       <DependentUpon>Option.xaml</DependentUpon>
     </Compile>
@@ -133,6 +138,7 @@
     </Compile>
     <Compile Include="UnitTester\Tester.cs" />
     <Compile Include="ViewModel\BibleModifyViewModel.cs" />
+    <Compile Include="ViewModel\BibleSearchViewModel.cs" />
     <Compile Include="ViewModel\ExternPPTViewModel.cs" />
     <Compile Include="ViewModel\ManualTabViewModel.cs" />
     <Compile Include="ViewModel\OptionViewModel.cs" />

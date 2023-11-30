@@ -45,6 +45,8 @@ namespace BibleProjector_WPF
         ViewModel.BibleCurrentSelectingData VM_BibleCurrentSelectingData;
         // 예약 정보
         ViewModel.BibleReserveData VM_BibleReserveData;
+        // 검색
+        ViewModel.BibleSearchViewModel VM_BibleSearch;
 
 
         // 설정 창
@@ -120,6 +122,8 @@ namespace BibleProjector_WPF
             Bible_CurrentDisplayTextBoxies_Grid.DataContext = VM_BibleSelectData = new ViewModel.BibleSelectData();
 
             BibleReserveListBox.DataContext = VM_BibleReserveData = new ViewModel.BibleReserveData();
+
+            BibleSearchBorder.DataContext = VM_BibleSearch = new ViewModel.BibleSearchViewModel();
         }
 
         void ReadingInitialize()
@@ -315,6 +319,14 @@ namespace BibleProjector_WPF
                 VM_BibleSelectData.Chapter = VM_BibleCurrentSelectingData.Chapter;
                 VM_BibleSelectData.Verse = VM_BibleCurrentSelectingData.Verse = verseNumber;
             }
+        }
+
+        // ======================================== 성경 검색 처리
+
+        void BibleSearchPreKeyUp(object sender, KeyEventArgs e)
+        {
+            BibleSearchTextBox.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+            VM_BibleSearch.searchTextChanged();
         }
 
         // ======================================== 성경 예약 처리
