@@ -91,7 +91,7 @@
     <Compile Include="View\Option.xaml.cs">
       <DependentUpon>Option.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ExternPPTControl.xaml.cs">
+    <Compile Include="View\Control\ExternPPTControl.xaml.cs">
       <DependentUpon>ExternPPTControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ProgramStartLoading.xaml.cs">
@@ -118,13 +118,13 @@
     <Compile Include="View\ReserveUnitBox.xaml.cs">
       <DependentUpon>ReserveUnitBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\SongControl.xaml.cs">
+    <Compile Include="View\Control\SongControl.xaml.cs">
       <DependentUpon>SongControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ReadingControl.xaml.cs">
+    <Compile Include="View\Control\ReadingControl.xaml.cs">
       <DependentUpon>ReadingControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\BibleControl.xaml.cs">
+    <Compile Include="View\Control\BibleControl.xaml.cs">
       <DependentUpon>BibleControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\LyricControl.xaml.cs">
@@ -142,7 +142,7 @@
     <Compile Include="ViewModel\ExternPPTViewModel.cs" />
     <Compile Include="ViewModel\ManualTabViewModel.cs" />
     <Compile Include="ViewModel\OptionViewModel.cs" />
-    <Compile Include="ViewModel\ExternPPTControlViewModel.cs" />
+    <Compile Include="ViewModel\Control\ExternPPTControlViewModel.cs" />
     <Compile Include="ViewModel\ReserveDataManager.cs" />
     <Compile Include="ViewModel\ReserveManagerViewModel.cs" />
     <Compile Include="ViewModel\ReserveOptionViewModels\Bible.cs" />
@@ -151,9 +151,9 @@
     <Compile Include="ViewModel\ReserveOptionViewModels\Reading.cs" />
     <Compile Include="ViewModel\ReserveOptionViewModels\IReserveOptionViewModel.cs" />
     <Compile Include="ViewModel\ReserveOptionViewModels\Song.cs" />
-    <Compile Include="ViewModel\SongControlViewModel.cs" />
-    <Compile Include="ViewModel\ReadingControlViewModel.cs" />
-    <Compile Include="ViewModel\BibleControlViewModel.cs" />
+    <Compile Include="ViewModel\Control\SongControlViewModel.cs" />
+    <Compile Include="ViewModel\Control\ReadingControlViewModel.cs" />
+    <Compile Include="ViewModel\Control\BibleControlViewModel.cs" />
     <Compile Include="ViewModel\BibleCurrentSelectingData.cs" />
     <Compile Include="ViewModel\BibleReserveData.cs" />
     <Compile Include="ViewModel\BibleSelectData.cs" />
@@ -174,7 +174,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\ExternPPTControl.xaml">
+    <Page Include="View\Control\ExternPPTControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -210,15 +210,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\SongControl.xaml">
+    <Page Include="View\Control\SongControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\ReadingControl.xaml">
+    <Page Include="View\Control\ReadingControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\BibleControl.xaml">
+    <Page Include="View\Control\BibleControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
