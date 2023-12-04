@@ -65,15 +65,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="BibleModifyWindow.xaml.cs">
+    <Compile Include="View\BibleModifyWindow.xaml.cs">
       <DependentUpon>BibleModifyWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="CloseButtonDisabler.cs" />
     <Compile Include="Event\ReserveListChanged.cs" />
-    <Compile Include="ExternPPT.xaml.cs">
+    <Compile Include="View\ExternPPT.xaml.cs">
       <DependentUpon>ExternPPT.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ManualTab.xaml.cs">
+    <Compile Include="View\ManualTab.xaml.cs">
       <DependentUpon>ManualTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="module\BibleSearch.cs" />
@@ -88,52 +88,52 @@
     <Compile Include="module\ReserveDataUnits.cs" />
     <Compile Include="module\ShowStarter.cs" />
     <Compile Include="module\CharCompare.cs" />
-    <Compile Include="Option.xaml.cs">
+    <Compile Include="View\Option.xaml.cs">
       <DependentUpon>Option.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ExternPPTControl.xaml.cs">
+    <Compile Include="View\ExternPPTControl.xaml.cs">
       <DependentUpon>ExternPPTControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ProgramStartLoading.xaml.cs">
+    <Compile Include="View\ProgramStartLoading.xaml.cs">
       <DependentUpon>ProgramStartLoading.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ReserveManagerWindow.xaml.cs">
+    <Compile Include="View\ReserveManagerWindow.xaml.cs">
       <DependentUpon>ReserveManagerWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ReserveOptionViews\Bible.xaml.cs">
+    <Compile Include="View\ReserveOptionViews\Bible.xaml.cs">
       <DependentUpon>Bible.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ReserveOptionViews\ExternPPT.xaml.cs">
+    <Compile Include="View\ReserveOptionViews\ExternPPT.xaml.cs">
       <DependentUpon>ExternPPT.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ReserveOptionViews\Null.xaml.cs">
+    <Compile Include="View\ReserveOptionViews\Null.xaml.cs">
       <DependentUpon>Null.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ReserveOptionViews\Reading.xaml.cs">
+    <Compile Include="View\ReserveOptionViews\Reading.xaml.cs">
       <DependentUpon>Reading.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ReserveOptionViews\Song.xaml.cs">
+    <Compile Include="View\ReserveOptionViews\Song.xaml.cs">
       <DependentUpon>Song.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ReserveUnitBox.xaml.cs">
+    <Compile Include="View\ReserveUnitBox.xaml.cs">
       <DependentUpon>ReserveUnitBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SongControl.xaml.cs">
+    <Compile Include="View\SongControl.xaml.cs">
       <DependentUpon>SongControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ReadingControl.xaml.cs">
+    <Compile Include="View\ReadingControl.xaml.cs">
       <DependentUpon>ReadingControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BibleControl.xaml.cs">
+    <Compile Include="View\BibleControl.xaml.cs">
       <DependentUpon>BibleControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="LyricControl.xaml.cs">
+    <Compile Include="View\LyricControl.xaml.cs">
       <DependentUpon>LyricControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="module\ProgramData.cs" />
     <Compile Include="module\StringModifier.cs" />
     <Compile Include="module\StringKMP.cs" />
-    <Compile Include="ManualContent.xaml.cs">
+    <Compile Include="View\ManualContent.xaml.cs">
       <DependentUpon>ManualContent.xaml</DependentUpon>
     </Compile>
     <Compile Include="UnitTester\Tester.cs" />
@@ -158,74 +158,71 @@
     <Compile Include="ViewModel\BibleReserveData.cs" />
     <Compile Include="ViewModel\BibleSelectData.cs" />
     <Compile Include="ViewModel\LyricViewModel.cs" />
-    <Compile Include="ExternPPTLoading.xaml.cs">
-      <DependentUpon>ExternPPTLoading.xaml</DependentUpon>
-    </Compile>
-    <Page Include="BibleModifyWindow.xaml">
+    <Page Include="View\BibleModifyWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ExternPPT.xaml">
+    <Page Include="View\ExternPPT.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ManualTab.xaml">
+    <Page Include="View\ManualTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Option.xaml">
+    <Page Include="View\Option.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ExternPPTControl.xaml">
+    <Page Include="View\ExternPPTControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ProgramStartLoading.xaml">
+    <Page Include="View\ProgramStartLoading.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ReserveManagerWindow.xaml">
+    <Page Include="View\ReserveManagerWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ReserveOptionViews\Bible.xaml">
+    <Page Include="View\ReserveOptionViews\Bible.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ReserveOptionViews\ExternPPT.xaml">
+    <Page Include="View\ReserveOptionViews\ExternPPT.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ReserveOptionViews\Null.xaml">
+    <Page Include="View\ReserveOptionViews\Null.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ReserveOptionViews\Reading.xaml">
+    <Page Include="View\ReserveOptionViews\Reading.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ReserveOptionViews\Song.xaml">
+    <Page Include="View\ReserveOptionViews\Song.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ReserveUnitBox.xaml">
+    <Page Include="View\ReserveUnitBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="SongControl.xaml">
+    <Page Include="View\SongControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ReadingControl.xaml">
+    <Page Include="View\ReadingControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="BibleControl.xaml">
+    <Page Include="View\BibleControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="LyricControl.xaml">
+    <Page Include="View\LyricControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -243,11 +240,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="ExternPPTLoading.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ManualContent.xaml">
+    <Page Include="View\ManualContent.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -290,9 +283,6 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="아이콘2.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="1.1.1.0 아이콘.ico" />

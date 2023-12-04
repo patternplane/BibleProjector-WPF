@@ -8,6 +8,7 @@
         Title="주일성수" Height="612.79" Width="1053.488"
         LocationChanged="changeLocate"
         SizeChanged="changeSize">
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="10*"/>
