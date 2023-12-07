@@ -28,7 +28,7 @@ namespace BibleProjector_WPF.ViewModel
             Kjjeul = Database.getBibleIndex_Next(Kjjeul);
             onlyPageSetting(false);
 
-            MainWindow.ProgramMainWindow.applyBibleMoving(Kjjeul.Substring(0,2), Kjjeul.Substring(2, 3), Kjjeul.Substring(5, 3));
+            Bible.tempBibleAccesser.applyBibleMoving(Kjjeul.Substring(0,2), Kjjeul.Substring(2, 3), Kjjeul.Substring(5, 3));
         }
 
         private void showBible_previous()
@@ -36,7 +36,7 @@ namespace BibleProjector_WPF.ViewModel
             Kjjeul = Database.getBibleIndex_Previous(Kjjeul);
             onlyPageSetting(preview_GoLastPage);
 
-            MainWindow.ProgramMainWindow.applyBibleMoving(Kjjeul.Substring(0, 2), Kjjeul.Substring(2, 3), Kjjeul.Substring(5, 3));
+            Bible.tempBibleAccesser.applyBibleMoving(Kjjeul.Substring(0, 2), Kjjeul.Substring(2, 3), Kjjeul.Substring(5, 3));
         }
 
         private void newBibleSetting()

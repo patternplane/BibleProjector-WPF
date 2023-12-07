@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="BibleProjector_WPF.Reading"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BibleProjector_WPF"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="257.659">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="431*"/>
+            <RowDefinition Height="13*"/>
+            <RowDefinition Height="79*"/>
+        </Grid.RowDefinitions>
+        <ListBox Grid.Row="0" x:Name="ReadingListBox">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <EventSetter Event="MouseDoubleClick" Handler="ReadingListBox_DoubleClick"></EventSetter>
+                    <EventSetter Event="KeyDown" Handler="ReadingListBox_KeyDown"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+        </ListBox>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="15*"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="8*"/>
+            </Grid.ColumnDefinitions>
+            <Button Click="ReadingOutputButton_Click" Content="선택된 교독문&#10;출력하기" HorizontalContentAlignment="Center"></Button>
+            <Button Grid.Column="2" Click="ReadingReserveButton_Click" Content="교독문&#10;예약하기"  HorizontalContentAlignment="Center"  Background="#FFCBFFB9"></Button>
+        </Grid>
+    </Grid>
+</UserControl>

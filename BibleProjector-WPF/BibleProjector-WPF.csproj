@@ -65,6 +65,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ProgramStartEnd.cs" />
+    <Compile Include="View\Bible.xaml.cs">
+      <DependentUpon>Bible.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\BibleModifyWindow.xaml.cs">
       <DependentUpon>BibleModifyWindow.xaml</DependentUpon>
     </Compile>
@@ -96,6 +100,9 @@
     </Compile>
     <Compile Include="View\ProgramStartLoading.xaml.cs">
       <DependentUpon>ProgramStartLoading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Reading.xaml.cs">
+      <DependentUpon>Reading.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ReserveManagerWindow.xaml.cs">
       <DependentUpon>ReserveManagerWindow.xaml</DependentUpon>
@@ -158,6 +165,10 @@
     <Compile Include="ViewModel\BibleReserveData.cs" />
     <Compile Include="ViewModel\BibleSelectData.cs" />
     <Compile Include="ViewModel\LyricViewModel.cs" />
+    <Page Include="View\Bible.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\BibleModifyWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -179,6 +190,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\ProgramStartLoading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Reading.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
