@@ -50,7 +50,9 @@ namespace BibleProjector_WPF
         }
 
         // ========================================== 윈도우 처리 =====================================
+        // Modal로 사용하는 윈도우인지라 이 부분은 현재 필요 없음.
 
+        /*
         private bool AllowClose = false;
 
         public void ForceClose()
@@ -70,5 +72,6 @@ namespace BibleProjector_WPF
             }
             base.OnClosing(e);
         }
+        */
     }
 }
