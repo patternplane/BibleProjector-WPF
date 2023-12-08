@@ -101,9 +101,8 @@ namespace BibleProjector_WPF
         {
             new module.ControlWindowManager().ForceClose();
 
-            // Modal로 사용하는 윈도우인지라 현재 이부분은 필요없음
-            //if (SubWindow_BibleModify != null)
-            //    SubWindow_BibleModify.ForceClose();
+            if (Bible.tempBibleAccesser.SubWindow_BibleModify != null)
+                Bible.tempBibleAccesser.SubWindow_BibleModify.ForceClose();
             if (Window_Reserve != null)
                 Window_Reserve.ForceClose();
 

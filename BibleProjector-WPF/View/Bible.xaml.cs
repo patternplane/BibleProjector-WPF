@@ -72,7 +72,7 @@ namespace BibleProjector_WPF
 
 
         // 성경 수정 창
-        BibleModifyWindow SubWindow_BibleModify = null;
+        public BibleModifyWindow SubWindow_BibleModify = null;
 
         // ========================================= 성경 ============================================
 
