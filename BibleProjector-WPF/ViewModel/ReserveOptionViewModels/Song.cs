@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
 {
-    internal class Song : IReserveOptionViewModel, INotifyPropertyChanged
+    internal class Song : NotifyPropertyChanged, IReserveOptionViewModel
     {
 
         // =============================== 비 바인딩 속성 ================================
@@ -28,7 +28,7 @@ namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
         public BindingList<module.SongFrameFile> SongFrameList { get; set; }
             = module.ProgramOption.SongFrameFiles;
         module.SongFrameFile _SongFrameSelection;
-        public module.SongFrameFile SongFrameSelection { get { return _SongFrameSelection; } set { _SongFrameSelection = value; onPropertyChanged(nameof(SongFrameSelection)); } }
+        public module.SongFrameFile SongFrameSelection { get { return _SongFrameSelection; } set { _SongFrameSelection = value; OnPropertyChanged(nameof(SongFrameSelection)); } }
 
         public BindingList<SingleLyric> CCMList { get; set; }
             = LyricViewModel.LyricList;
@@ -71,15 +71,6 @@ namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
             }
             else if (module.ProgramOption.DefaultCCMFrame != null)
                 SongFrameSelection = module.ProgramOption.DefaultCCMFrame;
-    }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void onPropertyChanged(string propertyName = "")
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
         }
     }
 }

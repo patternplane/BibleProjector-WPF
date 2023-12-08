@@ -8,11 +8,11 @@ using System.ComponentModel;
 
 namespace BibleProjector_WPF.ViewModel
 {
-    class BibleReserveData : INotifyPropertyChanged
+    class BibleReserveData : NotifyPropertyChanged
     {
         // 성경 예약 리스트
         ReserveCollectionUnit[] _BibleReserveList;
-        public ReserveCollectionUnit[] BibleReserveList { get { return _BibleReserveList; } set { _BibleReserveList = value; NotifyPropertyChanged(nameof(BibleReserveList)); } }
+        public ReserveCollectionUnit[] BibleReserveList { get { return _BibleReserveList; } set { _BibleReserveList = value; OnPropertyChanged(nameof(BibleReserveList)); } }
 
         public BibleReserveData()
         {
@@ -31,15 +31,6 @@ namespace BibleProjector_WPF.ViewModel
         {
             if ((e.changeType & Event.ReserveUpdateType.Bible) > 0)
                 BibleReserveList = getBibleReserveList();
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged(string propertyName = "")
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
         }
     }
 }

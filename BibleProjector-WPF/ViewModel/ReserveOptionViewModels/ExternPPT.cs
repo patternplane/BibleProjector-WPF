@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
 {
-    class ExternPPT : IReserveOptionViewModel,INotifyPropertyChanged
+    class ExternPPT : NotifyPropertyChanged, IReserveOptionViewModel
     {
         public ExternPPT()
         {
@@ -30,13 +30,13 @@ namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
                     SlideStartNum_Text_in = "0";
                 else
                     SlideStartNum_Text_in = res;
-                NotifyPropertyChanged("SlideStartNum_Text");
+                OnPropertyChanged("SlideStartNum_Text");
             }
         }
 
         // 선택항목의 갯수에 따른 실행버튼 활성화 여부
         bool _ExecuteButtonEnable = false;
-        public bool ExecuteButtonEnable { get { return _ExecuteButtonEnable; } set { _ExecuteButtonEnable = value; NotifyPropertyChanged("ExecuteButtonEnable"); } }
+        public bool ExecuteButtonEnable { get { return _ExecuteButtonEnable; } set { _ExecuteButtonEnable = value; OnPropertyChanged("ExecuteButtonEnable"); } }
 
         // ================================== 속성 변경 바인딩 =================================
 
@@ -101,15 +101,6 @@ namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
         public void GiveSelection(ReserveCollectionUnit[] data)
         {
             selection = data;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged(string propertyName = "")
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
         }
     }
 }

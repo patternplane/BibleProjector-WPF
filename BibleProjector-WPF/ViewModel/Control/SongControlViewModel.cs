@@ -14,7 +14,7 @@ namespace BibleProjector_WPF.ViewModel
         public string content { get; set; }
     }
 
-    class SongControlViewModel : INotifyPropertyChanged
+    class SongControlViewModel : NotifyPropertyChanged
     {
         // ================================================ 세팅 ================================================
 
@@ -81,7 +81,7 @@ namespace BibleProjector_WPF.ViewModel
                     onDisplay();
                 else
                     offDisplay();
-                NotifyPropertyChanged();
+                OnPropertyChanged();
             } 
         }
         // 자막 숨기기 토글버튼 - isChecked
@@ -91,7 +91,7 @@ namespace BibleProjector_WPF.ViewModel
                     ShowText();
                 else
                     hideText();
-                NotifyPropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -101,13 +101,13 @@ namespace BibleProjector_WPF.ViewModel
 
         // 찬양곡 페이지 리스트박스
         private BindingList<songPage> SongPages_in;
-        public BindingList<songPage> SongPages { get { return SongPages_in; } set { SongPages_in = value; NotifyPropertyChanged(); } }
+        public BindingList<songPage> SongPages { get { return SongPages_in; } set { SongPages_in = value; OnPropertyChanged(); } }
         private int CurrentPageIndex_in;
         public int CurrentPageIndex { get { return CurrentPageIndex_in; } set { CurrentPageIndex_in = value;
                 if (CurrentPageIndex_in != -1)
                     // 페이지 변경 처리
                     ChangePage(CurrentPageIndex_in);
-                NotifyPropertyChanged();
+                OnPropertyChanged();
             } }
 
         // ================================================ 속성 메소드 ================================================
@@ -207,17 +207,6 @@ namespace BibleProjector_WPF.ViewModel
         {
             Powerpoint.Song.SlideShowRun(currentPPTName);
             //Powerpoint.Song.OnDisplay(currentPPTName);
-        }
-
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged(string propertyName = "")
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
         }
     }
 }

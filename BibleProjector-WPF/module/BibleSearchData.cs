@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BibleProjector_WPF.module
 {
-    class BibleSearchData : INotifyPropertyChanged
+    class BibleSearchData : NotifyPropertyChanged
     {
 
         public BibleSearchData(string Kuen, string Jang, string Jeul, bool isShort, int searchDistance)
@@ -34,16 +34,5 @@ namespace BibleProjector_WPF.module
         public int searchDistance;
         string displayData_i;
         public string displayData { get { return displayData_i; } set { displayData_i = value; } }
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void OnPropertyChanged(string propertyName = "")
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
     }
 }

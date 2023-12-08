@@ -9,7 +9,7 @@ using System.Collections.ObjectModel;
 
 namespace BibleProjector_WPF.ViewModel
 {
-    class BibleSearchViewModel : INotifyPropertyChanged
+    class BibleSearchViewModel : NotifyPropertyChanged
     {
 
         string searchText_in = "";
@@ -32,19 +32,7 @@ namespace BibleProjector_WPF.ViewModel
                     searchList.Add(r);
 
                 popupOpen = true;
-                NotifyPropertyChanged("popupOpen");
-            }
-        }
-
-        // ====================================== INotifyPropertyChanged 인터페이스 구현
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void NotifyPropertyChanged(string propertyName = "")
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                OnPropertyChanged("popupOpen");
             }
         }
     }

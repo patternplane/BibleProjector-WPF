@@ -8,7 +8,7 @@ using System.ComponentModel;
 
 namespace BibleProjector_WPF.ViewModel
 {
-    class ReadingControlViewModel : INotifyPropertyChanged
+    class ReadingControlViewModel : NotifyPropertyChanged
     {
         // ================================================ 세팅 ================================================
 
@@ -47,7 +47,7 @@ namespace BibleProjector_WPF.ViewModel
                     onDisplay();
                 else
                     offDisplay();
-                NotifyPropertyChanged();
+                OnPropertyChanged();
             } 
         }
         // 자막 숨기기 토글버튼 - isChecked
@@ -57,7 +57,7 @@ namespace BibleProjector_WPF.ViewModel
                     ShowText();
                 else
                     hideText();
-                NotifyPropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -67,7 +67,7 @@ namespace BibleProjector_WPF.ViewModel
 
         // 교독문 페이지 리스트박스
         private BindingList<string> ReadingPages_in;
-        public BindingList<string> ReadingPages { get { return ReadingPages_in; } set { ReadingPages_in = value; NotifyPropertyChanged(); } }
+        public BindingList<string> ReadingPages { get { return ReadingPages_in; } set { ReadingPages_in = value; OnPropertyChanged(); } }
         private int CurrentPageIndex_in;
         public int CurrentPageIndex { get { return CurrentPageIndex_in; } set { CurrentPageIndex_in = value;
                 if (CurrentPageIndex_in != -1)
@@ -75,7 +75,7 @@ namespace BibleProjector_WPF.ViewModel
                     // 페이지 변경 처리
                     setReadingSlide_Content(ReadingPages[CurrentPageIndex_in]);
                 }
-                NotifyPropertyChanged();
+                OnPropertyChanged();
             } }
 
         // ================================================ 속성 메소드 ================================================
@@ -173,17 +173,6 @@ namespace BibleProjector_WPF.ViewModel
         {
             Powerpoint.Reading.SlideShowRun();
             //Powerpoint.Reading.OnDisplay();
-        }
-
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged(string propertyName = "")
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
         }
     }
 }

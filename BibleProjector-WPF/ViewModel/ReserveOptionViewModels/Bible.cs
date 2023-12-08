@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
 {
-    internal class Bible : IReserveOptionViewModel, INotifyPropertyChanged
+    internal class Bible : NotifyPropertyChanged, IReserveOptionViewModel
     {
         ReserveCollectionUnit selection;
         module.BibleReserveDataUnit bibleData { get { return (module.BibleReserveDataUnit)selection.reserveData; } }
@@ -30,29 +30,29 @@ namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
         void KuenChanged()
         {
             JangList = null;
-            NotifyPropertyChanged(nameof(JangList));
+            OnPropertyChanged(nameof(JangList));
             JeulList = null;
-            NotifyPropertyChanged(nameof(JeulList));
+            OnPropertyChanged(nameof(JeulList));
 
             int JangCount = Database.getChapterCount((KuenSelection_index + 1).ToString("00")); ;
             JangList = new int[JangCount];
 
             for (int i = 1; i <= JangCount; i++)
                 JangList[i-1] = i;
-            NotifyPropertyChanged(nameof(JangList));
+            OnPropertyChanged(nameof(JangList));
         }
 
         void JangChanged()
         {
             JeulList = null;
-            NotifyPropertyChanged(nameof(JeulList));
+            OnPropertyChanged(nameof(JeulList));
 
             int JeulCount = Database.getVerseCount((KuenSelection_index + 1).ToString("00") + JangSelection.ToString("000"));
             JeulList = new int[JeulCount];
 
             for (int i = 1; i <= JeulCount; i++)
                 JeulList[i - 1] = i;
-            NotifyPropertyChanged(nameof(JeulList));
+            OnPropertyChanged(nameof(JeulList));
         }
 
         void JeulChanged()
@@ -70,15 +70,15 @@ namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
             selection = data[0];
 
             _KuenSelection_index = (int.Parse(bibleData.Book) - 1);
-            NotifyPropertyChanged(nameof(KuenSelection_index));
+            OnPropertyChanged(nameof(KuenSelection_index));
             KuenChanged();
 
             _JangSelection = int.Parse(bibleData.Chapter);
-            NotifyPropertyChanged(nameof(JangSelection));
+            OnPropertyChanged(nameof(JangSelection));
             JangChanged();
 
             _JeulSelection = int.Parse(bibleData.Verse);
-            NotifyPropertyChanged(nameof(JeulSelection));
+            OnPropertyChanged(nameof(JeulSelection));
         }
 
         public void ShowContent()
@@ -90,15 +90,6 @@ namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
                     bibleData.Book
                     + bibleData.Chapter
                     + bibleData.Verse);
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged(string propertyName = "")
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
         }
     }
 }

@@ -15,7 +15,7 @@ namespace BibleProjector_WPF.ViewModel
     /// <summary>
     /// 곡의 한 단위를 나타냅니다.
     /// </summary>
-    public class SingleLyric : INotifyPropertyChanged
+    public class SingleLyric : NotifyPropertyChanged
     {
         public SingleLyric() { }
 
@@ -25,8 +25,8 @@ namespace BibleProjector_WPF.ViewModel
             this.content = content;
         }
 
-        public String title { get { return title_get(); } set { title_set(value); NotifyPropertyChanged(); } }
-        public String content { get { return content_get(); } set { content_set(value); NotifyPropertyChanged(); } }
+        public String title { get { return title_get(); } set { title_set(value); OnPropertyChanged(); } }
+        public String content { get { return content_get(); } set { content_set(value); OnPropertyChanged(); } }
 
         // title
         private string title_in;
@@ -75,15 +75,6 @@ namespace BibleProjector_WPF.ViewModel
             }
 
             return songData;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged(string propertyName = "")
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
         }
     }
 
@@ -182,7 +173,7 @@ namespace BibleProjector_WPF.ViewModel
         }
     }
 
-    class LyricViewModel : INotifyPropertyChanged
+    class LyricViewModel : NotifyPropertyChanged
     {
         // 파일 입출력시 구분자
         public const string SEPARATOR = "∂";
@@ -312,7 +303,7 @@ namespace BibleProjector_WPF.ViewModel
                     currentLyricTitle = currentLyric_in.title;
                     currentLyricContent = currentLyric_in.content;
                 }
-                NotifyPropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -336,7 +327,7 @@ namespace BibleProjector_WPF.ViewModel
                         SongFrameSelection = module.ProgramOption.DefaultCCMFrame;
                 }
                 SelectedLyric_in = value;
-                NotifyPropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -344,11 +335,11 @@ namespace BibleProjector_WPF.ViewModel
 
         // 곡 삭제버튼 보이기
         private bool isDeleteButtonEnable_in;
-        public bool isDeleteButtonEnable { get { return isDeleteButtonEnable_in; } set { isDeleteButtonEnable_in = value; NotifyPropertyChanged(); } }
+        public bool isDeleteButtonEnable { get { return isDeleteButtonEnable_in; } set { isDeleteButtonEnable_in = value; OnPropertyChanged(); } }
 
         // 곡 추가버튼 보이기
         private bool isAddButtonEnable_in = true;
-        public bool isAddButtonEnable { get { return isAddButtonEnable_in; } set { isAddButtonEnable_in = value; NotifyPropertyChanged(); } }
+        public bool isAddButtonEnable { get { return isAddButtonEnable_in; } set { isAddButtonEnable_in = value; OnPropertyChanged(); } }
 
         // 가사의 제목과 내용
         private bool needCheckNewLine_title = false;
@@ -365,7 +356,7 @@ namespace BibleProjector_WPF.ViewModel
                 else
                     needCheckNewLine_title = false;
                 isChangingLyric_title = false;
-                NotifyPropertyChanged();
+                OnPropertyChanged();
             } }
         private bool needCheckNewLine_Content = false;
         private bool isChangingLyric_content = false;
@@ -385,7 +376,7 @@ namespace BibleProjector_WPF.ViewModel
                 else
                     needCheckNewLine_Content = false;
                 isChangingLyric_content = false;
-                NotifyPropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -394,19 +385,19 @@ namespace BibleProjector_WPF.ViewModel
 
         // 검색 문구
         private string SearchText_in = DEFAUL_SEARCH_TEXT;
-        public string SearchText { get { return SearchText_in; } set { SearchText_in = value; NotifyPropertyChanged(); } }
+        public string SearchText { get { return SearchText_in; } set { SearchText_in = value; OnPropertyChanged(); } }
 
         // 검색 선택값
         private searchPair currentSearchData_in;
-        public searchPair currentSearchData { get { return currentSearchData_in; } set { currentSearchData_in = value; RunSetFromSearchValue(); NotifyPropertyChanged(); } }
+        public searchPair currentSearchData { get { return currentSearchData_in; } set { currentSearchData_in = value; RunSetFromSearchValue(); OnPropertyChanged(); } }
 
         // 검색값 리스트
         private BindingList<searchPair> SearchList_in;
-        public BindingList<searchPair> SearchList { get { return SearchList_in; } set { SearchList_in = value; NotifyPropertyChanged(); } }
+        public BindingList<searchPair> SearchList { get { return SearchList_in; } set { SearchList_in = value; OnPropertyChanged(); } }
 
         // 검색값 리스트 보이기
         private bool isSearchResultShow_in;
-        public bool isSearchResultShow { get { return isSearchResultShow_in; } set { isSearchResultShow_in = value; NotifyPropertyChanged(); } }
+        public bool isSearchResultShow { get { return isSearchResultShow_in; } set { isSearchResultShow_in = value; OnPropertyChanged(); } }
 
         /// <summary>
         /// 검색 결과의 한 단위를 나타냅니다.
@@ -477,7 +468,7 @@ namespace BibleProjector_WPF.ViewModel
             get { return CurrentHymnPosition_Text_in; }
             set {
                 CurrentHymnPosition_Text_in = value;
-                NotifyPropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -491,7 +482,7 @@ namespace BibleProjector_WPF.ViewModel
                 VerseContent_in = value;
                 if (HymnSelection != null && HymnSelection.content.CompareTo(VerseContent_in) != 0)
                     HymnSelection.content = VerseContent_in;
-                NotifyPropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -499,7 +490,7 @@ namespace BibleProjector_WPF.ViewModel
 
         // 예약 리스트
         ReserveCollectionUnit[] _LyricReserveList;
-        public ReserveCollectionUnit[] LyricReserveList { get { return _LyricReserveList; } set { _LyricReserveList = value; NotifyPropertyChanged(nameof(LyricReserveList)); } }
+        public ReserveCollectionUnit[] LyricReserveList { get { return _LyricReserveList; } set { _LyricReserveList = value; OnPropertyChanged(nameof(LyricReserveList)); } }
         // 현재 (출력)선택값
         private ReserveCollectionUnit LyricReserveSelection_in;
         public ReserveCollectionUnit LyricReserveSelection { get { return LyricReserveSelection_in; } set { LyricReserveSelection_in = value;
@@ -533,7 +524,7 @@ namespace BibleProjector_WPF.ViewModel
                     LinePerSlide = 0;
                 else
                     LinePerSlide = int.Parse(LinePerSlideText_in);
-                NotifyPropertyChanged();
+                OnPropertyChanged();
             } 
         }
 
@@ -819,18 +810,6 @@ namespace BibleProjector_WPF.ViewModel
                     if (!isNewLyric && currentSearchData == null)
                         currentSearchData = p;
                 }
-            }
-        }
-
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void NotifyPropertyChanged(string propertyName = "")
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
     }

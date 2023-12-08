@@ -9,7 +9,7 @@ using System.ComponentModel;
 
 namespace BibleProjector_WPF.module
 {
-    public class SongFrameFile : INotifyPropertyChanged
+    public class SongFrameFile : NotifyPropertyChanged
     {
         public string Path { get; set; }
         public string FileName { get; set; }
@@ -33,17 +33,6 @@ namespace BibleProjector_WPF.module
                 ProgramOption.setThisFrameToHymn(this,value);
                 _isHymnFrame = value;
                 OnPropertyChanged("isHymnFrame");
-            }
-        }
-
-        // INotifyPropertyChanged 인터페이스 관련
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
     }

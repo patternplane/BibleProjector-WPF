@@ -9,7 +9,7 @@ using System.Windows.Media.Imaging;
 
 namespace BibleProjector_WPF.ViewModel
 {
-    class ExternPPTControlViewModel : INotifyPropertyChanged
+    class ExternPPTControlViewModel : NotifyPropertyChanged
     {
 
         // ================================================ 세팅 ================================================
@@ -85,7 +85,7 @@ namespace BibleProjector_WPF.ViewModel
                     onDisplay();
                 else
                     offDisplay();
-                NotifyPropertyChanged();
+                OnPropertyChanged();
             } 
         }
 
@@ -95,7 +95,7 @@ namespace BibleProjector_WPF.ViewModel
 
         // ppt 페이지 리스트박스
         private BindingList<SingleSlidePreview> PPTImages_in = new BindingList<SingleSlidePreview>();
-        public BindingList<SingleSlidePreview> PPTImages { get { return PPTImages_in; } set { PPTImages_in = value; NotifyPropertyChanged(); } }
+        public BindingList<SingleSlidePreview> PPTImages { get { return PPTImages_in; } set { PPTImages_in = value; OnPropertyChanged(); } }
         private int CurrentPageIndex_in;
         public int CurrentPageIndex { get { return CurrentPageIndex_in; } set { CurrentPageIndex_in = value;
                 if (CurrentPageIndex_in != -1)
@@ -103,7 +103,7 @@ namespace BibleProjector_WPF.ViewModel
                     // 페이지 변경 처리
                     CurrentPageIndex_in = goToSlide(CurrentPageIndex_in + 1) - 1;
                 }
-                NotifyPropertyChanged();
+                OnPropertyChanged();
             } }
 
         public class SingleSlidePreview
@@ -191,17 +191,6 @@ namespace BibleProjector_WPF.ViewModel
         {
             Powerpoint.ExternPPTs.SlideShowRun(currentFileName);
             //Powerpoint.Reading.OnDisplay();
-        }
-
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged(string propertyName = "")
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
         }
     }
 }

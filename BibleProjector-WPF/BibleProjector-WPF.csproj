@@ -66,6 +66,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ProgramStartEnd.cs" />
+    <Compile Include="NotifyPropertyChanged.cs" />
     <Compile Include="View\Bible.xaml.cs">
       <DependentUpon>Bible.xaml</DependentUpon>
     </Compile>

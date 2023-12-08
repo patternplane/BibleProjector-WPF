@@ -313,7 +313,7 @@ namespace BibleProjector_WPF.ViewModel
         }
     }
 
-    public class ReserveCollectionUnit : INotifyPropertyChanged
+    public class ReserveCollectionUnit : NotifyPropertyChanged
     {
         // ============================= 속성 ====================================
 
@@ -414,17 +414,6 @@ namespace BibleProjector_WPF.ViewModel
         public ReserveCollectionUnit(module.ReserveDataUnit reserveDataUnit)
         {
             this.reserveData = reserveDataUnit;
-        }
-
-        // INotifyPropertyChanged 인터페이스 관련
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
         }
     }
 }

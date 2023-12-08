@@ -8,7 +8,7 @@ using System.ComponentModel;
 
 namespace BibleProjector_WPF.ViewModel
 {
-    class OptionViewModel : INotifyPropertyChanged
+    class OptionViewModel : NotifyPropertyChanged
     {
 
         // ========================================== View 연결 속성들 ========================================== 
@@ -25,7 +25,7 @@ namespace BibleProjector_WPF.ViewModel
                     module.ProgramOption.Bible_LinePerSlide = 0;
                 else
                     module.ProgramOption.Bible_LinePerSlide = int.Parse(res);
-                NotifyPropertyChanged();
+                OnPropertyChanged();
             }
         }
         public string CharPerLine_Text
@@ -41,7 +41,7 @@ namespace BibleProjector_WPF.ViewModel
                     module.ProgramOption.Bible_CharPerLine = 0;
                 else
                     module.ProgramOption.Bible_CharPerLine = int.Parse(res);
-                NotifyPropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -54,7 +54,7 @@ namespace BibleProjector_WPF.ViewModel
             set
             {
                 module.ProgramOption.BibleFramePath = value;
-                NotifyPropertyChanged();
+                OnPropertyChanged();
             }
         }
         public string ReadingFramePath_Text
@@ -66,7 +66,7 @@ namespace BibleProjector_WPF.ViewModel
             set
             {
                 module.ProgramOption.ReadingFramePath = value;
-                NotifyPropertyChanged();
+                OnPropertyChanged();
             }
         }
         public BindingList<module.SongFrameFile> SongFramePaths_List { get { return module.ProgramOption.SongFrameFiles; } set{}
@@ -250,17 +250,6 @@ namespace BibleProjector_WPF.ViewModel
                 module.ProgramOption.process_deleteSongFrame(SongFramePaths_List[itemIndex[i]]);
 
                 SongFramePaths_List.RemoveAt(itemIndex[i]);
-            }
-        }
-
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged(string propertyName = "")
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
     }

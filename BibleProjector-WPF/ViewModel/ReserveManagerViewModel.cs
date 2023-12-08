@@ -14,7 +14,7 @@ using System.Windows.Input;
 
 namespace BibleProjector_WPF.ViewModel
 {
-    internal class ReserveManagerViewModel : INotifyPropertyChanged
+    internal class ReserveManagerViewModel : NotifyPropertyChanged
     {
         // 이거 말고 더 좋은 방법 있을텐데
         static public ReserveManagerViewModel instance;
@@ -205,17 +205,6 @@ namespace BibleProjector_WPF.ViewModel
 
             ReserveOptionViewModel.GiveSelection(getSelectionItems());
             selectionType = type;
-        }
-
-        // INotifyPropertyChanged 인터페이스 관련
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
         }
     }
 }
