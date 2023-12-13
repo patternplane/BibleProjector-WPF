@@ -1,0 +1,82 @@
+﻿<Page x:Class="BibleProjector_WPF.View.MainPage.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:BibleProjector_WPF.View.MainPage"
+      mc:Ignorable="d" 
+      d:DesignHeight="475.613" d:DesignWidth="787.584"
+      Title="MainPage">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="603*"/>
+            <RowDefinition Height="10"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="998*"/>
+            <ColumnDefinition Width="10"/>
+        </Grid.ColumnDefinitions>
+
+        <TabControl Grid.Row="1" Grid.Column="1">
+
+            <!--성경-->
+            <TabItem Header="조작">
+            </TabItem>
+
+            <!--교독문, 찬양곡, 외부ppt-->
+            <TabItem Header="자료 수정">
+            </TabItem>
+        </TabControl>
+
+        <Button Height="21" Width="30" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top">
+            <Button.Triggers>
+                <EventTrigger RoutedEvent="Button.Click">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                                Storyboard.TargetName="optionBar"
+                                Storyboard.TargetProperty="RenderTransform.X"
+                                Duration="0:0:0.1"
+                                From="190"
+                                To="0">
+                            </DoubleAnimation>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Button.Triggers>
+        </Button>
+        <Border
+            x:Name="optionBar"
+            BorderBrush="Black"
+            BorderThickness="1"
+            Grid.Row="1"
+            Grid.Column="1"
+            Grid.ColumnSpan="2"
+            Width="180"
+            HorizontalAlignment="Right"
+            Background="White" >
+            <Border.RenderTransform>
+                <TranslateTransform/>
+            </Border.RenderTransform>
+            <Border.Triggers>
+
+                <EventTrigger RoutedEvent="MouseLeave">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                                Storyboard.TargetProperty="RenderTransform.X"
+                                Duration="0:0:0.1"
+                                From="0"
+                                To="190">
+                            </DoubleAnimation>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Border.Triggers>
+            <local:MainOption/>
+        </Border>
+    </Grid>
+</Page>

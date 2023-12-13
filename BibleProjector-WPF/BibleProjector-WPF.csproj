@@ -78,6 +78,12 @@
     <Compile Include="View\ExternPPT.xaml.cs">
       <DependentUpon>ExternPPT.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\MainPage\MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainPage\MainOption.xaml.cs">
+      <DependentUpon>MainOption.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\ManualTab.xaml.cs">
       <DependentUpon>ManualTab.xaml</DependentUpon>
     </Compile>
@@ -175,6 +181,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ExternPPT.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MainPage\MainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MainPage\MainOption.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
