@@ -38,10 +38,10 @@
                         <Storyboard>
                             <DoubleAnimation
                                 Storyboard.TargetName="optionBar"
-                                Storyboard.TargetProperty="RenderTransform.X"
+                                Storyboard.TargetProperty="Width"
                                 Duration="0:0:0.1"
-                                From="190"
-                                To="0">
+                                From="0"
+                                To="{Binding ElementName=optionBarContent, Path=Width}">
                             </DoubleAnimation>
                         </Storyboard>
                     </BeginStoryboard>
@@ -55,28 +55,24 @@
             Grid.Row="1"
             Grid.Column="1"
             Grid.ColumnSpan="2"
-            Width="180"
+            Width="0"
             HorizontalAlignment="Right"
-            Background="White" >
-            <Border.RenderTransform>
-                <TranslateTransform/>
-            </Border.RenderTransform>
+            Background="White">
             <Border.Triggers>
-
                 <EventTrigger RoutedEvent="MouseLeave">
-                    <BeginStoryboard>
+                    <BeginStoryboard Name="be">
                         <Storyboard>
                             <DoubleAnimation
-                                Storyboard.TargetProperty="RenderTransform.X"
+                                Storyboard.TargetProperty="Width"
                                 Duration="0:0:0.1"
-                                From="0"
-                                To="190">
+                                From="{Binding Path=Width}"
+                                To="0">
                             </DoubleAnimation>
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger>
             </Border.Triggers>
-            <local:MainOption/>
+            <local:MainOption x:Name="optionBarContent" />
         </Border>
     </Grid>
 </Page>
