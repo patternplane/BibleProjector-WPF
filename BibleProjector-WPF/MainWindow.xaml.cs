@@ -62,7 +62,8 @@ namespace BibleProjector_WPF
 
             InitializeComponent();
 
-            ReserveInitialize();
+            //ReserveInitialize();
+            // 개편중 임시로 꺼둔 부분임에 유의!
 
             setLayout();
         }

@@ -4,74 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BibleProjector_WPF"
+        xmlns:testing="clr-namespace:BibleProjector_WPF.View.MainPage"
         mc:Ignorable="d"
         Title="주일성수" Height="612.79" Width="1053.488"
         LocationChanged="changeLocate"
         SizeChanged="changeSize">
-    
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="10*"/>
-            <RowDefinition Height="603*"/>
-            <RowDefinition Height="15*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="18*"/>
-            <ColumnDefinition Width="998*"/>
-            <ColumnDefinition Width="29*"/>
-        </Grid.ColumnDefinitions>
-
-        <TabControl Grid.Row="1" Grid.Column="1">
-
-            <!--성경-->
-            <TabItem Header="성경" x:Name="BibleTap">
-                <local:Bible></local:Bible>
-            </TabItem>
-
-            <!--교독문, 찬양곡, 외부ppt-->
-            <TabItem Header="예배 자료">
-                <Grid Grid.Row="3">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="22*"/>
-                        <RowDefinition Height="490*"/>
-                        <RowDefinition Height="19*"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="25*"/>
-                        <ColumnDefinition Width="246*"/>
-                        <ColumnDefinition Width="18*"/>
-                        <ColumnDefinition Width="393*"/>
-                        <ColumnDefinition Width="18*"/>
-                        <ColumnDefinition Width="268*"/>
-                        <ColumnDefinition Width="24*"/>
-                    </Grid.ColumnDefinitions>
-                    
-                    <!--교독문 Grid-->
-                    <Border Grid.Row="1" Grid.Column="1" BorderThickness="1" BorderBrush="#FF666666" Padding="3">
-                        <local:Reading></local:Reading>
-                    </Border>
-                    
-                    <!--찬양곡 Control-->
-                    <Border Grid.Row="1" Grid.Column="3" BorderThickness="1" BorderBrush="#FF666666" Padding="4">
-                        <local:LyricControl Height="auto" Width="auto"></local:LyricControl>
-                    </Border>
-
-                    <!--외부 ppt 등록 Grid-->
-                    <Border Grid.Row="1" Grid.Column="5" BorderThickness="1" BorderBrush="#FF666666" Padding="4">
-                        <local:ExternPPT  Height="auto" Width="auto"></local:ExternPPT>
-                    </Border>
-                </Grid>
-            </TabItem>
-
-            <!--옵션-->
-            <TabItem Header="설정">
-                <local:Option></local:Option>
-            </TabItem>
-
-            <!--도움말-->
-            <TabItem BorderBrush="#FFF7B3B3" Background="#FFF7B3B3" Header="도움말">
-                <local:ManualTab></local:ManualTab>
-            </TabItem>
-        </TabControl>
-    </Grid>
+    <!--testing 네임스페이스 : 개편중 임시로 정한 이름임에 유의!-->
+    <testing:MainPage/>
 </Window>
