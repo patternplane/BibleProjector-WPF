@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:BibleProjector_WPF.View.MainPage"
       mc:Ignorable="d" 
-      d:DesignHeight="475.613" d:DesignWidth="787.584"
+      d:DesignHeight="500" d:DesignWidth="733"
       Title="MainPage">
 
     <Grid>
@@ -22,11 +22,12 @@
 
         <TabControl Grid.Row="1" Grid.Column="1">
 
-            <!--성경-->
+            <!--통합 조작 페이지-->
             <TabItem Header="조작">
+                <local:ControlView></local:ControlView>
             </TabItem>
 
-            <!--교독문, 찬양곡, 외부ppt-->
+            <!--자료 수정 페이지-->
             <TabItem Header="자료 수정">
             </TabItem>
         </TabControl>
