@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:BibleProjector_WPF"
         xmlns:testing="clr-namespace:BibleProjector_WPF.View.MainPage"
         mc:Ignorable="d"
-        Title="주일성수" Height="612.79" Width="1053.488"
+        Title="주일성수" Height="700" Width="933"
         LocationChanged="changeLocate"
         SizeChanged="changeSize">
     <!--testing 네임스페이스 : 개편중 임시로 정한 이름임에 유의!-->

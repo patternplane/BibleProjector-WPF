@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BibleProjector_WPF.View.MainPage"
              mc:Ignorable="d" 
-             d:DesignHeight="137" d:DesignWidth="733">
+             d:DesignHeight="155" d:DesignWidth="899">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -68,7 +68,7 @@
                     </Grid.RowDefinitions>
 
                     <Border Grid.Row="0" BorderBrush="Black" BorderThickness="1" Background="Aquamarine">
-                        <Label Padding="0" HorizontalAlignment="Center" Content="찬양 제목" FontSize="8"></Label>
+                        <Label Padding="0" VerticalAlignment="Center" HorizontalAlignment="Center" Content="찬 양 출 력" FontSize="9"></Label>
                     </Border>
                     <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1,0,1,1" Background="white">
                         <Grid>
@@ -97,12 +97,12 @@
                                     <Trigger Property="IsChecked" Value="True">
                                         <Setter Property="Content" Value="화면닫기"></Setter>
                                         <Setter Property="FontWeight" Value="Bold"></Setter>
-                                        <Setter Property="FontSize" Value="8"></Setter>
+                                        <Setter Property="FontSize" Value="10"></Setter>
                                     </Trigger>
                                     <Trigger Property="IsChecked" Value="False">
                                         <Setter Property="Content" Value="화면닫기"></Setter>
                                         <Setter Property="FontWeight" Value="Normal"></Setter>
-                                        <Setter Property="FontSize" Value="7"></Setter>
+                                        <Setter Property="FontSize" Value="9"></Setter>
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
@@ -115,12 +115,12 @@
                                     <Trigger Property="IsChecked" Value="True">
                                         <Setter Property="Content" Value="자막끄기"></Setter>
                                         <Setter Property="FontWeight" Value="Bold"></Setter>
-                                        <Setter Property="FontSize" Value="8"></Setter>
+                                        <Setter Property="FontSize" Value="10"></Setter>
                                     </Trigger>
                                     <Trigger Property="IsChecked" Value="False">
                                         <Setter Property="Content" Value="자막끄기"></Setter>
                                         <Setter Property="FontWeight" Value="Normal"></Setter>
-                                        <Setter Property="FontSize" Value="7"></Setter>
+                                        <Setter Property="FontSize" Value="9"></Setter>
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>

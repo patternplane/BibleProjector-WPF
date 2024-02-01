@@ -5,14 +5,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BibleProjector_WPF.View.MainPage"
              mc:Ignorable="d" 
-             d:DesignHeight="500" d:DesignWidth="733">
+             d:DesignHeight="621" d:DesignWidth="899">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="3*"/>
-            <RowDefinition Height="5*"/>
+            <RowDefinition Height="6*"/>
             <RowDefinition Height="3*"/>
         </Grid.RowDefinitions>
 
+        <!--상/하단 페이지 컨트롤러-->
         <local:ShowControler Grid.Row="0"></local:ShowControler>
         <local:ShowControler Grid.Row="2"></local:ShowControler>
 
@@ -28,6 +29,213 @@
                     <RowDefinition Height="9*"/>
                     <RowDefinition Height="8*"/>
                 </Grid.RowDefinitions>
+
+                <!--외부PPT 조작-->
+                <Grid Grid.Row="0" Margin="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="22*"/>
+                        <RowDefinition Height="133*"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Background="#FFE1E1E1" CornerRadius="4" Margin="1" BorderBrush="Black" BorderThickness="1">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
+                            외부 PPT 등록 및 편집
+                        </TextBlock>
+                    </Border>
+
+                    <WrapPanel Grid.Row="1" Margin="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        
+                        <local:ExternPPTSetter Margin="0,0,4,2"></local:ExternPPTSetter>
+                        <local:ExternPPTSetter Margin="4,0,0,2"></local:ExternPPTSetter>
+                        <local:ExternPPTSetter Margin="0,2,4,2"></local:ExternPPTSetter>
+                        <local:ExternPPTSetter Margin="4,2,0,2"></local:ExternPPTSetter>
+                        <local:ExternPPTSetter Margin="0,2,4,2"></local:ExternPPTSetter>
+                        <local:ExternPPTSetter Margin="4,2,0,2"></local:ExternPPTSetter>
+                    </WrapPanel>
+                </Grid>
+            </Grid>
+
+            <!--검색-->
+            <Grid Grid.Column="1" Margin="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="6.5*"/>
+                    <RowDefinition Height="6*"/>
+                    <RowDefinition Height="57*"/>
+                    <RowDefinition Height="10*"/>
+                </Grid.RowDefinitions>
+
+                <!--검색 : 제목표시-->
+                <ContentControl Grid.Row="0" Margin="1">
+                    <ContentControl.Content>
+                        통 합 검 색
+                    </ContentControl.Content>
+                    <ContentControl.Style>
+                        <Style TargetType="ContentControl">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ContentControl">
+                                        <Grid>
+                                            <Path Stretch="Fill" Fill="LightYellow" Stroke="Black" StrokeThickness="1">
+                                                <Path.Data>
+                                                    <CombinedGeometry>
+                                                        <CombinedGeometry.Geometry1>
+                                                            <RectangleGeometry Rect="0,0,200,18" RadiusX="9" RadiusY="9"></RectangleGeometry>
+                                                        </CombinedGeometry.Geometry1>
+                                                        <CombinedGeometry.Geometry2>
+                                                            <RectangleGeometry Rect="0,9,200,9"></RectangleGeometry>
+                                                        </CombinedGeometry.Geometry2>
+                                                    </CombinedGeometry>
+                                                </Path.Data>
+                                            </Path>
+                                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                        </Grid>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ContentControl.Style>
+                </ContentControl>
+
+                <!--검색 : 검색창-->
+                <Grid Grid.Row="1" Margin="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="179*"/>
+                        <ColumnDefinition Width="42*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border Grid.Column="0" BorderBrush="black" BorderThickness="1,1,0,1">
+                        <TextBlock>
+
+                        </TextBlock>
+                    </Border>
+                    <Button Grid.Column="1" FontSize="11" BorderBrush="Black" Background="#FF0272AA">
+                        검 색
+                    </Button>
+                </Grid>
+
+                <!--검색 : 미리보기-->
+                <Border Grid.Row="2" Margin="1" BorderBrush="Black" BorderThickness="1">
+
+                </Border>
+
+                <!--검색 : 후처리 버튼-->
+                <Grid Grid.Row="3" Margin="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0" Margin="0,0,1,0" Background="#FF72E172">
+                        출     력
+                    </Button>
+                    <Button Grid.Column="1" Margin="1,0,0,0" Background="#FF02AAAA">
+                        예     약
+                    </Button>
+                </Grid>
+            </Grid>
+
+            <!--예약 목록-->
+            <Grid Grid.Column="2" Margin="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="12*"/>
+                </Grid.RowDefinitions>
+
+                <Border BorderBrush="Black" BorderThickness="1,1,1,0">
+                    <Label Background="LightGray" Padding="0" FontSize="13" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                        예 약 목 록
+                    </Label>
+                </Border>
+                <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1">
+                    <ListBox>
+                        <!--아이템 표시 예시-->
+                        <!--템플릿은 추후 사용할 예정-->
+                        <ListBoxItem Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch">
+                            <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
+                                <TextBlock>
+                                    1. 성경1
+                                </TextBlock>
+                            </Border>
+                        </ListBoxItem>
+                        <ListBoxItem Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch">
+                            <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
+                                <TextBlock>
+                                    2. 성경2
+                                </TextBlock>
+                            </Border>
+                        </ListBoxItem>
+                        <ListBoxItem Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch">
+                            <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
+                                <TextBlock>
+                                    3. 성경3
+                                </TextBlock>
+                            </Border>
+                        </ListBoxItem>
+                        <ListBoxItem Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch">
+                            <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
+                                <TextBlock>
+                                    4. 찬양1
+                                </TextBlock>
+                            </Border>
+                        </ListBoxItem>
+                        <ListBoxItem Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch">
+                            <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
+                                <TextBlock>
+                                    5. 찬양2
+                                </TextBlock>
+                            </Border>
+                        </ListBoxItem>
+                        <ListBoxItem Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch">
+                            <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
+                                <TextBlock>
+                                    6. 외부자료1
+                                </TextBlock>
+                            </Border>
+                        </ListBoxItem>
+                        <ListBoxItem Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch">
+                            <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
+                                <TextBlock>
+                                    7.
+                                </TextBlock>
+                            </Border>
+                        </ListBoxItem>
+                        <ListBoxItem Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch">
+                            <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
+                                <TextBlock>
+                                    8.
+                                </TextBlock>
+                            </Border>
+                        </ListBoxItem>
+                        <ListBoxItem Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch">
+                            <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
+                                <TextBlock>
+                                    9.
+                                </TextBlock>
+                            </Border>
+                        </ListBoxItem>
+                        <ListBoxItem Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch">
+                            <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
+                                <TextBlock>
+                                    10.
+                                </TextBlock>
+                            </Border>
+                        </ListBoxItem>
+                        <ListBoxItem Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch">
+                            <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
+                                <TextBlock>
+                                    11.
+                                </TextBlock>
+                            </Border>
+                        </ListBoxItem>
+                        <ListBoxItem Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch">
+                            <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
+                                <TextBlock>
+                                    12.
+                                </TextBlock>
+                            </Border>
+                        </ListBoxItem>
+                    </ListBox>
+                </Border>
             </Grid>
         </Grid>
     </Grid>

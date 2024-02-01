@@ -1,0 +1,104 @@
+﻿<UserControl x:Class="BibleProjector_WPF.View.MainPage.ExternPPTSetter"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BibleProjector_WPF.View.MainPage"
+             mc:Ignorable="d" 
+             Height="35" Width="140">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="22*"/>
+            <ColumnDefinition Width="8*"/>
+        </Grid.ColumnDefinitions>
+
+        <ContentControl Grid.Column="0">
+            <!--더미 데이터-->
+            주일 오전
+            <ContentControl.Template>
+                <ControlTemplate TargetType="ContentControl">
+                    <Grid>
+                        <Path Fill="#FFFFFFD1" Stretch="Fill" Stroke="Black" StrokeThickness="0.5">
+                            <Path.Data>
+                                <CombinedGeometry>
+                                    <CombinedGeometry.Geometry1>
+                                        <RectangleGeometry Rect="0,0,110,35" RadiusX="5" RadiusY="5"></RectangleGeometry>
+                                    </CombinedGeometry.Geometry1>
+                                    <CombinedGeometry.Geometry2>
+                                        <RectangleGeometry Rect="50,0,60,35"></RectangleGeometry>
+                                    </CombinedGeometry.Geometry2>
+                                </CombinedGeometry>
+                            </Path.Data>
+                        </Path>
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"></ContentPresenter>
+                    </Grid>
+                </ControlTemplate>
+            </ContentControl.Template>
+        </ContentControl>
+
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Button Grid.Row="0" FontSize="9">
+                등 록
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Path Fill="#FFF7B251" Stretch="Fill" Stroke="Black" StrokeThickness="0.5">
+                                <Path.Data>
+                                    <CombinedGeometry>
+                                        <CombinedGeometry.Geometry1>
+                                            <CombinedGeometry>
+                                                <CombinedGeometry.Geometry1>
+                                                    <RectangleGeometry Rect="0,0,37,18" RadiusX="5" RadiusY="5"></RectangleGeometry>
+                                                </CombinedGeometry.Geometry1>
+                                                <CombinedGeometry.Geometry2>
+                                                    <RectangleGeometry Rect="0,0,20,18"></RectangleGeometry>
+                                                </CombinedGeometry.Geometry2>
+                                            </CombinedGeometry>
+                                        </CombinedGeometry.Geometry1>
+                                        <CombinedGeometry.Geometry2>
+                                            <RectangleGeometry Rect="0,10,37,10"></RectangleGeometry>
+                                        </CombinedGeometry.Geometry2>
+                                    </CombinedGeometry>
+                                </Path.Data>
+                            </Path>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"></ContentPresenter>
+                        </Grid>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Button Grid.Row="1" FontSize="9">
+                편 집
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Path Fill="#FF008787" Stretch="Fill" Stroke="Black" StrokeThickness="0.5">
+                                <Path.Data>
+                                    <CombinedGeometry>
+                                        <CombinedGeometry.Geometry1>
+                                            <CombinedGeometry>
+                                                <CombinedGeometry.Geometry1>
+                                                    <RectangleGeometry Rect="0,0,37,18" RadiusX="5" RadiusY="5"></RectangleGeometry>
+                                                </CombinedGeometry.Geometry1>
+                                                <CombinedGeometry.Geometry2>
+                                                    <RectangleGeometry Rect="0,0,20,18"></RectangleGeometry>
+                                                </CombinedGeometry.Geometry2>
+                                            </CombinedGeometry>
+                                        </CombinedGeometry.Geometry1>
+                                        <CombinedGeometry.Geometry2>
+                                            <RectangleGeometry Rect="0,0,37,10"></RectangleGeometry>
+                                        </CombinedGeometry.Geometry2>
+                                    </CombinedGeometry>
+                                </Path.Data>
+                            </Path>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </Grid>
+    </Grid>
+</UserControl>

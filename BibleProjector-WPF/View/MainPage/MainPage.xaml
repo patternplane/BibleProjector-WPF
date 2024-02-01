@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:BibleProjector_WPF.View.MainPage"
       mc:Ignorable="d" 
-      d:DesignHeight="500" d:DesignWidth="733"
+      d:DesignHeight="669" d:DesignWidth="925"
       Title="MainPage">
 
     <Grid>
@@ -23,7 +23,7 @@
         <TabControl Grid.Row="1" Grid.Column="1">
 
             <!--통합 조작 페이지-->
-            <TabItem Header="조작">
+            <TabItem Header="통합검색 및 예약">
                 <local:ControlView></local:ControlView>
             </TabItem>
 
