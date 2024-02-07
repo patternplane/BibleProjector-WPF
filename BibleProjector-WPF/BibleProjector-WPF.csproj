@@ -78,6 +78,9 @@
     <Compile Include="View\ExternPPT.xaml.cs">
       <DependentUpon>ExternPPT.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\MainPage\AdditionalContentButton.xaml.cs">
+      <DependentUpon>AdditionalContentButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\MainPage\ControlView.xaml.cs">
       <DependentUpon>ControlView.xaml</DependentUpon>
     </Compile>
@@ -190,6 +193,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ExternPPT.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MainPage\AdditionalContentButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

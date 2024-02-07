@@ -27,7 +27,7 @@
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="9*"/>
-                    <RowDefinition Height="8*"/>
+                    <RowDefinition Height="7*"/>
                 </Grid.RowDefinitions>
 
                 <!--외부PPT 조작-->
@@ -37,14 +37,14 @@
                         <RowDefinition Height="133*"/>
                     </Grid.RowDefinitions>
 
-                    <Border Grid.Row="0" Background="#FFE1E1E1" CornerRadius="4" Margin="1" BorderBrush="Black" BorderThickness="1">
+                    <Border Grid.Row="0" Background="#FFF7F7F7" CornerRadius="4" Margin="1" BorderBrush="Black" BorderThickness="1">
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
                             외부 PPT 등록 및 편집
                         </TextBlock>
                     </Border>
 
                     <WrapPanel Grid.Row="1" Margin="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        
+
                         <local:ExternPPTSetter Margin="0,0,4,2"></local:ExternPPTSetter>
                         <local:ExternPPTSetter Margin="4,0,0,2"></local:ExternPPTSetter>
                         <local:ExternPPTSetter Margin="0,2,4,2"></local:ExternPPTSetter>
@@ -52,6 +52,70 @@
                         <local:ExternPPTSetter Margin="0,2,4,2"></local:ExternPPTSetter>
                         <local:ExternPPTSetter Margin="4,2,0,2"></local:ExternPPTSetter>
                     </WrapPanel>
+                </Grid>
+
+                <!--기타 문구 등록-->
+                <Grid Grid.Row="1" Margin="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="23*"/>
+                        <RowDefinition Height="100*"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Background="#FFF7F7F7" CornerRadius="4" Margin="1" BorderBrush="Black" BorderThickness="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="127*"/>
+                                <ColumnDefinition Width="20*"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <TextBlock Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            사도신경 / 주기도문 / 비전선언문
+                            </TextBlock>
+
+                            <Button Grid.Column="1" Margin="1.5">
+                                <Button.Resources>
+                                    <Style TargetType="Border">
+                                        <Setter Property="CornerRadius" Value="8"/>
+                                    </Style>
+                                </Button.Resources>
+                                <TextBlock Text="✚" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="12"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+
+                    <Grid Grid.Row="1" Margin="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <StackPanel.Resources>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="#FFA3EEA3"/>
+                                </Style>
+                            </StackPanel.Resources>
+                            <local:AdditionalContentButton/>
+                            <local:AdditionalContentButton/>
+                            <local:AdditionalContentButton/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <local:AdditionalContentButton/>
+                            <local:AdditionalContentButton/>
+                            <local:AdditionalContentButton/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <StackPanel.Resources>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="#FFF9F9B3"/>
+                                </Style>
+                            </StackPanel.Resources>
+                            <local:AdditionalContentButton/>
+                            <local:AdditionalContentButton/>
+                            <local:AdditionalContentButton/>
+                        </StackPanel>
+                    </Grid>
                 </Grid>
             </Grid>
 
