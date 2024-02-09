@@ -28,49 +28,61 @@
             </TabItem>
         </TabControl>
 
-            <!--옵션 화면-->
-        <Button Height="21" Width="30" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top">
-            <Button.Triggers>
-                <EventTrigger RoutedEvent="Button.Click">
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <DoubleAnimation
-                                Storyboard.TargetName="optionBar"
-                                Storyboard.TargetProperty="Width"
-                                Duration="0:0:0.1"
-                                From="0"
-                                To="{Binding ElementName=optionBarContent, Path=Width}">
-                            </DoubleAnimation>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger>
-            </Button.Triggers>
+        <!--옵션 화면-->
+        <Button Height="21" Width="30" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top"
+                Click="EH_OptionButtonClick">
         </Button>
         <Border
-            x:Name="optionBar"
-            BorderBrush="Black"
-            BorderThickness="1"
             Grid.Row="1"
             Grid.Column="1"
             Grid.ColumnSpan="2"
-            Width="0"
+            
             HorizontalAlignment="Right"
-            Background="White">
-            <Border.Triggers>
-                <EventTrigger RoutedEvent="MouseLeave">
-                    <BeginStoryboard Name="be">
-                        <Storyboard>
-                            <DoubleAnimation
-                                Storyboard.TargetProperty="Width"
-                                Duration="0:0:0.1"
-                                From="{Binding Path=Width}"
-                                To="0">
-                            </DoubleAnimation>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger>
-            </Border.Triggers>
-            <local:MainOption x:Name="optionBarContent" />
+            BorderBrush="Black"
+            BorderThickness="1"
+            Width="0"
+            
+            MouseLeave="EH_OptionBarMouseLeave">
+
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding isOptionBarOut}" Value="True">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetProperty="Width"
+                                            Duration="0:0:0.3"
+                                            From="0"
+                                            To="250">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseOut"></CubicEase>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetProperty="Width"
+                                            Duration="0:0:0.3"
+                                            To="0">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseIn"></CubicEase>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.ExitActions>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+
+            <local:MainOption></local:MainOption>
         </Border>
     </Grid>
 </UserControl>
