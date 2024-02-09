@@ -4,11 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BibleProjector_WPF"
-        xmlns:testing="clr-namespace:BibleProjector_WPF.View.MainPage"
         mc:Ignorable="d"
         Title="주일성수" Height="700" Width="933"
         LocationChanged="changeLocate"
         SizeChanged="changeSize">
-    <!--testing 네임스페이스 : 개편중 임시로 정한 이름임에 유의!-->
-    <testing:MainPage/>
+        <!--개편중-->
+        <ContentControl Content="{Binding VM_Main}"/>
 </Window>

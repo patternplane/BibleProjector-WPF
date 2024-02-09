@@ -24,6 +24,10 @@ namespace BibleProjector_WPF
     /// </summary>
     public partial class MainWindow : Window
     {
+        // 개편중 임시로 제작한 구조
+        ViewModel.MainPage.VMMain _VM_Main = new ViewModel.MainPage.VMMain();
+        public ViewModel.MainPage.VMMain VM_Main { get { return _VM_Main; } set { _VM_Main = value; } }
+
 
         // 예약 창
         ReserveManagerWindow Window_Reserve = null;
@@ -61,6 +65,8 @@ namespace BibleProjector_WPF
             ProgramMainWindow = this;
 
             InitializeComponent();
+
+            this.DataContext = this;
 
             //ReserveInitialize();
             // 개편중 임시로 꺼둔 부분임에 유의!

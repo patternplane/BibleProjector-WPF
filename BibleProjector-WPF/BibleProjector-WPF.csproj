@@ -67,6 +67,10 @@
     </ApplicationDefinition>
     <Compile Include="ProgramStartEnd.cs" />
     <Compile Include="NotifyPropertyChanged.cs" />
+    <Compile Include="ViewModel\MainPage\VMControlPage.cs" />
+    <Compile Include="ViewModel\MainPage\VMSearchControl.cs" />
+    <Compile Include="ViewModel\MainPage\VMShowControler.cs" />
+    <Compile Include="ViewModel\MainPage\VMMain.cs" />
     <Compile Include="View\Bible.xaml.cs">
       <DependentUpon>Bible.xaml</DependentUpon>
     </Compile>
@@ -87,11 +91,14 @@
     <Compile Include="View\MainPage\ExternPPTSetter.xaml.cs">
       <DependentUpon>ExternPPTSetter.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\MainPage\MainPage.xaml.cs">
-      <DependentUpon>MainPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\MainPage\MainOption.xaml.cs">
       <DependentUpon>MainOption.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainPage\MainView.xaml.cs">
+      <DependentUpon>MainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainPage\SearchView.xaml.cs">
+      <DependentUpon>SearchView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\MainPage\ShowControler.xaml.cs">
       <DependentUpon>ShowControler.xaml</DependentUpon>
@@ -184,6 +191,10 @@
     <Compile Include="ViewModel\BibleReserveData.cs" />
     <Compile Include="ViewModel\BibleSelectData.cs" />
     <Compile Include="ViewModel\LyricViewModel.cs" />
+    <Page Include="ViewMapDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Bible.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -208,11 +219,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\MainPage\MainPage.xaml">
+    <Page Include="View\MainPage\MainOption.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\MainPage\MainOption.xaml">
+    <Page Include="View\MainPage\MainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MainPage\SearchView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

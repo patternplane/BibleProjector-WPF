@@ -1,12 +1,11 @@
-﻿<Page x:Class="BibleProjector_WPF.View.MainPage.MainPage"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:BibleProjector_WPF.View.MainPage"
-      mc:Ignorable="d" 
-      d:DesignHeight="669" d:DesignWidth="925"
-      Title="MainPage">
+﻿<UserControl x:Class="BibleProjector_WPF.View.MainPage.MainView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BibleProjector_WPF.View.MainPage"
+             mc:Ignorable="d" 
+             d:DesignHeight="669" d:DesignWidth="925">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -21,17 +20,15 @@
         </Grid.ColumnDefinitions>
 
         <TabControl Grid.Row="1" Grid.Column="1">
-
             <!--통합 조작 페이지-->
-            <TabItem Header="통합검색 및 예약">
-                <local:ControlView></local:ControlView>
-            </TabItem>
+            <TabItem Header="통합검색 및 예약" Content="{Binding VM_MainControl}"/>
 
             <!--자료 수정 페이지-->
             <TabItem Header="자료 수정">
             </TabItem>
         </TabControl>
 
+            <!--옵션 화면-->
         <Button Height="21" Width="30" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top">
             <Button.Triggers>
                 <EventTrigger RoutedEvent="Button.Click">
@@ -76,4 +73,4 @@
             <local:MainOption x:Name="optionBarContent" />
         </Border>
     </Grid>
-</Page>
+</UserControl>

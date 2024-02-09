@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace BibleProjector_WPF.View.MainPage
 {
     /// <summary>
-    /// MainPage.xaml에 대한 상호 작용 논리
+    /// SearchView.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class MainPage : Page
+    public partial class SearchView : UserControl
     {
-        public MainPage()
+        public SearchView()
         {
             InitializeComponent();
         }

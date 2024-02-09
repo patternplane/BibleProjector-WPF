@@ -1,0 +1,88 @@
+﻿<UserControl x:Class="BibleProjector_WPF.View.MainPage.SearchView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BibleProjector_WPF.View.MainPage"
+             mc:Ignorable="d" 
+             d:DesignHeight="301" d:DesignWidth="273">
+
+    <!--검색-->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="6.5*"/>
+            <RowDefinition Height="6*"/>
+            <RowDefinition Height="57*"/>
+            <RowDefinition Height="10*"/>
+        </Grid.RowDefinitions>
+
+        <!--검색 : 제목표시-->
+        <ContentControl Grid.Row="0" Margin="1">
+            <ContentControl.Content>
+                통 합 검 색
+            </ContentControl.Content>
+            <ContentControl.Style>
+                <Style TargetType="ContentControl">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ContentControl">
+                                <Grid>
+                                    <Path Stretch="Fill" Fill="LightYellow" Stroke="Black" StrokeThickness="1">
+                                        <Path.Data>
+                                            <CombinedGeometry>
+                                                <CombinedGeometry.Geometry1>
+                                                    <RectangleGeometry Rect="0,0,200,18" RadiusX="9" RadiusY="9"></RectangleGeometry>
+                                                </CombinedGeometry.Geometry1>
+                                                <CombinedGeometry.Geometry2>
+                                                    <RectangleGeometry Rect="0,9,200,9"></RectangleGeometry>
+                                                </CombinedGeometry.Geometry2>
+                                            </CombinedGeometry>
+                                        </Path.Data>
+                                    </Path>
+                                    <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
+
+        <!--검색 : 검색창-->
+        <Grid Grid.Row="1" Margin="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="179*"/>
+                <ColumnDefinition Width="42*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" BorderBrush="black" BorderThickness="1,1,0,1">
+                <TextBlock>
+
+                </TextBlock>
+            </Border>
+            <Button Grid.Column="1" FontSize="11" BorderBrush="Black" Background="#FF0272AA">
+                검 색
+            </Button>
+        </Grid>
+
+        <!--검색 : 미리보기-->
+        <Border Grid.Row="2" Margin="1" BorderBrush="Black" BorderThickness="1">
+
+        </Border>
+
+        <!--검색 : 후처리 버튼-->
+        <Grid Grid.Row="3" Margin="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0" Margin="0,0,1,0" Background="#FF72E172">
+                출     력
+            </Button>
+            <Button Grid.Column="1" Margin="1,0,0,0" Background="#FF02AAAA">
+                예     약
+            </Button>
+        </Grid>
+    </Grid>
+</UserControl>
