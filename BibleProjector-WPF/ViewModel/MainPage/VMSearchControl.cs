@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,8 +13,8 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         // ========== Properties ==========
 
         public string SearchText { get; set; }
-
         public bool ResultPopupOpen { get; set; }
+        public ICollection<VMSearchResult> SearchResultList { get; set; } = new ObservableCollection<VMSearchResult>();
 
         public ICommand CSearchStart { get; set; }
         public ICommand CPopupHide { get; set; }
@@ -30,8 +31,10 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         // ========== Command ==========
 
+        static int testCnt = 0;
         void SearchStart()
         {
+            SearchResultList.Add(new VMSearchResult() { DisplayTitle = string.Format("{0} {1}",SearchText, ++testCnt) });
             PopupShow();
         }
 

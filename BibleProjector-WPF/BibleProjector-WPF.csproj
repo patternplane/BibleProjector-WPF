@@ -67,6 +67,8 @@
     </ApplicationDefinition>
     <Compile Include="ProgramStartEnd.cs" />
     <Compile Include="RelayCommand.cs" />
+    <Compile Include="ViewModel\BibleViewModel.cs" />
+    <Compile Include="ViewModel\MainPage\VMSearchResult.cs" />
     <Compile Include="ViewModel\MainPage\VMControlPage.cs" />
     <Compile Include="ViewModel\MainPage\VMOptionBar.cs" />
     <Compile Include="ViewModel\MainPage\VMSearchControl.cs" />

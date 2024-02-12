@@ -62,20 +62,20 @@
             </Border>
             <Popup StaysOpen="False" IsOpen="{Binding ResultPopupOpen}">
                 <ListBox x:Name="ResultListBox"
-                         PreviewKeyUp="EH_ListBoxKeyUp">
-
-                    <ListBoxItem>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Label Content="검색결과"/>
-                            <Button Grid.Column="1">출력</Button>
-                            <Button Grid.Column="2">예약</Button>
-                        </Grid>
-                    </ListBoxItem>
+                         ItemsSource="{Binding SearchResultList, Mode=TwoWay}"
+                         PreviewKeyDown="EH_ListBoxKeyDown">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Label Content="{Binding DisplayTitle}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
                 </ListBox>
             </Popup>
             <Button Grid.Column="1" FontSize="11" BorderBrush="Black" Background="#FF0272AA"

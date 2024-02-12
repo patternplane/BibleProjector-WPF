@@ -66,17 +66,20 @@ namespace BibleProjector_WPF.View.MainPage
 
             if (e.Key == Key.Enter)
                 ((ICommand)CSearchStartProperty.GetValue(this.DataContext)).Execute(null);
-            if (e.Key == Key.Escape)
+            else if (e.Key == Key.Escape)
                 ((ICommand)CPopupHideProperty.GetValue(this.DataContext)).Execute(null);
             else if (e.Key == Key.Down)
             {
                 if (ResultListBox.Items.Count != 0)
+                {
                     ((ICommand)CLastestResultShowProperty.GetValue(this.DataContext)).Execute(null);
-                ResultListBox.Focus();
+                    ResultListBox.Focus();
+                    ((ListBoxItem)ResultListBox.ItemContainerGenerator.ContainerFromIndex(0)).Focus();
+                }
             }
         }
 
-        void EH_ListBoxKeyUp(object sender, KeyEventArgs e)
+        void EH_ListBoxKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
             {
