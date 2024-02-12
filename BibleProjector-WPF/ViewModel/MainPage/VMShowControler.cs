@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BibleProjector_WPF.ViewModel.MainPage
 {
-    public class VMShowControler
+    public class VMShowControler : ViewModel
     {
     }
 }

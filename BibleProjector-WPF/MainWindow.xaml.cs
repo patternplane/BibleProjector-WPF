@@ -14,8 +14,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using System.ComponentModel;
-using BibleProjector_WPF.ViewModel;
-using System.Collections.ObjectModel;
 
 namespace BibleProjector_WPF
 {
@@ -25,9 +23,7 @@ namespace BibleProjector_WPF
     public partial class MainWindow : Window
     {
         // 개편중 임시로 제작한 구조
-        ViewModel.MainPage.VMMain _VM_Main = new ViewModel.MainPage.VMMain();
-        public ViewModel.MainPage.VMMain VM_Main { get { return _VM_Main; } set { _VM_Main = value; } }
-
+        public ViewModel.ViewModel VM_Main { get; set; }
 
         // 예약 창
         ReserveManagerWindow Window_Reserve = null;
@@ -71,7 +67,15 @@ namespace BibleProjector_WPF
             //ReserveInitialize();
             // 개편중 임시로 꺼둔 부분임에 유의!
 
-            setLayout();
+            // 개편중 임시로 추가한 부분 -> MainWindow도 역시 ViewModel을 따로 두어 추가처리를 해야하지만 일단 여기서 처치중
+            this.VM_Main = new ViewModel.MainPage.VMMain(
+                new ViewModel.MainPage.VMControlPage(
+                    new ViewModel.MainPage.VMShowControler(),
+                    new ViewModel.MainPage.VMShowControler(),
+                    new ViewModel.MainPage.VMSearchControl()),
+                new ViewModel.MainPage.VMOptionBar());
+
+            //setLayout();
         }
 
         void ReserveInitialize()

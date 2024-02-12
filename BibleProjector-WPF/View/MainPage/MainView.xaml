@@ -27,7 +27,7 @@
             <TabItem Header="자료 수정">
             </TabItem>
         </TabControl>
-
+        
         <!--옵션 화면-->
         <Button Height="21" Width="30" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top"
                 Click="EH_OptionButtonClick">
@@ -82,7 +82,7 @@
                 </Style>
             </Border.Style>
 
-            <local:MainOption></local:MainOption>
+            <ContentControl Content="{Binding VM_OptionBar}"/>
         </Border>
     </Grid>
 </UserControl>

@@ -5,9 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BibleProjector_WPF"
         mc:Ignorable="d"
-        Title="주일성수" Height="700" Width="933"
+        Title="주일성수"
         LocationChanged="changeLocate"
-        SizeChanged="changeSize">
-        <!--개편중-->
-        <ContentControl Content="{Binding VM_Main}"/>
+        SizeChanged="changeSize"
+        SizeToContent="WidthAndHeight"
+        ResizeMode="CanMinimize">
+    <!--개편중 (Resize 정책도 바뀜)-->
+    <ContentControl Content="{Binding VM_Main}"/>
 </Window>

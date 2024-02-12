@@ -6,7 +6,21 @@ using System.Threading.Tasks;
 
 namespace BibleProjector_WPF.ViewModel.MainPage
 {
-    public class VMControlPage
+    public class VMControlPage : ViewModel
     {
+        // ========== Inner ViewModels ==========
+
+        public ViewModel VM_ShowControler_top { get; set; }
+        public ViewModel VM_ShowControler_bottom { get; set; }
+        public ViewModel VM_SearchControl { get; set; }
+
+        // ========== Gen ===========
+
+        public VMControlPage(ViewModel topShowControler, ViewModel bottomShowControler, ViewModel searchControl)
+        {
+            this.VM_ShowControler_top = topShowControler;
+            this.VM_ShowControler_bottom = bottomShowControler;
+            this.VM_SearchControl = searchControl;
+        }
     }
 }

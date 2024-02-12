@@ -18,4 +18,8 @@
     <DataTemplate DataType="{x:Type vm_mp:VMSearchControl}">
         <vw_mp:SearchView></vw_mp:SearchView>
     </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm_mp:VMOptionBar}">
+        <vw_mp:MainOption></vw_mp:MainOption>
+    </DataTemplate>
 </ResourceDictionary>
