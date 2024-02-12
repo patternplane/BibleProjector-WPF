@@ -25,22 +25,40 @@ namespace BibleProjector_WPF.View.MainPage
             InitializeComponent();
         }
 
-        System.Reflection.PropertyInfo CPullOptionBarProperty = null;
-        void EH_OptionButtonClick(object sender, RoutedEventArgs e)
-        {
-            if (CPullOptionBarProperty == null)
-                CPullOptionBarProperty = (this.DataContext).GetType().GetProperty("CPullOptionBar");
+        // ========== BindingProperties ==========
 
-            ((ICommand)(CPullOptionBarProperty.GetValue(this.DataContext))).Execute(null);
+        System.Reflection.PropertyInfo _CPullOptionBarProperty = null;
+        System.Reflection.PropertyInfo CPullOptionBarProperty
+        {
+            get
+            {
+                return _CPullOptionBarProperty
+                    ?? this.DataContext.GetType().GetProperty("CPullOptionBar")
+                    ?? throw new Exception("Binding Error");
+            }
         }
 
-        System.Reflection.PropertyInfo CPushOptionBarProperty = null;
+        System.Reflection.PropertyInfo _CPushOptionBarProperty = null;
+        System.Reflection.PropertyInfo CPushOptionBarProperty
+        {
+            get
+            {
+                return _CPushOptionBarProperty
+                    ?? this.DataContext.GetType().GetProperty("CPushOptionBar")
+                    ?? throw new Exception("Binding Error");
+            }
+        }
+
+        // ========== EventHander ==========
+
+        void EH_OptionButtonClick(object sender, RoutedEventArgs e)
+        {
+            ((ICommand)CPullOptionBarProperty.GetValue(this.DataContext)).Execute(null);
+        }
+
         void EH_OptionBarMouseLeave(object sender, RoutedEventArgs e)
         {
-            if (CPushOptionBarProperty == null)
-                CPushOptionBarProperty = (this.DataContext).GetType().GetProperty("CPushOptionBar");
-
-            ((ICommand)(CPushOptionBarProperty.GetValue(this.DataContext))).Execute(null);
+            ((ICommand)CPushOptionBarProperty.GetValue(this.DataContext)).Execute(null);
         }
     }
 }
