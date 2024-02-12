@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BibleProjector_WPF.module
 {
-    class BibleSearchData : NotifyPropertyChanged
+    class BibleSearchData : BibleProjector_WPF.ViewModel.ViewModel
     {
 
         public BibleSearchData(string Kuen, string Jang, string Jeul, bool isShort, int searchDistance)

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
 {
-    class ExternPPT : NotifyPropertyChanged, IReserveOptionViewModel
+    class ExternPPT : ViewModel, IReserveOptionViewModel
     {
         public ExternPPT()
         {

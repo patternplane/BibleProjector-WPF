@@ -15,7 +15,7 @@ namespace BibleProjector_WPF.ViewModel
     /// <summary>
     /// 곡의 한 단위를 나타냅니다.
     /// </summary>
-    public class SingleLyric : NotifyPropertyChanged
+    public class SingleLyric : ViewModel
     {
         public SingleLyric() { }
 
@@ -173,7 +173,7 @@ namespace BibleProjector_WPF.ViewModel
         }
     }
 
-    class LyricViewModel : NotifyPropertyChanged
+    class LyricViewModel : ViewModel
     {
         // 파일 입출력시 구분자
         public const string SEPARATOR = "∂";
@@ -642,7 +642,7 @@ namespace BibleProjector_WPF.ViewModel
                 //LyricReserveList.Add(new LyricReserve(SelectedLyric));
 
                 // 예약창에 보내는 데이터
-                ViewModel.ReserveManagerViewModel.instance.ReserveDataManager.addReserve(
+                ReserveManagerViewModel.instance.ReserveDataManager.addReserve(
                     new module.SongReserveDataUnit(SelectedLyric));
             }
         }

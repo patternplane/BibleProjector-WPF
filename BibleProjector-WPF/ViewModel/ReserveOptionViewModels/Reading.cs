@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
 {
-    internal class Reading : NotifyPropertyChanged, IReserveOptionViewModel
+    internal class Reading : ViewModel, IReserveOptionViewModel
     {
         public Reading() 
         {

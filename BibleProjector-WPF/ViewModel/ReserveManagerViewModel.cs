@@ -14,7 +14,7 @@ using System.Windows.Input;
 
 namespace BibleProjector_WPF.ViewModel
 {
-    internal class ReserveManagerViewModel : NotifyPropertyChanged
+    internal class ReserveManagerViewModel : ViewModel
     {
         // 이거 말고 더 좋은 방법 있을텐데
         static public ReserveManagerViewModel instance;

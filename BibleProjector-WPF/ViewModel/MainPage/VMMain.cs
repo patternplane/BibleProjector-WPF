@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace BibleProjector_WPF.ViewModel.MainPage
 {
-    public class VMMain : NotifyPropertyChanged
+    public class VMMain : ViewModel
     {
         public ICommand CPullOptionBar { get; set; }
         public ICommand CPushOptionBar { get; set; }

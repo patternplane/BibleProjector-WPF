@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
 {
-    internal class Bible : NotifyPropertyChanged, IReserveOptionViewModel
+    internal class Bible : ViewModel, IReserveOptionViewModel
     {
         ReserveCollectionUnit selection;
         module.BibleReserveDataUnit bibleData { get { return (module.BibleReserveDataUnit)selection.reserveData; } }

@@ -11,7 +11,7 @@ using System.ComponentModel;
 
 namespace BibleProjector_WPF.ViewModel
 {
-    class BibleSelectData : NotifyPropertyChanged
+    class BibleSelectData : ViewModel
     {
         // 현재 선택된 데이터
         private string Book_in;

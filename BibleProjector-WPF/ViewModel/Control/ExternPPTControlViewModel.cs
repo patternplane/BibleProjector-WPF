@@ -9,7 +9,7 @@ using System.Windows.Media.Imaging;
 
 namespace BibleProjector_WPF.ViewModel
 {
-    class ExternPPTControlViewModel : NotifyPropertyChanged
+    class ExternPPTControlViewModel : ViewModel
     {
 
         // ================================================ 세팅 ================================================

@@ -9,7 +9,7 @@ using System.ComponentModel;
 
 namespace BibleProjector_WPF.module
 {
-    public class SongFrameFile : NotifyPropertyChanged
+    public class SongFrameFile : BibleProjector_WPF.ViewModel.ViewModel
     {
         public string Path { get; set; }
         public string FileName { get; set; }

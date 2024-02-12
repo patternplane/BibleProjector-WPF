@@ -14,7 +14,7 @@ namespace BibleProjector_WPF.ViewModel
         public string content { get; set; }
     }
 
-    class SongControlViewModel : NotifyPropertyChanged
+    class SongControlViewModel : ViewModel
     {
         // ================================================ 세팅 ================================================
 
@@ -26,7 +26,7 @@ namespace BibleProjector_WPF.ViewModel
             // songData 규격 : [슬라이드 번호][정보 종류][커맨드(0)냐 내용(1)이냐]
             this.currentPPTName = System.IO.Path.GetFileName(FrameFilePath);
             this.songData = lyric.makeSongData(linePerSlide);
-            newSongSetting(lyric.GetType() == typeof(ViewModel.SingleHymn));
+            newSongSetting(lyric.GetType() == typeof(SingleHymn));
         }
 
         public void hideSong()

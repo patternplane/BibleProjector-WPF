@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
 {
-    internal class Song : NotifyPropertyChanged, IReserveOptionViewModel
+    internal class Song : ViewModel, IReserveOptionViewModel
     {
 
         // =============================== 비 바인딩 속성 ================================

@@ -8,7 +8,7 @@ using System.ComponentModel;
 
 namespace BibleProjector_WPF.ViewModel
 {
-    class ReadingControlViewModel : NotifyPropertyChanged
+    class ReadingControlViewModel : ViewModel
     {
         // ================================================ 세팅 ================================================
 

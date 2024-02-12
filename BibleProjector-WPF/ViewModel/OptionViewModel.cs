@@ -8,7 +8,7 @@ using System.ComponentModel;
 
 namespace BibleProjector_WPF.ViewModel
 {
-    class OptionViewModel : NotifyPropertyChanged
+    class OptionViewModel : ViewModel
     {
 
         // ========================================== View 연결 속성들 ========================================== 

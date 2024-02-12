@@ -9,7 +9,7 @@ using System.Collections.ObjectModel;
 
 namespace BibleProjector_WPF.ViewModel
 {
-    class BibleSearchViewModel : NotifyPropertyChanged
+    class BibleSearchViewModel : ViewModel
     {
 
         string searchText_in = "";

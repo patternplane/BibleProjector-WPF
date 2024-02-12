@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BibleProjector_WPF.ViewModel
 {
-    internal class ManualTabViewModel : NotifyPropertyChanged
+    internal class ManualTabViewModel : ViewModel
     {
         public module.Manual[] ManualList { get; set; }
 

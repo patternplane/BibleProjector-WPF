@@ -8,7 +8,7 @@ using System.ComponentModel;
 
 namespace BibleProjector_WPF.ViewModel
 {
-    class BibleReserveData : NotifyPropertyChanged
+    class BibleReserveData : ViewModel
     {
         // 성경 예약 리스트
         ReserveCollectionUnit[] _BibleReserveList;

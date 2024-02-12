@@ -313,7 +313,7 @@ namespace BibleProjector_WPF.ViewModel
         }
     }
 
-    public class ReserveCollectionUnit : NotifyPropertyChanged
+    public class ReserveCollectionUnit : ViewModel
     {
         // ============================= 속성 ====================================
 
