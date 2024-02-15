@@ -60,23 +60,38 @@
                          PreviewKeyUp="EH_TextBoxKeyUp">
                 </TextBox>
             </Border>
-            <Popup StaysOpen="False" IsOpen="{Binding ResultPopupOpen}">
-                <ListBox x:Name="ResultListBox"
-                         ItemsSource="{Binding SearchResultList, Mode=TwoWay}"
-                         PreviewKeyDown="EH_ListBoxKeyDown">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <Label Content="{Binding DisplayTitle}"/>
-                            </Grid>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+            <Popup Grid.ColumnSpan="2"
+                   StaysOpen="False" IsOpen="{Binding ResultPopupOpen}"
+                   PopupAnimation="Scroll" AllowsTransparency="true">
+                <Border
+                    BorderBrush="LightGray"
+                    BorderThickness="1">
+                    <ScrollViewer
+                        Width="271"
+                        MaxHeight="210"
+                        VerticalScrollBarVisibility="Auto"
+                        HorizontalScrollBarVisibility="Auto">
+                        <ListBox
+                            x:Name="ResultListBox"
+                            ItemsSource="{Binding SearchResultList, Mode=TwoWay}"
+                            PreviewKeyDown="EH_ListBoxKeyDown"
+                            Background="#FFF5FFF4"
+                            BorderThickness="0">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Content="{Binding DisplayTitle}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ScrollViewer>
+                </Border>
             </Popup>
             <Button Grid.Column="1" FontSize="11" BorderBrush="Black" Background="#FF0272AA"
                     Command="{Binding CSearchStart}">

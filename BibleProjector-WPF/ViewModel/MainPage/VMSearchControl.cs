@@ -31,10 +31,12 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         // ========== Command ==========
 
-        static int testCnt = 0;
         void SearchStart()
         {
-            SearchResultList.Add(new VMSearchResult() { DisplayTitle = string.Format("{0} {1}",SearchText, ++testCnt) });
+            if (SearchText == null
+                || SearchText.Length <= 1)
+                return;
+
             PopupShow();
         }
 
