@@ -15,11 +15,11 @@ namespace BibleProjector_WPF.ViewModel
         string searchText_in = "";
         public string searchText { get { return searchText_in; } set { searchText_in = value; } }
 
-        public ObservableCollection<module.BibleSearchData> searchList { get; set; } = new ObservableCollection<module.BibleSearchData>();
+        public ObservableCollection<module.Data.BibleSearchData> searchList { get; set; } = new ObservableCollection<module.Data.BibleSearchData>();
 
         public bool popupOpen { get; set; } = false;
 
-        module.BibleSearch searcher = new module.BibleSearch();
+        module.BibleSearcher searcher = new module.BibleSearcher();
 
         // ====================================== 메소드
 
@@ -28,7 +28,7 @@ namespace BibleProjector_WPF.ViewModel
             searchList.Clear();
             if (searchText.Length != 0)
             {
-                foreach (module.BibleSearchData r in searcher.getSearchResult(searchText))
+                foreach (module.Data.BibleSearchData r in searcher.getSearchResult(searchText))
                     searchList.Add(r);
 
                 popupOpen = true;

@@ -14,19 +14,25 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         public string SearchText { get; set; }
         public bool ResultPopupOpen { get; set; }
-        public ICollection<VMSearchResult> SearchResultList { get; set; } = new ObservableCollection<VMSearchResult>();
+        public ICollection<VMSearchResult> SearchResultList { get; set; }
 
         public ICommand CSearchStart { get; set; }
         public ICommand CPopupHide { get; set; }
         public ICommand CLastestResultShow { get; set; }
 
+        // ========== Members ==========
+
+        module.ISearcher searcher = null;
+
         // ========== Gen ==========
 
-        public VMSearchControl()
+        public VMSearchControl(module.ISearcher searcher)
         {
             CSearchStart = new RelayCommand(obj => SearchStart());
             CPopupHide = new RelayCommand(obj => PopupHide());
             CLastestResultShow = new RelayCommand(obj => PopupShow());
+
+            this.searcher = searcher;
         }
 
         // ========== Command ==========
@@ -34,10 +40,22 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         void SearchStart()
         {
             if (SearchText == null
-                || SearchText.Length <= 1)
+                || SearchText.Length < 1)
+            {
+                PopupHide();
                 return;
+            }
 
-            PopupShow();
+            ObservableCollection<VMSearchResult> newResults = new ObservableCollection<VMSearchResult>();
+
+            foreach (module.ISearchData data in searcher.getSearchResult(SearchText))
+                newResults.Add(new VMSearchResult(data));
+            
+            this.SearchResultList = newResults;
+            OnPropertyChanged("SearchResultList");
+
+            if (SearchResultList.Count > 0)
+                PopupShow();
         }
 
         void PopupShow()

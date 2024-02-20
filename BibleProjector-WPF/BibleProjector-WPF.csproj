@@ -65,6 +65,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="module\Data\BibleData.cs" />
+    <Compile Include="module\Data\BibleSearchData.cs" />
+    <Compile Include="module\Data\ExternPPTData.cs" />
+    <Compile Include="module\Data\ExternPPTSearchData.cs" />
+    <Compile Include="module\Data\Searcher.cs" />
+    <Compile Include="module\Data\SongManager.cs" />
+    <Compile Include="module\Data\SongSearchData.cs" />
+    <Compile Include="module\Data\SongSearcher.cs" />
+    <Compile Include="module\ISearchData.cs" />
+    <Compile Include="module\Data\SongData.cs" />
+    <Compile Include="module\Data\SongContent.cs" />
+    <Compile Include="module\ISearcher.cs" />
     <Compile Include="ProgramStartEnd.cs" />
     <Compile Include="RelayCommand.cs" />
     <Compile Include="ViewModel\BibleViewModel.cs" />
@@ -110,8 +122,7 @@
     <Compile Include="View\ManualTab.xaml.cs">
       <DependentUpon>ManualTab.xaml</DependentUpon>
     </Compile>
-    <Compile Include="module\BibleSearch.cs" />
-    <Compile Include="module\BibleSearchData.cs" />
+    <Compile Include="module\BibleSearcher.cs" />
     <Compile Include="module\ControlWindowManager.cs" />
     <Compile Include="module\ExternPPTManager.cs" />
     <Compile Include="module\KorString.cs" />

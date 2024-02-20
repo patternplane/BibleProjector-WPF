@@ -67,13 +67,22 @@ namespace BibleProjector_WPF
             //ReserveInitialize();
             // 개편중 임시로 꺼둔 부분임에 유의!
 
+            //===============================================================================================================
             // 개편중 임시로 추가한 부분 -> MainWindow도 역시 ViewModel을 따로 두어 추가처리를 해야하지만 일단 여기서 처치중
+            module.ISearcher searcher = new module.Data.Searcher(
+                new module.BibleSearcher(),
+                new module.Data.SongSearcher(
+                    new module.Data.SongManager()));
+
+            Database.DatabaseInitailize();
             this.VM_Main = new ViewModel.MainPage.VMMain(
                 new ViewModel.MainPage.VMControlPage(
                     new ViewModel.MainPage.VMShowControler(),
                     new ViewModel.MainPage.VMShowControler(),
-                    new ViewModel.MainPage.VMSearchControl()),
+                    new ViewModel.MainPage.VMSearchControl(searcher)),
                 new ViewModel.MainPage.VMOptionBar());
+
+            //===============================================================================================================
 
             //setLayout();
         }

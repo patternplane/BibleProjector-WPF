@@ -113,6 +113,10 @@ namespace BibleProjector_WPF.module
             VM_LyricViewModel = lyricViewModel;
             return getDataFromFile(LYRIC_DATA);
         }
+        public static string getLyricData()
+        {
+            return getDataFromFile(LYRIC_DATA);
+        }
 
         public static string getHymnData()
         {

@@ -6,79 +6,7 @@ using System.Threading.Tasks;
 
 namespace BibleProjector_WPF.module
 {
-    class BibleTitleSeparator
-    {
-        List<string> units = new List<string>(3);
-
-        /// <summary>
-        /// 구분자(대부분의 공백과 특수문자 전반)를 기준으로 단어를 분리하되,
-        /// 숫자와 문자는 붙어있어도 따로 분리합니다.
-        /// 또한 처음 단어 이후에는 숫자만 인식합니다.
-        /// </summary>
-        /// <param name="prase"></param>
-        /// <returns></returns>
-        public string[] trimPrase(string prase)
-        {
-            units.Clear();
-            bool getOnlyNumber = false;
-            bool onlyNumber = true;
-
-            for (int i = 0, startindex = 0; i <= prase.Length; i++)
-            {
-                if (i == prase.Length)
-                {
-                    if (!getOnlyNumber || onlyNumber)
-                        units.Add(prase.Substring(startindex, i - startindex));
-
-                    break;
-                }
-                else if (isSeperator(prase[i]))
-                {
-                    if (i != startindex)
-                    {
-                        if (!getOnlyNumber || onlyNumber)
-                        {
-                            units.Add(prase.Substring(startindex, i - startindex));
-                            getOnlyNumber = true;
-                        }
-
-                        onlyNumber = true;
-                        startindex = i + 1;
-                    }
-                    else
-                        startindex++;
-                }
-                else if (i != startindex && char.IsDigit(prase[i - 1]) != char.IsDigit(prase[i]))
-                {
-                    if (!getOnlyNumber || onlyNumber)
-                    {
-                        units.Add(prase.Substring(startindex, i - startindex));
-                        getOnlyNumber = true;
-                    }
-
-                    onlyNumber = true;
-                    startindex = i--;
-                }
-                else if (!char.IsDigit(prase[i]))
-                    onlyNumber = false;
-            }
-            
-            return units.ToArray();
-        }
-
-        bool isSeperator(char a)
-        {
-            if (char.IsSymbol(a)
-                || char.IsWhiteSpace(a)
-                || char.IsPunctuation(a)
-                || char.IsSeparator(a))
-                return true;
-            
-            return false;
-        }
-    }
-
-    class BibleSearch
+    public class BibleSearcher : ISearcher
     {
 
         // 검색 맵
@@ -86,14 +14,12 @@ namespace BibleProjector_WPF.module
             public string fullName;
             public string shortName;
             public int titleNumber;
-            public bool isChecked;
 
             public BibleTitleInfo(string fullName, string shortName, int titleNumber)
             {
                 this.fullName = fullName;
                 this.shortName = shortName;
                 this.titleNumber = titleNumber;
-                this.isChecked = false;
             }
         }
 
@@ -173,68 +99,13 @@ namespace BibleProjector_WPF.module
         int verse;
 
         const int SEARCH_DISTANCE_LIMIT = 1;
-        public BibleSearchData[] getSearchResult(string searchPrase)
+        public ICollection<ISearchData> getSearchResult(string searchPrase)
         {
             setSearchData(searchPrase);
-
-            List<BibleSearchData> result = new List<BibleSearchData>(5);
-            LevenshteinDistance ld = new LevenshteinDistance();
-            KorString ks = new KorString();
-
-            int searchDis_s = 0;
-            int searchDis_l = 0;
-            int searchDis;
-            bool isShort;
-            int titleLen;
-            for (int i = 0; i < bibleTitles.Length; i++)
-                bibleTitles[i].isChecked = false;
-            for (int i = 0; i < bibleTitles.Length; i++)
-            {
-                if ((searchDis_s = ld.getLevenDis_min(title, bibleTitles[i].shortName))
-                    < (searchDis_l = ld.getLevenDis_min(title, bibleTitles[i].fullName)))
-                {
-                    searchDis = searchDis_s;
-                    isShort = true;
-                }
-                else
-                {
-                    searchDis = searchDis_l;
-                    isShort = false;
-                }
-
-                titleLen = ks.GetAddCost(title);
-                if (searchDis <= ((titleLen / 2.5) * SEARCH_DISTANCE_LIMIT))
-                    result.Add(makeSearchResult(bibleTitles[i].titleNumber.ToString("00"), isShort, searchDis));
-            }
-
-            result.Sort((a, b) => (a.searchDistance > b.searchDistance ? 1 :
-            (a.searchDistance == b.searchDistance ? 0 : -1)));
-
-            return result.ToArray();
+            return makeSearchResult();
         }
 
-        BibleSearchData makeSearchResult(string Kuen, bool isShort, int searchDis)
-        {
-            if (chapter != -1
-                && chapter <= Database.getChapterCount(Kuen))
-            {
-                string Jang = chapter.ToString("000");
-
-                if (verse != -1
-                    && verse <= Database.getVerseCount(Kuen + Jang))
-                {
-                    string Jeul = verse.ToString("000");
-
-                    return new BibleSearchData(Kuen, Jang, Jeul, isShort, searchDis);
-                }
-                else
-                    return new BibleSearchData(Kuen, Jang, null, isShort, searchDis);
-            }
-            else
-                return new BibleSearchData(Kuen, null, null, isShort, searchDis);
-        }
-
-        void setSearchData(string searchPrase) 
+        void setSearchData(string searchPrase)
         {
             string[] prases = new BibleTitleSeparator().trimPrase(searchPrase);
 
@@ -253,6 +124,120 @@ namespace BibleProjector_WPF.module
                         if (int.TryParse(prases[2], out temp))
                             verse = temp;
                 }
+        }
+
+        ICollection<ISearchData> makeSearchResult()
+        {
+            LevenshteinDistance ld = new LevenshteinDistance();
+            KorString ks = new KorString();
+
+            List<Data.BibleSearchData> result = new List<Data.BibleSearchData>(5);
+
+            int searchDis_s = 0;
+            int searchDis_l = 0;
+            int searchDis;
+            bool isShort;
+            int titleLen;
+            for (int i = 0; i < bibleTitles.Length; i++)
+            {
+                searchDis_s = ld.getLevenDis_min(title, bibleTitles[i].shortName);
+                searchDis_l = ld.getLevenDis_min(title, bibleTitles[i].fullName);
+
+                if (searchDis_s < searchDis_l
+                    || searchDis_s == 0)
+                {
+                    searchDis = searchDis_s;
+                    isShort = true;
+                }
+                else
+                {
+                    searchDis = searchDis_l;
+                    isShort = false;
+                }
+
+                titleLen = ks.GetAddCost(title);
+                if (searchDis <= ((titleLen / 2.5) * SEARCH_DISTANCE_LIMIT))
+                    result.Add(
+                        new Data.BibleSearchData(
+                            new Data.BibleData(bibleTitles[i].titleNumber, this.chapter, this.verse)
+                            , isShort
+                            , searchDis));
+            }
+
+            result.Sort((a, b) => (a.searchDistance > b.searchDistance ? 1 : (a.searchDistance == b.searchDistance ? 0 : -1)));
+            return result.ToArray();
+        }
+    }
+    
+    class BibleTitleSeparator
+    {
+        List<string> units = new List<string>(3);
+
+        /// <summary>
+        /// 구분자(대부분의 공백과 특수문자 전반)를 기준으로 단어를 분리하되,
+        /// 숫자와 문자는 붙어있어도 따로 분리합니다.
+        /// 또한 처음 단어 이후에는 숫자만 인식합니다.
+        /// </summary>
+        /// <param name="prase"></param>
+        /// <returns></returns>
+        public string[] trimPrase(string prase)
+        {
+            units.Clear();
+            bool getOnlyNumber = false;
+            bool onlyNumber = true;
+
+            for (int i = 0, startindex = 0; i <= prase.Length; i++)
+            {
+                if (i == prase.Length)
+                {
+                    if (!getOnlyNumber || onlyNumber)
+                        units.Add(prase.Substring(startindex, i - startindex));
+
+                    break;
+                }
+                else if (isSeperator(prase[i]))
+                {
+                    if (i != startindex)
+                    {
+                        if (!getOnlyNumber || onlyNumber)
+                        {
+                            units.Add(prase.Substring(startindex, i - startindex));
+                            getOnlyNumber = true;
+                        }
+
+                        onlyNumber = true;
+                        startindex = i + 1;
+                    }
+                    else
+                        startindex++;
+                }
+                else if (i != startindex && char.IsDigit(prase[i - 1]) != char.IsDigit(prase[i]))
+                {
+                    if (!getOnlyNumber || onlyNumber)
+                    {
+                        units.Add(prase.Substring(startindex, i - startindex));
+                        getOnlyNumber = true;
+                    }
+
+                    onlyNumber = true;
+                    startindex = i--;
+                }
+                else if (!char.IsDigit(prase[i]))
+                    onlyNumber = false;
+            }
+
+            return units.ToArray();
+        }
+
+        bool isSeperator(char a)
+        {
+            if (char.IsSymbol(a)
+                || char.IsWhiteSpace(a)
+                || char.IsPunctuation(a)
+                || char.IsSeparator(a))
+                return true;
+
+            return false;
         }
     }
 }
