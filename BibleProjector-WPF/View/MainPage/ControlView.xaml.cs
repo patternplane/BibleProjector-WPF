@@ -25,28 +25,48 @@ namespace BibleProjector_WPF.View.MainPage
             InitializeComponent();
         }
 
-        private void testMouseMove(object sender, MouseEventArgs e)
+        class DragInfo
+        {
+            public object dragSource;
+            public object data;
+            public Point initialPosOffset;
+
+            public DragInfo(object dragSource, object data, Point initialPosOffset)
+            {
+                this.dragSource = dragSource;
+                this.data = data;
+                this.initialPosOffset = initialPosOffset;
+            }
+        }
+
+        private void GetMouseMove(object sender, MouseEventArgs e)
         {
             ListBoxItem obj = sender as ListBoxItem;
 
             if (obj != null && e.LeftButton == MouseButtonState.Pressed)
             {
-                DataObject data = new DataObject();
-                data.SetData(typeof(ListBoxItem), obj);
-                DragDrop.DoDragDrop(obj,
-                                     data,
-                                     DragDropEffects.Move);
-                Console.WriteLine("드래그의 시작");
+                DragDrop.DoDragDrop(
+                    obj,
+                    new DataObject(
+                        new DragInfo(
+                            obj,
+                            obj.DataContext,
+                            e.GetPosition(obj))),
+                    DragDropEffects.Move);
             }
         }
-        
-        private void testDragOver(object sender, DragEventArgs e)
+
+        TranslateTransform transformData = new TranslateTransform();
+        private void OnDragOver(object sender, DragEventArgs e)
         {
-            
-            Point pos = e.GetPosition((IInputElement)sender);
-            Console.WriteLine(e.Data.GetData(typeof(ListBoxItem)).ToString());
-            ((ListBoxItem)e.Data.GetData(typeof(ListBoxItem))).RenderTransform = new TranslateTransform(pos.X, pos.Y);
-            //Console.WriteLine("x : {0}, y : {1}",pos.X,pos.Y);
+            Point pos_s = e.GetPosition((IInputElement)sender);
+            DragInfo dragInfoData = (DragInfo)e.Data.GetData(typeof(DragInfo));
+
+            transformData.X = pos_s.X - dragInfoData.initialPosOffset.X;
+            transformData.Y = pos_s.Y + dragInfoData.initialPosOffset.Y;
+            temp.RenderTransform = transformData;
+            temp.Visibility = Visibility.Visible;
+            temp.IsSelected = true;
         }
     }
 }

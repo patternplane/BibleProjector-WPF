@@ -135,20 +135,28 @@
                     </Label>
                 </Border>
                 <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1">
-                    <ListBox 
-                                     DragOver="testDragOver"
-                                     AllowDrop="true">
+                    <ListBox
+                        DragOver="OnDragOver"                       
+                        AllowDrop="true">
                         <!--아이템 표시 예시-->
                         <!--템플릿은 추후 사용할 예정-->
+                        <ListBoxItem x:Name="temp" Margin="0,-21,0,0" Padding="0" HorizontalContentAlignment="Stretch" Visibility="Visible">
+                            <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
+                                <TextBlock>
+                                    미리보기
+                                </TextBlock>
+                            </Border>
+                        </ListBoxItem>
                         <ListBoxItem Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch" 
-                                     MouseMove="testMouseMove">
+                                     MouseMove="GetMouseMove">
                             <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
                                 <TextBlock>
                                     1. 성경1
                                 </TextBlock>
                             </Border>
                         </ListBoxItem>
-                        <ListBoxItem Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch">
+                        <ListBoxItem Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch"
+                                     MouseMove="GetMouseMove">
                             <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
                                 <TextBlock>
                                     2. 성경2
