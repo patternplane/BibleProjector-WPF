@@ -39,12 +39,25 @@ namespace BibleProjector_WPF.View.MainPage
             }
         }
 
+        List<ListBoxItem> selections = new List<ListBoxItem>();
+        private void ConfirmSelection(object sender, MouseButtonEventArgs e)
+        {
+            selections.Clear();
+            foreach (ListBoxItem item in ((ListBox)sender).SelectedItems)
+                selections.Add(item);
+        }
+
         private void GetMouseMove(object sender, MouseEventArgs e)
         {
             ListBoxItem obj = sender as ListBoxItem;
+            if (!selections.Contains(obj))
+                return;
 
             if (obj != null && e.LeftButton == MouseButtonState.Pressed)
             {
+                foreach (ListBoxItem item in selections)
+                    item.Visibility = Visibility.Collapsed;
+
                 DragDrop.DoDragDrop(
                     obj,
                     new DataObject(
@@ -57,16 +70,37 @@ namespace BibleProjector_WPF.View.MainPage
         }
 
         TranslateTransform transformData = new TranslateTransform();
+        const double SCROLL_RANGE = 60.0d;
         private void OnDragOver(object sender, DragEventArgs e)
         {
+            // 미리보기 위치 이동
+
             Point pos_s = e.GetPosition((IInputElement)sender);
             DragInfo dragInfoData = (DragInfo)e.Data.GetData(typeof(DragInfo));
 
             transformData.X = pos_s.X - dragInfoData.initialPosOffset.X;
-            transformData.Y = pos_s.Y + dragInfoData.initialPosOffset.Y;
-            temp.RenderTransform = transformData;
-            temp.Visibility = Visibility.Visible;
-            temp.IsSelected = true;
+            transformData.Y = pos_s.Y + 24 - dragInfoData.initialPosOffset.Y;
+            DragPreviewItem.RenderTransform = transformData;
+            DragPreviewItem.Visibility = Visibility.Visible;
+            DragPreviewItem.IsSelected = true;
+
+            // 드래그 중 스크롤 이동
+
+            double verticalPos = e.GetPosition(ReserveScrollViewer).Y;
+            double offset;
+
+            if (verticalPos < SCROLL_RANGE) // Top of visible list? 
+            {
+                offset = 20.0 - verticalPos * 0.3;
+                //Scroll up
+                ReserveScrollViewer.ScrollToVerticalOffset(ReserveScrollViewer.VerticalOffset - offset);
+            }
+            else if (verticalPos > ReserveScrollViewer.ActualHeight - SCROLL_RANGE) //Bottom of visible list? 
+            {
+                offset = 20.0 - (ReserveScrollViewer.ActualHeight - verticalPos) * 0.3;
+                //Scroll down
+                ReserveScrollViewer.ScrollToVerticalOffset(ReserveScrollViewer.VerticalOffset + offset);
+            }
         }
     }
 }
