@@ -31,9 +31,11 @@ namespace BibleProjector_WPF.View.MainPage
         System.Reflection.PropertyInfo CSearchStartProperty { 
             get
             {
-                return _CSearchStartProperty
-                    ?? this.DataContext.GetType().GetProperty("CSearchStart")
-                    ?? throw new Exception("Binding Error");
+                if (_CSearchStartProperty == null)
+                    _CSearchStartProperty = this.DataContext.GetType().GetProperty("CSearchStart")
+                        ?? throw new Exception("Binding Error");
+
+                return _CSearchStartProperty;
             }
         }
 
@@ -41,9 +43,11 @@ namespace BibleProjector_WPF.View.MainPage
         System.Reflection.PropertyInfo CPopupHideProperty {
             get
             {
-                return _CPopupHideProperty
-                    ?? this.DataContext.GetType().GetProperty("CPopupHide")
-                    ?? throw new Exception("Binding Error");
+                if (_CPopupHideProperty == null)
+                    _CPopupHideProperty = this.DataContext.GetType().GetProperty("CPopupHide")
+                        ?? throw new Exception("Binding Error");
+
+                return _CPopupHideProperty;
             }
         }
 
@@ -52,9 +56,11 @@ namespace BibleProjector_WPF.View.MainPage
         {
             get
             {
-                return _CLastestResultShowProperty
-                    ?? this.DataContext.GetType().GetProperty("CLastestResultShow")
-                    ?? throw new Exception("Binding Error");
+                if (_CLastestResultShowProperty == null)
+                    _CLastestResultShowProperty = this.DataContext.GetType().GetProperty("CLastestResultShow")
+                        ?? throw new Exception("Binding Error");
+
+                return _CLastestResultShowProperty;
             }
         }
 

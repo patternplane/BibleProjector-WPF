@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BibleProjector_WPF.View.MainPage"
              mc:Ignorable="d" 
-             Height="620" Width="900">
+             Height="620" Width="900"
+             Loaded="UserControl_Loaded">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="3*"/>
@@ -123,7 +124,7 @@
             <ContentControl Grid.Column="1" Margin="5" Content="{Binding VM_SearchControl}"/>
 
             <!--예약 목록-->
-            <Grid Grid.Column="2" Margin="5">
+            <Grid Grid.Column="2" Margin="5" DataContext="{Binding VM_ReserveList}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="12*"/>
@@ -138,160 +139,53 @@
                     <ScrollViewer
                         x:Name="ReserveScrollViewer"
                         ScrollViewer.CanContentScroll="False">
+                        <ScrollViewer.Resources>
+                            <local:ReserveItemTemplateSelector x:Key="reserveItemTemplateSelector"/>
+                        </ScrollViewer.Resources>
+                        
                         <ListBox
-                            MouseUp="ConfirmSelection"
+                            x:Name="ReserveListBox"
                             SelectionMode="Extended"
-                            DragOver="OnDragOver"                       
-                            AllowDrop="true">
-                            <!--아이템 표시 예시-->
-                            <!--템플릿은 추후 사용할 예정-->
-                            <ListBoxItem Panel.ZIndex="1" x:Name="DragPreviewItem" Margin="0,-22,0,0" Padding="0" HorizontalContentAlignment="Stretch">
-                                <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
-                                    <TextBlock>
-                                        미리보기
-                                    </TextBlock>
-                                </Border>
-                            </ListBoxItem>
-                            <ListBoxItem x:Name="DropPreviewItem" Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch" Visibility="Collapsed">
-                                <Border Margin="0" Height="13" BorderBrush="Black" BorderThickness="0,0,0,1" VerticalAlignment="Center">
-                                    <Border Margin="2,0,0,1" Padding="0" Background="#FFCCE7FF" BorderBrush="Gray" BorderThickness="1,1,0,0">
+                            AllowDrop="true"
+                            PreviewMouseDown="ReserveListBox_PreviewMouseDown"
+                            MouseUp="ConfirmSelection"
+                            PreviewMouseWheel="ScrollByWheel"
+                            SelectionChanged="ReserveListBox_SelectionChanged"
+                            DragOver="OnDragOver"       
+                            Drop="DragEnd"
+                            ItemsSource="{Binding ReserveContents}"
+                            ItemTemplateSelector="{StaticResource ResourceKey=reserveItemTemplateSelector}"
+                            xmlns:rtype="clr-namespace:BibleProjector_WPF">
+                            <ListBox.Resources>
+                                <DataTemplate x:Key="NormalItem">
+                                    <local:ReserveItem/>
+                                </DataTemplate>
+                                <!--드래그 항목 표시-->
+                                <DataTemplate x:Key="DragPreview">
+                                    <local:ReserveItem/>
+                                </DataTemplate>
+                                <!--드래그 드롭 위치 표시-->
+                                <DataTemplate x:Key="DropPreview">
+                                    <Border Margin="0" Height="13" BorderBrush="Black" BorderThickness="0,0,0,1" VerticalAlignment="Center">
+                                        <Border Margin="2,0,0,1" Padding="0" Background="#FFCCE7FF" BorderBrush="Gray" BorderThickness="1,1,0,0">
+                                        </Border>
                                     </Border>
-                                </Border>
-                            </ListBoxItem>
-                            <ListBoxItem Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch" 
-                                         MouseMove="GetMouseMove">
-                                <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
-                                    <TextBlock>
-                                        1. 성경1
-                                    </TextBlock>
-                                </Border>
-                            </ListBoxItem>
-                            <ListBoxItem Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch"
-                                         MouseMove="GetMouseMove">
-                                <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
-                                    <TextBlock>
-                                        2. 성경2
-                                    </TextBlock>
-                                </Border>
-                            </ListBoxItem>
-                            <ListBoxItem Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch"
-                                         MouseMove="GetMouseMove">
-                                <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
-                                    <TextBlock>
-                                        3. 성경3
-                                    </TextBlock>
-                                </Border>
-                            </ListBoxItem>
-                            <ListBoxItem Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch"
-                                         MouseMove="GetMouseMove">
-                                <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
-                                    <TextBlock>
-                                        4. 찬양1
-                                    </TextBlock>
-                                </Border>
-                            </ListBoxItem>
-                            <ListBoxItem Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch"
-                                         MouseMove="GetMouseMove">
-                                <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
-                                    <TextBlock>
-                                        5. 찬양2
-                                    </TextBlock>
-                                </Border>
-                            </ListBoxItem>
-                            <ListBoxItem Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch"
-                                         MouseMove="GetMouseMove">
-                                <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
-                                    <TextBlock>
-                                        6. 외부자료1
-                                    </TextBlock>
-                                </Border>
-                            </ListBoxItem>
-                            <ListBoxItem Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch"
-                                         MouseMove="GetMouseMove">
-                                <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
-                                    <TextBlock>
-                                        7.
-                                    </TextBlock>
-                                </Border>
-                            </ListBoxItem>
-                            <ListBoxItem Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch"
-                                         MouseMove="GetMouseMove">
-                                <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
-                                    <TextBlock>
-                                        8.
-                                    </TextBlock>
-                                </Border>
-                            </ListBoxItem>
-                            <ListBoxItem Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch">
-                                <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
-                                    <TextBlock>
-                                        9.
-                                    </TextBlock>
-                                </Border>
-                            </ListBoxItem>
-                            <ListBoxItem Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch">
-                                <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
-                                    <TextBlock>
-                                        10.
-                                    </TextBlock>
-                                </Border>
-                            </ListBoxItem>
-                            <ListBoxItem Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch">
-                                <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
-                                    <TextBlock>
-                                        11.
-                                    </TextBlock>
-                                </Border>
-                            </ListBoxItem>
-                            <ListBoxItem Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch">
-                                <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
-                                    <TextBlock>
-                                        12.
-                                    </TextBlock>
-                                </Border>
-                            </ListBoxItem>
-                            <ListBoxItem Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch">
-                                <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
-                                    <TextBlock>
-                                        13.
-                                    </TextBlock>
-                                </Border>
-                            </ListBoxItem>
-                            <ListBoxItem Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch">
-                                <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
-                                    <TextBlock>
-                                        14.
-                                    </TextBlock>
-                                </Border>
-                            </ListBoxItem>
-                            <ListBoxItem Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch">
-                                <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
-                                    <TextBlock>
-                                        15.
-                                    </TextBlock>
-                                </Border>
-                            </ListBoxItem>
-                            <ListBoxItem Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch">
-                                <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
-                                    <TextBlock>
-                                        16.
-                                    </TextBlock>
-                                </Border>
-                            </ListBoxItem>
-                            <ListBoxItem Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch">
-                                <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
-                                    <TextBlock>
-                                        17.
-                                    </TextBlock>
-                                </Border>
-                            </ListBoxItem>
-                            <ListBoxItem Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch">
-                                <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
-                                    <TextBlock>
-                                        18.
-                                    </TextBlock>
-                                </Border>
-                            </ListBoxItem>
+                                </DataTemplate>
+                            </ListBox.Resources>
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="Margin" Value="0,2,0,0"/>
+                                    <Setter Property="Padding" Value="0"/>
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    <EventSetter Event="MouseMove" Handler="GetMouseMove"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ViewType}" Value="{x:Static rtype:ReserveViewType.DragPreview}">
+                                            <Setter Property="Panel.ZIndex" Value="1"/>
+                                            <Setter Property="Margin" Value="0,-22,0,0"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
                         </ListBox>
                     </ScrollViewer>
                 </Border>

@@ -79,7 +79,8 @@ namespace BibleProjector_WPF
                 new ViewModel.MainPage.VMControlPage(
                     new ViewModel.MainPage.VMShowControler(),
                     new ViewModel.MainPage.VMShowControler(),
-                    new ViewModel.MainPage.VMSearchControl(searcher)),
+                    new ViewModel.MainPage.VMSearchControl(searcher),
+                    new ViewModel.MainPage.VMReserveList()),
                 new ViewModel.MainPage.VMOptionBar());
 
             //===============================================================================================================
