@@ -79,10 +79,36 @@ namespace BibleProjector_WPF.View.MainPage
             DragInfo dragInfoData = (DragInfo)e.Data.GetData(typeof(DragInfo));
 
             transformData.X = pos_s.X - dragInfoData.initialPosOffset.X;
-            transformData.Y = pos_s.Y + 24 - dragInfoData.initialPosOffset.Y;
+            transformData.Y = pos_s.Y + 23 - dragInfoData.initialPosOffset.Y;
             DragPreviewItem.RenderTransform = transformData;
             DragPreviewItem.Visibility = Visibility.Visible;
             DragPreviewItem.IsSelected = true;
+
+            // 드래그 할 위치 찾기
+
+            ListBoxItem NextItem = null; // item : item 바로 앞이 적정위치. null이면 가장 마지막이 적정위치
+            foreach(ListBoxItem item in ((ListBox)sender).Items)
+            {
+                if (item != DragPreviewItem
+                    && item != DropPreviewItem
+                    && !selections.Contains(item)
+                    && e.GetPosition(item).Y - 10 < 0)
+                {
+                    NextItem = item;
+                    break;
+                }
+            }
+            
+            if ((NextItem == null && ((ListBox)sender).Items.Count - 1 != ((ListBox)sender).Items.IndexOf(DropPreviewItem))
+                || (NextItem != null && ((ListBox)sender).Items.IndexOf(NextItem) - 1 != ((ListBox)sender).Items.IndexOf(DropPreviewItem)))
+            {
+                ((ListBox)sender).Items.Remove(DropPreviewItem);
+                if (NextItem == null)
+                    ((ListBox)sender).Items.Add(DropPreviewItem);
+                else
+                    ((ListBox)sender).Items.Insert(((ListBox)sender).Items.IndexOf(NextItem), DropPreviewItem);
+                DropPreviewItem.Visibility = Visibility.Visible;
+            }
 
             // 드래그 중 스크롤 이동
 

@@ -145,11 +145,17 @@
                             AllowDrop="true">
                             <!--아이템 표시 예시-->
                             <!--템플릿은 추후 사용할 예정-->
-                            <ListBoxItem x:Name="DragPreviewItem" Margin="0,-22,0,0" Padding="0" HorizontalContentAlignment="Stretch">
+                            <ListBoxItem Panel.ZIndex="1" x:Name="DragPreviewItem" Margin="0,-22,0,0" Padding="0" HorizontalContentAlignment="Stretch">
                                 <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
                                     <TextBlock>
                                         미리보기
                                     </TextBlock>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem x:Name="DropPreviewItem" Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch" Visibility="Collapsed">
+                                <Border Margin="0" Height="13" BorderBrush="Black" BorderThickness="0,0,0,1" VerticalAlignment="Center">
+                                    <Border Margin="2,0,0,1" Padding="0" Background="#FFCCE7FF" BorderBrush="Gray" BorderThickness="1,1,0,0">
+                                    </Border>
                                 </Border>
                             </ListBoxItem>
                             <ListBoxItem Margin="0,2,0,0" Padding="0" HorizontalContentAlignment="Stretch" 
