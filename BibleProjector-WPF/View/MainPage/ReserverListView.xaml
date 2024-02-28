@@ -28,18 +28,24 @@
                 </ScrollViewer.Resources>
 
                 <ListBox
-                            x:Name="ReserveListBox"
-                            SelectionMode="Extended"
-                            AllowDrop="true"
-                            PreviewMouseDown="ReserveListBox_PreviewMouseDown"
-                            MouseUp="ConfirmSelection"
-                            PreviewMouseWheel="ScrollByWheel"
-                            SelectionChanged="ReserveListBox_SelectionChanged"
-                            DragOver="OnDragOver"       
-                            Drop="DragEnd"
-                            ItemsSource="{Binding ReserveContents}"
-                            ItemTemplateSelector="{StaticResource ResourceKey=reserveItemTemplateSelector}"
-                            xmlns:rtype="clr-namespace:BibleProjector_WPF">
+                    x:Name="ReserveListBox"
+                    SelectionMode="Extended"
+                    AllowDrop="true"
+                    
+                    PreviewMouseWheel="ScrollByWheel"
+                    
+                    PreviewKeyUp="ReserveListBox_PreviewKeyUp"
+                    
+                    PreviewMouseDown="ReserveListBox_PreviewMouseDown"
+                    MouseUp="ConfirmSelection"
+                    SelectionChanged="ReserveListBox_SelectionChanged"
+                    DragEnter="DragEnterCheck"
+                    DragOver="OnDragOver"
+                    Drop="DragEnd"
+                    
+                    ItemsSource="{Binding ReserveContents}"
+                    ItemTemplateSelector="{StaticResource ResourceKey=reserveItemTemplateSelector}"
+                    xmlns:rtype="clr-namespace:BibleProjector_WPF">
                     <ListBox.Resources>
                         <DataTemplate x:Key="NormalItem">
                             <local:ReserveItem/>
@@ -62,6 +68,7 @@
                             <Setter Property="Padding" Value="0"/>
                             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                             <EventSetter Event="MouseMove" Handler="GetMouseMove"/>
+                            <EventSetter Event="PreviewKeyUp" Handler="ListBoxItem_PreviewKeyUp"/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding ViewType}" Value="{x:Static rtype:ReserveViewType.DragPreview}">
                                     <Setter Property="Panel.ZIndex" Value="1"/>

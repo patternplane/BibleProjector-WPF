@@ -14,6 +14,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public ICommand CSetDragDrop { get; set; }
         public ICommand CSetDropPreviewPos { get; set; }
         public ICommand CApplyDrag { get; set; }
+        public ICommand CDeleteItems { get; set; }
 
         VMReserveData dragPreviewItem;
         VMReserveData dropPreviewItem;
@@ -24,6 +25,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             this.CSetDragDrop = new RelayCommand(SetDragDrop);
             this.CSetDropPreviewPos = new RelayCommand(SetDropPreviewPos);
             this.CApplyDrag = new RelayCommand(ApplyDrag);
+            this.CDeleteItems = new RelayCommand(DeleteItems); 
 
             dragPreviewItem = new VMReserveData("", ReserveViewType.DragPreview);
             dropPreviewItem = new VMReserveData("", ReserveViewType.DropPreview);
@@ -34,11 +36,27 @@ namespace BibleProjector_WPF.ViewModel.MainPage
                 ReserveContents.Add(new VMReserveData("항목"+i, ReserveViewType.NormalItem));
         }
 
+        // ========== Methods ==========
+
+        void deleteItems(object[] Selection)
+        {
+            foreach (VMReserveData item in Selection)
+                ReserveContents.Remove(item);
+        }
+
+        // ========== Command ==========
+
+        void DeleteItems(object Selection)
+        {
+            deleteItems((object[])Selection);
+        }
+
+        // ========== Command - Drag & Drop ==========
+
         void SetDragDrop(object Selection)
         {
             this.dragSelection = (object[])Selection;
-            foreach(VMReserveData item in dragSelection)
-                ReserveContents.Remove(item);
+            deleteItems(dragSelection);
 
             dragPreviewItem.pasteDisplayTitle(((VMReserveData)dragSelection[0]).DisplayTitle);
         }

@@ -104,12 +104,24 @@ namespace BibleProjector_WPF.View.MainPage
             return (ICommand)_CApplyDragProperty.GetValue(obj);
         }
 
-        // ========== Reserve Drag & Drop Data ==========
+        System.Reflection.PropertyInfo _CDeleteItemsProperty = null;
+        ICommand getCDeleteItemsProperty(object obj)
+        {
+            if (_CDeleteItemsProperty == null)
+                _CDeleteItemsProperty = obj.GetType().GetProperty("CDeleteItems")
+                    ?? throw new Exception("Binding Error");
 
-        List<object> selections = new List<object>();
-        bool allowSelect = true;
+            return (ICommand)_CDeleteItemsProperty.GetValue(obj);
+        }
 
-        // ========== Reserve Item Index Update ==========
+        // ========== Reserve View Scroll ==========
+
+        private void ScrollByWheel(object sender, MouseWheelEventArgs e)
+        {
+            ReserveScrollViewer.ScrollToVerticalOffset(ReserveScrollViewer.VerticalOffset - 0.5 * e.Delta);
+        }
+
+        // ========== Reserve Item Index Updater ==========
 
         void UpdateReserveItemIdxs()
         {
@@ -120,7 +132,29 @@ namespace BibleProjector_WPF.View.MainPage
                     setMyIdxProperty(ReserveListBox.Items[i], viewIdx++);
         }
 
-        // ========== Reserve Item Selection ==========
+        // ========== Reserve Item Selection Data ==========
+
+        List<object> selections = new List<object>();
+        bool allowSelect = true;
+
+        // ========== Reserve Item Selection Manager ==========
+
+        /// <summary>
+        /// 이 이벤트가 SelectionChanged보다 선행되어야 올바른 동작이 될 것임
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ReserveListBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (selections.Count <= 1)
+                allowSelect = true;
+            else
+                allowSelect = false;
+
+            object VMofClickItem = ((FrameworkElement)e.OriginalSource).DataContext;
+            if (!selections.Contains(VMofClickItem))
+                selections.Clear();
+        }
 
         private void ReserveListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -128,18 +162,10 @@ namespace BibleProjector_WPF.View.MainPage
                 confirmSelection();
         }
 
-        private void ReserveListBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            allowSelect = false;
-            object VMofClickItem = ((FrameworkElement)e.OriginalSource).DataContext;
-            if (!selections.Contains(VMofClickItem))
-                selections.Clear();
-        }
-
         private void ConfirmSelection(object sender, MouseButtonEventArgs e)
         {
-            allowSelect = true;
             confirmSelection();
+            allowSelect = true;
         }
 
         void confirmSelection()
@@ -157,6 +183,44 @@ namespace BibleProjector_WPF.View.MainPage
                 });
         }
 
+        /*=======================================================
+         *                   Delete Process
+         =======================================================*/
+
+        private void ListBoxItem_PreviewKeyUp(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Delete)
+                DeleteSelections();
+        }
+
+        private void ReserveListBox_PreviewKeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Delete)
+                DeleteSelections();
+        }
+
+        void DeleteSelections()
+        {
+            if (selections.Count > 0)
+            {
+                MessageBoxResult result = MessageBox.Show(
+                    selections.Count + "개 항목을 삭제합니다"
+                    , "삭제"
+                    , MessageBoxButton.OKCancel
+                    , MessageBoxImage.Warning);
+
+                if (result == MessageBoxResult.Cancel)
+                    return;
+
+                getCDeleteItemsProperty(ReserveListBox.DataContext).Execute(selections.ToArray());
+                UpdateReserveItemIdxs();
+            }
+        }
+
+        /*=======================================================
+         *                 Drag And Drop Process
+         =======================================================*/
+
         // ========== Reserve Item Drag & Drop ==========
 
         private void GetMouseMove(object sender, MouseEventArgs e)
@@ -170,13 +234,13 @@ namespace BibleProjector_WPF.View.MainPage
 
             if (e.LeftButton == MouseButtonState.Pressed)
             {
+                allowSelect = false;
+
                 Point initialOffset = e.GetPosition(itemUnderMouse);
 
-                getCSetDragDropProperty(ReserveListBox.DataContext)
-                    .Execute(
-                    selections.ToArray()
-                    );
+                getCSetDragDropProperty(ReserveListBox.DataContext).Execute(selections.ToArray());
 
+                DropPreviewItem.Visibility = Visibility.Visible;
                 DragDropEffects result = DragDrop.DoDragDrop(
                     itemUnderMouse,
                     new DataObject(initialOffset),
@@ -187,18 +251,22 @@ namespace BibleProjector_WPF.View.MainPage
             }
         }
 
+        private void DragEnterCheck(object sender, DragEventArgs e)
+        {
+            prevTime = DateTime.Now;
+        }
+
         TranslateTransform transformData = new TranslateTransform();
         const double SCROLL_RANGE = 60.0d;
         DateTime prevTime;
         private void OnDragOver(object sender, DragEventArgs e)
         {
-
             // 미리보기 위치 이동
 
             Point initialPosOffset = (Point)e.Data.GetData(typeof(Point));
             Point pos_s = e.GetPosition(DragPreviewItem);
 
-            transformData.X = transformData.X + pos_s.X - initialPosOffset.X;
+            transformData.X = transformData.X + pos_s.X - initialPosOffset.X / 2.0;
             transformData.Y = transformData.Y + pos_s.Y - initialPosOffset.Y;
             DragPreviewItem.RenderTransform = transformData;
             DragPreviewItem.Visibility = Visibility.Visible;
@@ -228,7 +296,6 @@ namespace BibleProjector_WPF.View.MainPage
                 ReserveListBox.UpdateLayout();
 
                 DropPreviewItem = (ListBoxItem)reserveContainerGenerator.ContainerFromItem(item);
-                DropPreviewItem.Visibility = Visibility.Visible;
             }
 
             // 드래그 중 스크롤 이동
@@ -260,22 +327,19 @@ namespace BibleProjector_WPF.View.MainPage
 
         void DoDragEnd()
         {
-            allowSelect = true;
-
             int dropIdx = ReserveListBox.ItemContainerGenerator.IndexFromContainer(DropPreviewItem);
             getCApplyDragProperty(ReserveListBox.DataContext).Execute(dropIdx);
 
             UpdateReserveItemIdxs();
 
+            ReserveListBox.UpdateLayout();
+            foreach (object item in selections)
+                ((ListBoxItem)ReserveListBox.ItemContainerGenerator.ContainerFromItem(item)).IsSelected = true;
+
             DragPreviewItem.Visibility = Visibility.Hidden;
             DropPreviewItem.Visibility = Visibility.Collapsed;
-        }
 
-        // ========== Reserve View Scroll ==========
-
-        private void ScrollByWheel(object sender, MouseWheelEventArgs e)
-        {
-            ReserveScrollViewer.ScrollToVerticalOffset(ReserveScrollViewer.VerticalOffset - 0.5 * e.Delta);
+            allowSelect = true;
         }
     }
 }
