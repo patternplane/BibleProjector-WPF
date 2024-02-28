@@ -43,15 +43,27 @@
                         </TextBlock>
                     </Border>
 
-                    <WrapPanel Grid.Row="1" Margin="1,1,1,8" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-
-                        <local:ExternPPTSetter Margin="4,2,4,2"></local:ExternPPTSetter>
-                        <local:ExternPPTSetter Margin="4,2,4,2"></local:ExternPPTSetter>
-                        <local:ExternPPTSetter Margin="4,2,4,2"></local:ExternPPTSetter>
-                        <local:ExternPPTSetter Margin="4,2,4,2"></local:ExternPPTSetter>
-                        <local:ExternPPTSetter Margin="4,2,4,2"></local:ExternPPTSetter>
-                        <local:ExternPPTSetter Margin="4,2,4,2"></local:ExternPPTSetter>
-                    </WrapPanel>
+                    <ItemsControl
+                        Grid.Row="1" Margin="1,1,1,8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                        ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                        ItemsSource="{Binding ExternPPTEditButtons}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel
+                                    Orientation="Horizontal"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center">
+                                </WrapPanel>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemContainerStyle>
+                            <Style>
+                                <Setter Property="Control.Padding" Value="0"/>
+                                <Setter Property="Control.Margin" Value="4,2,4,2"/>
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                    </ItemsControl>
                 </Grid>
 
                 <!--기타 문구 등록-->

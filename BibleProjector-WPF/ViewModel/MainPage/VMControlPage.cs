@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,14 +16,24 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public ViewModel VM_SearchControl { get; set; }
         public ViewModel VM_ReserveList { get; set; }
 
+        // ========== Binding ===========
+
+        public Collection<ViewModel> ExternPPTEditButtons { get; }
+
         // ========== Gen ===========
 
-        public VMControlPage(ViewModel topShowControler, ViewModel bottomShowControler, ViewModel searchControl, ViewModel reserveList)
+        public VMControlPage(
+            ViewModel topShowControler,
+            ViewModel bottomShowControler,
+            ViewModel searchControl,
+            ViewModel reserveList,
+            Collection<ViewModel> externPPTEditButtonVMs)
         {
             this.VM_ShowControler_top = topShowControler;
             this.VM_ShowControler_bottom = bottomShowControler;
             this.VM_SearchControl = searchControl;
             this.VM_ReserveList = reserveList;
+            this.ExternPPTEditButtons = externPPTEditButtonVMs;
         }
     }
 }

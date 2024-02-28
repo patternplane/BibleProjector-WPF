@@ -23,6 +23,10 @@
         <vw_mp:ReserverListView></vw_mp:ReserverListView>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type vm_mp:VMExternPPTEditButton}">
+        <vw_mp:ExternPPTSetter></vw_mp:ExternPPTSetter>
+    </DataTemplate>
+
     <DataTemplate DataType="{x:Type vm_mp:VMOptionBar}">
         <vw_mp:MainOption></vw_mp:MainOption>
     </DataTemplate>

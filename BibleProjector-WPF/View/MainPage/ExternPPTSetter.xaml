@@ -12,13 +12,13 @@
             <ColumnDefinition Width="8*"/>
         </Grid.ColumnDefinitions>
 
-        <ContentControl Grid.Column="0">
-            <!--더미 데이터-->
-            주일 오전
-            <ContentControl.Template>
+        <Button Grid.Column="0"
+                Content="{Binding MainTitle}"
+                Click="EH_MainButtonClick">
+            <Button.Template>
                 <ControlTemplate TargetType="ContentControl">
                     <Grid>
-                        <Path Fill="#FFFFFFD1" Stretch="Fill" Stroke="Black" StrokeThickness="0.5">
+                        <Path x:Name="MainButton" Stretch="Fill" StrokeThickness="0.5">
                             <Path.Data>
                                 <CombinedGeometry>
                                     <CombinedGeometry.Geometry1>
@@ -32,21 +32,33 @@
                         </Path>
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"></ContentPresenter>
                     </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter TargetName="MainButton" Property="Fill" Value="#FFB9ECF7"/>
+                            <Setter TargetName="MainButton" Property="Stroke" Value="#FF0C43FF"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="false">
+                            <Setter TargetName="MainButton" Property="Fill" Value="#FFFFFFD1"/>
+                            <Setter TargetName="MainButton" Property="Stroke" Value="black"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
-            </ContentControl.Template>
-        </ContentControl>
+            </Button.Template>
+        </Button>
 
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Button Grid.Row="0" FontSize="9">
+            <Button Grid.Row="0" FontSize="9"
+                    Click="EH_AddButtonClick">
                 등 록
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Grid>
-                            <Path Fill="#FFF7B251" Stretch="Fill" Stroke="Black" StrokeThickness="0.5">
+                            <Path x:Name="SetButton" Stretch="Fill" StrokeThickness="0.5">
                                 <Path.Data>
                                     <CombinedGeometry>
                                         <CombinedGeometry.Geometry1>
@@ -67,15 +79,28 @@
                             </Path>
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"></ContentPresenter>
                         </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter TargetName="SetButton" Property="Fill" Value="#FFB9ECF7"/>
+                                <Setter TargetName="SetButton" Property="Stroke" Value="#FF0C43FF"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="false">
+                                <Setter TargetName="SetButton" Property="Fill" Value="#FFF7B251"/>
+                                <Setter TargetName="SetButton" Property="Stroke" Value="black"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Button.Template>
             </Button>
-            <Button Grid.Row="1" FontSize="9">
+            
+            <Button Grid.Row="1" FontSize="9"
+                    Click="EH_EditButtonClick">
                 편 집
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Grid>
-                            <Path Fill="#FF008787" Stretch="Fill" Stroke="Black" StrokeThickness="0.5">
+                            <Path x:Name="EditButton" Stretch="Fill" StrokeThickness="0.5">
                                 <Path.Data>
                                     <CombinedGeometry>
                                         <CombinedGeometry.Geometry1>
@@ -96,6 +121,17 @@
                             </Path>
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter TargetName="EditButton" Property="Fill" Value="#FFB9ECF7"/>
+                                <Setter TargetName="EditButton" Property="Stroke" Value="#FF0C43FF"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="false">
+                                <Setter TargetName="EditButton" Property="Fill" Value="#FF008787"/>
+                                <Setter TargetName="EditButton" Property="Stroke" Value="black"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Button.Template>
             </Button>

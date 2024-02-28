@@ -81,6 +81,7 @@
     <Compile Include="RelayCommand.cs" />
     <Compile Include="ReserveViewType.cs" />
     <Compile Include="ViewModel\BibleViewModel.cs" />
+    <Compile Include="ViewModel\MainPage\VMExternPPTEditButton.cs" />
     <Compile Include="ViewModel\MainPage\VMReserveData.cs" />
     <Compile Include="ViewModel\MainPage\VMReserveList.cs" />
     <Compile Include="ViewModel\MainPage\VMSearchResult.cs" />

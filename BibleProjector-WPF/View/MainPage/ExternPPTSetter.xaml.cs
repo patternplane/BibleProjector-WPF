@@ -24,5 +24,20 @@ namespace BibleProjector_WPF.View.MainPage
         {
             InitializeComponent();
         }
+
+        private void EH_MainButtonClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void EH_AddButtonClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void EH_EditButtonClick(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
