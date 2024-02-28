@@ -19,6 +19,10 @@
         <vw_mp:SearchView></vw_mp:SearchView>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type vm_mp:VMReserveList}">
+        <vw_mp:ReserverListView></vw_mp:ReserverListView>
+    </DataTemplate>
+
     <DataTemplate DataType="{x:Type vm_mp:VMOptionBar}">
         <vw_mp:MainOption></vw_mp:MainOption>
     </DataTemplate>

@@ -11,7 +11,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
     public class VMReserveList : ViewModel
     {
         public ObservableCollection<VMReserveData> ReserveContents { get; set; } = new ObservableCollection<VMReserveData>();
-        public ICommand CStartDragDrop { get; set; }
+        public ICommand CSetDragDrop { get; set; }
         public ICommand CSetDropPreviewPos { get; set; }
         public ICommand CApplyDrag { get; set; }
 
@@ -21,24 +21,20 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         public VMReserveList()
         {
-            this.CStartDragDrop = new RelayCommand(StartDragDrop);
+            this.CSetDragDrop = new RelayCommand(SetDragDrop);
             this.CSetDropPreviewPos = new RelayCommand(SetDropPreviewPos);
             this.CApplyDrag = new RelayCommand(ApplyDrag);
 
             dragPreviewItem = new VMReserveData("", ReserveViewType.DragPreview);
             dropPreviewItem = new VMReserveData("", ReserveViewType.DropPreview);
-
-            ReserveContents.Add(new VMReserveData("항목1", ReserveViewType.NormalItem));
-            ReserveContents.Add(new VMReserveData("항목2", ReserveViewType.NormalItem));
-            ReserveContents.Add(new VMReserveData("항목3", ReserveViewType.NormalItem));
             ReserveContents.Add(dropPreviewItem);
             ReserveContents.Add(dragPreviewItem);
-            ReserveContents.Add(new VMReserveData("항목4", ReserveViewType.NormalItem));
-            for (int i = 5; i <= 100; i++)
+
+            for (int i = 1; i <= 100; i++)
                 ReserveContents.Add(new VMReserveData("항목"+i, ReserveViewType.NormalItem));
         }
 
-        void StartDragDrop(object Selection)
+        void SetDragDrop(object Selection)
         {
             this.dragSelection = (object[])Selection;
             foreach(VMReserveData item in dragSelection)
@@ -56,7 +52,6 @@ namespace BibleProjector_WPF.ViewModel.MainPage
                 ReserveContents.Move(dropItemIdx, nextItemIdx - 1);
             else
                 ReserveContents.Move(dropItemIdx, nextItemIdx);
-
         }
 
         void ApplyDrag(object pos)

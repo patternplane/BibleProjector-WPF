@@ -120,6 +120,9 @@
       <DependentUpon>ReserveItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\MainPage\ReserveItemTemplateSelector.cs" />
+    <Compile Include="View\MainPage\ReserverListView.xaml.cs">
+      <DependentUpon>ReserverListView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\MainPage\SearchView.xaml.cs">
       <DependentUpon>SearchView.xaml</DependentUpon>
     </Compile>
@@ -250,6 +253,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\MainPage\ReserveItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MainPage\ReserverListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

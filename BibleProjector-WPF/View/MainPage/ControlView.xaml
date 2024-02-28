@@ -5,8 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BibleProjector_WPF.View.MainPage"
              mc:Ignorable="d" 
-             Height="620" Width="900"
-             Loaded="UserControl_Loaded">
+             Height="620" Width="900">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="3*"/>
@@ -124,72 +123,7 @@
             <ContentControl Grid.Column="1" Margin="5" Content="{Binding VM_SearchControl}"/>
 
             <!--예약 목록-->
-            <Grid Grid.Column="2" Margin="5" DataContext="{Binding VM_ReserveList}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="12*"/>
-                </Grid.RowDefinitions>
-
-                <Border BorderBrush="Black" BorderThickness="1,1,1,0">
-                    <Label Background="LightGray" Padding="0" FontSize="13" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
-                        예 약 목 록
-                    </Label>
-                </Border>
-                <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1">
-                    <ScrollViewer
-                        x:Name="ReserveScrollViewer"
-                        ScrollViewer.CanContentScroll="False">
-                        <ScrollViewer.Resources>
-                            <local:ReserveItemTemplateSelector x:Key="reserveItemTemplateSelector"/>
-                        </ScrollViewer.Resources>
-                        
-                        <ListBox
-                            x:Name="ReserveListBox"
-                            SelectionMode="Extended"
-                            AllowDrop="true"
-                            PreviewMouseDown="ReserveListBox_PreviewMouseDown"
-                            MouseUp="ConfirmSelection"
-                            PreviewMouseWheel="ScrollByWheel"
-                            SelectionChanged="ReserveListBox_SelectionChanged"
-                            DragOver="OnDragOver"       
-                            Drop="DragEnd"
-                            ItemsSource="{Binding ReserveContents}"
-                            ItemTemplateSelector="{StaticResource ResourceKey=reserveItemTemplateSelector}"
-                            xmlns:rtype="clr-namespace:BibleProjector_WPF">
-                            <ListBox.Resources>
-                                <DataTemplate x:Key="NormalItem">
-                                    <local:ReserveItem/>
-                                </DataTemplate>
-                                <!--드래그 항목 표시-->
-                                <DataTemplate x:Key="DragPreview">
-                                    <local:ReserveItem/>
-                                </DataTemplate>
-                                <!--드래그 드롭 위치 표시-->
-                                <DataTemplate x:Key="DropPreview">
-                                    <Border Margin="0" Height="13" BorderBrush="Black" BorderThickness="0,0,0,1" VerticalAlignment="Center">
-                                        <Border Margin="2,0,0,1" Padding="0" Background="#FFCCE7FF" BorderBrush="Gray" BorderThickness="1,1,0,0">
-                                        </Border>
-                                    </Border>
-                                </DataTemplate>
-                            </ListBox.Resources>
-                            <ListBox.ItemContainerStyle>
-                                <Style TargetType="ListBoxItem">
-                                    <Setter Property="Margin" Value="0,2,0,0"/>
-                                    <Setter Property="Padding" Value="0"/>
-                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                                    <EventSetter Event="MouseMove" Handler="GetMouseMove"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding ViewType}" Value="{x:Static rtype:ReserveViewType.DragPreview}">
-                                            <Setter Property="Panel.ZIndex" Value="1"/>
-                                            <Setter Property="Margin" Value="0,-22,0,0"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </ListBox.ItemContainerStyle>
-                        </ListBox>
-                    </ScrollViewer>
-                </Border>
-            </Grid>
+            <ContentControl Grid.Column="2" Margin="5" Content="{Binding VM_ReserveList}"/>
         </Grid>
     </Grid>
 </UserControl>
