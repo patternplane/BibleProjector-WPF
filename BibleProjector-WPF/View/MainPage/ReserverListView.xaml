@@ -14,8 +14,6 @@
             <RowDefinition Height="12*"/>
         </Grid.RowDefinitions>
         
-        <Button></Button>
-
         <Border BorderBrush="Black" BorderThickness="1,1,1,0">
             <Label Background="LightGray" Padding="0" FontSize="13" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
                 예 약 목 록

@@ -274,7 +274,8 @@ namespace BibleProjector_WPF.module
 
         public override void ProcessBeforeDeletion()
         {
-            new ExternPPTManager().UnlinkPPT(PPTfilePath);
+            //이전 코드
+            //new ExternPPTManager().UnlinkPPT(PPTfilePath);
         }
 
         protected override bool checkSameData(object data)

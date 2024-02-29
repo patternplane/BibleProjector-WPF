@@ -73,6 +73,7 @@
     <Compile Include="module\Data\SongManager.cs" />
     <Compile Include="module\Data\SongSearchData.cs" />
     <Compile Include="module\Data\SongSearcher.cs" />
+    <Compile Include="module\ExternPPTManager.cs" />
     <Compile Include="module\ISearchData.cs" />
     <Compile Include="module\Data\SongData.cs" />
     <Compile Include="module\Data\SongContent.cs" />
@@ -99,15 +100,13 @@
     </Compile>
     <Compile Include="CloseButtonDisabler.cs" />
     <Compile Include="Event\ReserveListChanged.cs" />
-    <Compile Include="View\ExternPPT.xaml.cs">
-      <DependentUpon>ExternPPT.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\MainPage\AdditionalContentButton.xaml.cs">
       <DependentUpon>AdditionalContentButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\MainPage\ControlView.xaml.cs">
       <DependentUpon>ControlView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\MainPage\ExternPPTFileDialog.cs" />
     <Compile Include="View\MainPage\ExternPPTSetter.xaml.cs">
       <DependentUpon>ExternPPTSetter.xaml</DependentUpon>
     </Compile>
@@ -135,7 +134,6 @@
     </Compile>
     <Compile Include="module\BibleSearcher.cs" />
     <Compile Include="module\ControlWindowManager.cs" />
-    <Compile Include="module\ExternPPTManager.cs" />
     <Compile Include="module\KorString.cs" />
     <Compile Include="module\LayoutInfo.cs" />
     <Compile Include="module\LevenshteinDistance.cs" />
@@ -198,7 +196,6 @@
     <Compile Include="UnitTester\Tester.cs" />
     <Compile Include="ViewModel\BibleModifyViewModel.cs" />
     <Compile Include="ViewModel\BibleSearchViewModel.cs" />
-    <Compile Include="ViewModel\ExternPPTViewModel.cs" />
     <Compile Include="ViewModel\ManualTabViewModel.cs" />
     <Compile Include="ViewModel\OptionViewModel.cs" />
     <Compile Include="ViewModel\Control\ExternPPTControlViewModel.cs" />
@@ -226,10 +223,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\BibleModifyWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\ExternPPT.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

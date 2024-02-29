@@ -75,11 +75,13 @@ namespace BibleProjector_WPF
                     new module.Data.SongManager()));
 
             Database.DatabaseInitailize();
+            Powerpoint.Initialize();
 
             System.Collections.ObjectModel.Collection<ViewModel.ViewModel> buttonVMs
                 = new System.Collections.ObjectModel.Collection<ViewModel.ViewModel>();
+            module.ExternPPTManager pptMan = new module.ExternPPTManager();
             for (int i = 0; i < 6; i++)
-                buttonVMs.Add(new ViewModel.MainPage.VMExternPPTEditButton());
+                buttonVMs.Add(new ViewModel.MainPage.VMExternPPTEditButton(pptMan));
 
             this.VM_Main = new ViewModel.MainPage.VMMain(
                 new ViewModel.MainPage.VMControlPage(

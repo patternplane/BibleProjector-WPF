@@ -70,7 +70,8 @@ namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
             if (filePaths.Count() == 0)
                 return;
 
-            new module.ExternPPTManager().ModifyOpenPPT(filePaths);
+            //이전 코드
+            //new module.ExternPPTManager().ModifyOpenPPT(filePaths);
         }
 
         public void RunRefreshPPT()
@@ -79,7 +80,8 @@ namespace BibleProjector_WPF.ViewModel.ReserveOptionViewModels
             if (filePaths.Count() == 0)
                 return;
 
-            new module.ExternPPTManager().RefreshPPT(filePaths);
+            //이전 코드
+            //new module.ExternPPTManager().RefreshPPT(filePaths);
 
             ExternPPTControlViewModel vm_ExternPPTControl = new module.ControlWindowManager().getExternPPTControlViewModel();
             if (vm_ExternPPTControl != null)

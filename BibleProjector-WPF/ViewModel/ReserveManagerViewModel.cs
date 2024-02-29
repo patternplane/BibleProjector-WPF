@@ -50,9 +50,10 @@ namespace BibleProjector_WPF.ViewModel
         {
             if (type == ReserveType.ExternPPT)
             {
-                if ((new ExternPPTManager().checkAvailPPT(SaveData, reserveDataManager.ExternPPT_isNotOverlaped)) != 0)
+                //이전 코드
+                /*if ((new ExternPPTManager().checkAvailPPT(SaveData, reserveDataManager.ExternPPT_isNotOverlaped)) != 0)
                     return false;
-                else
+                else*/
                     return true;
             }
             else

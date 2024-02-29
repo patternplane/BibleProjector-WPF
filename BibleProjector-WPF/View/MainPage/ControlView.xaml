@@ -60,7 +60,7 @@
                         <ItemsControl.ItemContainerStyle>
                             <Style>
                                 <Setter Property="Control.Padding" Value="0"/>
-                                <Setter Property="Control.Margin" Value="4,2,4,2"/>
+                                <Setter Property="Control.Margin" Value="4,4,4,4"/>
                             </Style>
                         </ItemsControl.ItemContainerStyle>
                     </ItemsControl>

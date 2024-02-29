@@ -25,19 +25,151 @@ namespace BibleProjector_WPF.View.MainPage
             InitializeComponent();
         }
 
+        // ========== BindingProperties ==========
+
+        System.Reflection.PropertyInfo _CAddPPTFileProperty = null;
+        ICommand getCAddPPTFileProperty(object obj)
+        {
+            if (_CAddPPTFileProperty == null)
+                _CAddPPTFileProperty = obj.GetType().GetProperty("CAddPPTFile")
+                    ?? throw new Exception("Binding Error");
+
+            return (ICommand)_CAddPPTFileProperty.GetValue(obj);
+        }
+
+        System.Reflection.PropertyInfo _CEditPPTFileProperty = null;
+        ICommand getCEditPPTFileProperty(object obj)
+        {
+            if (_CEditPPTFileProperty == null)
+                _CEditPPTFileProperty = obj.GetType().GetProperty("CEditPPTFile")
+                    ?? throw new Exception("Binding Error");
+
+            return (ICommand)_CEditPPTFileProperty.GetValue(obj);
+        }
+
+        System.Reflection.PropertyInfo _CRefreshPPTFileProperty = null;
+        ICommand getCRefreshPPTFileProperty(object obj)
+        {
+            if (_CRefreshPPTFileProperty == null)
+                _CRefreshPPTFileProperty = obj.GetType().GetProperty("CRefreshPPTFile")
+                    ?? throw new Exception("Binding Error");
+
+            return (ICommand)_CRefreshPPTFileProperty.GetValue(obj);
+        }
+
+        System.Reflection.PropertyInfo _AddPPTFileErrorProperty = null;
+        int getAddPPTFileErrorProperty(object obj)
+        {
+            if (_AddPPTFileErrorProperty == null)
+                _AddPPTFileErrorProperty = obj.GetType().GetProperty("AddPPTFileError")
+                    ?? throw new Exception("Binding Error");
+
+            return (int)_AddPPTFileErrorProperty.GetValue(obj);
+        }
+
+        System.Reflection.PropertyInfo _RefreshPPTFileErrorProperty = null;
+        int getRefreshPPTFileErrorProperty(object obj)
+        {
+            if (_RefreshPPTFileErrorProperty == null)
+                _RefreshPPTFileErrorProperty = obj.GetType().GetProperty("RefreshPPTFileError")
+                    ?? throw new Exception("Binding Error");
+
+            return (int)_RefreshPPTFileErrorProperty.GetValue(obj);
+        }
+
+        System.Reflection.PropertyInfo _MaxSlideSizeProperty = null;
+        int getMaxSlideSizeProperty(object obj)
+        {
+            if (_MaxSlideSizeProperty == null)
+                _MaxSlideSizeProperty = obj.GetType().GetProperty("MaxSlideSize")
+                    ?? throw new Exception("Binding Error");
+
+            return (int)_MaxSlideSizeProperty.GetValue(obj);
+        }
+
+        System.Reflection.PropertyInfo _FilePathProperty = null;
+        string getFilePathProperty(object obj)
+        {
+            if (_FilePathProperty == null)
+                _FilePathProperty = obj.GetType().GetProperty("FilePath")
+                    ?? throw new Exception("Binding Error");
+
+            return (string)_FilePathProperty.GetValue(obj);
+        }
+
+        System.Reflection.PropertyInfo _HasItemProperty = null;
+        bool getHasItemProperty(object obj)
+        {
+            if (_HasItemProperty == null)
+                _HasItemProperty = obj.GetType().GetProperty("HasItem")
+                    ?? throw new Exception("Binding Error");
+
+            return (bool)_HasItemProperty.GetValue(obj);
+        }
+
+        // ========== EventHander ==========
+
         private void EH_MainButtonClick(object sender, RoutedEventArgs e)
         {
+            if (getHasItemProperty(this.DataContext))
+            {
 
+            }
         }
 
         private void EH_AddButtonClick(object sender, RoutedEventArgs e)
         {
+            if (getHasItemProperty(this.DataContext))
+            {
+                MessageBoxResult result = MessageBox.Show("Yes : 기존 파일을 새로고침합니다.\n(No : 새 PPT를 등록합니다.)", "PPT 새로고침", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+                
+                if (result == MessageBoxResult.Cancel)
+                    return;
 
+                else if (result == MessageBoxResult.Yes)
+                {
+                    if (getCRefreshPPTFileProperty(this.DataContext).CanExecute(null))
+                        getCRefreshPPTFileProperty(this.DataContext).Execute(null);
+                    else
+                    {
+                        int errorCode = getRefreshPPTFileErrorProperty(this.DataContext);
+                        if (errorCode == 1)
+                            MessageBox.Show("편집한 PPT의 슬라이드 수가 너무 많습니다.\r\n한 PPT에 허용되는 최대 슬라이드 수는 " + getMaxSlideSizeProperty(this.DataContext) + "개 입니다.", "슬라이드 수 초과", MessageBoxButton.OK, MessageBoxImage.Error);
+                        else if (errorCode == 2)
+                            MessageBox.Show("해당 PPT파일의 원본이 없어 새로고침하지 못했습니다!\n경로 : " + getFilePathProperty(this.DataContext), "파일 없음", MessageBoxButton.OK, MessageBoxImage.Error);
+                        else
+                            MessageBox.Show("알 수 없는 오류 : " + errorCode, "알 수 없는 오류", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    return;
+                }
+            }
+
+            if (ExternPPTFileDialog.FD_ExternPPT.ShowDialog() == System.Windows.Forms.DialogResult.Cancel)
+                return;
+
+            if (getCAddPPTFileProperty(this.DataContext).CanExecute(ExternPPTFileDialog.FD_ExternPPT.FileName))
+                getCAddPPTFileProperty(this.DataContext).Execute(ExternPPTFileDialog.FD_ExternPPT.FileName);
+            else
+            {
+                int errorCode = getAddPPTFileErrorProperty(this.DataContext);
+                if (errorCode == 1)
+                    MessageBox.Show("너무 큰 용량의 PPT를 등록하려 했습니다.\r\n한 PPT에 허용되는 최대 슬라이드 수는 " + getMaxSlideSizeProperty(this.DataContext) + "개 입니다.", "너무 큰 파일 등록", MessageBoxButton.OK, MessageBoxImage.Error);
+                else if (errorCode == 3)
+                    MessageBox.Show("이미 등록된 파일입니다.", "중복 등록", MessageBoxButton.OK, MessageBoxImage.Error);
+                else
+                    MessageBox.Show("알 수 없는 오류 : " + errorCode, "알 수 없는 오류", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void EH_EditButtonClick(object sender, RoutedEventArgs e)
         {
-
+            if (getHasItemProperty(this.DataContext))
+            {
+                if (!getCEditPPTFileProperty(this.DataContext).CanExecute(null))
+                    MessageBox.Show("해당 PPT파일이 제거되어 열지 못했습니다!\n경로 : " + getFilePathProperty(this.DataContext), "파일 없음", MessageBoxButton.OK, MessageBoxImage.Warning);
+                else
+                    getCEditPPTFileProperty(this.DataContext).Execute(null);
+            }
         }
     }
 }
