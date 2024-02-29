@@ -25,7 +25,7 @@ namespace BibleProjector_WPF.View.MainPage
             InitializeComponent();
         }
 
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        private void EH_UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             ReserveListDragDropInit();
         }
@@ -116,7 +116,7 @@ namespace BibleProjector_WPF.View.MainPage
 
         // ========== Reserve View Scroll ==========
 
-        private void ScrollByWheel(object sender, MouseWheelEventArgs e)
+        private void EH_ScrollByWheel(object sender, MouseWheelEventArgs e)
         {
             ReserveScrollViewer.ScrollToVerticalOffset(ReserveScrollViewer.VerticalOffset - 0.5 * e.Delta);
         }
@@ -144,7 +144,7 @@ namespace BibleProjector_WPF.View.MainPage
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ReserveListBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        private void EH_ReserveListBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             if (selections.Count <= 1)
                 allowSelect = true;
@@ -156,13 +156,13 @@ namespace BibleProjector_WPF.View.MainPage
                 selections.Clear();
         }
 
-        private void ReserveListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void EH_ReserveListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (allowSelect)
                 confirmSelection();
         }
 
-        private void ConfirmSelection(object sender, MouseButtonEventArgs e)
+        private void EH_ConfirmSelection(object sender, MouseButtonEventArgs e)
         {
             confirmSelection();
             allowSelect = true;
@@ -187,13 +187,13 @@ namespace BibleProjector_WPF.View.MainPage
          *                   Delete Process
          =======================================================*/
 
-        private void ListBoxItem_PreviewKeyUp(object sender, KeyEventArgs e)
+        private void EH_ListBoxItem_PreviewKeyUp(object sender, KeyEventArgs e)
         {
             if(e.Key == Key.Delete)
                 DeleteSelections();
         }
 
-        private void ReserveListBox_PreviewKeyUp(object sender, KeyEventArgs e)
+        private void EH_ReserveListBox_PreviewKeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Delete)
                 DeleteSelections();
@@ -223,7 +223,7 @@ namespace BibleProjector_WPF.View.MainPage
 
         // ========== Reserve Item Drag & Drop ==========
 
-        private void GetMouseMove(object sender, MouseEventArgs e)
+        private void EH_GetMouseMove(object sender, MouseEventArgs e)
         {
             ListBoxItem itemUnderMouse = (ListBoxItem)sender;
 
@@ -251,7 +251,7 @@ namespace BibleProjector_WPF.View.MainPage
             }
         }
 
-        private void DragEnterCheck(object sender, DragEventArgs e)
+        private void EH_DragEnterCheck(object sender, DragEventArgs e)
         {
             prevTime = DateTime.Now;
         }
@@ -259,7 +259,7 @@ namespace BibleProjector_WPF.View.MainPage
         TranslateTransform transformData = new TranslateTransform();
         const double SCROLL_RANGE = 60.0d;
         DateTime prevTime;
-        private void OnDragOver(object sender, DragEventArgs e)
+        private void EH_OnDragOver(object sender, DragEventArgs e)
         {
             // 미리보기 위치 이동
 
@@ -320,7 +320,7 @@ namespace BibleProjector_WPF.View.MainPage
             prevTime = currentTime;
         }
 
-        private void DragEnd(object sender, DragEventArgs e)
+        private void EH_DragEnd(object sender, DragEventArgs e)
         {
             DoDragEnd();
         }

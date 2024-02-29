@@ -6,13 +6,15 @@
              xmlns:local="clr-namespace:BibleProjector_WPF.View.MainPage"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="280"
-             Loaded="UserControl_Loaded">
+             Loaded="EH_UserControl_Loaded">
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="12*"/>
         </Grid.RowDefinitions>
+        
+        <Button></Button>
 
         <Border BorderBrush="Black" BorderThickness="1,1,1,0">
             <Label Background="LightGray" Padding="0" FontSize="13" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
@@ -32,16 +34,16 @@
                     SelectionMode="Extended"
                     AllowDrop="true"
                     
-                    PreviewMouseWheel="ScrollByWheel"
+                    PreviewMouseWheel="EH_ScrollByWheel"
                     
-                    PreviewKeyUp="ReserveListBox_PreviewKeyUp"
+                    PreviewKeyUp="EH_ReserveListBox_PreviewKeyUp"
                     
-                    PreviewMouseDown="ReserveListBox_PreviewMouseDown"
-                    MouseUp="ConfirmSelection"
-                    SelectionChanged="ReserveListBox_SelectionChanged"
-                    DragEnter="DragEnterCheck"
-                    DragOver="OnDragOver"
-                    Drop="DragEnd"
+                    PreviewMouseDown="EH_ReserveListBox_PreviewMouseDown"
+                    MouseUp="EH_ConfirmSelection"
+                    SelectionChanged="EH_ReserveListBox_SelectionChanged"
+                    DragEnter="EH_DragEnterCheck"
+                    DragOver="EH_OnDragOver"
+                    Drop="EH_DragEnd"
                     
                     ItemsSource="{Binding ReserveContents}"
                     ItemTemplateSelector="{StaticResource ResourceKey=reserveItemTemplateSelector}"
@@ -67,8 +69,8 @@
                             <Setter Property="Margin" Value="0,2,0,0"/>
                             <Setter Property="Padding" Value="0"/>
                             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                            <EventSetter Event="MouseMove" Handler="GetMouseMove"/>
-                            <EventSetter Event="PreviewKeyUp" Handler="ListBoxItem_PreviewKeyUp"/>
+                            <EventSetter Event="MouseMove" Handler="EH_GetMouseMove"/>
+                            <EventSetter Event="PreviewKeyUp" Handler="EH_ListBoxItem_PreviewKeyUp"/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding ViewType}" Value="{x:Static rtype:ReserveViewType.DragPreview}">
                                     <Setter Property="Panel.ZIndex" Value="1"/>
