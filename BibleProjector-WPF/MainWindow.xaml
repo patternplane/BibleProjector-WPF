@@ -9,7 +9,9 @@
         LocationChanged="changeLocate"
         SizeChanged="changeSize"
         SizeToContent="WidthAndHeight"
-        ResizeMode="CanMinimize">
+        ResizeMode="CanMinimize"
+        KeyDown="EH_KeyDownCheck"
+        KeyUp="EH_KeyUpCheck">
     <!--개편중 (Resize 정책도 바뀜)-->
     <ContentControl Content="{Binding VM_Main}"/>
 </Window>

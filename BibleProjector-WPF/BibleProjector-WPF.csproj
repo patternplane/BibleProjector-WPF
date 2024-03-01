@@ -65,6 +65,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Event\ShiftStateChanged.cs" />
     <Compile Include="module\Data\BibleData.cs" />
     <Compile Include="module\Data\BibleSearchData.cs" />
     <Compile Include="module\Data\ExternPPTData.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="ViewModel\MainPage\VMSearchControl.cs" />
     <Compile Include="ViewModel\MainPage\VMShowControler.cs" />
     <Compile Include="ViewModel\MainPage\VMMain.cs" />
+    <Compile Include="ViewModel\ShiftEventManager.cs" />
     <Compile Include="ViewModel\ViewModel.cs" />
     <Compile Include="View\Bible.xaml.cs">
       <DependentUpon>Bible.xaml</DependentUpon>

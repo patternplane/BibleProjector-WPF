@@ -54,6 +54,29 @@ namespace BibleProjector_WPF
             module.LayoutInfo.Layout_MainWindow.y = this.Top;
         }
 
+        // =================================================== Shift키 상태 광역 전달 ======================================================
+
+        // 임시로 여기다 해둠, MainViewModel을 도입해야 할 것임
+        ViewModel.ShiftEventManager shiftEventManager;
+        void CShiftStateChange(object shiftState)
+        {
+            shiftEventManager.invokeShiftChange((bool)shiftState);
+        }
+
+        private void EH_KeyDownCheck(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.LeftShift
+                || e.Key == Key.RightShift)
+                CShiftStateChange(true);
+        }
+
+        private void EH_KeyUpCheck(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.LeftShift
+                || e.Key == Key.RightShift)
+                CShiftStateChange(false);
+        }
+
         // =================================================== 프로그램 시작 처리 ======================================================
 
         public MainWindow()
@@ -76,6 +99,8 @@ namespace BibleProjector_WPF
 
             Database.DatabaseInitailize();
             Powerpoint.Initialize();
+
+            shiftEventManager = new ViewModel.ShiftEventManager();
 
             System.Collections.ObjectModel.Collection<ViewModel.ViewModel> buttonVMs
                 = new System.Collections.ObjectModel.Collection<ViewModel.ViewModel>();
