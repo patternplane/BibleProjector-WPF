@@ -57,6 +57,16 @@ namespace BibleProjector_WPF.View.MainPage
             return (ICommand)_CRefreshPPTFileProperty.GetValue(obj);
         }
 
+        System.Reflection.PropertyInfo _CDeletePPTFileProperty = null;
+        ICommand getCDeletePPTFileProperty(object obj)
+        {
+            if (_CDeletePPTFileProperty == null)
+                _CDeletePPTFileProperty = obj.GetType().GetProperty("CDeletePPTFile")
+                    ?? throw new Exception("Binding Error");
+
+            return (ICommand)_CDeletePPTFileProperty.GetValue(obj);
+        }
+
         System.Reflection.PropertyInfo _AddPPTFileErrorProperty = null;
         int getAddPPTFileErrorProperty(object obj)
         {
@@ -107,6 +117,16 @@ namespace BibleProjector_WPF.View.MainPage
             return (bool)_HasItemProperty.GetValue(obj);
         }
 
+        System.Reflection.PropertyInfo _OnShiftProperty = null;
+        bool getOnShiftProperty(object obj)
+        {
+            if (_OnShiftProperty == null)
+                _OnShiftProperty = obj.GetType().GetProperty("OnShift")
+                    ?? throw new Exception("Binding Error");
+
+            return (bool)_OnShiftProperty.GetValue(obj);
+        }
+
         // ========== EventHander ==========
 
         private void EH_MainButtonClick(object sender, RoutedEventArgs e)
@@ -117,12 +137,27 @@ namespace BibleProjector_WPF.View.MainPage
             }
         }
 
-        private void EH_AddButtonClick(object sender, RoutedEventArgs e)
+        private void EH_FirstButtonClick(object sender, RoutedEventArgs e)
+        {
+            if (getOnShiftProperty(this.DataContext))
+                DeletePPTTask();
+            else
+                AddPPTTask();
+        }
+
+        private void EH_SecondButtonClick(object sender, RoutedEventArgs e)
+        {
+            EditPPTTask();
+        }
+
+        // ========== Sub Event Tasks ==========
+
+        void AddPPTTask()
         {
             if (getHasItemProperty(this.DataContext))
             {
                 MessageBoxResult result = MessageBox.Show("Yes : 기존 파일을 새로고침합니다.\n(No : 새 PPT를 등록합니다.)", "PPT 새로고침", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
-                
+
                 if (result == MessageBoxResult.Cancel)
                     return;
 
@@ -161,7 +196,13 @@ namespace BibleProjector_WPF.View.MainPage
             }
         }
 
-        private void EH_EditButtonClick(object sender, RoutedEventArgs e)
+        void DeletePPTTask()
+        {
+            if (getCDeletePPTFileProperty(this.DataContext).CanExecute(null))
+                getCDeletePPTFileProperty(this.DataContext).Execute(null);
+        }
+
+        void EditPPTTask()
         {
             if (getHasItemProperty(this.DataContext))
             {

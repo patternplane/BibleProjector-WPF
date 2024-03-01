@@ -30,12 +30,20 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public ICommand CEditPPTFile { get; set; }
         public ICommand CRefreshPPTFile { get; set; }
         public int RefreshPPTFileError { get; private set; }
+        public ICommand CDeletePPTFile { get; set; }
         public bool HasItem
         {
             get
             {
                 return (currentData != null);
             }
+        }
+        public bool OnShift { get; private set; }
+
+        void OnShiftTask(object sender ,Event.ShiftStateChangedEventArgs e)
+        {
+            OnShift = e.ShiftOn;
+            OnPropertyChanged("OnShift");
         }
 
         ExternPPTManager pptManager;
@@ -53,13 +61,15 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             }
         }
 
-        public VMExternPPTEditButton(ExternPPTManager pptManager)
+        public VMExternPPTEditButton(ExternPPTManager pptManager, ShiftEventManager shiftEventManager)
         {
             this.pptManager = pptManager;
+            shiftEventManager.ShiftStateChanged += OnShiftTask;
 
             CAddPPTFile = new RelayCommand(AddPPTFile, CanRunAddPPTFile);
             CEditPPTFile = new RelayCommand(obj => EditPPTFile(), obj => CanRunEditPPTFile());
             CRefreshPPTFile = new RelayCommand(obj => RefreshPPTFile(), obj => CanRefreshPPTFile());
+            CDeletePPTFile = new RelayCommand(obj => DeletePPTFile(), obj => { return HasItem; });
         }
 
         // ========== Commands ==========
@@ -75,6 +85,11 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             if (HasItem)
                 unlinkPPTFile();
             addPPTFile((string)filePath);
+        }
+
+        void DeletePPTFile()
+        {
+            unlinkPPTFile();
         }
 
         bool CanRunEditPPTFile()
