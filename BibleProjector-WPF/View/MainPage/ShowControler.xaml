@@ -4,81 +4,122 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BibleProjector_WPF.View.MainPage"
+             xmlns:home="clr-namespace:BibleProjector_WPF"
              mc:Ignorable="d" 
              d:DesignHeight="155" d:DesignWidth="899">
 
-    <Grid>
+    <Grid Margin="8">
         <Grid.RowDefinitions>
-            <RowDefinition Height="8"/>
             <RowDefinition Height="100*"/>
-            <RowDefinition Height="8"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="410*"/>
-            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="8"/>
             <ColumnDefinition Width="115"/>
-            <ColumnDefinition Width="5"/>
         </Grid.ColumnDefinitions>
 
         <!--리스트표시부-->
-        <ListBox Grid.Row="1" Grid.Column="1" VerticalContentAlignment="Stretch" ScrollViewer.CanContentScroll="False" Focusable="False"
+        <ListBox Grid.Column="0" VerticalContentAlignment="Stretch" ScrollViewer.CanContentScroll="False" Focusable="False"
                  ItemsSource="{Binding 아이템소스}"
-                 SelectedIndex="{Binding 현재인덱스}"
-                 >
+                 SelectedIndex="{Binding 현재인덱스}">
             <!--SelectionChanged="선택바뀜이벤트"-->
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Border BorderThickness="1,1,1,1" MinWidth="50" Padding="5,0">
-                        <TextBlock Text="{Binding content}" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                    <Border BorderThickness="1,1,1,1" BorderBrush="Black" MinWidth="50" Padding="5,0">
+                        <TextBlock Text="{Binding content}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                 </DataTemplate>
             </ListBox.ItemTemplate>
-            <ListBox.Style>
-                <Style TargetType="ListBox">
-                    <Setter Property="ItemsPanel">
-                        <Setter.Value>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Horizontal"
-                                        VerticalAlignment="Stretch"
-                                        HorizontalAlignment="Left"/>
-                            </ItemsPanelTemplate>
-                        </Setter.Value>
-                    </Setter>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"
+                                VerticalAlignment="Stretch"
+                                HorizontalAlignment="Left"/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Padding" Value="0"/>
+                    <Setter Property="Margin" Value="1"/>
                 </Style>
-            </ListBox.Style>
+            </ListBox.ItemContainerStyle>
         </ListBox>
 
         <!--조작부-->
-        <Grid Grid.Row="1" Grid.Column="3">
+        <Grid Grid.Column="2">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="65*"/>
+                    <RowDefinition Height="70*"/>
+                    <RowDefinition Height="5*"/>
+                    <RowDefinition Height="25*"/>
                     <RowDefinition Height="5*"/>
                     <RowDefinition Height="30*"/>
-                    <RowDefinition Height="5*"/>
-                    <RowDefinition Height="40*"/>
                 </Grid.RowDefinitions>
 
                 <!--라벨-->
                 <Grid Grid.Row="0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="2*"/>
-                        <RowDefinition Height="5*"/>
+                        <RowDefinition Height="15*"/>
+                        <RowDefinition Height="55*"/>
                     </Grid.RowDefinitions>
 
-                    <Border Grid.Row="0" BorderBrush="Black" BorderThickness="1" Background="Aquamarine">
-                        <Label Padding="0" VerticalAlignment="Center" HorizontalAlignment="Center" Content="찬 양 출 력" FontSize="9"></Label>
+                    <Border Grid.Row="0" BorderBrush="Black" BorderThickness="1">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Bible}">
+                                        <Setter Property="Background" Value="GreenYellow"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Song}">
+                                        <Setter Property="Background" Value="Aquamarine"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.PPT}">
+                                        <Setter Property="Background" Value="#FFFFC183"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <Label Padding="0" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="9">
+                            <Label.Style>
+                                <Style TargetType="Label">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Bible}">
+                                            <Setter Property="Content" Value="말 씀 출 력"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Song}">
+                                            <Setter Property="Content" Value="찬 양 출 력"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.PPT}">
+                                            <Setter Property="Content" Value="PPT 출 력"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Label.Style>
+                        </Label>
                     </Border>
                     <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1,0,1,1" Background="white">
-                        <Grid>
+                        <Grid Margin="0,3,0,5">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="1*"/>
-                                <RowDefinition Height="2*"/>
+                                <RowDefinition Height="85*"/>
+                                <RowDefinition Height="215*"/>
                             </Grid.RowDefinitions>
 
-                            <Label Grid.Row="0" Padding="3,0" FontSize="8">제목1</Label>
-                            <TextBlock Grid.Row="1" TextWrapping="Wrap" HorizontalAlignment="Center">제목2</TextBlock>
+                            <Border Grid.Row="0" VerticalAlignment="Center" BorderBrush="Silver" BorderThickness="0,0,0,1">
+                                <Label Padding="3,0" FontSize="10" Content="{Binding Title1}" />
+                            </Border>
+                            <Border 
+                                Grid.Row="1"
+                                Margin="5,0">
+                                <TextBlock 
+                                    FontSize="12"
+                                    FontWeight="Bold"
+                                    TextTrimming="CharacterEllipsis"
+                                    TextWrapping="Wrap"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding Title2}">
+                                </TextBlock>
+                            </Border>
                         </Grid>
                     </Border>
                 </Grid>
@@ -135,7 +176,7 @@
                         <ColumnDefinition Width="4*"/>
                         <ColumnDefinition Width="50*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" >
+                    <Button Grid.Column="0">
                         <!--Click="PreviousPageButton_Click"-->
                         <Button.Style>
                             <Style TargetType="{x:Type Button}">
@@ -143,26 +184,50 @@
                                     <Setter.Value>
                                         <ControlTemplate>
                                             <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="1*"/>
-                                                    <ColumnDefinition Width="1*"/>
-                                                    <ColumnDefinition Width="2*"/>
-                                                </Grid.ColumnDefinitions>
-
-                                                <Path Grid.ColumnSpan="3" Stroke="Black" Fill="Aquamarine" Stretch="Fill">
+                                                <Path x:Name="LeftButtonPath" Stretch="Fill">
                                                     <Path.Data>
                                                         <CombinedGeometry GeometryCombineMode="Union">
                                                             <CombinedGeometry.Geometry1>
-                                                                <EllipseGeometry RadiusX="20" RadiusY="20" Center="20,20" />
+                                                                <EllipseGeometry RadiusX="15.5" RadiusY="15.5" Center="15.5,15.5"/>
                                                             </CombinedGeometry.Geometry1>
                                                             <CombinedGeometry.Geometry2>
-                                                                <RectangleGeometry Rect="20,0,40,40"/>
+                                                                <RectangleGeometry Rect="15.5,0,40,31"/>
                                                             </CombinedGeometry.Geometry2>
                                                         </CombinedGeometry>
                                                     </Path.Data>
                                                 </Path>
-                                                <TextBlock Grid.ColumnSpan="3" HorizontalAlignment="Center" Text="❮" FontSize="20" VerticalAlignment="Center"></TextBlock>
+                                                <TextBlock HorizontalAlignment="Center" Text="❮" FontSize="20" VerticalAlignment="Center"></TextBlock>
                                             </Grid>
+                                            <ControlTemplate.Triggers>
+                                                <MultiDataTrigger>
+                                                    <MultiDataTrigger.Conditions>
+                                                        <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}" Value="false"/>
+                                                        <Condition Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Bible}"/>
+                                                    </MultiDataTrigger.Conditions>
+                                                    <Setter TargetName="LeftButtonPath" Property="Fill" Value="GreenYellow"/>
+                                                    <Setter TargetName="LeftButtonPath" Property="Stroke" Value="Black"/>
+                                                </MultiDataTrigger>
+                                                <MultiDataTrigger>
+                                                    <MultiDataTrigger.Conditions>
+                                                        <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}" Value="false"/>
+                                                        <Condition Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Song}"/>
+                                                    </MultiDataTrigger.Conditions>
+                                                    <Setter TargetName="LeftButtonPath" Property="Fill" Value="Aquamarine"/>
+                                                    <Setter TargetName="LeftButtonPath" Property="Stroke" Value="Black"/>
+                                                </MultiDataTrigger>
+                                                <MultiDataTrigger>
+                                                    <MultiDataTrigger.Conditions>
+                                                        <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}" Value="false"/>
+                                                        <Condition Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.PPT}"/>
+                                                    </MultiDataTrigger.Conditions>
+                                                    <Setter TargetName="LeftButtonPath" Property="Fill" Value="#FFFFC183"/>
+                                                    <Setter TargetName="LeftButtonPath" Property="Stroke" Value="Black"/>
+                                                </MultiDataTrigger>
+                                                <Trigger Property="IsMouseOver" Value="true">
+                                                    <Setter TargetName="LeftButtonPath" Property="Fill" Value="#FFB9ECF7"/>
+                                                    <Setter TargetName="LeftButtonPath" Property="Stroke" Value="#FF0C43FF"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
                                         </ControlTemplate>
                                     </Setter.Value>
                                 </Setter>
@@ -177,26 +242,50 @@
                                     <Setter.Value>
                                         <ControlTemplate>
                                             <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="1*"/>
-                                                    <ColumnDefinition Width="1*"/>
-                                                    <ColumnDefinition Width="2*"/>
-                                                </Grid.ColumnDefinitions>
-
-                                                <Path Grid.ColumnSpan="3" Stroke="Black" Fill="Aquamarine" Stretch="Fill">
+                                                <Path x:Name="RightButtonPath" Stretch="Fill">
                                                     <Path.Data>
                                                         <CombinedGeometry GeometryCombineMode="Union">
                                                             <CombinedGeometry.Geometry1>
-                                                                <EllipseGeometry RadiusX="20" RadiusY="20" Center="40,20" />
+                                                                <EllipseGeometry RadiusX="15.5" RadiusY="15.5" Center="39.5,15.5" />
                                                             </CombinedGeometry.Geometry1>
                                                             <CombinedGeometry.Geometry2>
-                                                                <RectangleGeometry Rect="0,0,40,40"/>
+                                                                <RectangleGeometry Rect="0,0,39.5,31"/>
                                                             </CombinedGeometry.Geometry2>
                                                         </CombinedGeometry>
                                                     </Path.Data>
                                                 </Path>
-                                                <TextBlock Grid.ColumnSpan="3" HorizontalAlignment="Center" Text="❯" FontSize="20" VerticalAlignment="Center"></TextBlock>
+                                                <TextBlock HorizontalAlignment="Center" Text="❯" FontSize="20" VerticalAlignment="Center"></TextBlock>
                                             </Grid>
+                                            <ControlTemplate.Triggers>
+                                                <MultiDataTrigger>
+                                                    <MultiDataTrigger.Conditions>
+                                                        <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}" Value="false"/>
+                                                        <Condition Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Bible}"/>
+                                                    </MultiDataTrigger.Conditions>
+                                                    <Setter TargetName="RightButtonPath" Property="Fill" Value="GreenYellow"/>
+                                                    <Setter TargetName="RightButtonPath" Property="Stroke" Value="Black"/>
+                                                </MultiDataTrigger>
+                                                <MultiDataTrigger>
+                                                    <MultiDataTrigger.Conditions>
+                                                        <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}" Value="false"/>
+                                                        <Condition Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Song}"/>
+                                                    </MultiDataTrigger.Conditions>
+                                                    <Setter TargetName="RightButtonPath" Property="Fill" Value="Aquamarine"/>
+                                                    <Setter TargetName="RightButtonPath" Property="Stroke" Value="Black"/>
+                                                </MultiDataTrigger>
+                                                <MultiDataTrigger>
+                                                    <MultiDataTrigger.Conditions>
+                                                        <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}" Value="false"/>
+                                                        <Condition Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.PPT}"/>
+                                                    </MultiDataTrigger.Conditions>
+                                                    <Setter TargetName="RightButtonPath" Property="Fill" Value="#FFFFC183"/>
+                                                    <Setter TargetName="RightButtonPath" Property="Stroke" Value="Black"/>
+                                                </MultiDataTrigger>
+                                                <Trigger Property="IsMouseOver" Value="true">
+                                                    <Setter TargetName="RightButtonPath" Property="Fill" Value="#FFB9ECF7"/>
+                                                    <Setter TargetName="RightButtonPath" Property="Stroke" Value="#FF0C43FF"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
                                         </ControlTemplate>
                                     </Setter.Value>
                                 </Setter>
