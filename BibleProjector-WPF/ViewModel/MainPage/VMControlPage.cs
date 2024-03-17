@@ -23,14 +23,13 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         // ========== Gen ===========
 
         public VMControlPage(
-            ViewModel topShowControler,
-            ViewModel bottomShowControler,
+            ViewModel[] ShowControlers,
             ViewModel searchControl,
             ViewModel reserveList,
             Collection<ViewModel> externPPTEditButtonVMs)
         {
-            this.VM_ShowControler_top = topShowControler;
-            this.VM_ShowControler_bottom = bottomShowControler;
+            this.VM_ShowControler_top = ShowControlers[0];
+            this.VM_ShowControler_bottom = ShowControlers[2];
             this.VM_SearchControl = searchControl;
             this.VM_ReserveList = reserveList;
             this.ExternPPTEditButtons = externPPTEditButtonVMs;

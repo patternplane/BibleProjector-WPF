@@ -65,12 +65,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Event\FrameDeleted.cs" />
     <Compile Include="Event\ShiftStateChanged.cs" />
+    <Compile Include="Event\ShowStart.cs" />
     <Compile Include="module\Data\BibleData.cs" />
     <Compile Include="module\Data\BibleSearchData.cs" />
     <Compile Include="module\Data\ExternPPTData.cs" />
     <Compile Include="module\Data\ExternPPTSearchData.cs" />
     <Compile Include="module\Data\Searcher.cs" />
+    <Compile Include="module\Data\ShowContentData.cs" />
+    <Compile Include="module\Data\ShowData.cs" />
+    <Compile Include="module\Data\ShowExcuteErrorEnum.cs" />
+    <Compile Include="module\Data\SongDataTypeEnum.cs" />
     <Compile Include="module\Data\SongManager.cs" />
     <Compile Include="module\Data\SongSearchData.cs" />
     <Compile Include="module\Data\SongSearcher.cs" />
@@ -93,6 +99,7 @@
     <Compile Include="ViewModel\MainPage\VMSearchControl.cs" />
     <Compile Include="ViewModel\MainPage\VMShowControler.cs" />
     <Compile Include="ViewModel\MainPage\VMMain.cs" />
+    <Compile Include="ViewModel\MainPage\VMShowItem.cs" />
     <Compile Include="ViewModel\ShiftEventManager.cs" />
     <Compile Include="ViewModel\ViewModel.cs" />
     <Compile Include="View\Bible.xaml.cs">
@@ -136,7 +143,6 @@
       <DependentUpon>ManualTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="module\BibleSearcher.cs" />
-    <Compile Include="module\ControlWindowManager.cs" />
     <Compile Include="module\KorString.cs" />
     <Compile Include="module\LayoutInfo.cs" />
     <Compile Include="module\LevenshteinDistance.cs" />
@@ -148,9 +154,6 @@
     <Compile Include="View\Option.xaml.cs">
       <DependentUpon>Option.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Control\ExternPPTControl.xaml.cs">
-      <DependentUpon>ExternPPTControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\ProgramStartLoading.xaml.cs">
       <DependentUpon>ProgramStartLoading.xaml</DependentUpon>
     </Compile>
@@ -160,32 +163,11 @@
     <Compile Include="View\ReserveManagerWindow.xaml.cs">
       <DependentUpon>ReserveManagerWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ReserveOptionViews\Bible.xaml.cs">
-      <DependentUpon>Bible.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\ReserveOptionViews\ExternPPT.xaml.cs">
-      <DependentUpon>ExternPPT.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\ReserveOptionViews\Null.xaml.cs">
-      <DependentUpon>Null.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\ReserveOptionViews\Reading.xaml.cs">
-      <DependentUpon>Reading.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\ReserveOptionViews\Song.xaml.cs">
-      <DependentUpon>Song.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\ReserveUnitBox.xaml.cs">
       <DependentUpon>ReserveUnitBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Control\SongControl.xaml.cs">
-      <DependentUpon>SongControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\Control\ReadingControl.xaml.cs">
       <DependentUpon>ReadingControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Control\BibleControl.xaml.cs">
-      <DependentUpon>BibleControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\LyricControl.xaml.cs">
       <DependentUpon>LyricControl.xaml</DependentUpon>
@@ -201,18 +183,9 @@
     <Compile Include="ViewModel\BibleSearchViewModel.cs" />
     <Compile Include="ViewModel\ManualTabViewModel.cs" />
     <Compile Include="ViewModel\OptionViewModel.cs" />
-    <Compile Include="ViewModel\Control\ExternPPTControlViewModel.cs" />
     <Compile Include="ViewModel\ReserveDataManager.cs" />
     <Compile Include="ViewModel\ReserveManagerViewModel.cs" />
-    <Compile Include="ViewModel\ReserveOptionViewModels\Bible.cs" />
-    <Compile Include="ViewModel\ReserveOptionViewModels\ExternPPT.cs" />
-    <Compile Include="ViewModel\ReserveOptionViewModels\Null.cs" />
-    <Compile Include="ViewModel\ReserveOptionViewModels\Reading.cs" />
-    <Compile Include="ViewModel\ReserveOptionViewModels\IReserveOptionViewModel.cs" />
-    <Compile Include="ViewModel\ReserveOptionViewModels\Song.cs" />
-    <Compile Include="ViewModel\Control\SongControlViewModel.cs" />
     <Compile Include="ViewModel\Control\ReadingControlViewModel.cs" />
-    <Compile Include="ViewModel\Control\BibleControlViewModel.cs" />
     <Compile Include="ViewModel\BibleCurrentSelectingData.cs" />
     <Compile Include="ViewModel\BibleReserveData.cs" />
     <Compile Include="ViewModel\BibleSelectData.cs" />
@@ -273,10 +246,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Control\ExternPPTControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="View\ProgramStartLoading.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -289,41 +258,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\ReserveOptionViews\Bible.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\ReserveOptionViews\ExternPPT.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\ReserveOptionViews\Null.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\ReserveOptionViews\Reading.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\ReserveOptionViews\Song.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="View\ReserveUnitBox.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\Control\SongControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\Control\ReadingControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\Control\BibleControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\LyricControl.xaml">
       <SubType>Designer</SubType>

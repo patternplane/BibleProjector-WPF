@@ -6,18 +6,39 @@ using System.Threading.Tasks;
 
 namespace BibleProjector_WPF.module.Data
 {
-    public class BibleData
+    public class BibleData : ShowData
     {
-        public int book { get; } = -1;
-        public int chapter { get; } = -1;
-        public int verse { get; } = -1;
+        public int book { get; set; } = -1;
+        public int chapter { get; set; } = -1;
+        public int verse { get; set; } = -1;
 
         string bibleTitle = null;
         string bibleTitle_abr = null;
         string bibleContent = null;
+        ShowContentData[] currentContents = null;
 
         public BibleData(int book, int chapter, int verse)
         {
+            setupBible(book, chapter, verse);
+        }
+
+        void setupBible(string Kjjeul)
+        {
+            setupBible(
+                int.Parse(Kjjeul.Substring(0, 2))
+                , int.Parse(Kjjeul.Substring(2,3))
+                , int.Parse(Kjjeul.Substring(5,3)));
+        }
+
+        void setupBible(int book, int chapter, int verse)
+        {
+            book = -1;
+            chapter = -1;
+            verse = -1;
+            bibleTitle = null;
+            bibleTitle_abr = null;
+            bibleContent = null;
+            currentContents = null;
             if (book >= 1 && book <= 66)
             {
                 this.book = book;
@@ -54,6 +75,72 @@ namespace BibleProjector_WPF.module.Data
                 && bibleContent == null)
                 bibleContent = Database.getBible(book.ToString("D2") + chapter.ToString("D3") + verse.ToString("D3"));
             return bibleContent;
+        }
+
+        // ================ ShowData 메소드 ================
+
+        public override string getTitle1()
+        {
+            return getBibleTitle();
+        }
+
+        public override string getTitle2()
+        {
+            return chapter + "장 " + verse + "절";
+        }
+
+        public override ShowContentData[] getContents()
+        {
+            if (currentContents == null)
+            {
+                string[] contents = StringModifier.makeStringPage(
+                    getBibleContent()
+                    , ProgramOption.Bible_CharPerLine
+                    , ProgramOption.Bible_LinePerSlide);
+
+                currentContents = new ShowContentData[contents.Length];
+                int i = 0;
+                foreach (string item in contents)
+                    currentContents[i++] = new ShowContentData(item, item, false);
+            }
+
+            return currentContents;
+        }
+
+        public override ShowData getNextShowData()
+        {
+            setupBible(Database.getBibleIndex_Next(book.ToString("D2") + chapter.ToString("D3") + verse.ToString("D3")));
+            return this;
+        }
+
+        public override ShowData getPrevShowData()
+        {
+            setupBible(Database.getBibleIndex_Previous(book.ToString("D2") + chapter.ToString("D3") + verse.ToString("D3")));
+            return this;
+        }
+
+        public override ShowContentType getDataType()
+        {
+            return ShowContentType.Bible;
+        }
+
+        public override bool isSameData(ShowData data)
+        {
+            if (data.GetType() == this.GetType())
+                if (book == ((BibleData)data).book
+                    && chapter == ((BibleData)data).chapter
+                    && verse == ((BibleData)data).verse)
+                    return true;
+
+            return false;
+        }
+
+        public override ShowExcuteErrorEnum canExcuteShow()
+        {
+            if (ProgramOption.BibleFramePath == null)
+                return ShowExcuteErrorEnum.NoneFrameFile;
+            else
+                return ShowExcuteErrorEnum.NoErrors;
         }
     }
 }

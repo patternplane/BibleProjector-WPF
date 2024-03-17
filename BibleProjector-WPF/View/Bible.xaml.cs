@@ -422,7 +422,7 @@ namespace BibleProjector_WPF
             else if (VM_BibleSelectData.Verse.CompareTo("") == 0)
                 MessageBox.Show("출력할 성경구절을 선택해주세요!", "성경 선택되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
             else
-                new module.ShowStarter().BibleShowStart(VM_BibleSelectData.Book + VM_BibleSelectData.Chapter + VM_BibleSelectData.Verse);
+                return;//new module.ShowStarter().BibleShowStart(VM_BibleSelectData.Book + VM_BibleSelectData.Chapter + VM_BibleSelectData.Verse);
         }
 
 

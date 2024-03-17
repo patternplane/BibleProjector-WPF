@@ -78,7 +78,7 @@ namespace BibleProjector_WPF
             else if (ReadingListBox.SelectedIndex == -1)
                 MessageBox.Show("출력할 교독문을 선택해주세요!", "교독문 선택되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
             else
-                new module.ShowStarter().ReadingShowStart(ReadingListBox.SelectedIndex);
+                return;// new module.ShowStarter().ReadingShowStart(ReadingListBox.SelectedIndex);
         }
 
         // ======================================== 교독문 예약처리

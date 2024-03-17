@@ -105,14 +105,9 @@ namespace BibleProjector_WPF
 
             MainWindow.ProgramMainWindow.ResetLayout();
             ReserveManagerWindow.ReserveWindow.ResetLayout();
-            if (BibleControl.BibleControlAccess != null)
-                BibleControl.BibleControlAccess.ResetLayout();
-            if (ReadingControl.ReadingControlAccess != null)
-                ReadingControl.ReadingControlAccess.ResetLayout();
-            if (SongControl.SongControlAccess != null)
-                SongControl.SongControlAccess.ResetLayout();
-            if (ExternPPTControl.ExternPPTControlAccess != null)
-                ExternPPTControl.ExternPPTControlAccess.ResetLayout();
+            // 구버전 교독문 컨트롤 윈도우 처리부분
+            // if (ReadingControl.ReadingControlAccess != null)
+            //    ReadingControl.ReadingControlAccess.ResetLayout();
         }
     }
 }

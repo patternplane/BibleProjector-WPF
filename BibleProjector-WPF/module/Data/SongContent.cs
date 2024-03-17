@@ -31,7 +31,7 @@ namespace BibleProjector_WPF.module.Data
             return result.ToString();
         }
 
-        public string getContentByPage(int page)
+        public string getContentByVerse(int page)
         {
             if (page < 0 || page > lyricCount)
                 return null;

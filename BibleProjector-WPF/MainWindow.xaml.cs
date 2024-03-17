@@ -108,10 +108,16 @@ namespace BibleProjector_WPF
             for (int i = 0; i < 6; i++)
                 buttonVMs.Add(new ViewModel.MainPage.VMExternPPTEditButton(pptMan, shiftEventManager));
 
+            module.ShowStarter showStarter = new module.ShowStarter();
+
+            ViewModel.MainPage.VMShowControler[] showControlers = new ViewModel.MainPage.VMShowControler[3];
+            showControlers[0] = new ViewModel.MainPage.VMShowControler(ShowContentType.Bible, showStarter);
+            showControlers[1] = new ViewModel.MainPage.VMShowControler(ShowContentType.Song, showStarter);
+            showControlers[2] = new ViewModel.MainPage.VMShowControler(ShowContentType.PPT, showStarter);
+
             this.VM_Main = new ViewModel.MainPage.VMMain(
                 new ViewModel.MainPage.VMControlPage(
-                    new ViewModel.MainPage.VMShowControler(),
-                    new ViewModel.MainPage.VMShowControler(),
+                    showControlers,
                     new ViewModel.MainPage.VMSearchControl(searcher),
                     new ViewModel.MainPage.VMReserveList(),
                     buttonVMs),
@@ -154,7 +160,7 @@ namespace BibleProjector_WPF
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            new module.ControlWindowManager().ForceClose();
+            //new module.ControlWindowManager().ForceClose();
 
             if (Bible.tempBibleAccesser.SubWindow_BibleModify != null)
                 Bible.tempBibleAccesser.SubWindow_BibleModify.ForceClose();

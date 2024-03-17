@@ -59,9 +59,8 @@ namespace BibleProjector_WPF.module
         static public SongFrameFile DefaultHymnFrame { get; set; } = null;
 
         // ======================================= 찬양PPT틀 지울때 처리해야 하는... =======================================
-        // 너무 난잡한 구조다!
-        // 한창 MVVM 공부하며 시간에 쫒겨 개발할 시절에 짠 코드라
-        // 찬양곡 관련 부분들이 매우 개선 필요
+
+        static public event Event.FrameDeletedEventHandler FrameDeletedEvent;
 
         static public void process_deleteSongFrame(SongFrameFile item)
         {
@@ -69,6 +68,8 @@ namespace BibleProjector_WPF.module
                 DefaultCCMFrame = null;
             if (item.isHymnFrame)
                 DefaultHymnFrame = null;
+
+            FrameDeletedEvent.Invoke(null, new Event.FrameDeletedEventArgs(item.Path));
         }
 
         // ======================================= 찬양PPT틀 선택가능 판단 =======================================

@@ -7,30 +7,16 @@ using System.Windows;
 
 namespace BibleProjector_WPF.module
 {
-    internal class ShowStarter
+    public class ShowStarter
     {
-        public void BibleShowStart(string KuenJangJeul)
-        {
-            ControlWindowManager cwm = new ControlWindowManager();
-            cwm.showBibleControl().showBible(KuenJangJeul);
-        }
+        public Event.ShowStartEventHandler ShowStartEvent;
 
-        public void ReadingShowStart(int ReadingIndex)
+        public void Show(Data.ShowData showData)
         {
-            ControlWindowManager cwm = new ControlWindowManager();
-            cwm.showReadingControl().showReading(ReadingIndex);
-        }
-
-        public void SongShowStart(ViewModel.SingleLyric lyric, int linePerSlide, string FrameFilePath)
-        {
-            ControlWindowManager cwm = new ControlWindowManager();
-            cwm.showSongControl().showSong(lyric, linePerSlide, FrameFilePath);
-        }
-
-        public void ExternPPTShowStart(string fileName, int StartSlide)
-        {
-            ControlWindowManager cwm = new ControlWindowManager();
-            cwm.showExternPPTControl().ShowExternPPT(fileName, StartSlide);
+            if (showData.canExcuteShow() != Data.ShowExcuteErrorEnum.NoErrors)
+                throw new Exception("슬라이드 쇼를 실행할 수 없는 항목을 표시하려 했습니다. " + showData.canExcuteShow().ToString());
+            else
+                ShowStartEvent.Invoke(this, new Event.ShowStartEventArgs(showData));
         }
     }
 }

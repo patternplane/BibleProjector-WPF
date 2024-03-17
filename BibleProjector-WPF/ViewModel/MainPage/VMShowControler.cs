@@ -10,11 +10,8 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 {
     public class VMShowControler : ViewModel
     {
-        public string Title1 { get; set; }
-        public string Title2 { get; set; }
-        public ShowContentType ContentType { get; set; }
 
-        // ================================================ 속성 ================================================
+        // ================================================ Binding Properties ================================================
 
         public ICommand CDisplayOnOff { get; set; }
         public ICommand CTextShowHide { get; set; }
@@ -22,73 +19,115 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public ICommand CGoPreviousPage { get; set; }
         public ICommand CSetDisplayTopMost { get; set; }
 
-        // 성경 페이지 리스트박스
-        public ObservableCollection<string> BiblePages { get; set; }
-        private int CurrentPageIndex_in;
-        public int CurrentPageIndex
-        {
-            get { return CurrentPageIndex_in; }
-            set
-            {
-                if (CurrentPageIndex_in != value)
-                {
-                    CurrentPageIndex_in = value;
-                    if (CurrentPageIndex_in != -1)
-                        // 페이지 변경 처리
-                        Powerpoint.Bible.Change_VerseContent(verse.ToString(), BiblePages[CurrentPageIndex_in], CurrentPageIndex_in == 0);
-                }
-            }
-        }
+        public ShowContentType ContentType { get; set; }
 
-        // 이전 페이지 넘기는 동작 설정
+        public string Title1 { get; set; }
+        public string Title2 { get; set; }
+
+        public ObservableCollection<VMShowItem> Pages { get; set; }
+        public int CurrentPageIndex { get; set; }
+
+        // 이전 페이지로 넘어갈 때 동작 설정
         public bool preview_GoLastPage { get; set; } = true;
 
-        string Kjjeul_in;
-        string Kjjeul
-        {
-            get { return Kjjeul_in; }
-            set
-            {
-                Kjjeul_in = value;
-                bible_display = Database.getTitle(Kjjeul_in.Substring(0, 2));
-                chapter = int.Parse(Kjjeul_in.Substring(2, 3));
-                verse = int.Parse(Kjjeul_in.Substring(5, 3));
-            }
-        }
-        string bible_display = null;
-        int chapter = -1;
-        int verse = -1;
+        // ================================================ Properties ================================================
+
+        module.Data.ShowData currentData;
 
         // ================================================ 세팅 ================================================
 
-        public VMShowControler()
+        public VMShowControler(ShowContentType type, module.ShowStarter showStarter)
         {
             CDisplayOnOff = new RelayCommand(obj => DisplayVisibility((bool)obj));
             CTextShowHide = new RelayCommand(obj => TextVisibility((bool)obj));
             CGoNextPage = new RelayCommand(obj => GoNextPage());
             CGoPreviousPage = new RelayCommand(obj => GoPreviousPage());
             CSetDisplayTopMost = new RelayCommand(obj => SetDisplayTopMost());
-        }   
 
-        private void BiblePresentationSetting(string Kjjeul)
+            this.ContentType = type;
+
+            module.ProgramOption.FrameDeletedEvent += FrameDeleted;
+            showStarter.ShowStartEvent += startShow;
+        }
+
+        public void FrameDeleted(object sender, Event.FrameDeletedEventArgs e)
         {
-            this.Kjjeul = Kjjeul;
+            DisplayVisibility(false);
+        }
 
-            Title1 = bible_display;
-            Title2 = chapter + "장 " + verse + "절";
-            OnPropertyChanged("Title1");
-            OnPropertyChanged("Title2");
+        public void startShow(object sender, Event.ShowStartEventArgs e)
+        {
+            if (e.showData.getDataType() == ContentType)
+                newShowStart(e.showData);
+        }
 
-            BiblePages = new ObservableCollection<string>(
-                module.StringModifier.makeStringPage(
-                    Database.getBible(Kjjeul)
-                    , module.ProgramOption.Bible_CharPerLine
-                    , module.ProgramOption.Bible_LinePerSlide
-                    )
-                );
-            OnPropertyChanged("BiblePages");
+        // ================================================ 메소드 ================================================
 
-            Powerpoint.Bible.Change_BibleChapter(bible_display, chapter.ToString());
+        public void newShowStart(module.Data.ShowData data)
+        {
+            data.ItemRefreshedEvent += refreshData;
+            data.ItemDeletedEvent += itemDeleted;
+
+            dataSetter(data);
+            MovePage(0);
+            TextVisibility(true);
+            DisplayVisibility(true);
+        }
+
+        public void refreshData(object sender, EventArgs e)
+        {
+            dataSetter((module.Data.ShowData)sender, CurrentPageIndex);
+        }
+
+        public void itemDeleted(object sender, EventArgs e)
+        {
+            if (this.currentData.isSameData((module.Data.ShowData)sender))
+            {
+                DisplayVisibility(false);
+                dataSetter(null);
+            }
+        }
+
+        void dataSetter(module.Data.ShowData data, int pageIdx = 0)
+        {
+            this.currentData = data;
+
+            if (data == null)
+            {
+                this.Title1 = null;
+                OnPropertyChanged("Title1");
+                this.Title2 = null;
+                OnPropertyChanged("Title2");
+                this.Pages = null;
+                OnPropertyChanged("Pages");
+            }
+            else
+            {
+                this.Title1 = currentData.getTitle1();
+                OnPropertyChanged("Title1");
+                this.Title2 = currentData.getTitle2();
+                OnPropertyChanged("Title2");
+                ObservableCollection<VMShowItem> displayPages = new ObservableCollection<VMShowItem>();
+                int i = 0;
+                foreach (module.Data.ShowContentData item in currentData.getContents())
+                    displayPages.Add(new VMShowItem(i + 1, item.DisplayData, item.DoHighlight));
+                this.Pages = displayPages;
+                OnPropertyChanged("Pages");
+
+                if (pageIdx >= Pages.Count)
+                    pageIdx = Pages.Count - 1;
+                Powerpoint.setPageData(currentData, pageIdx);
+            }
+        }
+
+        void MovePage(int pageIdx)
+        {
+            if (pageIdx >= 0 && pageIdx < Pages.Count)
+            {
+                CurrentPageIndex = pageIdx;
+                OnPropertyChanged("CurrentPageIndex");
+                Powerpoint.setPageData(currentData, pageIdx);
+            }
         }
 
         // ================================================ 이벤트에 쓰일 함수 ================================================
@@ -96,66 +135,64 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public void DisplayVisibility(bool OnDisplay)
         {
             if (OnDisplay)
-                Powerpoint.Bible.SlideShowRun();
+                Powerpoint.SlideShowRun(currentData);
             else
-                Powerpoint.Bible.SlideShowHide();
+                Powerpoint.SlideShowHide(currentData);
         }
 
         public void TextVisibility(bool ShowText)
         {
             if (ShowText)
-                Powerpoint.Bible.ShowText();
+                Powerpoint.ShowText(currentData);
             else
-                Powerpoint.Bible.HideText();
+                Powerpoint.HideText(currentData);
         }
 
         public void SetDisplayTopMost()
         {
-            Powerpoint.Bible.TopMost();
-        }
-
-        void MovePage(int pageIdx)
-        {
-            CurrentPageIndex = pageIdx;
-            OnPropertyChanged("CurrentPageIndex");
-        }
-
-        public void showBible(string Kjjeul)
-        {
-            BiblePresentationSetting(Kjjeul);
-
-            MovePage(0);
-            OnPropertyChanged("CurrentPageIndex");
-            TextVisibility(true);
-            DisplayVisibility(true);
+            Powerpoint.TopMost(currentData);
         }
 
         public void GoNextPage()
         {
-            if (CurrentPageIndex != BiblePages.Count - 1)
+            if (currentData == null)
+                return;
+
+            if (CurrentPageIndex != Pages.Count - 1)
                 MovePage(CurrentPageIndex + 1);
             else
             {
-                BiblePresentationSetting(Database.getBibleIndex_Next(Kjjeul));
-                MovePage(0);
+                module.Data.ShowData nextData = currentData.getNextShowData();
+                if (nextData != null)
+                {
+                    dataSetter(nextData);
+                    MovePage(0);
 
-                // Bible.tempBibleAccesser.applyBibleMoving(Kjjeul.Substring(0, 2), Kjjeul.Substring(2, 3), Kjjeul.Substring(5, 3));
+                    // Bible.tempBibleAccesser.applyBibleMoving(Kjjeul.Substring(0, 2), Kjjeul.Substring(2, 3), Kjjeul.Substring(5, 3));
+                }
             }
         }
 
         public void GoPreviousPage()
         {
+            if (currentData == null)
+                return;
+
             if (CurrentPageIndex != 0)
                 MovePage(CurrentPageIndex - 1);
             else
             {
-                BiblePresentationSetting(Database.getBibleIndex_Previous(Kjjeul));
-                if (preview_GoLastPage)
-                    MovePage(BiblePages.Count - 1);
-                else
-                    MovePage(0);
+                module.Data.ShowData prevData = currentData.getPrevShowData();
+                if (prevData != null)
+                {
+                    dataSetter(prevData);
+                    if (preview_GoLastPage)
+                        MovePage(Pages.Count - 1);
+                    else
+                        MovePage(0);
 
-                // Bible.tempBibleAccesser.applyBibleMoving(Kjjeul.Substring(0, 2), Kjjeul.Substring(2, 3), Kjjeul.Substring(5, 3));
+                    // Bible.tempBibleAccesser.applyBibleMoving(Kjjeul.Substring(0, 2), Kjjeul.Substring(2, 3), Kjjeul.Substring(5, 3));
+                }
             }
         }
 
@@ -171,8 +208,8 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         {
             if (inputedNum > 0)
             {
-                if (inputedNum > BiblePages.Count)
-                    MovePage(BiblePages.Count - 1);
+                if (inputedNum > Pages.Count)
+                    MovePage(Pages.Count - 1);
                 else
                     MovePage(inputedNum - 1);
 

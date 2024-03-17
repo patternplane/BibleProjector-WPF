@@ -23,6 +23,7 @@ namespace BibleProjector_WPF.module
 
         const string LYRIC_DATA = PROGRAM_DATA_PATH + "\\Lyrics";
         const string HYMN_DATA = PROGRAM_DATA_PATH + "\\Hymns";
+        const string HYMN_SUB_DATA = PROGRAM_DATA_PATH + "\\HymnSubData";
         const string OPTION_DATA = PROGRAM_DATA_PATH + "\\Option";
         const string LAYOUT_DATA = PROGRAM_DATA_PATH + "\\LayoutData";
         const string RESERVE_DATA = PROGRAM_DATA_PATH + "\\ReserveData";
@@ -121,6 +122,11 @@ namespace BibleProjector_WPF.module
         public static string getHymnData()
         {
             return getDataFromFile(HYMN_DATA);
+        }
+
+        public static string getHymnSubData()
+        {
+            return getDataFromFile(HYMN_SUB_DATA);
         }
 
         public static string getOptionData()

@@ -33,9 +33,9 @@ namespace BibleProjector_WPF.module.Data
             {
                 string[] line = data.TrimStart().Split(new string[] { "\r\n" }, 2, StringSplitOptions.None);
                 if (line.Length == 1)
-                    PrimitiveLyricList.Add(new SongData(line[0], new SongContent("")));
+                    PrimitiveLyricList.Add(new SongData(line[0], new SongContent(""), SongDataTypeEnum.CCM, null));
                 else if (line.Length == 2)
-                    PrimitiveLyricList.Add(new SongData(line[0], new SongContent(line[1])));
+                    PrimitiveLyricList.Add(new SongData(line[0], new SongContent(line[1]), SongDataTypeEnum.CCM, null));
             }
 
             return PrimitiveLyricList;
@@ -45,15 +45,18 @@ namespace BibleProjector_WPF.module.Data
         {
             List<SongData> PrimitiveHymnList = new List<SongData>(10);
 
-            string rawData = module.ProgramData.getHymnData();
+            string rawData = ProgramData.getHymnData();
+            string rawData_hymnSub = ProgramData.getHymnSubData();
 
             string[] songs = rawData.Split(new string[] { SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
+            string[] subTitles = rawData_hymnSub.Split(new string[] { HYMN_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
             for (int i = 0; i < songs.Length; i++)
                 PrimitiveHymnList.Add(
                     new SongData(
                         (i + 1).ToString()
                         , new SongContent (songs[i].Split(new string[] { HYMN_SEPARATOR }, StringSplitOptions.None))
-                        )
+                        , SongDataTypeEnum.HYMN
+                        , subTitles[i])
                     );
 
             return PrimitiveHymnList;
@@ -81,11 +84,11 @@ namespace BibleProjector_WPF.module.Data
 
             foreach (SongData hymn in Hymns)
             {
-                str.Append(hymn.songContent.getContentByPage(1));
+                str.Append(hymn.songContent.getContentByVerse(1));
                 for (int i = 2; i <= hymn.songContent.lyricCount; i++)
                 {
                     str.Append(HYMN_SEPARATOR);
-                    str.Append(hymn.songContent.getContentByPage(i));
+                    str.Append(hymn.songContent.getContentByVerse(i));
                 }
                 str.Append(SEPARATOR);
             }

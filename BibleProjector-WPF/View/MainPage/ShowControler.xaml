@@ -20,7 +20,7 @@
 
         <!--리스트표시부-->
         <ListBox Grid.Column="0" VerticalContentAlignment="Stretch" ScrollViewer.CanContentScroll="False" Focusable="False"
-                 ItemsSource="{Binding BiblePages}"
+                 ItemsSource="{Binding Pages}"
                  SelectedIndex="{Binding CurrentPageIndex}">
             <ListBox.ItemTemplate>
                 <DataTemplate>

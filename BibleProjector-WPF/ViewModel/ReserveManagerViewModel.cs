@@ -1,6 +1,4 @@
 ﻿using BibleProjector_WPF.module;
-using BibleProjector_WPF.ReserveOptionViews;
-using BibleProjector_WPF.ViewModel.ReserveOptionViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -26,12 +24,12 @@ namespace BibleProjector_WPF.ViewModel
             reserveDataManager = new ReserveDataManager();
             
             // 옵션 탭
-            ROViewModels[(int)ReserveType.NULL] = new ReserveOptionViewModels.Null();
+            /*ROViewModels[(int)ReserveType.NULL] = new ReserveOptionViewModels.Null();
             ROViewModels[(int)ReserveType.Bible] = new ReserveOptionViewModels.Bible();
             ROViewModels[(int)ReserveType.Reading] = new ReserveOptionViewModels.Reading();
             ROViewModels[(int)ReserveType.Song] = new ReserveOptionViewModels.Song();
             ROViewModels[(int)ReserveType.ExternPPT] = new ReserveOptionViewModels.ExternPPT();
-            ReserveOptionViewModel = ROViewModels[(int)ReserveType.NULL];
+            ReserveOptionViewModel = ROViewModels[(int)ReserveType.NULL];*/
 
             // 프로그램 저장데이터 불러오기
             makeListFromSaveData();
@@ -117,9 +115,9 @@ namespace BibleProjector_WPF.ViewModel
             private set { reserveDataManager = value; }
         }
 
-        IReserveOptionViewModel[] ROViewModels = new IReserveOptionViewModel[5];
-        IReserveOptionViewModel reserveOptionViewModel;
-        public IReserveOptionViewModel ReserveOptionViewModel
+        object[] ROViewModels = new object[5];
+        object reserveOptionViewModel;
+        public object ReserveOptionViewModel
         {
             get { return reserveOptionViewModel; } 
             set { reserveOptionViewModel = value;
@@ -134,9 +132,9 @@ namespace BibleProjector_WPF.ViewModel
 
         public void startShow()
         {
-            ReserveCollectionUnit[] selections = getSelectionItems();
+            /*ReserveCollectionUnit[] selections = getSelectionItems();
             if (selections.Count() == 1)
-                ReserveOptionViewModel.ShowContent();
+                ReserveOptionViewModel.ShowContent();*/
         }
 
         public void AddReserveData(module.ReserveDataUnit data)
@@ -204,7 +202,7 @@ namespace BibleProjector_WPF.ViewModel
                     break;
             }
 
-            ReserveOptionViewModel.GiveSelection(getSelectionItems());
+            //ReserveOptionViewModel.GiveSelection(getSelectionItems());
             selectionType = type;
         }
     }

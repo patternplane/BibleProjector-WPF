@@ -596,9 +596,9 @@ namespace BibleProjector_WPF.ViewModel
                     SearchText = lastSearchPattern;
                 }
             }
-
+/* 아이템 삭제시 show도 종료되는건 다른방식으로 변경됨
             if (deleteItem == outedLyric)
-                new module.ControlWindowManager().closeSongControl();
+                new module.ControlWindowManager().closeSongControl();*/
         }
 
         public void RunSetFromSearchValue()
@@ -657,7 +657,7 @@ namespace BibleProjector_WPF.ViewModel
                 MessageBox.Show("출력할 찬양곡을 선택해주세요!", "찬양곡 선택되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
             else
             {
-                new module.ShowStarter().SongShowStart(lyric, linePerSlide, FrameFile.Path);
+                return;// new module.ShowStarter().SongShowStart(lyric, linePerSlide, FrameFile.Path);
                 currentLyricOuted();
             }
         }
@@ -687,8 +687,9 @@ namespace BibleProjector_WPF.ViewModel
             {
                 LyricList.Remove(item);
                 ReserveDataManager.instance.deleteItemsByData(item);
-                if (SongControl.SongControlAccess != null)
-                    SongControl.SongControlAccess.CloseByRemovedLyric(item);
+                /* 아이템 삭제시 show도 종료되는건 다른방식으로 변경됨
+                 * if (SongControl.SongControlAccess != null)
+                     SongControl.SongControlAccess.CloseByRemovedLyric(item);*/
                 return true;
             }
             return false;
