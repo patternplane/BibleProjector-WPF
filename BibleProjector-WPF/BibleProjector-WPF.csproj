@@ -85,6 +85,7 @@
     <Compile Include="module\Data\SongData.cs" />
     <Compile Include="module\Data\SongContent.cs" />
     <Compile Include="module\ISearcher.cs" />
+    <Compile Include="module\ReserveDataManager.cs" />
     <Compile Include="ProgramStartEnd.cs" />
     <Compile Include="RelayCommand.cs" />
     <Compile Include="ReserveViewType.cs" />

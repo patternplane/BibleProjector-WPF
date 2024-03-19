@@ -24,15 +24,26 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             }
         }
         public ReserveViewType ViewType { get; set; }
+        public module.Data.ShowData Data;
         
         string title;
 
         public VMReserveData(string title, ReserveViewType type)
         {
             this.title = title;
-            updateDisplayTitle();
-
+            this.Data = null;
             this.ViewType = type;
+
+            updateDisplayTitle();
+        }
+
+        public VMReserveData(module.Data.ShowData data, ReserveViewType type = ReserveViewType.NormalItem)
+        {
+            this.Data = data;
+            this.title = data.getTitle1() + " " + data.getTitle2();
+            this.ViewType = type;
+
+            updateDisplayTitle();
         }
 
         public void updateDisplayTitle()

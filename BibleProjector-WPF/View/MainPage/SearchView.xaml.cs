@@ -23,6 +23,9 @@ namespace BibleProjector_WPF.View.MainPage
         public SearchView()
         {
             InitializeComponent();
+            // 테스팅용
+            Binding b = new Binding("CItemClick");
+            this.SetBinding(CItemClickProperty, b);
         }
 
         // ========== BindingProperties ==========
@@ -95,6 +98,26 @@ namespace BibleProjector_WPF.View.MainPage
             else if (e.Key == Key.Up
                 && ResultListBox.SelectedIndex == 0)
                 SearchTextBox.Focus();
+        }
+
+        public static readonly DependencyProperty CItemClickProperty =
+        DependencyProperty.Register(
+            name: "CItemClick",
+            propertyType: typeof(ICommand),
+            ownerType: typeof(SearchView));
+
+        public ICommand CItemClick
+        {
+            get => (ICommand)GetValue(CItemClickProperty);
+            set => SetValue(CItemClickProperty, value);
+        }
+        private void ListBoxItem_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            ViewModel.MainPage.VMSearchResult item = (ViewModel.MainPage.VMSearchResult)((ListBoxItem)sender).DataContext;
+            
+            Console.WriteLine(item.DisplayTitle);
+            // 테스팅용
+            CItemClick.Execute(item.getData());
         }
     }
 }

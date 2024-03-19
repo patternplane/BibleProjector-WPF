@@ -44,11 +44,11 @@ namespace BibleProjector_WPF.ViewModel
 
         static event Event.ReserveListChangedEventHandler listUpdated;
 
-        void onListUpdated(Event.ReserveUpdateType changeType)
+        /*void onListUpdated(Event.ReserveUpdateType changeType)
         {
             if (listUpdated != null)
                 listUpdated(this,new Event.ReserveListChangedEventArgs(changeType));
-        }
+        }*/
 
         static public void subscriptToListChange(Event.ReserveListChangedEventHandler handler)
         {
@@ -80,12 +80,12 @@ namespace BibleProjector_WPF.ViewModel
         public void addReserve(module.ReserveDataUnit reserveData)
         {
             reserveList.Add(new ReserveCollectionUnit(reserveData));
-            onListUpdated(new Event.ReserveTypeConverter().RTToRUT(reserveData.reserveType));
+            // onListUpdated(new Event.ReserveTypeConverter().RTToRUT(reserveData.reserveType));
         }
 
         public void moveSelectionUp()
         {
-            Event.ReserveUpdateType type = Event.ReserveUpdateType.None;
+            /*Event.ReserveUpdateType type = Event.ReserveUpdateType.None;
             Event.ReserveTypeConverter typeConverter = new Event.ReserveTypeConverter();
 
             for (int i = 0; i < reserveList.Count; i++)
@@ -100,7 +100,7 @@ namespace BibleProjector_WPF.ViewModel
                     reserveList.RemoveAt(i+1);
                 }
 
-            onListUpdated(type);
+            onListUpdated(type);*/
         }
 
         public void moveUpInCategory(Collection<ReserveCollectionUnit> Items)
@@ -131,11 +131,12 @@ namespace BibleProjector_WPF.ViewModel
                 preItemIndex = currentItemIndex;
             }
 
-            onListUpdated(new Event.ReserveTypeConverter().RTToRUT(Items.First().reserveType));
+            //onListUpdated(new Event.ReserveTypeConverter().RTToRUT(Items.First().reserveType));
         }
 
         public void moveSelectionDown()
         {
+            /*
             Event.ReserveUpdateType type = Event.ReserveUpdateType.None;
             Event.ReserveTypeConverter typeConverter = new Event.ReserveTypeConverter();
 
@@ -152,6 +153,7 @@ namespace BibleProjector_WPF.ViewModel
                 }
 
             onListUpdated(type);
+            */
         }
 
         public void moveDownInCategory(Collection<ReserveCollectionUnit> Items)
@@ -182,11 +184,12 @@ namespace BibleProjector_WPF.ViewModel
                 preItemIndex = currentItemIndex;
             }
 
-            onListUpdated(new Event.ReserveTypeConverter().RTToRUT(Items.First().reserveType));
+            //onListUpdated(new Event.ReserveTypeConverter().RTToRUT(Items.First().reserveType));
         }
 
         public void deleteSelection()
         {
+            /*
             Event.ReserveUpdateType type = Event.ReserveUpdateType.None;
             Event.ReserveTypeConverter typeConverter = new Event.ReserveTypeConverter();
 
@@ -200,10 +203,12 @@ namespace BibleProjector_WPF.ViewModel
                 }
 
             onListUpdated(type);
+            */
         }
 
         public void deleteItems(Collection<ReserveCollectionUnit> Items)
         {
+            /*
             Event.ReserveUpdateType type = Event.ReserveUpdateType.None;
             Event.ReserveTypeConverter typeConverter = new Event.ReserveTypeConverter();
 
@@ -219,6 +224,7 @@ namespace BibleProjector_WPF.ViewModel
             }
 
             onListUpdated(type);
+            */
         }
 
         public void deleteItemsByData(object data)

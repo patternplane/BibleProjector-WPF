@@ -510,8 +510,8 @@ namespace BibleProjector_WPF.ViewModel
 
         void ListUpdate(object sender, Event.ReserveListChangedEventArgs e)
         {
-            if ((e.changeType & Event.ReserveUpdateType.Song) > 0)
-                LyricReserveList = getSongReserveList();
+            /*if ((e.changeType & Event.ReserveUpdateType.Song) > 0)
+                LyricReserveList = getSongReserveList();*/
         }
 
         // =================================== 출력란

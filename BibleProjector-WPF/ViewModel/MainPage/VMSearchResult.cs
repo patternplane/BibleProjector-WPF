@@ -9,12 +9,17 @@ namespace BibleProjector_WPF.ViewModel.MainPage
     public class VMSearchResult : ViewModel
     {
         public string DisplayTitle { get; }
-        public module.ISearchData searchData;
+        module.ISearchData searchData;
 
         public VMSearchResult(module.ISearchData data)
         {
             this.searchData = data;
             this.DisplayTitle = data.displayName;
+        }
+
+        public module.Data.ShowData getData()
+        {
+            return searchData.getData();
         }
     }
 }

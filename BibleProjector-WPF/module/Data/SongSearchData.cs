@@ -31,5 +31,10 @@ namespace BibleProjector_WPF.module.Data
 
             this.previewContent = data.songContent.getRawContent();
         }
+
+        public ShowData getData()
+        {
+            return this.data;
+        }
     }
 }

@@ -32,13 +32,13 @@ namespace BibleProjector_WPF.module.Data
 
         void setupBible(int book, int chapter, int verse)
         {
-            book = -1;
-            chapter = -1;
-            verse = -1;
-            bibleTitle = null;
-            bibleTitle_abr = null;
-            bibleContent = null;
-            currentContents = null;
+            this.book = -1;
+            this.chapter = -1;
+            this.verse = -1;
+            this.bibleTitle = null;
+            this.bibleTitle_abr = null;
+            this.bibleContent = null;
+            this.currentContents = null;
             if (book >= 1 && book <= 66)
             {
                 this.book = book;

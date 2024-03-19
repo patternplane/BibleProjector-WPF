@@ -115,11 +115,13 @@ namespace BibleProjector_WPF
             showControlers[1] = new ViewModel.MainPage.VMShowControler(ShowContentType.Song, showStarter);
             showControlers[2] = new ViewModel.MainPage.VMShowControler(ShowContentType.PPT, showStarter);
 
+            module.ReserveDataManager reserveDataManager = new module.ReserveDataManager();
+
             this.VM_Main = new ViewModel.MainPage.VMMain(
                 new ViewModel.MainPage.VMControlPage(
                     showControlers,
-                    new ViewModel.MainPage.VMSearchControl(searcher),
-                    new ViewModel.MainPage.VMReserveList(),
+                    new ViewModel.MainPage.VMSearchControl(searcher, reserveDataManager),
+                    new ViewModel.MainPage.VMReserveList(reserveDataManager),
                     buttonVMs),
                 new ViewModel.MainPage.VMOptionBar());
 

@@ -6,40 +6,35 @@ using System.Threading.Tasks;
 
 namespace BibleProjector_WPF.Event
 {
-    public enum ReserveUpdateType
+    public enum ReserveListUpdateType
     {
-        None = 0,
-        Bible = (1<<0),
-        Reading = (1<<1),
-        Song = (1<<2),
-        ExternPPT = (1<<3)
-    }
-
-    public class ReserveTypeConverter
-    {
-        public ReserveUpdateType RTToRUT(module.ReserveType type)
-        {
-            switch (type)
-            {
-                case module.ReserveType.Bible:
-                    return ReserveUpdateType.Bible;
-                case module.ReserveType.Reading:
-                    return ReserveUpdateType.Reading;
-                case module.ReserveType.Song:
-                    return ReserveUpdateType.Song;
-                case module.ReserveType.ExternPPT:
-                    return ReserveUpdateType.ExternPPT;
-                default: 
-                    return ReserveUpdateType.None;
-            }
-        }
+        Add,
+        Delete,
+        Move
     }
 
     public class ReserveListChangedEventArgs : EventArgs
     {
-        public ReserveListChangedEventArgs(ReserveUpdateType changeType) { this.changeType = changeType; }
+        public ReserveListChangedEventArgs(module.Data.ShowData[] newData) 
+        {
+            this.updateType = ReserveListUpdateType.Add;
+            this.updatedObjects = newData;
+        }
 
-        public ReserveUpdateType changeType;
+        public ReserveListChangedEventArgs(ReserveListUpdateType updateType, int[] updateData, int moveIdx = -1)
+        {
+            if (updateType == ReserveListUpdateType.Move
+                && moveIdx == -1)
+                throw new Exception("예약 리스트의 이동 이벤트는 이동 위치를 함께 알려야 합니다.");
+
+            this.updateType = updateType;
+            this.updatedObjects = updateData;
+            this.moveIdx = moveIdx;
+        }
+
+        public ReserveListUpdateType updateType;
+        public object updatedObjects;
+        public int moveIdx = -1;
     }
 
     public delegate void ReserveListChangedEventHandler(object sender, ReserveListChangedEventArgs e);

@@ -37,11 +37,16 @@ namespace BibleProjector_WPF.module.Data
                 displayName = data.getBibleTitle();
 
             if (data.chapter != -1)
-                displayName += $" {data.chapter}절";
+                displayName += $" {data.chapter}장 ";
             if (data.verse != -1)
                 displayName += $"{data.verse}절";
 
             previewContent = data.getBibleContent();
+        }
+
+        public ShowData getData()
+        {
+            return this.data;
         }
     }
 }

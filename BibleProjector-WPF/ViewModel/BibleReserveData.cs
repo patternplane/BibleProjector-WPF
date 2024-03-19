@@ -29,8 +29,8 @@ namespace BibleProjector_WPF.ViewModel
 
         void ListUpdate(object sender, Event.ReserveListChangedEventArgs e) 
         {
-            if ((e.changeType & Event.ReserveUpdateType.Bible) > 0)
-                BibleReserveList = getBibleReserveList();
+            /*if ((e.changeType & Event.ReserveUpdateType.Bible) > 0)
+                BibleReserveList = getBibleReserveList();*/
         }
     }
 }

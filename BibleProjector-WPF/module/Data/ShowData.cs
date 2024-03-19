@@ -26,13 +26,13 @@ namespace BibleProjector_WPF.module.Data
         public event EventHandler ItemRefreshedEvent;
         protected void OnItemRefreshed()
         {
-            ItemRefreshedEvent.Invoke(this, new EventArgs());
+            ItemRefreshedEvent?.Invoke(this, new EventArgs());
         }
 
         public event EventHandler ItemDeletedEvent;
         protected void OnItemDeleted()
         {
-            ItemDeletedEvent.Invoke(this, new EventArgs());
+            ItemDeletedEvent?.Invoke(this, new EventArgs());
         }
     }
 }

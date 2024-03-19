@@ -22,5 +22,10 @@ namespace BibleProjector_WPF.module.Data
                 0 :
                 -1);
         }
+
+        public ShowData getData()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

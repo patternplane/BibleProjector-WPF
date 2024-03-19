@@ -134,7 +134,7 @@ namespace BibleProjector_WPF.View.MainPage
 
         // ========== Reserve Item Selection Data ==========
 
-        List<object> selections = new List<object>();
+        List<ViewModel.ViewModel> selections = new List<ViewModel.ViewModel>();
         bool allowSelect = true;
 
         // ========== Reserve Item Selection Manager ==========
@@ -171,7 +171,7 @@ namespace BibleProjector_WPF.View.MainPage
         void confirmSelection()
         {
             selections.Clear();
-            foreach (object item in ReserveListBox.SelectedItems)
+            foreach (ViewModel.ViewModel item in ReserveListBox.SelectedItems)
                 if (getViewTypeProperty(item) != ReserveViewType.DragPreview
                     && getViewTypeProperty(item) != ReserveViewType.DropPreview)
                     selections.Add(item);

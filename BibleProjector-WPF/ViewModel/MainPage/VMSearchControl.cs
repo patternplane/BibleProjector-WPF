@@ -19,23 +19,33 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public ICommand CSearchStart { get; set; }
         public ICommand CPopupHide { get; set; }
         public ICommand CLastestResultShow { get; set; }
+        public ICommand CItemClick { get; set; }
 
         // ========== Members ==========
 
         module.ISearcher searcher = null;
+        module.ReserveDataManager reserveManager;
 
         // ========== Gen ==========
 
-        public VMSearchControl(module.ISearcher searcher)
+        public VMSearchControl(module.ISearcher searcher, module.ReserveDataManager reserveManager)
         {
             CSearchStart = new RelayCommand(obj => SearchStart());
             CPopupHide = new RelayCommand(obj => PopupHide());
             CLastestResultShow = new RelayCommand(obj => PopupShow());
+            CItemClick = new RelayCommand(itemClick);
 
             this.searcher = searcher;
+            this.reserveManager = reserveManager;
         }
 
         // ========== Command ==========
+
+        void itemClick(object obj)
+        {
+            Console.WriteLine("Click");
+            reserveManager.AddReserveItem(this ,(module.Data.ShowData)obj);
+        }
 
         void SearchStart()
         {

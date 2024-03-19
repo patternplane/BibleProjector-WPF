@@ -23,7 +23,7 @@ namespace BibleProjector_WPF.module.Data
 
         void songDataSetup(string songTitle, SongContent songContent, SongDataTypeEnum songType, string subTitle)
         {
-            currentContents = null;
+            this.currentContents = null;
 
             this.songTitle = songTitle;
             this.songContent = songContent;

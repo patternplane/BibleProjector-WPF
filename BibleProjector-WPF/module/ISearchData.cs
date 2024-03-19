@@ -11,5 +11,6 @@ namespace BibleProjector_WPF.module
         string displayName { get; }
         string previewContent { get; }
         int searchDistance { get; }
+        Data.ShowData getData();
     }
 }
