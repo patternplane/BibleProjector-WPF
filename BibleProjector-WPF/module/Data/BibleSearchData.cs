@@ -6,26 +6,8 @@ using System.Threading.Tasks;
 
 namespace BibleProjector_WPF.module.Data
 {
-    public class BibleSearchData : ISearchData
+    public class BibleSearchData : SearchData
     {
-
-        BibleData data;
-
-        public int searchDistance { get; }
-        public int CompareTo(object obj)
-        {
-            return
-                (searchDistance > ((ISearchData)obj).searchDistance) ?
-                1 :
-                (searchDistance == ((ISearchData)obj).searchDistance ?
-                0 :
-                -1);
-        }
-
-        public string displayName { get; }
-
-        public string previewContent { get; }
-
         public BibleSearchData(BibleData data, bool isShort, int searchDistance)
         {
             this.data = data;
@@ -42,11 +24,6 @@ namespace BibleProjector_WPF.module.Data
                 displayName += $"{data.verse}절";
 
             previewContent = data.getBibleContent();
-        }
-
-        public ShowData getData()
-        {
-            return this.data;
         }
     }
 }

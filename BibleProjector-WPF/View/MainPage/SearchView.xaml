@@ -74,6 +74,7 @@
                         <ListBox
                             x:Name="ResultListBox"
                             ItemsSource="{Binding SearchResultList, Mode=TwoWay}"
+                            SelectionChanged="EH_SearchItemSelectionChanged"
                             PreviewKeyDown="EH_ListBoxKeyDown"
                             Background="#FFF5FFF4"
                             BorderThickness="0">
@@ -106,7 +107,20 @@
 
         <!--검색 : 미리보기-->
         <Border Grid.Row="2" Margin="1" BorderBrush="Black" BorderThickness="1">
-
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Border Grid.Row="0" BorderBrush="LightGray" BorderThickness="0,0,0,1">
+                    <TextBlock Margin="5,0,1,0" Text="{Binding SelectionItem.DisplayTitle}" VerticalAlignment="Center" FontWeight="Bold">
+                    </TextBlock>
+                </Border>
+                <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                    <TextBlock Margin="3" Text="{Binding SelectionItem.PreviewContent}" TextWrapping="Wrap">
+                    </TextBlock>
+                </ScrollViewer>
+            </Grid>
         </Border>
 
         <!--검색 : 후처리 버튼-->

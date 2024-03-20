@@ -72,7 +72,7 @@
     <Compile Include="module\Data\BibleSearchData.cs" />
     <Compile Include="module\Data\ExternPPTData.cs" />
     <Compile Include="module\Data\ExternPPTSearchData.cs" />
-    <Compile Include="module\Data\Searcher.cs" />
+    <Compile Include="module\Data\MultiSearcher.cs" />
     <Compile Include="module\Data\ShowContentData.cs" />
     <Compile Include="module\Data\ShowData.cs" />
     <Compile Include="module\Data\ShowExcuteErrorEnum.cs" />
@@ -81,7 +81,8 @@
     <Compile Include="module\Data\SongSearchData.cs" />
     <Compile Include="module\Data\SongSearcher.cs" />
     <Compile Include="module\ExternPPTManager.cs" />
-    <Compile Include="module\ISearchData.cs" />
+    <Compile Include="module\ExternPPTSearcher.cs" />
+    <Compile Include="module\SearchData.cs" />
     <Compile Include="module\Data\SongData.cs" />
     <Compile Include="module\Data\SongContent.cs" />
     <Compile Include="module\ISearcher.cs" />

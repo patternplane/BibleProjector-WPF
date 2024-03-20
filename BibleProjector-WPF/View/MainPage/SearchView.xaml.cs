@@ -23,8 +23,12 @@ namespace BibleProjector_WPF.View.MainPage
         public SearchView()
         {
             InitializeComponent();
+
+            Binding b = new Binding("CItemSelected");
+            this.SetBinding(ItemSelectedCommandProperty, b);
+
             // 테스팅용
-            Binding b = new Binding("CItemClick");
+            b = new Binding("CItemClick");
             this.SetBinding(CItemClickProperty, b);
         }
 
@@ -67,6 +71,18 @@ namespace BibleProjector_WPF.View.MainPage
             }
         }
 
+        public static readonly DependencyProperty ItemSelectedCommandProperty =
+        DependencyProperty.Register(
+            name: "ItemSelectedCommand",
+            propertyType: typeof(ICommand),
+            ownerType: typeof(SearchView));
+
+        public ICommand ItemSelectedCommand
+        {
+            get => (ICommand)GetValue(ItemSelectedCommandProperty);
+            set => SetValue(ItemSelectedCommandProperty, value);
+        }
+
         // ========== EventHander ==========
 
         void EH_TextBoxKeyUp(object sender, KeyEventArgs e)
@@ -99,6 +115,14 @@ namespace BibleProjector_WPF.View.MainPage
                 && ResultListBox.SelectedIndex == 0)
                 SearchTextBox.Focus();
         }
+
+        void EH_SearchItemSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count >= 1)
+                ItemSelectedCommand.Execute(e.AddedItems[0]);
+        }
+
+        // ======================= 테스팅용 =======================
 
         public static readonly DependencyProperty CItemClickProperty =
         DependencyProperty.Register(

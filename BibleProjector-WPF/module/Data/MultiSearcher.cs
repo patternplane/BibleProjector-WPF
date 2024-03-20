@@ -6,22 +6,25 @@ using System.Threading.Tasks;
 
 namespace BibleProjector_WPF.module.Data
 {
-    public class Searcher : ISearcher
+    public class MultiSearcher : ISearcher
     {
         ISearcher bibleSearcher = null;
         ISearcher songSearcher = null;
+        ISearcher externPPTSearcher = null;
 
-        public Searcher(ISearcher bibleSearcher, ISearcher songSearcher)
+        public MultiSearcher(ISearcher bibleSearcher, ISearcher songSearcher, ISearcher externPPTSearcher)
         {
             this.bibleSearcher = bibleSearcher;
             this.songSearcher = songSearcher;
+            this.externPPTSearcher = externPPTSearcher;
         }
 
-        public ICollection<ISearchData> getSearchResult(string phrase)
+        public ICollection<SearchData> getSearchResult(string phrase)
         {
-            List<ISearchData> searchResults = new List<ISearchData>();
+            List<SearchData> searchResults = new List<SearchData>();
             searchResults.AddRange(bibleSearcher.getSearchResult(phrase));
             searchResults.AddRange(songSearcher.getSearchResult(phrase));
+            searchResults.AddRange(externPPTSearcher.getSearchResult(phrase));
 
             searchResults.Sort();
             return searchResults;

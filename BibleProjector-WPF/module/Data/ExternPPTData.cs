@@ -101,5 +101,10 @@ namespace BibleProjector_WPF.module.Data
         {
             return ShowExcuteErrorEnum.NoErrors;
         }
+
+        public override bool isAvailData()
+        {
+            return true;
+        }
     }
 }

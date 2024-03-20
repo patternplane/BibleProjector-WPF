@@ -15,7 +15,7 @@ namespace BibleProjector_WPF.module.Data
             this.songManager = songManager;
         }
 
-        public ICollection<ISearchData> getSearchResult(string phrase)
+        public ICollection<SearchData> getSearchResult(string phrase)
         {
             ICollection<SongSearchData> searchList = new List<SongSearchData>();
 

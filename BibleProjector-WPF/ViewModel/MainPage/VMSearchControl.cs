@@ -15,11 +15,14 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public string SearchText { get; set; }
         public bool ResultPopupOpen { get; set; }
         public ICollection<VMSearchResult> SearchResultList { get; set; }
+        VMSearchResult _SelectionItem;
+        public VMSearchResult SelectionItem { get { return _SelectionItem; } set { _SelectionItem = value; OnPropertyChanged("SelectionItem"); } }
 
         public ICommand CSearchStart { get; set; }
         public ICommand CPopupHide { get; set; }
         public ICommand CLastestResultShow { get; set; }
         public ICommand CItemClick { get; set; }
+        public ICommand CItemSelected { get; set; }
 
         // ========== Members ==========
 
@@ -34,6 +37,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             CPopupHide = new RelayCommand(obj => PopupHide());
             CLastestResultShow = new RelayCommand(obj => PopupShow());
             CItemClick = new RelayCommand(itemClick);
+            CItemSelected = new RelayCommand(obj => ItemSelected((VMSearchResult)obj));
 
             this.searcher = searcher;
             this.reserveManager = reserveManager;
@@ -58,7 +62,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
             ObservableCollection<VMSearchResult> newResults = new ObservableCollection<VMSearchResult>();
 
-            foreach (module.ISearchData data in searcher.getSearchResult(SearchText))
+            foreach (module.SearchData data in searcher.getSearchResult(SearchText))
                 newResults.Add(new VMSearchResult(data));
             
             this.SearchResultList = newResults;
@@ -78,6 +82,12 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         {
             ResultPopupOpen = false;
             OnPropertyChanged("ResultPopupOpen");
+        }
+
+        void ItemSelected(VMSearchResult item)
+        {
+            if (item.getData().isAvailData())
+                this.SelectionItem = item;
         }
     }
 }

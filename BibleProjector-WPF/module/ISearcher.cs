@@ -8,6 +8,6 @@ namespace BibleProjector_WPF.module
 {
     public interface ISearcher
     {
-        ICollection<ISearchData> getSearchResult(string phrase);
+        ICollection<SearchData> getSearchResult(string phrase);
     }
 }

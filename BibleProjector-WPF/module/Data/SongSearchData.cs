@@ -6,35 +6,24 @@ using System.Threading.Tasks;
 
 namespace BibleProjector_WPF.module.Data
 {
-    class SongSearchData : ISearchData
+    class SongSearchData : SearchData
     {
-        public string displayName { get; } = null;
-        public string previewContent { get; } = null;
-        public int searchDistance { get; } = -1;
-        public int CompareTo(object obj)
-        {
-            return
-                (searchDistance > ((ISearchData)obj).searchDistance) ?
-                1 :
-                (searchDistance == ((ISearchData)obj).searchDistance ?
-                0 :
-                -1);
-        }
-
-        SongData data;
-
         public SongSearchData(SongData data, string foundPhrase ,int searchDistance)
         {
             this.data = data;
             this.displayName = foundPhrase;
             this.searchDistance = searchDistance;
 
-            this.previewContent = data.songContent.getRawContent();
-        }
-
-        public ShowData getData()
-        {
-            return this.data;
+            StringBuilder preview = new StringBuilder();
+            string[] lyrics = data.songContent.getContents();
+            for (int i = 0; i < lyrics.Length; i++) 
+            {
+                preview.Append(" [ ").Append(i + 1).Append("절 ]").Append('\n');
+                preview.Append(lyrics[i]);
+                if (i < lyrics.Length - 1)
+                    preview.Append("\n\n");
+            }
+            this.previewContent = preview.ToString();
         }
     }
 }

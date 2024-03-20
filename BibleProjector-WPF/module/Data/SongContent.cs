@@ -26,9 +26,18 @@ namespace BibleProjector_WPF.module.Data
         public string getRawContent()
         {
             StringBuilder result = new StringBuilder();
-            foreach (string lyric in lyrics)
-                result.Append(lyric).Append(" ");
+            for (int i = 0; i < lyrics.Length; i++)
+            {
+                result.Append(lyrics[i]);
+                if (i < lyrics.Length - 1)
+                    result.Append('\n');
+            }
             return result.ToString();
+        }
+
+        public string[] getContents()
+        {
+            return lyrics.ToArray();
         }
 
         public string getContentByVerse(int page)

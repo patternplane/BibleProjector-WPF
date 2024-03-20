@@ -78,5 +78,10 @@ namespace BibleProjector_WPF.module
             ExternPPTList.Remove(item);
             item.UnlinkPPT();
         }
+
+        public Data.ExternPPTData[] getDataList()
+        {
+            return ExternPPTList.ToArray();
+        }
     }
 }

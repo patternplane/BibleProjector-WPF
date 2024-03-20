@@ -20,6 +20,7 @@ namespace BibleProjector_WPF.module.Data
         }
         abstract public bool isSameData(ShowData data);
         abstract public ShowExcuteErrorEnum canExcuteShow();
+        abstract public bool isAvailData();
 
         // =================== Events ==================
 

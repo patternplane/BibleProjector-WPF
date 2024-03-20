@@ -99,7 +99,7 @@ namespace BibleProjector_WPF.module
         int verse;
 
         const int SEARCH_DISTANCE_LIMIT = 1;
-        public ICollection<ISearchData> getSearchResult(string searchPrase)
+        public ICollection<SearchData> getSearchResult(string searchPrase)
         {
             setSearchData(searchPrase);
             return makeSearchResult();
@@ -126,7 +126,7 @@ namespace BibleProjector_WPF.module
                 }
         }
 
-        ICollection<ISearchData> makeSearchResult()
+        ICollection<SearchData> makeSearchResult()
         {
             LevenshteinDistance ld = new LevenshteinDistance();
             KorString ks = new KorString();

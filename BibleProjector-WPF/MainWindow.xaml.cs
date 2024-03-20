@@ -92,10 +92,15 @@ namespace BibleProjector_WPF
 
             //===============================================================================================================
             // 개편중 임시로 추가한 부분 -> MainWindow도 역시 ViewModel을 따로 두어 추가처리를 해야하지만 일단 여기서 처치중
-            module.ISearcher searcher = new module.Data.Searcher(
+
+            module.ExternPPTManager pptMan = new module.ExternPPTManager();
+
+            module.ISearcher searcher = new module.Data.MultiSearcher(
                 new module.BibleSearcher(),
                 new module.Data.SongSearcher(
-                    new module.Data.SongManager()));
+                    new module.Data.SongManager()),
+                new module.ExternPPTSearcher(
+                    pptMan));
 
             Database.DatabaseInitailize();
             Powerpoint.Initialize();
@@ -104,7 +109,6 @@ namespace BibleProjector_WPF
 
             System.Collections.ObjectModel.Collection<ViewModel.ViewModel> buttonVMs
                 = new System.Collections.ObjectModel.Collection<ViewModel.ViewModel>();
-            module.ExternPPTManager pptMan = new module.ExternPPTManager();
             for (int i = 0; i < 6; i++)
                 buttonVMs.Add(new ViewModel.MainPage.VMExternPPTEditButton(pptMan, shiftEventManager));
 

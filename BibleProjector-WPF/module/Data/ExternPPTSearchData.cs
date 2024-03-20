@@ -6,26 +6,14 @@ using System.Threading.Tasks;
 
 namespace BibleProjector_WPF.module.Data
 {
-    class ExternPPTSearchData : ISearchData
+    class ExternPPTSearchData : SearchData
     {
-        public string displayName => throw new NotImplementedException();
-
-        public string previewContent => throw new NotImplementedException();
-
-        public int searchDistance => throw new NotImplementedException();
-        public int CompareTo(object obj)
+        public ExternPPTSearchData(ExternPPTData data, int searchDistance)
         {
-            return
-                (searchDistance > ((ISearchData)obj).searchDistance) ?
-                1 :
-                (searchDistance == ((ISearchData)obj).searchDistance ?
-                0 :
-                -1);
-        }
-
-        public ShowData getData()
-        {
-            throw new NotImplementedException();
+            this.data = data;
+            this.displayName = " (외부자료) " + data.fileName;
+            this.previewContent = "";
+            this.searchDistance = searchDistance;
         }
     }
 }
