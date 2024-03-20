@@ -1176,7 +1176,7 @@ namespace BibleProjector_WPF
             static private int pptFinder_fullPath(string fullPath)
             {
                 for (int i = 0; i < ppt.Count; i++)
-                    if (ppt[i].FullPath.CompareTo(fullPath) == 0)
+                    if (ppt[i].OriginalFullPath.CompareTo(fullPath) == 0)
                         return i;
 
                 return -1;
@@ -1262,6 +1262,7 @@ namespace BibleProjector_WPF
             // ============================================ 필요 변수 ============================================ 
 
             public string FullPath;
+            public string OriginalFullPath;
             public string PPTName;
 
             Presentation ppt;
@@ -1283,16 +1284,18 @@ namespace BibleProjector_WPF
             public void setPresentation(string path)
             {
                 string tempPath = EXTERN_TEMP_DIRECTORY + System.IO.Path.GetFileName(path);
-                System.IO.File.Copy(path, tempPath, true);
-                path = System.IO.Path.GetFullPath(tempPath);
+                string newPath = System.IO.Path.GetFullPath(tempPath);
+                string originalPath = path;
+                System.IO.File.Copy(originalPath, newPath, true);
 
-                this.PPTName = System.IO.Path.GetFileName(path);
-                this.FullPath = path;
+                this.FullPath = System.IO.Path.GetFullPath(newPath);
+                this.OriginalFullPath = originalPath;
+                this.PPTName = System.IO.Path.GetFileName(newPath);
 
-                ppt = app.Presentations.Open(path, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
+                ppt = app.Presentations.Open(newPath, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
                 checkValidPPT();
 
-                SetThumbNailImages(path);
+                SetThumbNailImages(newPath);
             }
 
             void SetThumbNailImages(string fullPath)

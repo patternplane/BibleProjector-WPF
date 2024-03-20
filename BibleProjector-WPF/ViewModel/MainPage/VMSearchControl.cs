@@ -28,10 +28,11 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         module.ISearcher searcher = null;
         module.ReserveDataManager reserveManager;
+        module.ShowStarter showStarter;
 
         // ========== Gen ==========
 
-        public VMSearchControl(module.ISearcher searcher, module.ReserveDataManager reserveManager)
+        public VMSearchControl(module.ISearcher searcher, module.ReserveDataManager reserveManager, module.ShowStarter showStarter)
         {
             CSearchStart = new RelayCommand(obj => SearchStart());
             CPopupHide = new RelayCommand(obj => PopupHide());
@@ -41,6 +42,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
             this.searcher = searcher;
             this.reserveManager = reserveManager;
+            this.showStarter = showStarter;
         }
 
         // ========== Command ==========
@@ -48,7 +50,8 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         void itemClick(object obj)
         {
             Console.WriteLine("Click");
-            reserveManager.AddReserveItem(this ,(module.Data.ShowData)obj);
+            //reserveManager.AddReserveItem(this ,(module.Data.ShowData)obj);
+            showStarter.Show((module.Data.ShowData)obj);
         }
 
         void SearchStart()
