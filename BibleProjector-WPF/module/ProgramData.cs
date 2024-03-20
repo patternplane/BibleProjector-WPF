@@ -38,10 +38,10 @@ namespace BibleProjector_WPF.module
 
         static public void saveProgramData()
         {
-            saveLyricData();
+            //saveLyricData();
             saveOptionData();
-            saveLayoutData();
-            saveReserveData();
+            //saveLayoutData();
+            //saveReserveData();
         }
 
         static void saveLyricData()
@@ -54,12 +54,12 @@ namespace BibleProjector_WPF.module
             file.Write(VM_LyricViewModel.getSaveData_Hymn());
             file.Close();
 
-            /*
-            catch (Exception e)
+            
+            /*catch (Exception e)
             {
                 MessageBox.Show("가사 저장 실패!\n오류 : " + e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            */
+            }*/
+            
         }
 
         static void saveOptionData()

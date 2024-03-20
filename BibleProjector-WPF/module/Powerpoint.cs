@@ -754,7 +754,7 @@ namespace BibleProjector_WPF
             static private int pptFinder_fullPath(string fullPath)
             {
                 for (int i = 0; i < ppt.Count; i++)
-                    if (ppt[i].FrameFullPath.CompareTo(fullPath) == 0)
+                    if (ppt[i].FrameOriginFullPath.CompareTo(fullPath) == 0)
                         return i;
 
                 return -1;
@@ -824,6 +824,7 @@ namespace BibleProjector_WPF
 
             public string FramePPTName;
             public string FrameFullPath;
+            public string FrameOriginFullPath;
 
             Presentation ppt;
             class TextShape
@@ -847,15 +848,16 @@ namespace BibleProjector_WPF
 
             public void setPresentation(string path)
             {
-                string tempPath = FRAME_TEMP_DIRECTORY + System.IO.Path.GetFileName(path);
-                System.IO.File.Copy(path, tempPath, true);
-                path = System.IO.Path.GetFullPath(tempPath);
+                string newPath = FRAME_TEMP_DIRECTORY + System.IO.Path.GetFileName(path);
+                System.IO.File.Copy(path, newPath, true);
+                newPath = System.IO.Path.GetFullPath(newPath);
 
-                this.FramePPTName = System.IO.Path.GetFileName(path);
-                this.FrameFullPath = path;
+                this.FramePPTName = System.IO.Path.GetFileName(newPath);
+                this.FrameFullPath = newPath;
+                this.FrameOriginFullPath = path;
                 textShapes = new List<TextShape>(5);
 
-                ppt = app.Presentations.Open(path, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
+                ppt = app.Presentations.Open(newPath, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
                 checkValidPPT();
                 getCommand();
             }

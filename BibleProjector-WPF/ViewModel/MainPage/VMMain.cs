@@ -13,6 +13,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         public ViewModel VM_MainControl { get; set; }
         public ViewModel VM_OptionBar { get; set; }
+        public ViewModel VM_Option { get; set; }
 
         // ========== Properties ==========
 
@@ -35,10 +36,11 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         // ========== Gen ===========
 
-        public VMMain(ViewModel controlViewModel, ViewModel optionBar)
+        public VMMain(ViewModel controlViewModel, ViewModel option, ViewModel optionBar)
         {
             this.VM_MainControl = controlViewModel;
             this.VM_OptionBar = optionBar;
+            this.VM_Option = option;
 
             CPullOptionBar = new RelayCommand(param => pullOptionBar());
             CPushOptionBar = new RelayCommand(param => pushOptionBar());

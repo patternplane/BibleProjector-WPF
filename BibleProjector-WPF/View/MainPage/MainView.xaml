@@ -26,6 +26,9 @@
             <!--자료 수정 페이지-->
             <TabItem Header="자료 수정">
             </TabItem>
+            
+            <!--설정 페이지-->
+            <TabItem Header="설정" Content="{Binding VM_Option}"/>
         </TabControl>
         
         <!--옵션 화면-->

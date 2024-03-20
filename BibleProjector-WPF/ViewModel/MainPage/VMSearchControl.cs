@@ -51,6 +51,8 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         {
             Console.WriteLine("Click");
             //reserveManager.AddReserveItem(this ,(module.Data.ShowData)obj);
+            if (((module.Data.ShowData)obj).getDataType() == ShowContentType.Song)
+                ((module.Data.SongData)obj).pptFrameFullPath = module.ProgramOption.DefaultHymnFrame.Path;
             showStarter.Show((module.Data.ShowData)obj);
         }
 

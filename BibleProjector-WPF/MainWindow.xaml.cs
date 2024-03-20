@@ -104,6 +104,7 @@ namespace BibleProjector_WPF
 
             Database.DatabaseInitailize();
             Powerpoint.Initialize();
+            module.ProgramOption.Initialize();
 
             shiftEventManager = new ViewModel.ShiftEventManager();
 
@@ -127,6 +128,7 @@ namespace BibleProjector_WPF
                     new ViewModel.MainPage.VMSearchControl(searcher, reserveDataManager, showStarter),
                     new ViewModel.MainPage.VMReserveList(reserveDataManager),
                     buttonVMs),
+                new ViewModel.OptionViewModel(),
                 new ViewModel.MainPage.VMOptionBar());
 
             //===============================================================================================================
@@ -168,8 +170,8 @@ namespace BibleProjector_WPF
         {
             //new module.ControlWindowManager().ForceClose();
 
-            if (Bible.tempBibleAccesser.SubWindow_BibleModify != null)
-                Bible.tempBibleAccesser.SubWindow_BibleModify.ForceClose();
+            /*if (Bible.tempBibleAccesser.SubWindow_BibleModify != null)
+                Bible.tempBibleAccesser.SubWindow_BibleModify.ForceClose();*/
             if (Window_Reserve != null)
                 Window_Reserve.ForceClose();
 

@@ -83,7 +83,7 @@ namespace BibleProjector_WPF.module.Data
                             pageData[1][0] = "{c}";
                             pageData[1][1] = pages[j];
 
-                            songData.Add(new ShowContentData(pages[j], pageData, false));
+                            songData.Add(new ShowContentData(pageData, pages[j], false));
                         }
                     }
                     else if (this.songType == SongDataTypeEnum.HYMN)
@@ -111,9 +111,9 @@ namespace BibleProjector_WPF.module.Data
                             pageData[3][1] = (verse + 1).ToString();
 
                             if (j == 0)
-                                songData.Add(new ShowContentData(pages[j], pageData, false));
+                                songData.Add(new ShowContentData(pageData, "    " + (verse + 1) + " 절\r\n" + pages[j] + "\r\n", true));
                             else
-                                songData.Add(new ShowContentData("    " + (verse + 1) + " 절\r\n" + pages[j] + "\r\n", pageData, true));
+                                songData.Add(new ShowContentData(pageData, pages[j], false));
                         }
                     }
                     else

@@ -11,6 +11,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
     {
         // ========== Inner ViewModels ==========
 
+        ViewModel[] ShowController;
         public ViewModel VM_ShowControler_top { get; set; }
         public ViewModel VM_ShowControler_bottom { get; set; }
         public ViewModel VM_SearchControl { get; set; }
@@ -28,7 +29,8 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             ViewModel reserveList,
             Collection<ViewModel> externPPTEditButtonVMs)
         {
-            this.VM_ShowControler_top = ShowControlers[0];
+            this.ShowController = ShowControlers;
+            this.VM_ShowControler_top = ShowControlers[1];
             this.VM_ShowControler_bottom = ShowControlers[2];
             this.VM_SearchControl = searchControl;
             this.VM_ReserveList = reserveList;

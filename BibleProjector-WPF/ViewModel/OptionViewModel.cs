@@ -8,7 +8,7 @@ using System.ComponentModel;
 
 namespace BibleProjector_WPF.ViewModel
 {
-    class OptionViewModel : ViewModel
+    public class OptionViewModel : ViewModel
     {
 
         // ========================================== View 연결 속성들 ========================================== 
@@ -72,18 +72,16 @@ namespace BibleProjector_WPF.ViewModel
         public BindingList<module.SongFrameFile> SongFramePaths_List { get { return module.ProgramOption.SongFrameFiles; } set{}
      }
 
-        // ========================================== 일반 속성들 ========================================== 
-
-        System.Windows.Forms.OpenFileDialog FD_BibleFrame;
-        System.Windows.Forms.OpenFileDialog FD_ReadingFrame;
-        System.Windows.Forms.OpenFileDialog FD_SongFrame;
-
         // ========================================== 프로그램 세팅 ========================================== 
 
         public OptionViewModel()
         {
             SetFileDialogs();
         }
+
+        System.Windows.Forms.OpenFileDialog FD_BibleFrame;
+        System.Windows.Forms.OpenFileDialog FD_ReadingFrame;
+        System.Windows.Forms.OpenFileDialog FD_SongFrame;
 
         void SetFileDialogs()
         {
