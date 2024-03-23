@@ -45,6 +45,23 @@ namespace BibleProjector_WPF.ViewModel
             }
         }
 
+        public string SongLinePerSlide_Text
+        {
+            get
+            {
+                return module.ProgramOption.Song_LinePerSlide.ToString();
+            }
+            set
+            {
+                string res = module.StringModifier.makeOnlyNum(value);
+                if (res.Length == 0)
+                    module.ProgramOption.Song_LinePerSlide = 0;
+                else
+                    module.ProgramOption.Song_LinePerSlide = int.Parse(res);
+                OnPropertyChanged();
+            }
+        }
+
         public string BibleFramePath_Text
         {
             get

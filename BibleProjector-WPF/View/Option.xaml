@@ -9,11 +9,13 @@
 
     <Grid Margin="15">
         <Grid.RowDefinitions>
-            <RowDefinition Height="70*"/>
-            <RowDefinition Height="14*"/>
-            <RowDefinition Height="226*"/>
-            <RowDefinition Height="17*"/>
-            <RowDefinition Height="100*"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="15"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="15"/>
+            <RowDefinition Height="320"/>
+            <RowDefinition Height="15"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="119*"/>
@@ -50,10 +52,26 @@
             </Grid>
         </Grid>
 
-        <Label Grid.Row="2" Content="PPT 틀" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"></Label>
-        <Border Grid.Row="2" BorderBrush="Black" BorderThickness="1" Grid.ColumnSpan="2">
-        </Border>
-        <Grid Grid.Row="2" Grid.Column="1">
+        <Label Grid.Row="2" Content="가사 문장 갯수&#10;설정" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+        <Border Grid.Row="2" BorderBrush="Black" BorderThickness="1" Grid.ColumnSpan="2"/>
+        <Grid Grid.Row="2" Grid.Column="1" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="139"/>
+                <ColumnDefinition Width="90"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="130"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="1,1,0,1">
+                <Label  Content="문장 수 :" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
+            </Border>
+            <TextBox Grid.Column="1" Text="{Binding SongLinePerSlide_Text, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <Label Grid.Column="3" FontWeight="Bold" Content="[저장기능 공사중...]" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Grid>
+
+        <Label Grid.Row="4" Content="PPT 틀" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"></Label>
+        <Border Grid.Row="4" BorderBrush="Black" BorderThickness="1" Grid.ColumnSpan="2"/>
+        <Grid Grid.Row="4" Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="*"/>

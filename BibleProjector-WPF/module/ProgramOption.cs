@@ -53,6 +53,7 @@ namespace BibleProjector_WPF.module
         static public int Bible_CharPerLine { get; set; } = 20;
         static public int Bible_LinePerSlide { get; set; } = 5;
 
+        static public int Song_LinePerSlide { get; set; } = 2;
 
         static public string BibleFramePath { get; set; } = null;
         static public string ReadingFramePath { get; set; } = null;
