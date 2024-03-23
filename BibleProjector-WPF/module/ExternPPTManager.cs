@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BibleProjector_WPF.module.Data;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,14 +8,48 @@ using System.Threading.Tasks;
 
 namespace BibleProjector_WPF.module
 {
-    public class ExternPPTManager
+    public class ExternPPTManager : ISourceOfReserve
     {
 
-        List<Data.ExternPPTData> ExternPPTList = new List<Data.ExternPPTData>();
+        ExternPPTData[] ExternPPTList = new ExternPPTData[PPT_LIST_LENGTH];
 
         // ================================ 상수 ==============================
 
         public const int MAX_SLIDE_COUNT = 200;
+        const int PPT_LIST_LENGTH = 6;
+
+        // ================================== 세팅 / 저장 ===========================
+
+        public ExternPPTManager()
+        {
+            getSaveData();
+        }
+
+        const string SEPARATOR = "∂";
+
+        void getSaveData()
+        {
+            string[] rawData = ProgramData.getExternPPTData().Split(new string[] { SEPARATOR }, StringSplitOptions.None);
+
+            for (int i = 0; i < PPT_LIST_LENGTH && i < rawData.Length; i++)
+                if (CanAddPPT(rawData[i]) == 0)
+                    AddPPT(rawData[i],i);
+        }
+
+        public void saveData(object sender, Event.SaveDataEventArgs e)
+        {
+            StringBuilder str = new StringBuilder(10);
+
+            for (int i = 0; i < ExternPPTList.Length; i++)
+            {
+                if (ExternPPTList[i] != null)
+                    str.Append(ExternPPTList[i].fileFullPath);
+                if (i < ExternPPTList.Length - 1)
+                    str.Append(SEPARATOR);
+            }
+
+            e.saveDataFunc(SaveDataTypeEnum.ExternPPTData, str.ToString());
+        }
 
         // ================================== 메서드 ===========================
 
@@ -28,8 +63,9 @@ namespace BibleProjector_WPF.module
             int validity = validateFile(pptFullPath);
             if (validity == 0)
             {
-                foreach (Data.ExternPPTData item in ExternPPTList)
-                    if (item.fileFullPath.CompareTo(pptFullPath) == 0)
+                foreach (ExternPPTData item in ExternPPTList)
+                    if (item != null
+                        && item.fileFullPath.CompareTo(pptFullPath) == 0)
                         return 3;
             }
 
@@ -53,7 +89,17 @@ namespace BibleProjector_WPF.module
         /// <returns>사용가능 : 0, 허용 슬라이드 수 초과 : 1, 파일 없음 : 2</returns>
         int validateFile(string pptFullPath)
         {
-            if (!(new FileInfo(pptFullPath).Exists))
+            FileInfo fi;
+            try
+            {
+                fi = new FileInfo(pptFullPath);
+            }
+            catch (Exception e)
+            {
+                return 2;
+            }
+
+            if (!fi.Exists)
                 return 2;
             else if (Powerpoint.getSlideCountFromFile(pptFullPath) > MAX_SLIDE_COUNT)
                 return 1;
@@ -61,27 +107,52 @@ namespace BibleProjector_WPF.module
                 return 0;
         }
 
-        /// <summary>
-        /// 입력받은 
-        /// </summary>
-        /// <param name="pptFullPath"></param>
-        /// <returns></returns>
-        public Data.ExternPPTData AddPPT(string pptFullPath)
+        public ExternPPTData AddPPT(string pptFullPath, int posId)
         {
-            Data.ExternPPTData addedData = new Data.ExternPPTData(pptFullPath);
-            ExternPPTList.Add(addedData);
+            ExternPPTData addedData = new ExternPPTData(pptFullPath);
+            ExternPPTList[posId] = addedData;
             return addedData;
         }
 
-        public void UnlinkPPT(Data.ExternPPTData item)
+        public void UnlinkPPT(int posId)
         {
-            ExternPPTList.Remove(item);
-            item.UnlinkPPT();
+            ExternPPTList[posId].UnlinkPPT();
+            ExternPPTList[posId] = null;
         }
 
-        public Data.ExternPPTData[] getDataList()
+        public ExternPPTData getMyData(int idx)
         {
-            return ExternPPTList.ToArray();
+            if (idx < 0 || idx >= ExternPPTList.Length)
+                return null;
+            return ExternPPTList[idx];
+        }
+
+        public ExternPPTData[] getDataList()
+        {
+            List<ExternPPTData> temp = new List<ExternPPTData>(ExternPPTList.Length);
+            foreach (ExternPPTData item in ExternPPTList)
+                if (item != null)
+                    temp.Add(item);
+            return temp.ToArray();
+        }
+
+        // ================================== 예약값 복원 지원 ===========================
+
+        public ShowData getItemByReserveInfo(int ReserveInfo)
+        {
+            if (ReserveInfo < 0 || ReserveInfo >= ExternPPTList.Length)
+                return null;
+
+            return ExternPPTList[ReserveInfo];
+        }
+
+        public int getReserveInfoByItem(ShowData item)
+        {
+            for (int i = 0; i < ExternPPTList.Length; i++)
+                if (ExternPPTList[i] == item)
+                    return i;
+
+            return -1;
         }
     }
 }

@@ -66,8 +66,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Event\FrameDeleted.cs" />
+    <Compile Include="Event\SaveData.cs" />
     <Compile Include="Event\ShiftStateChanged.cs" />
     <Compile Include="Event\ShowStart.cs" />
+    <Compile Include="module\BibleDataManager.cs" />
     <Compile Include="module\Data\BibleData.cs" />
     <Compile Include="module\Data\BibleSearchData.cs" />
     <Compile Include="module\Data\ExternPPTData.cs" />
@@ -82,6 +84,8 @@
     <Compile Include="module\Data\SongSearcher.cs" />
     <Compile Include="module\ExternPPTManager.cs" />
     <Compile Include="module\ExternPPTSearcher.cs" />
+    <Compile Include="module\ISourceOfReserve.cs" />
+    <Compile Include="module\SaveDataTypeEnum.cs" />
     <Compile Include="module\SearchData.cs" />
     <Compile Include="module\Data\SongData.cs" />
     <Compile Include="module\Data\SongContent.cs" />

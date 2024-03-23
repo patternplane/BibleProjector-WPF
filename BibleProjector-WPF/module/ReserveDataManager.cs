@@ -15,6 +15,83 @@ namespace BibleProjector_WPF.module
             return reserveList.ToArray();
         }
 
+        // ======================= Initialize ======================
+
+        ISourceOfReserve bibleDataManager;
+        ISourceOfReserve songDataManager;
+        ISourceOfReserve pptDataManager;
+
+        public ReserveDataManager(ISourceOfReserve bibleManager, ISourceOfReserve songManager, ISourceOfReserve pptManager)
+        {
+            this.bibleDataManager = bibleManager;
+            this.songDataManager = songManager;
+            this.pptDataManager = pptManager;
+
+            getReserveData();
+        }
+
+        void getReserveData()
+        {
+            string[] rawData = ProgramData.getReserveData()
+                .Split(new string[] { "§", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+
+            ReserveType type;
+            Data.ShowData data = null;
+            for (int i = 0; i < rawData.Length; i += 2)
+            {
+                type = (ReserveType)int.Parse(rawData[i]);
+                if (type == ReserveType.Bible)
+                    data = bibleDataManager.getItemByReserveInfo(int.Parse(rawData[i + 1]));
+                else if (type == ReserveType.Song)
+                    data = songDataManager.getItemByReserveInfo(int.Parse(rawData[i + 1]));
+                else if (type == ReserveType.ExternPPT)
+                    data = pptDataManager.getItemByReserveInfo(int.Parse(rawData[i + 1]));
+
+                if (data != null)
+                {
+                    AddReserveItem(this, data);
+                    data = null;
+                }
+            }
+        }
+
+        public void saveData(object sender, Event.SaveDataEventArgs e)
+        {
+            StringBuilder str = new StringBuilder(50);
+            int type;
+            int saveData;
+            foreach (Data.ShowData item in reserveList)
+            {
+                type = -1;
+                saveData = -1;
+                if (item.getDataType() == ShowContentType.Bible)
+                {
+                    type = (int)ReserveType.Bible;
+                    saveData = bibleDataManager.getReserveInfoByItem(item);
+                }
+                else if (item.getDataType() == ShowContentType.Song)
+                {
+                    type = (int)ReserveType.Song;
+                    saveData = songDataManager.getReserveInfoByItem(item);
+                }
+                else if (item.getDataType() == ShowContentType.PPT)
+                {
+                    type = (int)ReserveType.ExternPPT;
+                    saveData = pptDataManager.getReserveInfoByItem(item);
+                }
+
+                if (type != -1) 
+                {
+                    str.Append(type);
+                    str.Append("§");
+                    str.Append(saveData);
+                    str.Append("\r\n");
+                }
+            }
+
+            e.saveDataFunc(SaveDataTypeEnum.ReserveData, str.ToString());
+        }
+
         // ======================= List Update Event =======================
 
         public event Event.ReserveListChangedEventHandler ListChangedEvent;
@@ -25,7 +102,7 @@ namespace BibleProjector_WPF.module
         {
             reserveList.Add(data);
 
-            ListChangedEvent.Invoke(sender, new Event.ReserveListChangedEventArgs(new Data.ShowData[] { data }));
+            ListChangedEvent?.Invoke(sender, new Event.ReserveListChangedEventArgs(new Data.ShowData[] { data }));
         }
 
         void deleteItems(int[] dataIdxs)

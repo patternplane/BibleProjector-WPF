@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace BibleProjector_WPF.module.Data
 {
-    public class SongManager
+    public class SongManager : ISourceOfReserve
     {
-        public ICollection<SongData> CCMs;
-        public ICollection<SongData> Hymns;
+        public List<SongData> CCMs;
+        public List<SongData> Hymns;
 
         public SongManager()
         {
@@ -64,8 +64,10 @@ namespace BibleProjector_WPF.module.Data
 
         // ============================================== 저장하기 ==============================================
 
-        public string getSaveData_Lyric()
+        public void saveData_Lyric(object sender, Event.SaveDataEventArgs e)
         {
+            CCMs.Sort((a, b) => a.songTitle.CompareTo(b.songTitle));
+
             StringBuilder str = new StringBuilder(50).Clear();
 
             foreach (SongData lyric in CCMs)
@@ -75,10 +77,10 @@ namespace BibleProjector_WPF.module.Data
                 str.AppendLine(SEPARATOR);
             }
 
-            return str.ToString();
+            e.saveDataFunc(SaveDataTypeEnum.LyricData, str.ToString());
         }
 
-        public string getSaveData_Hymn()
+        public void saveData_Hymn(object sender, Event.SaveDataEventArgs e)
         {
             StringBuilder str = new StringBuilder(50).Clear();
 
@@ -93,7 +95,37 @@ namespace BibleProjector_WPF.module.Data
                 str.Append(SEPARATOR);
             }
 
-            return str.ToString();
+            e.saveDataFunc(SaveDataTypeEnum.HymnData, str.ToString());
+        }
+
+        // ============================================== 예약값 추출 지원 ==============================================
+
+        public ShowData getItemByReserveInfo(int ReserveInfo)
+        {
+            if (ReserveInfo < -Hymns.Count || ReserveInfo >= CCMs.Count)
+                return null;
+
+            if (ReserveInfo < 0)
+                return Hymns.ElementAt(-ReserveInfo - 1);
+            else
+                return CCMs.ElementAt(ReserveInfo);
+        }
+
+        public int getReserveInfoByItem(ShowData item)
+        {
+            if (((SongData)item).songType == SongDataTypeEnum.CCM)
+            {
+                for (int i = 0; i < CCMs.Count; i++)
+                    if (CCMs.ElementAt(i) == item)
+                        return i;
+            }
+            else
+            {
+                for (int i = 0; i < Hymns.Count; i++)
+                    if (Hymns.ElementAt(i) == item)
+                        return -(i+1);
+            }
+            return int.MinValue;
         }
     }
 }

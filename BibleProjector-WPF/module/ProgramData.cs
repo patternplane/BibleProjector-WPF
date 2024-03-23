@@ -26,17 +26,17 @@ namespace BibleProjector_WPF.module
         const string HYMN_SUB_DATA = PROGRAM_DATA_PATH + "\\HymnSubData";
         const string OPTION_DATA = PROGRAM_DATA_PATH + "\\Option";
         const string RESERVE_DATA = PROGRAM_DATA_PATH + "\\ReserveData";
+        const string EXTERN_PPT_DATA = PROGRAM_DATA_PATH + "\\ExternPPTpaths";
 
         // 이전 버전의 프로그램 저장값을 지원하기 위한 장치
         // 더 이상 추가 지원하지 않을 기능들
         const string LAYOUT_DATA = PROGRAM_DATA_PATH + "\\LayoutData";
         const string LYRIC_RESERVE_DATA = PROGRAM_DATA_PATH + "\\LyricReserve";
         const string BIBLE_RESERVE_DATA = PROGRAM_DATA_PATH + "\\BibleReserve";
-        const string EXTERN_PPT_DATA = PROGRAM_DATA_PATH + "\\ExternPPTpaths";
 
         static public void Initialize()
         {
-            string[] fileList = { LYRIC_DATA, HYMN_DATA, HYMN_SUB_DATA, OPTION_DATA, RESERVE_DATA };
+            string[] fileList = { HYMN_DATA, HYMN_SUB_DATA };
 
             StringBuilder warningPhrase = new StringBuilder("프로그램 실행에 필요한 다음의 파일들이 없습니다!\n");
             bool isFileMissing = false;
@@ -59,50 +59,33 @@ namespace BibleProjector_WPF.module
 
         // =========================================== 프로그램 종료시 ===========================================
 
+        static public event Event.SaveDataEventHandler SaveDataEvent;
+
         static public void saveProgramData()
         {
-            //saveLyricData();
-            saveOptionData();
-            //saveLayoutData();
-            //saveReserveData();
+            SaveDataEvent?.Invoke(null, new Event.SaveDataEventArgs(saveData));
         }
 
-        static void saveLyricData()
+        static void saveData(SaveDataTypeEnum type, string data)
         {
-            StreamWriter file = new StreamWriter(LYRIC_DATA, false);
-            file.Write(VM_LyricViewModel.getSaveData_Lyric());
-            file.Close();
+            string savePath = null;
 
-            file = new StreamWriter(HYMN_DATA, false);
-            file.Write(VM_LyricViewModel.getSaveData_Hymn());
-            file.Close();
+            if (type == SaveDataTypeEnum.LyricData)
+                savePath = LYRIC_DATA;
+            else if (type == SaveDataTypeEnum.HymnData)
+                savePath = HYMN_DATA;
+            else if (type == SaveDataTypeEnum.ExternPPTData)
+                savePath = EXTERN_PPT_DATA;
+            else if (type == SaveDataTypeEnum.ReserveData)
+                savePath = RESERVE_DATA;
+            else if (type == SaveDataTypeEnum.OptionData)
+                savePath = OPTION_DATA;
 
-            
-            /*catch (Exception e)
-            {
-                MessageBox.Show("가사 저장 실패!\n오류 : " + e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }*/
-            
-        }
+            if (savePath == null)
+                return;
 
-        static void saveOptionData()
-        {
-            StreamWriter file = new StreamWriter(OPTION_DATA, false);
-            file.Write(module.ProgramOption.getSaveData());
-            file.Close();
-        }
-
-        static void saveLayoutData()
-        {
-            StreamWriter file = new StreamWriter(LAYOUT_DATA, false);
-            file.Write(module.LayoutInfo.getSaveData());
-            file.Close();
-        }
-
-        static void saveReserveData()
-        {
-            StreamWriter file = new StreamWriter(RESERVE_DATA, false);
-            file.Write(VM_ReserveManager.getSaveData());
+            StreamWriter file = new StreamWriter(savePath, false);
+            file.Write(data);
             file.Close();
         }
 
@@ -167,6 +150,17 @@ namespace BibleProjector_WPF.module
             VM_ReserveManager = ReserveManagerViewModel;
             return getDataFromFile(RESERVE_DATA);
         }
+        public static string getReserveData()
+        {
+            return getDataFromFile(RESERVE_DATA);
+        }
+
+        public static string getExternPPTData()
+        {
+            string data = getDataFromFile(EXTERN_PPT_DATA);
+            File.Delete(EXTERN_PPT_DATA);
+            return data;
+        }
 
         // 더 이상 추가 지원하지 않을 기능들
 
@@ -181,13 +175,6 @@ namespace BibleProjector_WPF.module
         {
             string data = getDataFromFile(BIBLE_RESERVE_DATA);
             File.Delete(BIBLE_RESERVE_DATA);
-            return data;
-        }
-
-        public static string getExternPPTData()
-        {
-            string data = getDataFromFile(EXTERN_PPT_DATA);
-            File.Delete(EXTERN_PPT_DATA);
             return data;
         }
     }

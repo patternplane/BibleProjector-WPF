@@ -227,7 +227,7 @@ namespace BibleProjector_WPF.module
 
         }
 
-        static public string getSaveData()
+        static public void saveData(object sender, Event.SaveDataEventArgs e)
         {
             StringBuilder str = new StringBuilder(10);
             
@@ -247,7 +247,7 @@ namespace BibleProjector_WPF.module
                 str.Append(f.Path);
             }
 
-            return str.ToString();
+            e.saveDataFunc(SaveDataTypeEnum.OptionData, str.ToString());
         }
     }
 }

@@ -12,7 +12,7 @@ namespace BibleProjector_WPF.module.Data
         string subTitle;
         public SongContent songContent { get; set; }
         ShowContentData[] currentContents = null;
-        SongDataTypeEnum songType;
+        public SongDataTypeEnum songType { get; private set; }
         public string pptFrameFullPath = null;
         public int linePerSlide = -1;
 

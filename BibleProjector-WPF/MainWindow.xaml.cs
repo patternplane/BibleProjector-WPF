@@ -103,25 +103,27 @@ namespace BibleProjector_WPF
                 throw new Exception("필수 파일 없음");
             }
 
+            Database.DatabaseInitailize();
+            Powerpoint.Initialize();
+            module.ProgramOption.Initialize();
+
             module.ExternPPTManager pptMan = new module.ExternPPTManager();
+            module.Data.SongManager songMan = new module.Data.SongManager();
+            module.BibleDataManager bibleMan = new module.BibleDataManager();
 
             module.ISearcher searcher = new module.Data.MultiSearcher(
                 new module.BibleSearcher(),
                 new module.Data.SongSearcher(
-                    new module.Data.SongManager()),
+                    songMan),
                 new module.ExternPPTSearcher(
                     pptMan));
-
-            Database.DatabaseInitailize();
-            Powerpoint.Initialize();
-            module.ProgramOption.Initialize();
 
             shiftEventManager = new ViewModel.ShiftEventManager();
 
             System.Collections.ObjectModel.Collection<ViewModel.ViewModel> buttonVMs
                 = new System.Collections.ObjectModel.Collection<ViewModel.ViewModel>();
             for (int i = 0; i < 6; i++)
-                buttonVMs.Add(new ViewModel.MainPage.VMExternPPTEditButton(pptMan, shiftEventManager));
+                buttonVMs.Add(new ViewModel.MainPage.VMExternPPTEditButton(pptMan, shiftEventManager, i));
 
             module.ShowStarter showStarter = new module.ShowStarter();
 
@@ -130,7 +132,7 @@ namespace BibleProjector_WPF
             showControlers[1] = new ViewModel.MainPage.VMShowControler(ShowContentType.Song, showStarter);
             showControlers[2] = new ViewModel.MainPage.VMShowControler(ShowContentType.PPT, showStarter);
 
-            module.ReserveDataManager reserveDataManager = new module.ReserveDataManager();
+            module.ReserveDataManager reserveDataManager = new module.ReserveDataManager(bibleMan, songMan, pptMan);
 
             this.VM_Main = new ViewModel.MainPage.VMMain(
                 new ViewModel.MainPage.VMControlPage(
@@ -140,6 +142,12 @@ namespace BibleProjector_WPF
                     buttonVMs),
                 new ViewModel.OptionViewModel(),
                 new ViewModel.MainPage.VMOptionBar());
+
+            module.ProgramData.SaveDataEvent += songMan.saveData_Lyric;
+            module.ProgramData.SaveDataEvent += songMan.saveData_Hymn;
+            module.ProgramData.SaveDataEvent += pptMan.saveData;
+            module.ProgramData.SaveDataEvent += reserveDataManager.saveData;
+            module.ProgramData.SaveDataEvent += module.ProgramOption.saveData;
 
             //===============================================================================================================
 

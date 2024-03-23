@@ -61,15 +61,26 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             }
         }
 
-        public VMExternPPTEditButton(ExternPPTManager pptManager, ShiftEventManager shiftEventManager)
+        int myIdx;
+
+        public VMExternPPTEditButton(ExternPPTManager pptManager, ShiftEventManager shiftEventManager, int idx)
         {
             this.pptManager = pptManager;
             shiftEventManager.ShiftStateChanged += OnShiftTask;
+            this.myIdx = idx;
 
             CAddPPTFile = new RelayCommand(AddPPTFile, CanRunAddPPTFile);
             CEditPPTFile = new RelayCommand(obj => EditPPTFile(), obj => CanRunEditPPTFile());
             CRefreshPPTFile = new RelayCommand(obj => RefreshPPTFile(), obj => CanRefreshPPTFile());
             CDeletePPTFile = new RelayCommand(obj => DeletePPTFile(), obj => { return HasItem; });
+
+            initialize();
+        }
+
+        void initialize()
+        {
+            if (pptManager.getMyData(myIdx) != null)
+                asignPPTData(pptManager.getMyData(myIdx).fileName);
         }
 
         // ========== Commands ==========
@@ -116,14 +127,19 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         void addPPTFile(string fullFilePath)
         {
-            currentData = pptManager.AddPPT(fullFilePath);
-            MainTitle = currentData.fileName;
+            currentData = pptManager.AddPPT(fullFilePath, myIdx);
+            asignPPTData(currentData.fileName);
+        }
+
+        void asignPPTData(string fileName)
+        {
+            MainTitle = fileName;
             OnPropertyChanged("MainTitle");
         }
 
         void unlinkPPTFile()
         {
-            pptManager.UnlinkPPT(currentData);
+            pptManager.UnlinkPPT(myIdx);
             MainTitle = "";
             OnPropertyChanged("MainTitle");
             currentData = null;
