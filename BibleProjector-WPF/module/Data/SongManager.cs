@@ -86,8 +86,8 @@ namespace BibleProjector_WPF.module.Data
 
             foreach (SongData hymn in Hymns)
             {
-                str.Append(hymn.songContent.getContentByVerse(1));
-                for (int i = 2; i <= hymn.songContent.lyricCount; i++)
+                str.Append(hymn.songContent.getContentByVerse(0));
+                for (int i = 1; i < hymn.songContent.lyricCount; i++)
                 {
                     str.Append(HYMN_SEPARATOR);
                     str.Append(hymn.songContent.getContentByVerse(i));

@@ -40,12 +40,12 @@ namespace BibleProjector_WPF.module.Data
             return lyrics.ToArray();
         }
 
-        public string getContentByVerse(int page)
+        public string getContentByVerse(int pageIdx)
         {
-            if (page < 0 || page >= lyricCount)
+            if (pageIdx < 0 || pageIdx >= lyricCount)
                 return null;
 
-            return lyrics[page];
+            return lyrics[pageIdx];
         }
     }
 }
