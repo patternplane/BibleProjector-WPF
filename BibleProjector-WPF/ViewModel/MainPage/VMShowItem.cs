@@ -12,7 +12,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public object Content { get; set; }
         public bool DoHighlight { get; set; }
 
-        public VMShowItem(int displayIdx,object content, bool doHighlight)
+        public VMShowItem(int displayIdx, object content, bool doHighlight)
         {
             this.DisplayIndex = displayIdx;
             this.Content = content;

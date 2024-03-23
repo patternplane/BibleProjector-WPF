@@ -108,9 +108,9 @@ namespace BibleProjector_WPF.ViewModel.MainPage
                 this.Title2 = currentData.getTitle2();
                 OnPropertyChanged("Title2");
                 ObservableCollection<VMShowItem> displayPages = new ObservableCollection<VMShowItem>();
-                int i = 0;
+                int i = 1;
                 foreach (module.Data.ShowContentData item in currentData.getContents())
-                    displayPages.Add(new VMShowItem(i + 1, item.DisplayData, item.DoHighlight));
+                    displayPages.Add(new VMShowItem(i++, item.DisplayData, item.DoHighlight));
                 this.Pages = displayPages;
                 OnPropertyChanged("Pages");
 
