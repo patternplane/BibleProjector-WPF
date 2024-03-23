@@ -28,8 +28,8 @@ namespace BibleProjector_WPF.View.MainPage
             this.SetBinding(ItemSelectedCommandProperty, b);
 
             // 테스팅용
-            b = new Binding("CItemClick");
-            this.SetBinding(CItemClickProperty, b);
+            //b = new Binding("CItemClick");
+            //this.SetBinding(CItemClickProperty, b);
         }
 
         // ========== BindingProperties ==========
@@ -119,12 +119,12 @@ namespace BibleProjector_WPF.View.MainPage
         void EH_SearchItemSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count >= 1)
-                ItemSelectedCommand.Execute(e.AddedItems[0]);
+                ItemSelectedCommand?.Execute(e.AddedItems[0]);
         }
 
         // ======================= 테스팅용 =======================
 
-        public static readonly DependencyProperty CItemClickProperty =
+        /*public static readonly DependencyProperty CItemClickProperty =
         DependencyProperty.Register(
             name: "CItemClick",
             propertyType: typeof(ICommand),
@@ -134,14 +134,14 @@ namespace BibleProjector_WPF.View.MainPage
         {
             get => (ICommand)GetValue(CItemClickProperty);
             set => SetValue(CItemClickProperty, value);
-        }
+        }*/
         private void ListBoxItem_MouseDown(object sender, MouseButtonEventArgs e)
         {
             ViewModel.MainPage.VMSearchResult item = (ViewModel.MainPage.VMSearchResult)((ListBoxItem)sender).DataContext;
             
             Console.WriteLine(item.DisplayTitle);
             // 테스팅용
-            CItemClick.Execute(item.getData());
+            //CItemClick.Execute(item.getData());
         }
     }
 }

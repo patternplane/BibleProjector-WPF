@@ -117,6 +117,16 @@ namespace BibleProjector_WPF.module
             }
         }
 
+        // ======================================= 찬양PPT틀 사용 가능성 확인 =======================================
+
+        static public bool canExcutableSongFrame(string frameFilePath)
+        {
+            foreach (SongFrameFile f in SongFrameFiles)
+                if (f.Path.CompareTo(frameFilePath) == 0)
+                    return true;
+            return false;
+        }
+
         // ======================================= 찬양PPT틀 지울때 처리해야 하는... =======================================
 
         static public event Event.FrameDeletedEventHandler FrameDeletedEvent;

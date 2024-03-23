@@ -146,6 +146,9 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         public void DisplayVisibility(bool OnDisplay)
         {
+            if (currentData == null)
+                return;
+
             if (OnDisplay)
                 Powerpoint.SlideShowRun(currentData);
             else
@@ -154,6 +157,9 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         public void TextVisibility(bool ShowText)
         {
+            if (currentData == null)
+                return;
+
             if (ShowText)
                 Powerpoint.ShowText(currentData);
             else
@@ -162,6 +168,9 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         public void SetDisplayTopMost()
         {
+            if (currentData == null)
+                return;
+
             Powerpoint.TopMost(currentData);
         }
 

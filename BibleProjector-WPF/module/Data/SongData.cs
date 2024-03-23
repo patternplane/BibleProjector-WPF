@@ -14,7 +14,8 @@ namespace BibleProjector_WPF.module.Data
         ShowContentData[] currentContents = null;
         public SongDataTypeEnum songType { get; private set; }
         public string pptFrameFullPath = null;
-        public int linePerSlide = -1;
+        int _linePerSlide = -1;
+        public int linePerSlide { get { if (_linePerSlide == -1) return ProgramOption.Song_LinePerSlide; else return _linePerSlide; } }
 
         public SongData(string songTitle, SongContent songContent, SongDataTypeEnum songType, string subTitle)
         {
@@ -148,7 +149,7 @@ namespace BibleProjector_WPF.module.Data
 
         public override ShowExcuteErrorEnum canExcuteShow()
         {
-            if (pptFrameFullPath == null)
+            if (!hasFrame())
                 return ShowExcuteErrorEnum.NoneFrameFile;
             else
                 return ShowExcuteErrorEnum.NoErrors;
@@ -157,6 +158,27 @@ namespace BibleProjector_WPF.module.Data
         public override bool isAvailData()
         {
             return true;
+        }
+
+        // ========================== 검증 ============================
+
+        public void checkAndSetFrame()
+        {
+            if (pptFrameFullPath != null
+                && ProgramOption.canExcutableSongFrame(pptFrameFullPath))
+                return;
+            else if (songType == SongDataTypeEnum.CCM && ProgramOption.DefaultCCMFrame != null)
+                pptFrameFullPath = ProgramOption.DefaultCCMFrame.Path;
+            else if (songType == SongDataTypeEnum.HYMN && ProgramOption.DefaultHymnFrame != null)
+                pptFrameFullPath = ProgramOption.DefaultHymnFrame.Path;
+            else
+                pptFrameFullPath = null;
+        }
+
+        public bool hasFrame()
+        {
+            checkAndSetFrame();
+            return pptFrameFullPath != null;
         }
     }
 }

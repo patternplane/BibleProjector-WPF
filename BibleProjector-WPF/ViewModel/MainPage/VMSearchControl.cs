@@ -21,8 +21,9 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public ICommand CSearchStart { get; set; }
         public ICommand CPopupHide { get; set; }
         public ICommand CLastestResultShow { get; set; }
-        public ICommand CItemClick { get; set; }
         public ICommand CItemSelected { get; set; }
+        public ICommand CStartShow { get; set; }
+        public ICommand CReserveThis { get; set; }
 
         // ========== Members ==========
 
@@ -37,8 +38,10 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             CSearchStart = new RelayCommand(obj => SearchStart());
             CPopupHide = new RelayCommand(obj => PopupHide());
             CLastestResultShow = new RelayCommand(obj => PopupShow());
-            CItemClick = new RelayCommand(itemClick);
+            //CItemClick = new RelayCommand(itemClick);
             CItemSelected = new RelayCommand(obj => ItemSelected((VMSearchResult)obj));
+            CStartShow = new RelayCommand((obj) => StartShow());
+            CReserveThis = new RelayCommand((obj) => ReserveThis());
 
             this.searcher = searcher;
             this.reserveManager = reserveManager;
@@ -47,23 +50,12 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         // ========== Command ==========
 
-        void itemClick(object obj)
+        /*void itemClick(object obj)
         {
             module.Data.ShowData data = (module.Data.ShowData)obj;
 
             Console.WriteLine("Click");
-            reserveManager.AddReserveItem(this ,(module.Data.ShowData)obj);
-
-            if (data.getDataType() == ShowContentType.Song)
-                ((module.Data.SongData)data).pptFrameFullPath = module.ProgramOption.DefaultHymnFrame.Path;
-
-            if (data.canExcuteShow() == module.Data.ShowExcuteErrorEnum.NoneFrameFile)
-                System.Windows.MessageBox.Show("틀 파일이 입력되지 않음");
-            else if (data.canExcuteShow() == module.Data.ShowExcuteErrorEnum.InvalidData)
-                System.Windows.MessageBox.Show("주어진 자료는 잘못된 자료입니다!");
-            else
-                showStarter.Show(data);
-        }
+        }*/
 
         void SearchStart()
         {
@@ -102,6 +94,29 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         {
             if (item.getData().isAvailData())
                 this.SelectionItem = item;
+        }
+
+        void StartShow()
+        {
+            if (SelectionItem == null)
+                return;
+
+            module.Data.ShowData data = SelectionItem.getData();
+
+            if (data.canExcuteShow() == module.Data.ShowExcuteErrorEnum.NoneFrameFile)
+                System.Windows.MessageBox.Show("틀 파일이 입력되지 않음");
+            else if (data.canExcuteShow() == module.Data.ShowExcuteErrorEnum.InvalidData)
+                System.Windows.MessageBox.Show("주어진 자료는 잘못된 자료입니다!");
+            else
+                showStarter.Show(data);
+        }
+
+        void ReserveThis()
+        {
+            if (SelectionItem == null)
+                return;
+
+            reserveManager.AddReserveItem(this, SelectionItem.getData());
         }
     }
 }
