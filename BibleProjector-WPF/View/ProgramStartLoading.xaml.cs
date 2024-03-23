@@ -27,13 +27,17 @@ namespace BibleProjector_WPF
             this.DataContext = this;
             try
             {
-                loadingImage = new BitmapImage();
-                loadingImage.BeginInit();
-                loadingImage.UriSource = new Uri(System.IO.Path.GetFullPath(LOADING_IMAGE_PATH), UriKind.Absolute);
-                loadingImage.CacheOption = BitmapCacheOption.OnLoad;
-                loadingImage.EndInit();
+                BitmapImage b = new BitmapImage();
+                b.BeginInit();
+                b.UriSource = new Uri(System.IO.Path.GetFullPath(LOADING_IMAGE_PATH), UriKind.Absolute);
+                b.CacheOption = BitmapCacheOption.OnLoad;
+                b.EndInit();
+
+                loadingImage = b;
             }
-            catch { }
+            catch {
+
+            }
 
             InitializeComponent();
         }

@@ -28,7 +28,8 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             ViewModel searchControl,
             ViewModel reserveList,
             Collection<ViewModel> externPPTEditButtonVMs,
-            CapsLockEventManager capsLockEventManager)
+            CapsLockEventManager capsLockEventManager,
+            module.ShowStarter showStarter)
         {
             this.ShowController = ShowControlers;
             this.VM_ShowControler_top = ShowControlers[1];
@@ -38,9 +39,27 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             this.ExternPPTEditButtons = externPPTEditButtonVMs;
 
             capsLockEventManager.CapsLockStateChanged += CapsLockTask;
+
+            showStarter.ShowStartEvent += WhenShowStarted;
         }
 
-        // ========== key Event Handling ===========
+        // ========== Show Controller Changing ===========
+
+        void WhenShowStarted(object sender, Event.ShowStartEventArgs e)
+        {
+            if (e.showData.getDataType() == ShowContentType.Bible
+                && VM_ShowControler_top != ShowController[0])
+            {
+                VM_ShowControler_top = ShowController[0];
+                OnPropertyChanged("VM_ShowControler_top");
+            }
+            else if (e.showData.getDataType() == ShowContentType.Song
+                && VM_ShowControler_top != ShowController[1])
+            {
+                VM_ShowControler_top = ShowController[1];
+                OnPropertyChanged("VM_ShowControler_top");
+            }
+        }
 
         void CapsLockTask(object sender, Event.KeyStateChangedEventArgs e)
         {

@@ -9,7 +9,7 @@ namespace BibleProjector_WPF.module
 {
     public class ShowStarter
     {
-        public Event.ShowStartEventHandler ShowStartEvent;
+        public event Event.ShowStartEventHandler ShowStartEvent;
 
         public void Show(Data.ShowData showData)
         {

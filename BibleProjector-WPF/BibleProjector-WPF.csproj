@@ -109,6 +109,7 @@
     <Compile Include="ViewModel\MainPage\VMShowItem.cs" />
     <Compile Include="ViewModel\ShiftEventManager.cs" />
     <Compile Include="ViewModel\ViewModel.cs" />
+    <Compile Include="ViewModel\VMMainWindow.cs" />
     <Compile Include="View\BibleModifyWindow.xaml.cs">
       <DependentUpon>BibleModifyWindow.xaml</DependentUpon>
     </Compile>
