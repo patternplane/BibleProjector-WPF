@@ -25,14 +25,37 @@ namespace BibleProjector_WPF.module
         const string HYMN_DATA = PROGRAM_DATA_PATH + "\\Hymns";
         const string HYMN_SUB_DATA = PROGRAM_DATA_PATH + "\\HymnSubData";
         const string OPTION_DATA = PROGRAM_DATA_PATH + "\\Option";
-        const string LAYOUT_DATA = PROGRAM_DATA_PATH + "\\LayoutData";
         const string RESERVE_DATA = PROGRAM_DATA_PATH + "\\ReserveData";
 
         // 이전 버전의 프로그램 저장값을 지원하기 위한 장치
         // 더 이상 추가 지원하지 않을 기능들
+        const string LAYOUT_DATA = PROGRAM_DATA_PATH + "\\LayoutData";
         const string LYRIC_RESERVE_DATA = PROGRAM_DATA_PATH + "\\LyricReserve";
         const string BIBLE_RESERVE_DATA = PROGRAM_DATA_PATH + "\\BibleReserve";
         const string EXTERN_PPT_DATA = PROGRAM_DATA_PATH + "\\ExternPPTpaths";
+
+        static public void Initialize()
+        {
+            string[] fileList = { LYRIC_DATA, HYMN_DATA, HYMN_SUB_DATA, OPTION_DATA, RESERVE_DATA };
+
+            StringBuilder warningPhrase = new StringBuilder("프로그램 실행에 필요한 다음의 파일들이 없습니다!\n");
+            bool isFileMissing = false;
+            foreach(string FilePath in fileList)
+            {
+                DirectoryInfo di = new DirectoryInfo(Path.GetDirectoryName(FilePath));
+                if (!di.Exists)
+                    di.Create();
+
+                if (!new FileInfo(FilePath).Exists)
+                {
+                    warningPhrase.Append(Path.GetFileName(FilePath)).Append('\n');
+                    isFileMissing = true;
+                }
+            }
+
+            if (isFileMissing)
+                throw new Exception(warningPhrase.ToString());
+        }
 
         // =========================================== 프로그램 종료시 ===========================================
 

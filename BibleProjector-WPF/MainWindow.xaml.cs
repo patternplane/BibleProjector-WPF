@@ -93,6 +93,16 @@ namespace BibleProjector_WPF
             //===============================================================================================================
             // 개편중 임시로 추가한 부분 -> MainWindow도 역시 ViewModel을 따로 두어 추가처리를 해야하지만 일단 여기서 처치중
 
+            try
+            {
+                module.ProgramData.Initialize();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "필수 파일 없음", MessageBoxButton.OK, MessageBoxImage.Warning);
+                throw new Exception("필수 파일 없음");
+            }
+
             module.ExternPPTManager pptMan = new module.ExternPPTManager();
 
             module.ISearcher searcher = new module.Data.MultiSearcher(
