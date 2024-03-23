@@ -30,6 +30,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public ICommand CRefreshPPTFile { get; set; }
         public int RefreshPPTFileError { get; private set; }
         public ICommand CDeletePPTFile { get; set; }
+        public ICommand CShowRun { get; set; }
         public bool OnShift { get; private set; }
 
         void OnShiftTask(object sender ,Event.ShiftStateChangedEventArgs e)
@@ -55,19 +56,22 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         }
         public bool HasItem { get { return (currentData != null); } }
         public string MainTitle { get { return currentData?.fileName; } }
+        ShowStarter showStarter;
 
         int myIdx;
 
-        public VMExternPPTEditButton(ExternPPTManager pptManager, ShiftEventManager shiftEventManager, int idx)
+        public VMExternPPTEditButton(ExternPPTManager pptManager, ShiftEventManager shiftEventManager, int idx, ShowStarter showStarter)
         {
             this.pptManager = pptManager;
             shiftEventManager.ShiftStateChanged += OnShiftTask;
+            this.showStarter = showStarter;
             this.myIdx = idx;
 
             CAddPPTFile = new RelayCommand(AddPPTFile, CanRunAddPPTFile);
             CEditPPTFile = new RelayCommand(obj => EditPPTFile(), obj => CanRunEditPPTFile());
             CRefreshPPTFile = new RelayCommand(obj => RefreshPPTFile(), obj => CanRefreshPPTFile());
             CDeletePPTFile = new RelayCommand(obj => DeletePPTFile(), obj => { return HasItem; });
+            CShowRun = new RelayCommand(obj => ShowRun());
 
             currentData = pptManager.getMyData(myIdx);
         }
@@ -78,6 +82,12 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         {
             AddPPTFileError = pptManager.CanAddPPT((string)filePath);
             return (AddPPTFileError == 0);
+        }
+
+        void ShowRun()
+        {
+            if (HasItem)
+                showStarter.Show(currentData);
         }
 
         void AddPPTFile(object filePath)

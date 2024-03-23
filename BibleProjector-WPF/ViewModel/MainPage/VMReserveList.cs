@@ -15,21 +15,25 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public ICommand CSetDropPreviewPos { get; set; }
         public ICommand CApplyDrag { get; set; }
         public ICommand CDeleteItems { get; set; }
+        public ICommand CItemShowStart { get; set; }
 
         VMReserveData dragPreviewItem;
         VMReserveData dropPreviewItem;
 
         module.ReserveDataManager reserveDataManager;
+        module.ShowStarter showStarter;
 
-        public VMReserveList(module.ReserveDataManager reserveDataManager)
+        public VMReserveList(module.ReserveDataManager reserveDataManager, module.ShowStarter showStarter)
         {
             this.CSetDragDrop = new RelayCommand((obj) => SetDragDrop((ViewModel[])obj));
             this.CSetDropPreviewPos = new RelayCommand(SetDropPreviewPos);
             this.CApplyDrag = new RelayCommand(ApplyDrag);
             this.CDeleteItems = new RelayCommand((obj) => DeleteItems((ViewModel[])obj));
+            this.CItemShowStart = new RelayCommand((obj) => ItemShowStart((VMReserveData)obj));
 
             reserveDataManager.ListChangedEvent += OnReserveDataUpdated;
             this.reserveDataManager = reserveDataManager;
+            this.showStarter = showStarter;
 
             dragPreviewItem = new VMReserveData("", ReserveViewType.DragPreview);
             dropPreviewItem = new VMReserveData("", ReserveViewType.DropPreview);
@@ -104,6 +108,11 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             foreach (VMReserveData item in Selection)
                 ReserveContents.Remove(item);
             reserveDataManager.DeleteReserveItem(this, deleteItems);
+        }
+
+        void ItemShowStart(VMReserveData data)
+        {
+            showStarter.Show(data.Data);
         }
 
         // ========== Command - Drag & Drop ==========

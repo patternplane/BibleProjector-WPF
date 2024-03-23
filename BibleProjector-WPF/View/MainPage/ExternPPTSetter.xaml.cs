@@ -23,6 +23,9 @@ namespace BibleProjector_WPF.View.MainPage
         public ExternPPTSetter()
         {
             InitializeComponent();
+
+            Binding b = new Binding("CShowRun");
+            this.SetBinding(ShowRunCommandProperty, b);
         }
 
         // ========== BindingProperties ==========
@@ -127,14 +130,24 @@ namespace BibleProjector_WPF.View.MainPage
             return (bool)_OnShiftProperty.GetValue(obj);
         }
 
+        public static readonly DependencyProperty ShowRunCommandProperty =
+        DependencyProperty.Register(
+            name: "ShowRunCommand",
+            propertyType: typeof(ICommand),
+            ownerType: typeof(ExternPPTSetter));
+
+        public ICommand ShowRunCommand
+        {
+            get => (ICommand)GetValue(ShowRunCommandProperty);
+            set => SetValue(ShowRunCommandProperty, value);
+        }
+
         // ========== EventHander ==========
 
         private void EH_MainButtonClick(object sender, RoutedEventArgs e)
         {
             if (getHasItemProperty(this.DataContext))
-            {
-
-            }
+                ShowRunCommand.Execute(null);
         }
 
         private void EH_FirstButtonClick(object sender, RoutedEventArgs e)

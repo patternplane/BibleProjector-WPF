@@ -23,6 +23,9 @@ namespace BibleProjector_WPF.View.MainPage
         public ReserverListView()
         {
             InitializeComponent();
+
+            Binding b = new Binding("CItemShowStart");
+            this.SetBinding(ItemShowStartCommandProperty, b);
         }
 
         private void EH_UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -112,6 +115,18 @@ namespace BibleProjector_WPF.View.MainPage
                     ?? throw new Exception("Binding Error");
 
             return (ICommand)_CDeleteItemsProperty.GetValue(obj);
+        }
+
+        public static readonly DependencyProperty ItemShowStartCommandProperty =
+        DependencyProperty.Register(
+            name: "ItemShowStartCommand",
+            propertyType: typeof(ICommand),
+            ownerType: typeof(ReserverListView));
+
+        public ICommand ItemShowStartCommand
+        {
+            get => (ICommand)GetValue(ItemShowStartCommandProperty);
+            set => SetValue(ItemShowStartCommandProperty, value);
         }
 
         // ========== Reserve View Scroll ==========
@@ -215,6 +230,15 @@ namespace BibleProjector_WPF.View.MainPage
                 getCDeleteItemsProperty(ReserveListBox.DataContext).Execute(selections.ToArray());
                 UpdateReserveItemIdxs();
             }
+        }
+
+        /*=======================================================
+         *                 Item DoubleClick
+         =======================================================*/
+
+        private void EH_ItemDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            ItemShowStartCommand.Execute(((ListBoxItem)sender).DataContext);
         }
 
         /*=======================================================

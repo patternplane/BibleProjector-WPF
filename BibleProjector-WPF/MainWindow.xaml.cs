@@ -93,12 +93,12 @@ namespace BibleProjector_WPF
 
             shiftEventManager = new ViewModel.ShiftEventManager();
 
+            module.ShowStarter showStarter = new module.ShowStarter();
+
             System.Collections.ObjectModel.Collection<ViewModel.ViewModel> buttonVMs
                 = new System.Collections.ObjectModel.Collection<ViewModel.ViewModel>();
             for (int i = 0; i < 6; i++)
-                buttonVMs.Add(new ViewModel.MainPage.VMExternPPTEditButton(pptMan, shiftEventManager, i));
-
-            module.ShowStarter showStarter = new module.ShowStarter();
+                buttonVMs.Add(new ViewModel.MainPage.VMExternPPTEditButton(pptMan, shiftEventManager, i, showStarter));
 
             ViewModel.MainPage.VMShowControler[] showControlers = new ViewModel.MainPage.VMShowControler[3];
             showControlers[0] = new ViewModel.MainPage.VMShowControler(ShowContentType.Bible, showStarter);
@@ -111,7 +111,7 @@ namespace BibleProjector_WPF
                 new ViewModel.MainPage.VMControlPage(
                     showControlers,
                     new ViewModel.MainPage.VMSearchControl(searcher, reserveDataManager, showStarter),
-                    new ViewModel.MainPage.VMReserveList(reserveDataManager),
+                    new ViewModel.MainPage.VMReserveList(reserveDataManager, showStarter),
                     buttonVMs),
                 new ViewModel.OptionViewModel(),
                 new ViewModel.MainPage.VMOptionBar());
