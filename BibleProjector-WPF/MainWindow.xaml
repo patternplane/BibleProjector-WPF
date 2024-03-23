@@ -6,8 +6,6 @@
         xmlns:local="clr-namespace:BibleProjector_WPF"
         mc:Ignorable="d"
         Title="주일성수"
-        LocationChanged="changeLocate"
-        SizeChanged="changeSize"
         SizeToContent="WidthAndHeight"
         ResizeMode="CanMinimize"
         KeyDown="EH_KeyDownCheck"

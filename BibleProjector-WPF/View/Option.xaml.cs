@@ -94,19 +94,5 @@ namespace BibleProjector_WPF
 
             VM_Option.deleteSongFrame(itemindex.ToArray());
         }
-
-        void LayoutResetButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (MessageBox.Show("모든 창의 크기를 초기화하시겠습니까?", "창 크기 초기화", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
-                return;
-
-            module.LayoutInfo.removeAllLayoutData();
-
-            MainWindow.ProgramMainWindow.ResetLayout();
-            ReserveManagerWindow.ReserveWindow.ResetLayout();
-            // 구버전 교독문 컨트롤 윈도우 처리부분
-            // if (ReadingControl.ReadingControlAccess != null)
-            //    ReadingControl.ReadingControlAccess.ResetLayout();
-        }
     }
 }

@@ -93,9 +93,9 @@
     <Compile Include="module\ReserveDataManager.cs" />
     <Compile Include="ProgramStartEnd.cs" />
     <Compile Include="RelayCommand.cs" />
+    <Compile Include="ReserveType.cs" />
     <Compile Include="ReserveViewType.cs" />
     <Compile Include="ShowContentType.cs" />
-    <Compile Include="ViewModel\BibleViewModel.cs" />
     <Compile Include="ViewModel\MainPage\VMExternPPTEditButton.cs" />
     <Compile Include="ViewModel\MainPage\VMReserveData.cs" />
     <Compile Include="ViewModel\MainPage\VMReserveList.cs" />
@@ -108,13 +108,9 @@
     <Compile Include="ViewModel\MainPage\VMShowItem.cs" />
     <Compile Include="ViewModel\ShiftEventManager.cs" />
     <Compile Include="ViewModel\ViewModel.cs" />
-    <Compile Include="View\Bible.xaml.cs">
-      <DependentUpon>Bible.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\BibleModifyWindow.xaml.cs">
       <DependentUpon>BibleModifyWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CloseButtonDisabler.cs" />
     <Compile Include="Event\ReserveListChanged.cs" />
     <Compile Include="View\MainPage\AdditionalContentButton.xaml.cs">
       <DependentUpon>AdditionalContentButton.xaml</DependentUpon>
@@ -150,11 +146,9 @@
     </Compile>
     <Compile Include="module\BibleSearcher.cs" />
     <Compile Include="module\KorString.cs" />
-    <Compile Include="module\LayoutInfo.cs" />
     <Compile Include="module\LevenshteinDistance.cs" />
     <Compile Include="module\ManualData.cs" />
     <Compile Include="module\ProgramOption.cs" />
-    <Compile Include="module\ReserveDataUnits.cs" />
     <Compile Include="module\ShowStarter.cs" />
     <Compile Include="module\CharCompare.cs" />
     <Compile Include="View\Option.xaml.cs">
@@ -162,18 +156,6 @@
     </Compile>
     <Compile Include="View\ProgramStartLoading.xaml.cs">
       <DependentUpon>ProgramStartLoading.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Reading.xaml.cs">
-      <DependentUpon>Reading.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\ReserveManagerWindow.xaml.cs">
-      <DependentUpon>ReserveManagerWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\ReserveUnitBox.xaml.cs">
-      <DependentUpon>ReserveUnitBox.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Control\ReadingControl.xaml.cs">
-      <DependentUpon>ReadingControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\LyricControl.xaml.cs">
       <DependentUpon>LyricControl.xaml</DependentUpon>
@@ -186,21 +168,10 @@
     </Compile>
     <Compile Include="UnitTester\Tester.cs" />
     <Compile Include="ViewModel\BibleModifyViewModel.cs" />
-    <Compile Include="ViewModel\BibleSearchViewModel.cs" />
     <Compile Include="ViewModel\ManualTabViewModel.cs" />
     <Compile Include="ViewModel\OptionViewModel.cs" />
-    <Compile Include="ViewModel\ReserveDataManager.cs" />
-    <Compile Include="ViewModel\ReserveManagerViewModel.cs" />
-    <Compile Include="ViewModel\Control\ReadingControlViewModel.cs" />
-    <Compile Include="ViewModel\BibleCurrentSelectingData.cs" />
-    <Compile Include="ViewModel\BibleReserveData.cs" />
-    <Compile Include="ViewModel\BibleSelectData.cs" />
     <Compile Include="ViewModel\LyricViewModel.cs" />
     <Page Include="ViewMapDictionary.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Bible.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -256,22 +227,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Reading.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\ReserveManagerWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\ReserveUnitBox.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\Control\ReadingControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="View\LyricControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -284,7 +239,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="module\BibleButtonData.cs" />
     <Compile Include="module\Database.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

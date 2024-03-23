@@ -98,7 +98,7 @@ namespace BibleProjector_WPF
 
         // ============================================= 예약 특수처리 ============================================= 
 
-        Collection<ReserveCollectionUnit> getSortedSelection(ItemCollection items, System.Collections.IList rawSelection)
+        /*Collection<ReserveCollectionUnit> getSortedSelection(ItemCollection items, System.Collections.IList rawSelection)
         {
             List<int> itemindex = new List<int>(rawSelection.Count);
 
@@ -111,15 +111,15 @@ namespace BibleProjector_WPF
                 sortedItems.Add((ReserveCollectionUnit)items[i]);
 
             return sortedItems;
-        }
+        }*/
 
         void ReserveUp_Click(object sender, RoutedEventArgs e)
         {
             if (LyricReserveListBox.SelectedItems.Count == 0)
                 return;
 
-            ViewModel.ReserveDataManager.instance.moveUpInCategory(
-                getSortedSelection(LyricReserveListBox.Items, LyricReserveListBox.SelectedItems));
+            /*ViewModel.ReserveDataManager.instance.moveUpInCategory(
+                getSortedSelection(LyricReserveListBox.Items, LyricReserveListBox.SelectedItems));*/
 
             /*if (itemindex[0] == 0)
                 return;
@@ -143,8 +143,8 @@ namespace BibleProjector_WPF
             if (LyricReserveListBox.SelectedItems.Count == 0)
                 return;
 
-            ViewModel.ReserveDataManager.instance.moveDownInCategory(
-                getSortedSelection(LyricReserveListBox.Items, LyricReserveListBox.SelectedItems));
+            /*ViewModel.ReserveDataManager.instance.moveDownInCategory(
+                getSortedSelection(LyricReserveListBox.Items, LyricReserveListBox.SelectedItems));*/
 
             /*List<int> itemindex = new List<int>(10);
             foreach (object item in LyricReserveListBox.SelectedItems)
@@ -189,8 +189,8 @@ namespace BibleProjector_WPF
             if (MessageBox.Show("선택된 예약 곡을 삭제하시겠습니까?", "찬양곡 예약 삭제", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
                 return;
 
-            ViewModel.ReserveDataManager.instance.deleteItems(
-                getSortedSelection(LyricReserveListBox.Items, LyricReserveListBox.SelectedItems));
+            /*ViewModel.ReserveDataManager.instance.deleteItems(
+                getSortedSelection(LyricReserveListBox.Items, LyricReserveListBox.SelectedItems));*/
 
             /*List<int> itemindex = new List<int>(10);
             foreach (object item in LyricReserveListBox.SelectedItems)
@@ -218,8 +218,8 @@ namespace BibleProjector_WPF
                     /*VM_LyricViewModel.LyricReserveList.Add(new ViewModel.LyricViewModel.LyricReserve(ViewModel.LyricViewModel.LyricList[i]));*/
 
                     // 예약창에 보내는 데이터
-                    ViewModel.ReserveManagerViewModel.instance.ReserveDataManager.addReserve(
-                        new module.SongReserveDataUnit(ViewModel.LyricViewModel.LyricList[i]));
+                    /*ViewModel.ReserveManagerViewModel.instance.ReserveDataManager.addReserve(
+                        new module.SongReserveDataUnit(ViewModel.LyricViewModel.LyricList[i]));*/
                 }
             }
             if (LyricReserveSelectTabControl.SelectedIndex == 1)
@@ -237,8 +237,8 @@ namespace BibleProjector_WPF
                     /*VM_LyricViewModel.LyricReserveList.Add(new ViewModel.LyricViewModel.LyricReserve(ViewModel.LyricViewModel.HymnList[i]));*/
 
                     // 예약창에 보내는 데이터
-                    ViewModel.ReserveManagerViewModel.instance.ReserveDataManager.addReserve(
-                        new module.SongReserveDataUnit(ViewModel.LyricViewModel.HymnList[i]));
+                    /*ViewModel.ReserveManagerViewModel.instance.ReserveDataManager.addReserve(
+                        new module.SongReserveDataUnit(ViewModel.LyricViewModel.HymnList[i]));*/
                 }
             }
         }

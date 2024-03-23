@@ -25,34 +25,7 @@ namespace BibleProjector_WPF
         // 개편중 임시로 제작한 구조
         public ViewModel.ViewModel VM_Main { get; set; }
 
-        // 예약 창
-        ReserveManagerWindow Window_Reserve = null;
-
         public static MainWindow ProgramMainWindow = null;
-
-        // =================================================== 윈도우 레이아웃 변경 ======================================================
-
-        public void ResetLayout()
-        {
-            this.Width = 1053.488;
-            this.Height = 612.79;
-        }
-
-        void changeSize(object sender, SizeChangedEventArgs e)
-        {
-            module.LayoutInfo.Layout_MainWindow.Width = this.ActualWidth;
-            module.LayoutInfo.Layout_MainWindow.Height = this.ActualHeight;
-            module.LayoutInfo.Layout_MainWindow.x = this.Left;
-            module.LayoutInfo.Layout_MainWindow.y = this.Top;
-        }
-
-        void changeLocate(object sender, EventArgs e)
-        {
-            module.LayoutInfo.Layout_MainWindow.Width = this.ActualWidth;
-            module.LayoutInfo.Layout_MainWindow.Height = this.ActualHeight;
-            module.LayoutInfo.Layout_MainWindow.x = this.Left;
-            module.LayoutInfo.Layout_MainWindow.y = this.Top;
-        }
 
         // =================================================== Shift키 상태 광역 전달 ======================================================
 
@@ -150,25 +123,6 @@ namespace BibleProjector_WPF
             module.ProgramData.SaveDataEvent += module.ProgramOption.saveData;
 
             //===============================================================================================================
-
-            //setLayout();
-        }
-
-        void ReserveInitialize()
-        {
-            Window_Reserve = new ReserveManagerWindow();
-            Window_Reserve.Show();
-        }
-
-        void setLayout()
-        {
-            if (module.LayoutInfo.Layout_MainWindow.Width == -1)
-                return;
-
-            this.Width = module.LayoutInfo.Layout_MainWindow.Width;
-            this.Height = module.LayoutInfo.Layout_MainWindow.Height;
-            this.Left = module.LayoutInfo.Layout_MainWindow.x;
-            this.Top = module.LayoutInfo.Layout_MainWindow.y;
         }
 
         // =================================================== 프로그램 종료 처리 ======================================================
@@ -186,13 +140,6 @@ namespace BibleProjector_WPF
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            //new module.ControlWindowManager().ForceClose();
-
-            /*if (Bible.tempBibleAccesser.SubWindow_BibleModify != null)
-                Bible.tempBibleAccesser.SubWindow_BibleModify.ForceClose();*/
-            if (Window_Reserve != null)
-                Window_Reserve.ForceClose();
-
             base.OnClosing(e);
         }
     }

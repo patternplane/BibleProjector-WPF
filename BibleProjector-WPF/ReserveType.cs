@@ -4,9 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BibleProjector_WPF.ViewModel
+namespace BibleProjector_WPF
 {
-    class BibleViewModel
+    public enum ReserveType
     {
+        NULL,
+        Bible,
+        Reading,
+        Song,
+        ExternPPT
     }
 }

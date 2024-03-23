@@ -12,10 +12,6 @@ namespace BibleProjector_WPF.module
 {
     class ProgramData
     {
-        // 데이터를 가진 객체에 접근하기 위한 참조변수들
-        static ViewModel.LyricViewModel VM_LyricViewModel;
-        static ViewModel.ReserveManagerViewModel VM_ReserveManager;
-
         // =========================================== 파일 경로 =========================================== 
 
         // 파일 경로들
@@ -115,11 +111,6 @@ namespace BibleProjector_WPF.module
             return fileContent.ToString();
         }
 
-        public static string getLyricData(ViewModel.LyricViewModel lyricViewModel)
-        {
-            VM_LyricViewModel = lyricViewModel;
-            return getDataFromFile(LYRIC_DATA);
-        }
         public static string getLyricData()
         {
             return getDataFromFile(LYRIC_DATA);
@@ -145,11 +136,6 @@ namespace BibleProjector_WPF.module
             return getDataFromFile(LAYOUT_DATA);
         }
 
-        public static string getReserveData(ViewModel.ReserveManagerViewModel ReserveManagerViewModel)
-        {
-            VM_ReserveManager = ReserveManagerViewModel;
-            return getDataFromFile(RESERVE_DATA);
-        }
         public static string getReserveData()
         {
             return getDataFromFile(RESERVE_DATA);

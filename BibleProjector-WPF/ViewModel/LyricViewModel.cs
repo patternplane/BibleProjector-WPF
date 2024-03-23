@@ -185,7 +185,7 @@ namespace BibleProjector_WPF.ViewModel
         
         public LyricViewModel()
         {
-            ReserveDataManager.subscriptToListChange(ListUpdate);
+            //ReserveDataManager.subscriptToListChange(ListUpdate);
 
             getData();
             /*
@@ -208,7 +208,7 @@ namespace BibleProjector_WPF.ViewModel
         {
             List<SingleLyric> PrimitiveLyricList = new List<SingleLyric>(10);
 
-            string rawData = module.ProgramData.getLyricData(this).TrimEnd();
+            /*string rawData = module.ProgramData.getLyricData(this).TrimEnd();
 
             foreach (string data in rawData.Split(new string[] { SEPARATOR }, StringSplitOptions.RemoveEmptyEntries))
             {
@@ -217,7 +217,7 @@ namespace BibleProjector_WPF.ViewModel
                     PrimitiveLyricList.Add(new SingleLyric(line[0], ""));
                 else if (line.Length == 2)
                     PrimitiveLyricList.Add(new SingleLyric(line[0], line[1]));
-            }
+            }*/
 
             return PrimitiveLyricList;
         }
@@ -489,7 +489,7 @@ namespace BibleProjector_WPF.ViewModel
         // =================================== 예약 탭
 
         // 예약 리스트
-        ReserveCollectionUnit[] _LyricReserveList;
+        /*ReserveCollectionUnit[] _LyricReserveList;
         public ReserveCollectionUnit[] LyricReserveList { get { return _LyricReserveList; } set { _LyricReserveList = value; OnPropertyChanged(nameof(LyricReserveList)); } }
         // 현재 (출력)선택값
         private ReserveCollectionUnit LyricReserveSelection_in;
@@ -499,13 +499,13 @@ namespace BibleProjector_WPF.ViewModel
                 else
                     SelectedLyric = null;
             }
-        }
+        }*/
 
-        ReserveCollectionUnit[] getSongReserveList()
+        /*ReserveCollectionUnit[] getSongReserveList()
         {
             return ReserveDataManager.instance.ReserveList.Where
                 (obj => (obj.reserveType == module.ReserveType.Song)).ToArray();
-        }
+        }*/
 
 
         void ListUpdate(object sender, Event.ReserveListChangedEventArgs e)
@@ -642,8 +642,8 @@ namespace BibleProjector_WPF.ViewModel
                 //LyricReserveList.Add(new LyricReserve(SelectedLyric));
 
                 // 예약창에 보내는 데이터
-                ReserveManagerViewModel.instance.ReserveDataManager.addReserve(
-                    new module.SongReserveDataUnit(SelectedLyric));
+                /*ReserveManagerViewModel.instance.ReserveDataManager.addReserve(
+                    new module.SongReserveDataUnit(SelectedLyric));*/
             }
         }
 
@@ -686,7 +686,7 @@ namespace BibleProjector_WPF.ViewModel
             if (item != null)
             {
                 LyricList.Remove(item);
-                ReserveDataManager.instance.deleteItemsByData(item);
+                //ReserveDataManager.instance.deleteItemsByData(item);
                 /* 아이템 삭제시 show도 종료되는건 다른방식으로 변경됨
                  * if (SongControl.SongControlAccess != null)
                      SongControl.SongControlAccess.CloseByRemovedLyric(item);*/

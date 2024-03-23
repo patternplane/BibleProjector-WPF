@@ -56,7 +56,6 @@ namespace BibleProjector_WPF
             
             Database.DatabaseInitailize();
             module.ProgramOption.Initialize();
-            module.LayoutInfo.Initialize();
             
             string error = Powerpoint.Initialize();
             if (error.CompareTo("") != 0)
