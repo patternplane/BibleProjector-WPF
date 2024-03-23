@@ -9,7 +9,7 @@ using System.ComponentModel;
 
 namespace BibleProjector_WPF.module
 {
-    public class SongFrameFile : BibleProjector_WPF.ViewModel.ViewModel
+    public class SongFrameFile : ViewModel.ViewModel
     {
         public string Path { get; set; }
         public string FileName { get; set; }
@@ -35,6 +35,14 @@ namespace BibleProjector_WPF.module
                 OnPropertyChanged("isHymnFrame");
             }
         }
+
+        public SongFrameFile(string path, bool isCCM = false, bool isHymn = false)
+        {
+            this.Path = path;
+            this.FileName = System.IO.Path.GetFileName(path);
+            this.isCCMFrame = isCCM;
+            this.isHymnFrame = isHymn;
+        }
     }
 
     class ProgramOption
@@ -57,6 +65,56 @@ namespace BibleProjector_WPF.module
 
         static public SongFrameFile DefaultCCMFrame { get; set; } = null;
         static public SongFrameFile DefaultHymnFrame { get; set; } = null;
+
+        // ======================================= PPT 틀 관리 관련 =======================================
+
+        static public bool isValidFrameFile(string path)
+        {
+            string fileName = Path.GetFileName(path);
+            if (BibleFramePath != null && Path.GetFileName(BibleFramePath).CompareTo(fileName) == 0)
+                return false;
+            if (ReadingFramePath != null && Path.GetFileName(ReadingFramePath).CompareTo(fileName) == 0)
+                return false;
+            foreach (SongFrameFile f in SongFrameFiles)
+                if (f.FileName.CompareTo(fileName) == 0)
+                    return false;
+
+            return true;
+        }
+
+        static public void setBibleFrameFile(string newFilePath)
+        {
+            if (BibleFramePath == null)
+                Powerpoint.Bible.setPresentation(newFilePath);
+            else
+                Powerpoint.Bible.refreshPresentation(newFilePath);
+            BibleFramePath = newFilePath;
+        }
+
+        static public void setReadingFrameFile(string newFilePath)
+        {
+            if (ReadingFramePath == null)
+                Powerpoint.Reading.setPresentation(newFilePath);
+            else
+                Powerpoint.Reading.refreshPresentation(newFilePath);
+            ReadingFramePath = newFilePath;
+        }
+
+        static public void setSongFrameFile(string newFilePath, bool isCCM = false, bool isHymn = false)
+        {
+            SongFrameFiles.Add(new SongFrameFile(newFilePath, isCCM, isHymn));
+            Powerpoint.Song.setPresentation(newFilePath);
+        }
+
+        static public void deleteSongFrameFiles(int[] itemIndexes_sorted)
+        {
+            for (int i = itemIndexes_sorted.Length - 1; i >= 0; i--)
+            {
+                module.ProgramOption.process_deleteSongFrame(SongFrameFiles[itemIndexes_sorted[i]]);
+                Powerpoint.Song.closeSingle(SongFrameFiles[itemIndexes_sorted[i]].Path);
+                SongFrameFiles.RemoveAt(itemIndexes_sorted[i]);
+            }
+        }
 
         // ======================================= 찬양PPT틀 지울때 처리해야 하는... =======================================
 
@@ -112,7 +170,7 @@ namespace BibleProjector_WPF.module
 
         static public void Initialize()
         {
-            string[] items = module.ProgramData.getOptionData().Split(new string[] { SEPARATOR }, StringSplitOptions.None);
+            string[] items = ProgramData.getOptionData().Split(new string[] { SEPARATOR }, StringSplitOptions.None);
             if (items.Length == 1)
                 return;
             
@@ -123,13 +181,13 @@ namespace BibleProjector_WPF.module
 
             if (items[2].CompareTo("") != 0)
             {
-                System.IO.FileInfo file = new FileInfo(items[2]);
+                FileInfo file = new FileInfo(items[2]);
                 if (file.Exists)
-                    BibleFramePath = items[2];
+                    setBibleFrameFile(items[2]);
             }
             if (items[3].CompareTo("") != 0)
             {
-                System.IO.FileInfo file = new FileInfo(items[3]);
+                FileInfo file = new FileInfo(items[3]);
                 if (file.Exists)
                     ReadingFramePath = items[3];
             }
@@ -145,15 +203,13 @@ namespace BibleProjector_WPF.module
                 {
                     for (int i = 4; i < items.Length; i += 2)
                     {
-                        System.IO.FileInfo file = new FileInfo(items[i + 1]);
+                        FileInfo file = new FileInfo(items[i + 1]);
                         if (file.Exists)
-                            SongFrameFiles.Add(new SongFrameFile()
-                            {
-                                Path = items[i + 1],
-                                FileName = System.IO.Path.GetFileName(items[i + 1]),
-                                isCCMFrame = ((int.Parse(items[i]) & IS_CCM_FRAME) != 0),
-                                isHymnFrame = ((int.Parse(items[i]) & IS_HYMN_FRAME) != 0)
-                            });
+                            setSongFrameFile(
+                                items[i + 1],
+                                ((int.Parse(items[i]) & IS_CCM_FRAME) != 0),
+                                ((int.Parse(items[i]) & IS_HYMN_FRAME) != 0)
+                                );
                     }
                 }
 
@@ -162,9 +218,9 @@ namespace BibleProjector_WPF.module
                 {
                     for (int i = 4; i < items.Length; i++)
                     {
-                        System.IO.FileInfo file = new FileInfo(items[i]);
+                        FileInfo file = new FileInfo(items[i]);
                         if (file.Exists)
-                            SongFrameFiles.Add(new SongFrameFile() { Path = items[i], FileName = System.IO.Path.GetFileName(items[i]) });
+                            setSongFrameFile(items[i]);
                     }
                 }
             }

@@ -99,25 +99,11 @@ namespace BibleProjector_WPF.ViewModel
 
         // ========================================== 메서드 ========================================== 
 
-        bool isValidFrameFile(string path)
-        {
-            string fileName = System.IO.Path.GetFileName(path);
-            if (BibleFramePath_Text != null && System.IO.Path.GetFileName(BibleFramePath_Text).CompareTo(fileName) == 0)
-                return false;
-            if (ReadingFramePath_Text != null && System.IO.Path.GetFileName(ReadingFramePath_Text).CompareTo(fileName) == 0)
-                return false;
-            foreach (module.SongFrameFile f in SongFramePaths_List)
-                if (f.FileName.CompareTo(fileName) == 0)
-                    return false;
-
-            return true;
-        }
-
         public void setBibleFrame()
         {
             if (FD_BibleFrame.ShowDialog() == System.Windows.Forms.DialogResult.Cancel)
                 return;
-            while (!isValidFrameFile(FD_BibleFrame.FileName))
+            while (!module.ProgramOption.isValidFrameFile(FD_BibleFrame.FileName))
             {
                 System.Windows.MessageBox.Show("이미 사용중인 ppt 틀입니다.","중복된 파일 등록",System.Windows.MessageBoxButton.OK,System.Windows.MessageBoxImage.Error);
                 if (FD_BibleFrame.ShowDialog() == System.Windows.Forms.DialogResult.Cancel)
@@ -125,16 +111,8 @@ namespace BibleProjector_WPF.ViewModel
             }
             FD_BibleFrame.InitialDirectory = System.IO.Path.GetDirectoryName(FD_BibleFrame.FileName) + "\\";
 
-            if (BibleFramePath_Text == null)
-            {
-                BibleFramePath_Text = FD_BibleFrame.FileName;
-                Powerpoint.Bible.setPresentation(BibleFramePath_Text);
-            }
-            else
-            {
-                BibleFramePath_Text = FD_BibleFrame.FileName;
-                Powerpoint.Bible.refreshPresentation(BibleFramePath_Text);
-            }
+            module.ProgramOption.setBibleFrameFile(FD_BibleFrame.FileName);
+            OnPropertyChanged("BibleFramePath_Text");
         }
 
         public void refreshBibleFrame()
@@ -155,7 +133,7 @@ namespace BibleProjector_WPF.ViewModel
         {
             if (FD_ReadingFrame.ShowDialog() == System.Windows.Forms.DialogResult.Cancel)
                 return;
-            while (!isValidFrameFile(FD_ReadingFrame.FileName))
+            while (!module.ProgramOption.isValidFrameFile(FD_ReadingFrame.FileName))
             {
                 System.Windows.MessageBox.Show("이미 사용중인 ppt 틀입니다.", "중복된 파일 등록", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
                 if (FD_ReadingFrame.ShowDialog() == System.Windows.Forms.DialogResult.Cancel)
@@ -163,16 +141,8 @@ namespace BibleProjector_WPF.ViewModel
             }
             FD_ReadingFrame.InitialDirectory = System.IO.Path.GetDirectoryName(FD_ReadingFrame.FileName) + "\\";
 
-            if (ReadingFramePath_Text == null)
-            {
-                ReadingFramePath_Text = FD_ReadingFrame.FileName;
-                Powerpoint.Reading.setPresentation(ReadingFramePath_Text);
-            }
-            else
-            {
-                ReadingFramePath_Text = FD_ReadingFrame.FileName;
-                Powerpoint.Reading.refreshPresentation(ReadingFramePath_Text);
-            }
+            module.ProgramOption.setReadingFrameFile(FD_ReadingFrame.FileName);
+            OnPropertyChanged("ReadingFramePath_Text");
         }
 
         public void refreshReadingFrame()
@@ -199,11 +169,8 @@ namespace BibleProjector_WPF.ViewModel
             StringBuilder overlappedFile = new StringBuilder();
             foreach (string newFilePath in FD_SongFrame.FileNames)
             {
-                if (isValidFrameFile(newFilePath)) 
-                { 
-                    SongFramePaths_List.Add(new module.SongFrameFile() { Path = newFilePath, FileName = System.IO.Path.GetFileName(newFilePath) });
-                    Powerpoint.Song.setPresentation(newFilePath);
-                }
+                if (module.ProgramOption.isValidFrameFile(newFilePath))
+                    module.ProgramOption.setSongFrameFile(newFilePath);
                 else
                 {
                     overlappedFile.Append(newFilePath);
@@ -236,12 +203,7 @@ namespace BibleProjector_WPF.ViewModel
 
         public void deleteSongFrame(int[] itemIndex)
         {
-            for (int i = itemIndex.Length - 1; i >= 0; i--)
-            {
-                module.ProgramOption.process_deleteSongFrame(SongFramePaths_List[itemIndex[i]]);
-                Powerpoint.Song.closeSingle(SongFramePaths_List[itemIndex[i]].Path);
-                SongFramePaths_List.RemoveAt(itemIndex[i]);
-            }
+            module.ProgramOption.deleteSongFrameFiles(itemIndex);
         }
     }
 }
