@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace BibleProjector_WPF.Event
 {
-    public class ShiftStateChangedEventArgs : EventArgs
+    public class KeyStateChangedEventArgs : EventArgs
     {
-        public bool ShiftOn { get; }
+        public bool KeyOn { get; }
 
-        public ShiftStateChangedEventArgs(bool ShiftOn)
+        public KeyStateChangedEventArgs(bool KeyOn)
         {
-            this.ShiftOn = ShiftOn;
+            this.KeyOn = KeyOn;
         }
     }
 
-    public delegate void ShiftStateChangedEventHandler(object sender, ShiftStateChangedEventArgs e);
+    public delegate void KeyStateChangedEventHandler(object sender, KeyStateChangedEventArgs e);
 }

@@ -27,27 +27,29 @@ namespace BibleProjector_WPF
 
         public static MainWindow ProgramMainWindow = null;
 
-        // =================================================== Shift키 상태 광역 전달 ======================================================
+        // =================================================== 키 상태 광역 전달 ======================================================
 
         // 임시로 여기다 해둠, MainViewModel을 도입해야 할 것임
+
         ViewModel.ShiftEventManager shiftEventManager;
-        void CShiftStateChange(object shiftState)
-        {
-            shiftEventManager.invokeShiftChange((bool)shiftState);
-        }
+        ViewModel.CapsLockEventManager capsLockEventManager;
 
         private void EH_KeyDownCheck(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.LeftShift
                 || e.Key == Key.RightShift)
-                CShiftStateChange(true);
+                shiftEventManager.invokeShiftChange(true);
+            else if (e.Key == Key.CapsLock)
+                capsLockEventManager.invokeCapsLockChange(true);
         }
 
         private void EH_KeyUpCheck(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.LeftShift
                 || e.Key == Key.RightShift)
-                CShiftStateChange(false);
+                shiftEventManager.invokeShiftChange(false);
+            else if (e.Key == Key.CapsLock)
+                capsLockEventManager.invokeCapsLockChange(false);
         }
 
         // =================================================== 프로그램 시작 처리 ======================================================
@@ -92,6 +94,7 @@ namespace BibleProjector_WPF
                     pptMan));
 
             shiftEventManager = new ViewModel.ShiftEventManager();
+            capsLockEventManager = new ViewModel.CapsLockEventManager();
 
             module.ShowStarter showStarter = new module.ShowStarter();
 
@@ -112,7 +115,8 @@ namespace BibleProjector_WPF
                     showControlers,
                     new ViewModel.MainPage.VMSearchControl(searcher, reserveDataManager, showStarter),
                     new ViewModel.MainPage.VMReserveList(reserveDataManager, showStarter),
-                    buttonVMs),
+                    buttonVMs,
+                    capsLockEventManager),
                 new ViewModel.OptionViewModel(),
                 new ViewModel.MainPage.VMOptionBar(),
                 new ViewModel.LyricViewModel(showStarter, songMan, reserveDataManager));

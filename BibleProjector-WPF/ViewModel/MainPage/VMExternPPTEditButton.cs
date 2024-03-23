@@ -33,9 +33,9 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public ICommand CShowRun { get; set; }
         public bool OnShift { get; private set; }
 
-        void OnShiftTask(object sender ,Event.ShiftStateChangedEventArgs e)
+        void OnShiftTask(object sender ,Event.KeyStateChangedEventArgs e)
         {
-            OnShift = e.ShiftOn;
+            OnShift = e.KeyOn;
             OnPropertyChanged("OnShift");
         }
 

@@ -10,14 +10,14 @@ namespace BibleProjector_WPF.ViewModel
     {
         bool isShifted = false;
 
-        public event Event.ShiftStateChangedEventHandler ShiftStateChanged;
+        public event Event.KeyStateChangedEventHandler ShiftStateChanged;
 
         public void invokeShiftChange(bool shiftState)
         {
             if (isShifted != shiftState)
             {
                 isShifted = shiftState;
-                ShiftStateChanged.Invoke(this, new Event.ShiftStateChangedEventArgs(isShifted));
+                ShiftStateChanged.Invoke(this, new Event.KeyStateChangedEventArgs(isShifted));
             }
         }
     }
