@@ -10,6 +10,6 @@ namespace BibleProjector_WPF.module.Data
     {
         NoErrors,
         NoneFrameFile,
-        InvalidBibleData
+        InvalidData
     }
 }

@@ -52,14 +52,15 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             module.Data.ShowData data = (module.Data.ShowData)obj;
 
             Console.WriteLine("Click");
-            //reserveManager.AddReserveItem(this ,(module.Data.ShowData)obj);
+            reserveManager.AddReserveItem(this ,(module.Data.ShowData)obj);
+
             if (data.getDataType() == ShowContentType.Song)
                 ((module.Data.SongData)data).pptFrameFullPath = module.ProgramOption.DefaultHymnFrame.Path;
 
             if (data.canExcuteShow() == module.Data.ShowExcuteErrorEnum.NoneFrameFile)
                 System.Windows.MessageBox.Show("틀 파일이 입력되지 않음");
-            else if (data.canExcuteShow() == module.Data.ShowExcuteErrorEnum.InvalidBibleData)
-                System.Windows.MessageBox.Show("해당 성경의 장/절이 잘못되었습니다!");
+            else if (data.canExcuteShow() == module.Data.ShowExcuteErrorEnum.InvalidData)
+                System.Windows.MessageBox.Show("주어진 자료는 잘못된 자료입니다!");
             else
                 showStarter.Show(data);
         }
