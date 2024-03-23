@@ -101,7 +101,7 @@ namespace BibleProjector_WPF
             }
             else if (Data.getDataType() == ShowContentType.PPT)
             {
-                ExternPPTs.goToSlide(((module.Data.ExternPPTData)Data).fileFullPath, PageIndex);
+                ExternPPTs.goToSlide(((module.Data.ExternPPTData)Data).fileFullPath, PageIndex + 1);
             }
         }
 

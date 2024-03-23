@@ -10,7 +10,6 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 {
     public class VMExternPPTEditButton : ViewModel
     {
-        public string MainTitle { get; set; }
         public string FilePath
         {
             get
@@ -31,13 +30,6 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public ICommand CRefreshPPTFile { get; set; }
         public int RefreshPPTFileError { get; private set; }
         public ICommand CDeletePPTFile { get; set; }
-        public bool HasItem
-        {
-            get
-            {
-                return (currentData != null);
-            }
-        }
         public bool OnShift { get; private set; }
 
         void OnShiftTask(object sender ,Event.ShiftStateChangedEventArgs e)
@@ -58,8 +50,11 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             {
                 _currentData = value;
                 OnPropertyChanged("HasItem");
+                OnPropertyChanged("MainTitle");
             }
         }
+        public bool HasItem { get { return (currentData != null); } }
+        public string MainTitle { get { return currentData?.fileName; } }
 
         int myIdx;
 
@@ -74,13 +69,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             CRefreshPPTFile = new RelayCommand(obj => RefreshPPTFile(), obj => CanRefreshPPTFile());
             CDeletePPTFile = new RelayCommand(obj => DeletePPTFile(), obj => { return HasItem; });
 
-            initialize();
-        }
-
-        void initialize()
-        {
-            if (pptManager.getMyData(myIdx) != null)
-                asignPPTData(pptManager.getMyData(myIdx).fileName);
+            currentData = pptManager.getMyData(myIdx);
         }
 
         // ========== Commands ==========
@@ -128,20 +117,11 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         void addPPTFile(string fullFilePath)
         {
             currentData = pptManager.AddPPT(fullFilePath, myIdx);
-            asignPPTData(currentData.fileName);
-        }
-
-        void asignPPTData(string fileName)
-        {
-            MainTitle = fileName;
-            OnPropertyChanged("MainTitle");
         }
 
         void unlinkPPTFile()
         {
             pptManager.UnlinkPPT(myIdx);
-            MainTitle = "";
-            OnPropertyChanged("MainTitle");
             currentData = null;
         }
     }

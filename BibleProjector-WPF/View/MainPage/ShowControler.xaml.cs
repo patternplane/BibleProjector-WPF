@@ -132,13 +132,6 @@ namespace BibleProjector_WPF.View.MainPage
             getCGoNextPageProperty(this.DataContext).Execute(null);
         }
 
-        void PageListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ListBox ControlListBox = (ListBox)sender;
-            ListBoxItem SelectedItem = (ListBoxItem)ControlListBox.ItemContainerGenerator.ContainerFromItem(ControlListBox.SelectedItem);
-            SelectedItem?.Focus();
-        }
-
         private void EH_DisplayOffButtonClick(object sender, RoutedEventArgs e)
         {
             getCDisplayOnOffProperty(this.DataContext).Execute(!((ToggleButton)sender).IsChecked);

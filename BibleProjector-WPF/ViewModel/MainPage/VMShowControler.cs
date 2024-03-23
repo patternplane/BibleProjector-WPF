@@ -25,7 +25,19 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public string Title2 { get; set; }
 
         public ObservableCollection<VMShowItem> Pages { get; set; }
-        public int CurrentPageIndex { get; set; }
+        int _CurrentPageIndex;
+        public int CurrentPageIndex 
+        { 
+            get 
+            { 
+                return _CurrentPageIndex; 
+            } 
+            set 
+            { 
+                if (_CurrentPageIndex != value) 
+                    MovePage(value);  
+            } 
+        }
 
         // 이전 페이지로 넘어갈 때 동작 설정
         public bool preview_GoLastPage { get; set; } = true;
@@ -124,7 +136,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         {
             if (pageIdx >= 0 && pageIdx < Pages.Count)
             {
-                CurrentPageIndex = pageIdx;
+                _CurrentPageIndex = pageIdx;
                 OnPropertyChanged("CurrentPageIndex");
                 Powerpoint.setPageData(currentData, pageIdx);
             }
