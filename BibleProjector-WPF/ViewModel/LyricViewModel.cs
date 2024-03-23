@@ -289,9 +289,7 @@ namespace BibleProjector_WPF.ViewModel
 
             if (newLyric != null)
             {
-                LyricList.Insert(
-                    songManager.AddSongInOrder(newLyric),
-                    newLyric);
+                songManager.AddSongInOrder(newLyric);
 
                 if (lastSearchPattern != null)
                 {
@@ -312,7 +310,6 @@ namespace BibleProjector_WPF.ViewModel
                 return;
 
             songManager.DeleteSongItem(deleteItem);
-            LyricList.Remove(deleteItem);
 
             if (lastSearchPattern != null)
             {
@@ -344,7 +341,8 @@ namespace BibleProjector_WPF.ViewModel
             }
             
             if (lastSearchPattern != null)
-                refreshSearchItem(currentLyric, lastSearchPattern);
+                if (currentLyric != null)
+                    refreshSearchItem(currentLyric, lastSearchPattern);
         }
 
         public void RunApplyHymnModify()
