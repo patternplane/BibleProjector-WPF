@@ -22,12 +22,11 @@ namespace BibleProjector_WPF
     {
 
         // ViewModel
-        ViewModel.OptionViewModel VM_Option;
+        ViewModel.OptionViewModel VM_Option { get { return (ViewModel.OptionViewModel)this.DataContext; } }
 
         public Option()
         {
             InitializeComponent();
-            VM_Option = (ViewModel.OptionViewModel)this.DataContext;
         }
 
         // ========================================= 틀 파일 등록 ==========================================

@@ -139,6 +139,8 @@ namespace BibleProjector_WPF.module.Data
         {
             if (ProgramOption.BibleFramePath == null)
                 return ShowExcuteErrorEnum.NoneFrameFile;
+            else if (verse == -1)
+                return ShowExcuteErrorEnum.InvalidBibleData;
             else
                 return ShowExcuteErrorEnum.NoErrors;
         }

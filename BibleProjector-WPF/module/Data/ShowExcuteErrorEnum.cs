@@ -9,6 +9,7 @@ namespace BibleProjector_WPF.module.Data
     public enum ShowExcuteErrorEnum
     {
         NoErrors,
-        NoneFrameFile
+        NoneFrameFile,
+        InvalidBibleData
     }
 }
