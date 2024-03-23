@@ -101,14 +101,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             if (SelectionItem == null)
                 return;
 
-            module.Data.ShowData data = SelectionItem.getData();
-
-            if (data.canExcuteShow() == module.Data.ShowExcuteErrorEnum.NoneFrameFile)
-                System.Windows.MessageBox.Show("틀 파일이 입력되지 않음");
-            else if (data.canExcuteShow() == module.Data.ShowExcuteErrorEnum.InvalidData)
-                System.Windows.MessageBox.Show("주어진 자료는 잘못된 자료입니다!");
-            else
-                showStarter.Show(data);
+            showStarter.Show(SelectionItem.getData());
         }
 
         void ReserveThis()

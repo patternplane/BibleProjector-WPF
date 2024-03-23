@@ -114,7 +114,8 @@ namespace BibleProjector_WPF
                     new ViewModel.MainPage.VMReserveList(reserveDataManager, showStarter),
                     buttonVMs),
                 new ViewModel.OptionViewModel(),
-                new ViewModel.MainPage.VMOptionBar());
+                new ViewModel.MainPage.VMOptionBar(),
+                new ViewModel.LyricViewModel(showStarter, songMan, reserveDataManager));
 
             module.ProgramData.SaveDataEvent += songMan.saveData_Lyric;
             module.ProgramData.SaveDataEvent += songMan.saveData_Hymn;

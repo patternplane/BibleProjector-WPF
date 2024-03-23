@@ -47,5 +47,14 @@ namespace BibleProjector_WPF.module.Data
 
             return lyrics[pageIdx];
         }
+
+        public void setContent(string content, int Idx)
+        {
+            if (Idx < 0 || Idx >= lyricCount
+                || content == null)
+                return;
+
+            lyrics[Idx] = content;
+        }
     }
 }

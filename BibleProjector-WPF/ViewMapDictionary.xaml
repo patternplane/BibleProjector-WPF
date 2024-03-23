@@ -29,6 +29,10 @@
         <vw_mp:ExternPPTSetter></vw_mp:ExternPPTSetter>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type vm:LyricViewModel}">
+        <root:LyricControl></root:LyricControl>
+    </DataTemplate>
+
     <DataTemplate DataType="{x:Type vm_mp:VMOptionBar}">
         <vw_mp:MainOption></vw_mp:MainOption>
     </DataTemplate>

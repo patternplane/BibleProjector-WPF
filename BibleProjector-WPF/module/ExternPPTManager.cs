@@ -116,6 +116,7 @@ namespace BibleProjector_WPF.module
 
         public void UnlinkPPT(int posId)
         {
+            ExternPPTList[posId].deleteProcess();
             ExternPPTList[posId].UnlinkPPT();
             ExternPPTList[posId] = null;
         }

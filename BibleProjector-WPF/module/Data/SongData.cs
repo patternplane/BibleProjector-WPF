@@ -15,7 +15,7 @@ namespace BibleProjector_WPF.module.Data
         public SongDataTypeEnum songType { get; private set; }
         public string pptFrameFullPath = null;
         int _linePerSlide = -1;
-        public int linePerSlide { get { if (_linePerSlide == -1) return ProgramOption.Song_LinePerSlide; else return _linePerSlide; } }
+        public int linePerSlide { get { if (_linePerSlide == -1) return ProgramOption.Song_LinePerSlide; else return _linePerSlide; } set { _linePerSlide = value; } }
 
         public SongData(string songTitle, SongContent songContent, SongDataTypeEnum songType, string subTitle)
         {

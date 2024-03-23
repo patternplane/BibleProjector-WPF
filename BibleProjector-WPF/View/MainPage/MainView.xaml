@@ -25,6 +25,24 @@
 
             <!--자료 수정 페이지-->
             <TabItem Header="자료 수정">
+                <Grid Height="620" Width="900">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border Padding="15" Grid.Row="1" Grid.Column="1" BorderBrush="gray" BorderThickness="1">
+                        <ContentControl Height="500" Width="400" Content="{Binding VM_LyricControl}"/>
+                    </Border>
+
+                    <Label Grid.Row="1" Grid.Column="2" Content="- 여백의 미 -" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </Grid>
             </TabItem>
             
             <!--설정 페이지-->

@@ -124,8 +124,6 @@ namespace BibleProjector_WPF.module
                     || lastest <= dataIdxs[i])
                     throw new Exception("예약항목 삭제 정보가 올바르지 않음");
 
-            foreach (int idx in dataIdxs)
-                reserveList[idx].deleteProcess();
             deleteItems(dataIdxs);
 
             ListChangedEvent.Invoke(sender, new Event.ReserveListChangedEventArgs(Event.ReserveListUpdateType.Delete, dataIdxs));

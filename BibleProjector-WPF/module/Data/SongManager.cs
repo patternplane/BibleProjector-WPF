@@ -17,6 +17,28 @@ namespace BibleProjector_WPF.module.Data
             Hymns = getHymnList();
         }
 
+        // ============================================== 관리 메소드 ==============================================
+
+        public int AddSongInOrder(SongData data)
+        {
+            int pos = 0;
+            for (; pos < CCMs.Count; pos++)
+                if (data.songTitle.CompareTo(CCMs[pos].songTitle) <= 0)
+                    break;
+            CCMs.Insert(pos, data);
+
+            return pos;
+        }
+
+        public void DeleteSongItem(SongData item)
+        {
+            if (CCMs.Contains(item))
+            {
+                item.deleteProcess();
+                CCMs.Remove(item);
+            }
+        }
+
         // ============================================== 받아오기 ==============================================
 
         // 파일 입출력시 구분자
