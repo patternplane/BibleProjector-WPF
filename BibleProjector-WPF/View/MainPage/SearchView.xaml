@@ -17,7 +17,7 @@
         </Grid.RowDefinitions>
 
         <!--검색 : 제목표시-->
-        <ContentControl Grid.Row="0" Margin="1">
+        <ContentControl Grid.Row="0" Margin="1,0,1,1">
             <ContentControl.Content>
                 통 합 검 색
             </ContentControl.Content>
@@ -124,7 +124,7 @@
         </Border>
 
         <!--검색 : 후처리 버튼-->
-        <Grid Grid.Row="3" Margin="1">
+        <Grid Grid.Row="3" Margin="2,2,2,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>

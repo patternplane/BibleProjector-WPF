@@ -129,7 +129,7 @@
                         </StackPanel>
                     </Grid>
                 </Grid>
-                <Border Grid.Row="1" Background="#7FB1B1B1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <Border Margin="5" Grid.Row="1" Background="#7FB1B1B1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                     <TextBlock Text="공 사 중" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" Foreground="Black" FontWeight="Bold" Opacity="0.7" RenderTransformOrigin="0.5,0.5" >
                         <TextBlock.RenderTransform>
                             <TransformGroup>
