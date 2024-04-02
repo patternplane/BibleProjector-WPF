@@ -42,6 +42,9 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         // 이전 페이지로 넘어갈 때 동작 설정
         public bool preview_GoLastPage { get; set; } = true;
 
+        // 애니메이션 효과
+        public bool DoAnimation { get; set; } = false;
+
         // ================================================ Properties ================================================
 
         module.Data.ShowData currentData;
@@ -74,6 +77,12 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         }
 
         // ================================================ 메소드 ================================================
+
+        public void doViewModelChangedAnimation()
+        {
+            DoAnimation = true;
+            OnPropertyChanged("DoAnimation");
+        }
 
         public void newShowStart(module.Data.ShowData data)
         {
@@ -175,7 +184,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         }
 
         public void GoNextPage()
-        {
+       {
             if (currentData == null)
                 return;
 

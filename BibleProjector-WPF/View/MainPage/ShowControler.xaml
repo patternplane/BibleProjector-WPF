@@ -7,6 +7,59 @@
              xmlns:home="clr-namespace:BibleProjector_WPF"
              mc:Ignorable="d" 
              d:DesignHeight="155" d:DesignWidth="899">
+    <UserControl.Background>
+        <SolidColorBrush/>
+    </UserControl.Background>
+    <UserControl.Style>
+        <Style TargetType="UserControl">
+            <Style.Triggers>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding DoAnimation}" Value="true"/>
+                        <Condition Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Song}"/>
+                    </MultiDataTrigger.Conditions>
+                    <MultiDataTrigger.EnterActions>
+                        <RemoveStoryboard BeginStoryboardName="changedStoryboard2"/>
+                        <BeginStoryboard x:Name="changedStoryboard1">
+                            <Storyboard>
+                                <ColorAnimationUsingKeyFrames
+                                    Storyboard.TargetProperty="Background.Color"
+                                    Duration="0:0:0.5">
+                                    <ColorAnimationUsingKeyFrames.KeyFrames>
+                                        <LinearColorKeyFrame Value="Aquamarine" KeyTime="0:0:0.0"/>
+                                        <LinearColorKeyFrame Value="Aquamarine" KeyTime="0:0:0.3"/>
+                                        <LinearColorKeyFrame Value="#00FFFFFF" KeyTime="0:0:0.5"/>
+                                    </ColorAnimationUsingKeyFrames.KeyFrames>
+                                </ColorAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </MultiDataTrigger.EnterActions>
+                </MultiDataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding DoAnimation}" Value="true"/>
+                        <Condition Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Bible}"/>
+                    </MultiDataTrigger.Conditions>
+                    <MultiDataTrigger.EnterActions>
+                        <RemoveStoryboard BeginStoryboardName="changedStoryboard1"/>
+                        <BeginStoryboard x:Name="changedStoryboard2">
+                            <Storyboard>
+                                <ColorAnimationUsingKeyFrames
+                                    Storyboard.TargetProperty="Background.Color"
+                                    Duration="0:0:0.5">
+                                    <ColorAnimationUsingKeyFrames.KeyFrames>
+                                        <LinearColorKeyFrame Value="GreenYellow" KeyTime="0:0:0.0"/>
+                                        <LinearColorKeyFrame Value="GreenYellow" KeyTime="0:0:0.3"/>
+                                        <LinearColorKeyFrame Value="#00FFFFFF" KeyTime="0:0:0.5"/>
+                                    </ColorAnimationUsingKeyFrames.KeyFrames>
+                                </ColorAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </MultiDataTrigger.EnterActions>
+                </MultiDataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Style>
 
     <Grid Margin="8">
         <Grid.RowDefinitions>
@@ -21,6 +74,7 @@
         <!--리스트표시부-->
         <ListBox Grid.Column="0" VerticalContentAlignment="Stretch" ScrollViewer.CanContentScroll="False" Focusable="False"
                  ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                 Background="#B2FFFFFF"
                  ItemsSource="{Binding Pages}"
                  SelectedIndex="{Binding CurrentPageIndex}">
             <ListBox.Resources>

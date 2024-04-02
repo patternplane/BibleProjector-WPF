@@ -32,8 +32,8 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             module.ShowStarter showStarter)
         {
             this.ShowController = ShowControlers;
-            this.VM_ShowControler_top = ShowControlers[1];
-            this.VM_ShowControler_bottom = ShowControlers[2];
+            this.VM_ShowControler_top = ShowControlers[2];
+            this.VM_ShowControler_bottom = ShowControlers[0];
             this.VM_SearchControl = searchControl;
             this.VM_ReserveList = reserveList;
             this.ExternPPTEditButtons = externPPTEditButtonVMs;
@@ -48,16 +48,18 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         void WhenShowStarted(object sender, Event.ShowStartEventArgs e)
         {
             if (e.showData.getDataType() == ShowContentType.Bible
-                && VM_ShowControler_top != ShowController[0])
+                && VM_ShowControler_bottom != ShowController[0])
             {
-                VM_ShowControler_top = ShowController[0];
-                OnPropertyChanged("VM_ShowControler_top");
+                VM_ShowControler_bottom = ShowController[0];
+                OnPropertyChanged("VM_ShowControler_bottom");
+                ((VMShowControler)VM_ShowControler_bottom).doViewModelChangedAnimation();
             }
             else if (e.showData.getDataType() == ShowContentType.Song
-                && VM_ShowControler_top != ShowController[1])
+                && VM_ShowControler_bottom != ShowController[1])
             {
-                VM_ShowControler_top = ShowController[1];
-                OnPropertyChanged("VM_ShowControler_top");
+                VM_ShowControler_bottom = ShowController[1];
+                OnPropertyChanged("VM_ShowControler_bottom");
+                ((VMShowControler)VM_ShowControler_bottom).doViewModelChangedAnimation();
             }
         }
 
@@ -66,11 +68,12 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             if (true == e.KeyOn)
                 return;
 
-            if (VM_ShowControler_top == ShowController[0])
-                VM_ShowControler_top = ShowController[1];
+            if (VM_ShowControler_bottom == ShowController[0])
+                VM_ShowControler_bottom = ShowController[1];
             else
-                VM_ShowControler_top = ShowController[0];
-            OnPropertyChanged("VM_ShowControler_top");
+                VM_ShowControler_bottom = ShowController[0];
+            OnPropertyChanged("VM_ShowControler_bottom");
+            ((VMShowControler)VM_ShowControler_bottom).doViewModelChangedAnimation();
         }
     }
 }
