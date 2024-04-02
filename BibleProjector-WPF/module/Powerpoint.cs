@@ -48,33 +48,13 @@ namespace BibleProjector_WPF
         public const string EXTERN_TEMP_DIRECTORY = ".\\programData\\ExternPPT\\";
         public const string EXTERN_THUMBNAIL_DIRECTORY = ".\\programData\\Thumbnails\\";
 
-        static public string Initialize()
+        static public void Initialize()
         {
             app = new Application();
 
             if (System.IO.Directory.Exists(FRAME_TEMP_DIRECTORY))
                 System.IO.Directory.Delete(FRAME_TEMP_DIRECTORY, true);
             System.IO.Directory.CreateDirectory(FRAME_TEMP_DIRECTORY);
-
-            StringBuilder pptFrameError = new StringBuilder(10);
-
-            if (module.ProgramOption.BibleFramePath == null)
-                pptFrameError.Append("성경 ppt틀\r\n");
-            else
-                Powerpoint.Bible.setPresentation(module.ProgramOption.BibleFramePath);
-
-            if (module.ProgramOption.ReadingFramePath == null)
-                pptFrameError.Append("교독문 ppt틀\r\n");
-            else
-                Powerpoint.Reading.setPresentation(module.ProgramOption.ReadingFramePath);
-
-            if (module.ProgramOption.SongFrameFiles.Count == 0)
-                pptFrameError.Append("찬양 ppt틀\r\n");
-            else
-                foreach (module.SongFrameFile f in module.ProgramOption.SongFrameFiles)
-                    Powerpoint.Song.setPresentation(f.Path);
-
-            return pptFrameError.ToString();
         }
 
         static public void FinallProcess()

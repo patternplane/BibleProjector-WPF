@@ -67,8 +67,9 @@ namespace BibleProjector_WPF
             }
 
             Database.DatabaseInitailize();
-            string error = Powerpoint.Initialize();
-            if (error.CompareTo("") != 0)
+            Powerpoint.Initialize();
+            string error = module.ProgramOption.Initialize();
+            if (error != null)
                 System.Windows.MessageBox.Show
                     (
                     "다음을 확인해주세요 : \r\n" + error,
@@ -76,7 +77,6 @@ namespace BibleProjector_WPF
                     System.Windows.MessageBoxButton.OK,
                     System.Windows.MessageBoxImage.Information
                     );
-            module.ProgramOption.Initialize();
 
             module.ExternPPTManager pptMan = new module.ExternPPTManager();
             module.Data.SongManager songMan = new module.Data.SongManager();

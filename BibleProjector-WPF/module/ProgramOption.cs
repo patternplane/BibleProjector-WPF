@@ -175,11 +175,30 @@ namespace BibleProjector_WPF.module
 
         // ======================================= 세팅 및 종료 =======================================
 
+        static public string Initialize()
+        {
+            loadSavedData();
+
+            StringBuilder pptFrameError = new StringBuilder(10);
+
+            if (BibleFramePath == null)
+                pptFrameError.Append("성경 ppt틀\r\n");
+
+            // 교독문 미사용
+            /*if (ReadingFramePath == null)
+                pptFrameError.Append("교독문 ppt틀\r\n");*/
+
+            if (SongFrameFiles.Count == 0)
+                pptFrameError.Append("찬양 ppt틀\r\n");
+
+            return (pptFrameError.Length == 0 ? null : pptFrameError.ToString());
+        }
+
         const string SEPARATOR = "∂";
         const int IS_CCM_FRAME = 1;
         const int IS_HYMN_FRAME = 2;
 
-        static public void Initialize()
+        static void loadSavedData()
         {
             string[] items = ProgramData.getOptionData().Split(new string[] { SEPARATOR }, StringSplitOptions.None);
             if (items.Length == 1)
