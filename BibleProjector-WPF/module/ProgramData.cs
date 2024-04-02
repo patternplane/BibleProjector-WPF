@@ -24,17 +24,29 @@ namespace BibleProjector_WPF.module
         const string RESERVE_DATA = PROGRAM_DATA_PATH + "\\ReserveData";
         const string EXTERN_PPT_DATA = PROGRAM_DATA_PATH + "\\ExternPPTpaths";
 
+        // 에러 로그 출력 폴더
+        const string ERROR_LOG_OUTPUT = PROGRAM_DATA_PATH + "\\errorLog";
+
         // 이전 버전의 프로그램 저장값을 지원하기 위한 장치
         // 더 이상 추가 지원하지 않을 기능들
         const string LAYOUT_DATA = PROGRAM_DATA_PATH + "\\LayoutData";
         const string LYRIC_RESERVE_DATA = PROGRAM_DATA_PATH + "\\LyricReserve";
         const string BIBLE_RESERVE_DATA = PROGRAM_DATA_PATH + "\\BibleReserve";
 
+        // 필수 확인 경로들
+        static string[] fileList = { HYMN_DATA, HYMN_SUB_DATA };
+        static string[] directoryList = { ERROR_LOG_OUTPUT };
+
         static public void Initialize()
         {
-            string[] fileList = { HYMN_DATA, HYMN_SUB_DATA };
+            foreach (string DirectoryPath in directoryList)
+            {
+                DirectoryInfo di = new DirectoryInfo(DirectoryPath);
+                if (!di.Exists)
+                    di.Create();
+            }
 
-            StringBuilder warningPhrase = new StringBuilder("프로그램 실행에 필요한 다음의 파일들이 없습니다!\n");
+                StringBuilder warningPhrase = new StringBuilder("프로그램 실행에 필요한 다음의 파일들이 없습니다!\n");
             bool isFileMissing = false;
             foreach(string FilePath in fileList)
             {
@@ -85,7 +97,18 @@ namespace BibleProjector_WPF.module
             file.Close();
         }
 
-        // =========================================== 별도 메소드 =========================================== 
+        // =========================================== 파일 쓰기 =========================================== 
+
+        static public void writeErrorLog(string data)
+        {
+            StreamWriter file = new StreamWriter(
+                ERROR_LOG_OUTPUT + "\\" + (new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds()) + ".txt",
+                false);
+            file.Write(data);
+            file.Close();
+        }
+
+        // =========================================== 파일 읽기 =========================================== 
 
         /// <summary>
         /// 특정 파일의 정보를 문자열로 읽어옵니다.
