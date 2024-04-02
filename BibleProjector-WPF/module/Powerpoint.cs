@@ -92,8 +92,12 @@ namespace BibleProjector_WPF
             if (Data.getDataType() == ShowContentType.Bible)
             {
                 module.Data.BibleData data = (module.Data.BibleData)Data;
-                Bible.Change_BibleChapter(data.getBibleTitle(), data.chapter.ToString());
-                Bible.Change_VerseContent(data.verse.ToString(), (string)data.getContents()[PageIndex].Content, PageIndex == 0);
+                Bible.ChangeContent(
+                    data.getBibleTitle(),
+                    data.chapter.ToString(),
+                    data.verse.ToString(),
+                    (string)data.getContents()[PageIndex].Content,
+                    PageIndex == 0);
             }
             else if (Data.getDataType() == ShowContentType.Song)
             {
@@ -407,19 +411,13 @@ namespace BibleProjector_WPF
                 }
             }
 
-            static public void Change_VerseContent(string verse, string content,bool FirstPage)
-            {
-                currentVerse = verse;
-                currentContent = content;
-                isFirstPage = FirstPage;
-
-                Change();
-            }
-
-            static public void Change_BibleChapter(string bible, string chapter)
+            static public void ChangeContent(string bible, string chapter, string verse, string content,bool FirstPage)
             {
                 currentBible = bible;
                 currentChapter = chapter;
+                currentVerse = verse;
+                currentContent = content;
+                isFirstPage = FirstPage;
 
                 Change();
             }
