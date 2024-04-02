@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BibleProjector_WPF.View.MainPage"
              mc:Ignorable="d" 
-             Height="35" Width="140">
+             Height="51" Width="188">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="22*"/>
@@ -13,6 +13,7 @@
         </Grid.ColumnDefinitions>
 
         <Button Grid.Column="0"
+                FontSize="15"
                 Content="{Binding MainTitle}"
                 Click="EH_MainButtonClick">
             <Button.Template>
@@ -22,10 +23,10 @@
                             <Path.Data>
                                 <CombinedGeometry>
                                     <CombinedGeometry.Geometry1>
-                                        <RectangleGeometry Rect="0,0,110,35" RadiusX="5" RadiusY="5"></RectangleGeometry>
+                                        <RectangleGeometry Rect="0,0,140,54" RadiusX="8" RadiusY="8"></RectangleGeometry>
                                     </CombinedGeometry.Geometry1>
                                     <CombinedGeometry.Geometry2>
-                                        <RectangleGeometry Rect="50,0,60,35"></RectangleGeometry>
+                                        <RectangleGeometry Rect="50,0,90,54"></RectangleGeometry>
                                     </CombinedGeometry.Geometry2>
                                 </CombinedGeometry>
                             </Path.Data>
@@ -68,7 +69,7 @@
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Button Grid.Row="0" FontSize="9"
+            <Button Grid.Row="0" FontSize="11"
                     Click="EH_FirstButtonClick">
                 <Button.Style>
                     <Style TargetType="Button">
@@ -169,7 +170,7 @@
                 </Button.Style>
             </Button>
             
-            <Button Grid.Row="1" FontSize="9"
+            <Button Grid.Row="1" FontSize="11"
                     Click="EH_SecondButtonClick">
                 편 집
                 <Button.Template>

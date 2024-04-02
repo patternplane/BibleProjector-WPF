@@ -5,22 +5,22 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BibleProjector_WPF.View.MainPage"
              mc:Ignorable="d" 
-             d:DesignHeight="301" d:DesignWidth="273">
+             d:DesignHeight="457" d:DesignWidth="368">
 
     <!--검색-->
-    <Grid>
+    <Grid Margin="1,0">
         <Grid.RowDefinitions>
-            <RowDefinition Height="6.5*"/>
-            <RowDefinition Height="6*"/>
-            <RowDefinition Height="57*"/>
-            <RowDefinition Height="10*"/>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="4"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="4"/>
+            <RowDefinition Height="70*"/>
+            <RowDefinition Height="4"/>
+            <RowDefinition Height="43"/>
         </Grid.RowDefinitions>
 
         <!--검색 : 제목표시-->
-        <ContentControl Grid.Row="0" Margin="1,0,1,1">
-            <ContentControl.Content>
-                통 합 검 색
-            </ContentControl.Content>
+        <ContentControl Grid.Row="0" FontSize="17" Content="통   합   검   색" FontWeight="Bold">
             <ContentControl.Style>
                 <Style TargetType="ContentControl">
                     <Setter Property="Template">
@@ -49,14 +49,14 @@
         </ContentControl>
 
         <!--검색 : 검색창-->
-        <Grid Grid.Row="1" Margin="1">
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="179*"/>
                 <ColumnDefinition Width="42*"/>
             </Grid.ColumnDefinitions>
 
             <Border Grid.Column="0" BorderBrush="black" BorderThickness="1,1,0,1">
-                <TextBox x:Name="SearchTextBox" Text="{Binding SearchText}"
+                <TextBox x:Name="SearchTextBox" FontSize="15" Text="{Binding SearchText}" Padding="0"
                          PreviewKeyUp="EH_TextBoxKeyUp">
                 </TextBox>
             </Border>
@@ -99,43 +99,44 @@
                     </ScrollViewer>
                 </Border>
             </Popup>
-            <Button Grid.Column="1" FontSize="11" BorderBrush="Black" Background="#FF0272AA"
+            <Button Grid.Column="1" FontSize="16" BorderBrush="Black" Background="#FF0272AA"
                     Command="{Binding CSearchStart}">
                 검 색
             </Button>
         </Grid>
 
         <!--검색 : 미리보기-->
-        <Border Grid.Row="2" Margin="1" BorderBrush="Black" BorderThickness="1">
+        <Border Grid.Row="4" BorderBrush="Black" BorderThickness="1">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="20"/>
                     <RowDefinition/>
+                    <RowDefinition Height="30"/>
                 </Grid.RowDefinitions>
-                <Border Grid.Row="0" BorderBrush="LightGray" BorderThickness="0,0,0,1">
-                    <TextBlock Margin="5,0,1,0" Text="{Binding SelectionItem.DisplayTitle}" VerticalAlignment="Center" FontWeight="Bold">
-                    </TextBlock>
-                </Border>
-                <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                    <TextBlock Margin="3" Text="{Binding SelectionItem.PreviewContent}" TextWrapping="Wrap">
+                <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
+                              VerticalAlignment="Bottom">
+                    <TextBlock FontSize="14" Margin="3" Text="{Binding SelectionItem.PreviewContent}" TextWrapping="Wrap">
                     </TextBlock>
                 </ScrollViewer>
+                <Border Grid.Row="1" BorderBrush="Gray" BorderThickness="0,2,0,0">
+                    <TextBlock Margin="5,0,1,0" FontSize="15" Text="{Binding SelectionItem.DisplayTitle}" VerticalAlignment="Center" FontWeight="Bold">
+                    </TextBlock>
+                </Border>
             </Grid>
         </Border>
 
         <!--검색 : 후처리 버튼-->
-        <Grid Grid.Row="3" Margin="2,2,2,0">
+        <Grid Grid.Row="6">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" Margin="0,0,1,0" Background="#FF72E172" Command="{Binding CStartShow}">
-                출     력
-            </Button>
-            <Button Grid.Column="1" Margin="1,0,0,0" Background="#FF02AAAA" Command="{Binding CReserveThis}">
-                예     약
-            </Button>
+            <Button Grid.Column="0" Margin="0,0,2,0" Background="#FF72E172" Command="{Binding CStartShow}"
+                    FontSize="17"
+                    Content="출   력"/>
+            <Button Grid.Column="1" Margin="2,0,0,0" Background="#FF02AAAA" Command="{Binding CReserveThis}"
+                    FontSize="17"
+                    Content="예   약"/>
         </Grid>
     </Grid>
 </UserControl>

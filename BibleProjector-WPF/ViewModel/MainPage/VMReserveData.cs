@@ -49,6 +49,8 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public void updateDisplayTitle()
         {
             DisplayTitle = MyIdx + ". " + title;
+            if (MyIdx < 10)
+                DisplayTitle = "0" + DisplayTitle;
             OnPropertyChanged("DisplayTitle");
         }
 

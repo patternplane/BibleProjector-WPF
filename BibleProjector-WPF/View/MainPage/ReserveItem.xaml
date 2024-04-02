@@ -8,7 +8,7 @@
              d:DesignHeight="23.238" d:DesignWidth="125.432">
     <Grid>
         <Border Padding="0,0,0,2" BorderBrush="Black" BorderThickness="0,0,0,1">
-            <TextBlock Text="{Binding DisplayTitle}">
+            <TextBlock Margin="10,0,0,0" FontSize="14" Text="{Binding DisplayTitle}">
             </TextBlock>
         </Border>
     </Grid>

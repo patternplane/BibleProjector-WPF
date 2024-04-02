@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:BibleProjector_WPF.View.MainPage"
              xmlns:home="clr-namespace:BibleProjector_WPF"
              mc:Ignorable="d" 
-             d:DesignHeight="155" d:DesignWidth="899">
+             d:DesignHeight="191" d:DesignWidth="1200">
     <UserControl.Background>
         <SolidColorBrush/>
     </UserControl.Background>
@@ -68,12 +68,13 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="410*"/>
             <ColumnDefinition Width="8"/>
-            <ColumnDefinition Width="115"/>
+            <ColumnDefinition Width="137"/>
         </Grid.ColumnDefinitions>
 
         <!--리스트표시부-->
         <ListBox Grid.Column="0" VerticalContentAlignment="Stretch" ScrollViewer.CanContentScroll="False" Focusable="False"
                  ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                 ScrollViewer.HorizontalScrollBarVisibility="Visible"
                  Background="#B2FFFFFF"
                  ItemsSource="{Binding Pages}"
                  SelectedIndex="{Binding CurrentPageIndex}">
@@ -174,8 +175,8 @@
                 <!--라벨-->
                 <Grid Grid.Row="0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="15*"/>
-                        <RowDefinition Height="55*"/>
+                        <RowDefinition Height="13*"/>
+                        <RowDefinition Height="60*"/>
                     </Grid.RowDefinitions>
 
                     <Border Grid.Row="0" BorderBrush="Black" BorderThickness="1">
@@ -194,7 +195,7 @@
                                 </Style.Triggers>
                             </Style>
                         </Border.Style>
-                        <Label Padding="0" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="9">
+                        <Label Padding="0" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="11">
                             <Label.Style>
                                 <Style TargetType="Label">
                                     <Style.Triggers>
@@ -220,19 +221,33 @@
                             </Grid.RowDefinitions>
 
                             <Border Grid.Row="0" VerticalAlignment="Center" BorderBrush="Silver" BorderThickness="0,0,0,1">
-                                <Label Padding="3,0" FontSize="10" Content="{Binding Title1}" />
+                                <Label Padding="3,0" FontSize="11" Content="{Binding Title1}" />
                             </Border>
                             <Border 
                                 Grid.Row="1"
                                 Margin="5,0">
                                 <TextBlock 
-                                    FontSize="12"
                                     FontWeight="Bold"
                                     TextTrimming="CharacterEllipsis"
                                     TextWrapping="Wrap"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     Text="{Binding Title2}">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Bible}">
+                                                    <Setter Property="FontSize" Value="16"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Song}">
+                                                    <Setter Property="FontSize" Value="13"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.PPT}">
+                                                    <Setter Property="FontSize" Value="13"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
                                 </TextBlock>
                             </Border>
                         </Grid>
@@ -253,12 +268,12 @@
                                     <Trigger Property="IsChecked" Value="True">
                                         <Setter Property="Content" Value="화면닫기"></Setter>
                                         <Setter Property="FontWeight" Value="Bold"></Setter>
-                                        <Setter Property="FontSize" Value="10"></Setter>
+                                        <Setter Property="FontSize" Value="13"></Setter>
                                     </Trigger>
                                     <Trigger Property="IsChecked" Value="False">
                                         <Setter Property="Content" Value="화면닫기"></Setter>
                                         <Setter Property="FontWeight" Value="Normal"></Setter>
-                                        <Setter Property="FontSize" Value="9"></Setter>
+                                        <Setter Property="FontSize" Value="12"></Setter>
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
@@ -271,12 +286,12 @@
                                     <Trigger Property="IsChecked" Value="True">
                                         <Setter Property="Content" Value="자막끄기"></Setter>
                                         <Setter Property="FontWeight" Value="Bold"></Setter>
-                                        <Setter Property="FontSize" Value="10"></Setter>
+                                        <Setter Property="FontSize" Value="13"></Setter>
                                     </Trigger>
                                     <Trigger Property="IsChecked" Value="False">
                                         <Setter Property="Content" Value="자막끄기"></Setter>
                                         <Setter Property="FontWeight" Value="Normal"></Setter>
-                                        <Setter Property="FontSize" Value="9"></Setter>
+                                        <Setter Property="FontSize" Value="12"></Setter>
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
@@ -310,7 +325,7 @@
                                                         </CombinedGeometry>
                                                     </Path.Data>
                                                 </Path>
-                                                <TextBlock HorizontalAlignment="Center" Text="❮" FontSize="20" VerticalAlignment="Center"></TextBlock>
+                                                <TextBlock HorizontalAlignment="Center" Text="❮" FontSize="22" VerticalAlignment="Center"></TextBlock>
                                             </Grid>
                                             <ControlTemplate.Triggers>
                                                 <MultiDataTrigger>
@@ -367,7 +382,7 @@
                                                         </CombinedGeometry>
                                                     </Path.Data>
                                                 </Path>
-                                                <TextBlock HorizontalAlignment="Center" Text="❯" FontSize="20" VerticalAlignment="Center"></TextBlock>
+                                                <TextBlock HorizontalAlignment="Center" Text="❯" FontSize="22" VerticalAlignment="Center"></TextBlock>
                                             </Grid>
                                             <ControlTemplate.Triggers>
                                                 <MultiDataTrigger>

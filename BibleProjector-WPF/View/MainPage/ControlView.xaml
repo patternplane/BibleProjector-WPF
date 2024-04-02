@@ -5,12 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BibleProjector_WPF.View.MainPage"
              mc:Ignorable="d" 
-             Height="620" Width="900">
+             Height="800" Width="1200">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="3*"/>
-            <RowDefinition Height="6*"/>
-            <RowDefinition Height="3*"/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="11*"/>
+            <RowDefinition Height="5*"/>
         </Grid.RowDefinitions>
 
         <!--상/하단 페이지 컨트롤러-->
@@ -31,14 +31,14 @@
                 </Grid.RowDefinitions>
 
                 <!--외부PPT 조작-->
-                <Grid Grid.Row="0" Margin="5">
+                <Grid Grid.Row="0" Margin="10,5">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="22*"/>
-                        <RowDefinition Height="133*"/>
+                        <RowDefinition Height="32"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <Border Grid.Row="0" Background="#FFF7F7F7" CornerRadius="4" Margin="1" BorderBrush="Black" BorderThickness="1">
-                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Border Grid.Row="0" Background="#FFF7F7F7" CornerRadius="8" Margin="1" BorderBrush="Black" BorderThickness="1">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" FontWeight="Bold">
                             외부 PPT 등록 및 편집
                         </TextBlock>
                     </Border>
@@ -60,37 +60,37 @@
                         <ItemsControl.ItemContainerStyle>
                             <Style>
                                 <Setter Property="Control.Padding" Value="0"/>
-                                <Setter Property="Control.Margin" Value="4,4,4,4"/>
+                                <Setter Property="Control.Margin" Value="3"/>
                             </Style>
                         </ItemsControl.ItemContainerStyle>
                     </ItemsControl>
                 </Grid>
 
                 <!--기타 문구 등록-->
-                <Grid Grid.Row="1" Margin="5">
+                <Grid Grid.Row="1" Margin="10,5">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="23*"/>
-                        <RowDefinition Height="100*"/>
+                        <RowDefinition Height="32"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <Border Grid.Row="0" Background="#FFF7F7F7" CornerRadius="4" Margin="1" BorderBrush="Black" BorderThickness="1">
+                    <Border Grid.Row="0" Background="#FFF7F7F7" CornerRadius="8" Margin="1" BorderBrush="Black" BorderThickness="1">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="127*"/>
+                                <ColumnDefinition Width="110*"/>
                                 <ColumnDefinition Width="20*"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" FontWeight="Bold">
                             사도신경 / 주기도문 / 비전선언문
                             </TextBlock>
 
-                            <Button Grid.Column="1" Margin="1.5">
+                            <Button Grid.Column="1" Margin="3,3">
                                 <Button.Resources>
                                     <Style TargetType="Border">
-                                        <Setter Property="CornerRadius" Value="8"/>
+                                        <Setter Property="CornerRadius" Value="12"/>
                                     </Style>
                                 </Button.Resources>
-                                <TextBlock Text="✚" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="12"/>
+                                <TextBlock Text="✚" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18"/>
                             </Button>
                         </Grid>
                     </Border>
@@ -102,30 +102,33 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
 
-                        <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                    Margin="0,0,0,10">
                             <StackPanel.Resources>
                                 <Style TargetType="Button">
                                     <Setter Property="Background" Value="#FFA3EEA3"/>
                                 </Style>
                             </StackPanel.Resources>
-                            <local:AdditionalContentButton/>
-                            <local:AdditionalContentButton/>
-                            <local:AdditionalContentButton/>
+                            <local:AdditionalContentButton Margin="1"/>
+                            <local:AdditionalContentButton Margin="1"/>
+                            <local:AdditionalContentButton Margin="1"/>
                         </StackPanel>
-                        <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <local:AdditionalContentButton/>
-                            <local:AdditionalContentButton/>
-                            <local:AdditionalContentButton/>
+                        <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                    Margin="0,0,0,10">
+                            <local:AdditionalContentButton Margin="1"/>
+                            <local:AdditionalContentButton Margin="1"/>
+                            <local:AdditionalContentButton Margin="1"/>
                         </StackPanel>
-                        <StackPanel Grid.Column="2" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <StackPanel Grid.Column="2" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                    Margin="0,0,0,10">
                             <StackPanel.Resources>
                                 <Style TargetType="Button">
                                     <Setter Property="Background" Value="#FFF9F9B3"/>
                                 </Style>
                             </StackPanel.Resources>
-                            <local:AdditionalContentButton/>
-                            <local:AdditionalContentButton/>
-                            <local:AdditionalContentButton/>
+                            <local:AdditionalContentButton Margin="1"/>
+                            <local:AdditionalContentButton Margin="1"/>
+                            <local:AdditionalContentButton Margin="1"/>
                         </StackPanel>
                     </Grid>
                 </Grid>
@@ -144,10 +147,10 @@
             </Grid>
 
             <!--검색-->
-            <ContentControl Grid.Column="1" Margin="5" Content="{Binding VM_SearchControl}"/>
+            <ContentControl Grid.Column="1" Margin="10,5" Content="{Binding VM_SearchControl}"/>
 
             <!--예약 목록-->
-            <ContentControl Grid.Column="2" Margin="5" Content="{Binding VM_ReserveList}"/>
+            <ContentControl Grid.Column="2" Margin="10,5" Content="{Binding VM_ReserveList}"/>
         </Grid>
     </Grid>
 </UserControl>

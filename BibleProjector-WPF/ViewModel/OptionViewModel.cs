@@ -62,6 +62,16 @@ namespace BibleProjector_WPF.ViewModel
             }
         }
 
+        public string BibleFramePath_Display
+        {
+            get
+            {
+                if (BibleFramePath_Text == null)
+                    return null;
+                else
+                    return System.IO.Path.GetFileName(BibleFramePath_Text) + " [" + BibleFramePath_Text + "]";
+            }
+        }
         public string BibleFramePath_Text
         {
             get
@@ -72,6 +82,16 @@ namespace BibleProjector_WPF.ViewModel
             {
                 module.ProgramOption.BibleFramePath = value;
                 OnPropertyChanged();
+            }
+        }
+        public string ReadingFramePath_Display
+        {
+            get
+            {
+                if (ReadingFramePath_Text == null)
+                    return null;
+                else
+                    return System.IO.Path.GetFileName(ReadingFramePath_Text) + " [" + ReadingFramePath_Text + "]";
             }
         }
         public string ReadingFramePath_Text

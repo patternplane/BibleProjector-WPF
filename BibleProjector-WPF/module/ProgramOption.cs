@@ -11,6 +11,13 @@ namespace BibleProjector_WPF.module
 {
     public class SongFrameFile : ViewModel.ViewModel
     {
+        public string DisplayName
+        {
+            get 
+            { 
+                return FileName + " [" + Path + "]";
+            }
+        }
         public string Path { get; set; }
         public string FileName { get; set; }
         bool _isCCMFrame;
