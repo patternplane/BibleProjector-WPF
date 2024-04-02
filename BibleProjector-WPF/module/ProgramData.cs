@@ -143,9 +143,7 @@ namespace BibleProjector_WPF.module
 
         public static string getExternPPTData()
         {
-            string data = getDataFromFile(EXTERN_PPT_DATA);
-            File.Delete(EXTERN_PPT_DATA);
-            return data;
+            return getDataFromFile(EXTERN_PPT_DATA);
         }
 
         // 더 이상 추가 지원하지 않을 기능들
