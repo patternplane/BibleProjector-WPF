@@ -93,6 +93,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             MovePage(0);
             TextVisibility(true);
             DisplayVisibility(true);
+            SetDisplayTopMost();
         }
 
         public void refreshData(object sender, EventArgs e)
