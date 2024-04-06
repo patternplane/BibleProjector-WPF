@@ -8,8 +8,10 @@
         Title="ProgramStartLoading"
         WindowStyle="None" Background="{x:Null}" Foreground="{x:Null}"
         AllowsTransparency="True"
-        WindowStartupLocation="CenterScreen">
-    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-        <Image Source="{Binding loadingImage}"></Image>
+        WindowStartupLocation="CenterScreen"
+        SizeToContent="WidthAndHeight">
+    <Grid MaxHeight="700" x:Name="gridView">
+        <Image Source="{Binding loadingImage}" x:Name="StdImg" Stretch="None" Visibility="Hidden"/>
+        <Image Source="{Binding loadingImage}" MaxHeight="{Binding ElementName=StdImg, Path=ActualHeight}" Height="{Binding ElementName=gridView, Path=ActualHeight}"/>
     </Grid>
 </Window>
