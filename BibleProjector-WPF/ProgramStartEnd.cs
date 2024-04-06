@@ -81,6 +81,7 @@ namespace BibleProjector_WPF
             module.ExternPPTManager pptMan = new module.ExternPPTManager();
             module.Data.SongManager songMan = new module.Data.SongManager();
             module.BibleDataManager bibleMan = new module.BibleDataManager();
+            module.ReserveDataManager reserveDataManager = new module.ReserveDataManager(bibleMan, songMan, pptMan);
 
             module.ISearcher searcher = new module.Data.MultiSearcher(
                 new module.BibleSearcher(),
@@ -97,14 +98,12 @@ namespace BibleProjector_WPF
             System.Collections.ObjectModel.Collection<ViewModel.ViewModel> buttonVMs
                 = new System.Collections.ObjectModel.Collection<ViewModel.ViewModel>();
             for (int i = 0; i < 6; i++)
-                buttonVMs.Add(new ViewModel.MainPage.VMExternPPTEditButton(pptMan, shiftEventManager, i, showStarter));
+                buttonVMs.Add(new ViewModel.MainPage.VMExternPPTEditButton(reserveDataManager, pptMan, shiftEventManager, i, showStarter));
 
             ViewModel.MainPage.VMShowControler[] showControlers = new ViewModel.MainPage.VMShowControler[3];
             showControlers[0] = new ViewModel.MainPage.VMShowControler(ShowContentType.Bible, showStarter);
             showControlers[1] = new ViewModel.MainPage.VMShowControler(ShowContentType.Song, showStarter);
             showControlers[2] = new ViewModel.MainPage.VMShowControler(ShowContentType.PPT, showStarter);
-
-            module.ReserveDataManager reserveDataManager = new module.ReserveDataManager(bibleMan, songMan, pptMan);
 
             module.ProgramData.SaveDataEvent += songMan.saveData_Lyric;
             module.ProgramData.SaveDataEvent += songMan.saveData_Hymn;

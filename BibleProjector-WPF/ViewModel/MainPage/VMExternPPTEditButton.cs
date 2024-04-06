@@ -31,6 +31,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public int RefreshPPTFileError { get; private set; }
         public ICommand CDeletePPTFile { get; set; }
         public ICommand CShowRun { get; set; }
+        public ICommand CDoReserve { get; set; }
         public bool OnShift { get; private set; }
 
         void OnShiftTask(object sender ,Event.KeyStateChangedEventArgs e)
@@ -39,6 +40,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             OnPropertyChanged("OnShift");
         }
 
+        ReserveDataManager reserveManager;
         ExternPPTManager pptManager;
         module.Data.ExternPPTData _currentData = null;
         module.Data.ExternPPTData currentData
@@ -60,8 +62,9 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         int myIdx;
 
-        public VMExternPPTEditButton(ExternPPTManager pptManager, ShiftEventManager shiftEventManager, int idx, ShowStarter showStarter)
+        public VMExternPPTEditButton(ReserveDataManager reserveManager, ExternPPTManager pptManager, ShiftEventManager shiftEventManager, int idx, ShowStarter showStarter)
         {
+            this.reserveManager = reserveManager;
             this.pptManager = pptManager;
             shiftEventManager.ShiftStateChanged += OnShiftTask;
             this.showStarter = showStarter;
@@ -72,6 +75,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             CRefreshPPTFile = new RelayCommand(obj => RefreshPPTFile(), obj => CanRefreshPPTFile());
             CDeletePPTFile = new RelayCommand(obj => DeletePPTFile(), obj => { return HasItem; });
             CShowRun = new RelayCommand(obj => ShowRun());
+            CDoReserve = new RelayCommand(obj => DoReserve());
 
             currentData = pptManager.getMyData(myIdx);
         }
@@ -120,6 +124,12 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         void RefreshPPTFile() {
             currentData.RefreshPPT();
+        }
+
+        void DoReserve()
+        {
+            if (HasItem)
+                reserveManager.AddReserveItem(this, currentData);
         }
 
         // ========== Methods ==========

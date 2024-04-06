@@ -24,8 +24,8 @@ namespace BibleProjector_WPF.View.MainPage
         {
             InitializeComponent();
 
-            Binding b = new Binding("CShowRun");
-            this.SetBinding(ShowRunCommandProperty, b);
+            this.SetBinding(ShowRunCommandProperty, new Binding("CShowRun"));
+            this.SetBinding(DoReserveCommandProperty, new Binding("CDoReserve"));
         }
 
         // ========== BindingProperties ==========
@@ -142,6 +142,18 @@ namespace BibleProjector_WPF.View.MainPage
             set => SetValue(ShowRunCommandProperty, value);
         }
 
+        public static readonly DependencyProperty DoReserveCommandProperty =
+        DependencyProperty.Register(
+            name: "DoReserveCommand",
+            propertyType: typeof(ICommand),
+            ownerType: typeof(ExternPPTSetter));
+
+        public ICommand DoReserveCommand
+        {
+            get => (ICommand)GetValue(DoReserveCommandProperty);
+            set => SetValue(DoReserveCommandProperty, value);
+        }
+
         // ========== EventHander ==========
 
         private void EH_MainButtonClick(object sender, RoutedEventArgs e)
@@ -160,7 +172,10 @@ namespace BibleProjector_WPF.View.MainPage
 
         private void EH_SecondButtonClick(object sender, RoutedEventArgs e)
         {
-            EditPPTTask();
+            if (getOnShiftProperty(this.DataContext))
+                DoReserveCommand.Execute(null);
+            else
+                EditPPTTask();
         }
 
         // ========== Sub Event Tasks ==========
