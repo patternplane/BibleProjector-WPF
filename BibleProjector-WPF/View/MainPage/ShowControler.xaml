@@ -80,13 +80,29 @@
                  SelectedIndex="{Binding CurrentPageIndex}">
             <ListBox.Resources>
                 <DataTemplate x:Key="StringItem">
-                    <Border BorderThickness="1" BorderBrush="#FFD4D4D4" Background="{x:Null}">
+                    <Border>
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="true">
+                                        <Setter Property="BorderThickness" Value="2"/>
+                                        <Setter Property="BorderBrush" Value="Orange"/>
+                                        <Setter Property="Background" Value="#33FF7845"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="false">
+                                        <Setter Property="BorderThickness" Value="1"/>
+                                        <Setter Property="BorderBrush" Value="#FFD4D4D4"/>
+                                        <Setter Property="Background" Value="{x:Null}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Margin="3,0,1,0"
+                            <TextBlock Grid.Column="0" Margin="3,0,3,0"
                                                            Text="{Binding DisplayIndex}"></TextBlock>
                             <Border Grid.Column="1" BorderThickness="1,1,1,1" BorderBrush="Black" MinWidth="50" Padding="5,0">
                                 <TextBlock Text="{Binding Content}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -104,13 +120,29 @@
                     </Border>
                 </DataTemplate>
                 <DataTemplate x:Key="ImageItem">
-                    <Border BorderThickness="1" BorderBrush="#FFD4D4D4" Background="{x:Null}">
+                    <Border>
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="true">
+                                        <Setter Property="BorderThickness" Value="2"/>
+                                        <Setter Property="BorderBrush" Value="Red"/>
+                                        <Setter Property="Background" Value="#33FF7845"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="false">
+                                        <Setter Property="BorderThickness" Value="1"/>
+                                        <Setter Property="BorderBrush" Value="#FFD4D4D4"/>
+                                        <Setter Property="Background" Value="{x:Null}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Margin="3,0,1,0"
+                            <TextBlock Grid.Column="0" Margin="3,0,3,0"
                                                            Text="{Binding DisplayIndex}"></TextBlock>
                             <Border Grid.Column="1" BorderThickness="1,1,1,1" MinWidth="50" Padding="0">
                                 <Image Source="{Binding Content}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
