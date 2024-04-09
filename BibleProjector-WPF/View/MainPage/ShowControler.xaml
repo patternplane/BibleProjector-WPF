@@ -7,11 +7,13 @@
              xmlns:home="clr-namespace:BibleProjector_WPF"
              mc:Ignorable="d" 
              d:DesignHeight="191" d:DesignWidth="1200">
-    <UserControl.Background>
-        <SolidColorBrush/>
-    </UserControl.Background>
+    <UserControl.Resources>
+        <local:ShowControllerBrushConverter x:Key="ColorConverter"/>
+        <local:ShowControllerBrush2Converter x:Key="BackgroundConverter"/>
+    </UserControl.Resources>
     <UserControl.Style>
         <Style TargetType="UserControl">
+            <Setter Property="Background" Value="{Binding ContentType, Converter={StaticResource ResourceKey=BackgroundConverter}}"/>
             <Style.Triggers>
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>
@@ -19,16 +21,15 @@
                         <Condition Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Song}"/>
                     </MultiDataTrigger.Conditions>
                     <MultiDataTrigger.EnterActions>
-                        <RemoveStoryboard BeginStoryboardName="changedStoryboard2"/>
-                        <BeginStoryboard x:Name="changedStoryboard1">
-                            <Storyboard>
+                        <BeginStoryboard>
+                            <Storyboard FillBehavior="Stop">
                                 <ColorAnimationUsingKeyFrames
                                     Storyboard.TargetProperty="Background.Color"
-                                    Duration="0:0:0.5">
+                                    Duration="0:0:0.2"
+                                    RepeatBehavior="2x">
                                     <ColorAnimationUsingKeyFrames.KeyFrames>
-                                        <LinearColorKeyFrame Value="Aquamarine" KeyTime="0:0:0.0"/>
-                                        <LinearColorKeyFrame Value="Aquamarine" KeyTime="0:0:0.3"/>
-                                        <LinearColorKeyFrame Value="#00FFFFFF" KeyTime="0:0:0.5"/>
+                                        <LinearColorKeyFrame Value="#00FFFFFF" KeyTime="0:0:0.1"/>
+                                        <LinearColorKeyFrame Value="{x:Static local:ShowItemColor.SongBackgroundBrush}" KeyTime="0:0:0.2"/>
                                     </ColorAnimationUsingKeyFrames.KeyFrames>
                                 </ColorAnimationUsingKeyFrames>
                             </Storyboard>
@@ -41,16 +42,15 @@
                         <Condition Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Bible}"/>
                     </MultiDataTrigger.Conditions>
                     <MultiDataTrigger.EnterActions>
-                        <RemoveStoryboard BeginStoryboardName="changedStoryboard1"/>
-                        <BeginStoryboard x:Name="changedStoryboard2">
-                            <Storyboard>
+                        <BeginStoryboard>
+                            <Storyboard FillBehavior="Stop">
                                 <ColorAnimationUsingKeyFrames
                                     Storyboard.TargetProperty="Background.Color"
-                                    Duration="0:0:0.5">
+                                    Duration="0:0:0.2"
+                                    RepeatBehavior="2x">
                                     <ColorAnimationUsingKeyFrames.KeyFrames>
-                                        <LinearColorKeyFrame Value="GreenYellow" KeyTime="0:0:0.0"/>
-                                        <LinearColorKeyFrame Value="GreenYellow" KeyTime="0:0:0.3"/>
-                                        <LinearColorKeyFrame Value="#00FFFFFF" KeyTime="0:0:0.5"/>
+                                        <LinearColorKeyFrame Value="#00FFFFFF" KeyTime="0:0:0.1"/>
+                                        <LinearColorKeyFrame Value="{x:Static local:ShowItemColor.BibleBackgroundBrush}" KeyTime="0:0:0.2"/>
                                     </ColorAnimationUsingKeyFrames.KeyFrames>
                                 </ColorAnimationUsingKeyFrames>
                             </Storyboard>
@@ -214,17 +214,7 @@
                     <Border Grid.Row="0" BorderBrush="Black" BorderThickness="1">
                         <Border.Style>
                             <Style TargetType="Border">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Bible}">
-                                        <Setter Property="Background" Value="GreenYellow"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Song}">
-                                        <Setter Property="Background" Value="Aquamarine"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.PPT}">
-                                        <Setter Property="Background" Value="#FFFFC183"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
+                                <Setter Property="Background" Value="{Binding ContentType, Converter={StaticResource ResourceKey=ColorConverter}}"/>
                             </Style>
                         </Border.Style>
                         <Label Padding="0" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="11">
@@ -360,30 +350,10 @@
                                                 <TextBlock HorizontalAlignment="Center" Text="❮" FontSize="22" VerticalAlignment="Center"></TextBlock>
                                             </Grid>
                                             <ControlTemplate.Triggers>
-                                                <MultiDataTrigger>
-                                                    <MultiDataTrigger.Conditions>
-                                                        <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}" Value="false"/>
-                                                        <Condition Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Bible}"/>
-                                                    </MultiDataTrigger.Conditions>
-                                                    <Setter TargetName="LeftButtonPath" Property="Fill" Value="GreenYellow"/>
+                                                <DataTrigger Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}" Value="false">
+                                                    <Setter TargetName="LeftButtonPath" Property="Fill" Value="{Binding ContentType, Converter={StaticResource ResourceKey=ColorConverter}}"/>
                                                     <Setter TargetName="LeftButtonPath" Property="Stroke" Value="Black"/>
-                                                </MultiDataTrigger>
-                                                <MultiDataTrigger>
-                                                    <MultiDataTrigger.Conditions>
-                                                        <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}" Value="false"/>
-                                                        <Condition Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Song}"/>
-                                                    </MultiDataTrigger.Conditions>
-                                                    <Setter TargetName="LeftButtonPath" Property="Fill" Value="Aquamarine"/>
-                                                    <Setter TargetName="LeftButtonPath" Property="Stroke" Value="Black"/>
-                                                </MultiDataTrigger>
-                                                <MultiDataTrigger>
-                                                    <MultiDataTrigger.Conditions>
-                                                        <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}" Value="false"/>
-                                                        <Condition Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.PPT}"/>
-                                                    </MultiDataTrigger.Conditions>
-                                                    <Setter TargetName="LeftButtonPath" Property="Fill" Value="#FFFFC183"/>
-                                                    <Setter TargetName="LeftButtonPath" Property="Stroke" Value="Black"/>
-                                                </MultiDataTrigger>
+                                                </DataTrigger>
                                                 <Trigger Property="IsMouseOver" Value="true">
                                                     <Setter TargetName="LeftButtonPath" Property="Fill" Value="#FFB9ECF7"/>
                                                     <Setter TargetName="LeftButtonPath" Property="Stroke" Value="#FF0C43FF"/>
@@ -417,30 +387,10 @@
                                                 <TextBlock HorizontalAlignment="Center" Text="❯" FontSize="22" VerticalAlignment="Center"></TextBlock>
                                             </Grid>
                                             <ControlTemplate.Triggers>
-                                                <MultiDataTrigger>
-                                                    <MultiDataTrigger.Conditions>
-                                                        <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}" Value="false"/>
-                                                        <Condition Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Bible}"/>
-                                                    </MultiDataTrigger.Conditions>
-                                                    <Setter TargetName="RightButtonPath" Property="Fill" Value="GreenYellow"/>
+                                                <DataTrigger Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}" Value="false">
+                                                    <Setter TargetName="RightButtonPath" Property="Fill" Value="{Binding ContentType, Converter={StaticResource ResourceKey=ColorConverter}}"/>
                                                     <Setter TargetName="RightButtonPath" Property="Stroke" Value="Black"/>
-                                                </MultiDataTrigger>
-                                                <MultiDataTrigger>
-                                                    <MultiDataTrigger.Conditions>
-                                                        <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}" Value="false"/>
-                                                        <Condition Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Song}"/>
-                                                    </MultiDataTrigger.Conditions>
-                                                    <Setter TargetName="RightButtonPath" Property="Fill" Value="Aquamarine"/>
-                                                    <Setter TargetName="RightButtonPath" Property="Stroke" Value="Black"/>
-                                                </MultiDataTrigger>
-                                                <MultiDataTrigger>
-                                                    <MultiDataTrigger.Conditions>
-                                                        <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}" Value="false"/>
-                                                        <Condition Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.PPT}"/>
-                                                    </MultiDataTrigger.Conditions>
-                                                    <Setter TargetName="RightButtonPath" Property="Fill" Value="#FFFFC183"/>
-                                                    <Setter TargetName="RightButtonPath" Property="Stroke" Value="Black"/>
-                                                </MultiDataTrigger>
+                                                </DataTrigger>
                                                 <Trigger Property="IsMouseOver" Value="true">
                                                     <Setter TargetName="RightButtonPath" Property="Fill" Value="#FFB9ECF7"/>
                                                     <Setter TargetName="RightButtonPath" Property="Stroke" Value="#FF0C43FF"/>
@@ -453,7 +403,6 @@
                         </Button.Style>
                     </Button>
                 </Grid>
-
             </Grid>
         </Grid>
     </Grid>

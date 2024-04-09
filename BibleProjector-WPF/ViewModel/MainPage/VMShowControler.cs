@@ -82,6 +82,8 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         {
             DoAnimation = true;
             OnPropertyChanged("DoAnimation");
+            DoAnimation = false;
+            OnPropertyChanged("DoAnimation");
         }
 
         public void newShowStart(module.Data.ShowData data)
