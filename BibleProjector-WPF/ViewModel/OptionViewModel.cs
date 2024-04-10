@@ -66,44 +66,20 @@ namespace BibleProjector_WPF.ViewModel
         {
             get
             {
-                if (BibleFramePath_Text == null)
+                if (module.ProgramOption.BibleFramePath == null)
                     return null;
                 else
-                    return System.IO.Path.GetFileName(BibleFramePath_Text) + " [" + BibleFramePath_Text + "]";
-            }
-        }
-        public string BibleFramePath_Text
-        {
-            get
-            {
-                return module.ProgramOption.BibleFramePath;
-            }
-            set
-            {
-                module.ProgramOption.BibleFramePath = value;
-                OnPropertyChanged();
+                    return System.IO.Path.GetFileName(module.ProgramOption.BibleFramePath) + " [" + module.ProgramOption.BibleFramePath + "]";
             }
         }
         public string ReadingFramePath_Display
         {
             get
             {
-                if (ReadingFramePath_Text == null)
+                if (module.ProgramOption.ReadingFramePath == null)
                     return null;
                 else
-                    return System.IO.Path.GetFileName(ReadingFramePath_Text) + " [" + ReadingFramePath_Text + "]";
-            }
-        }
-        public string ReadingFramePath_Text
-        {
-            get
-            {
-                return module.ProgramOption.ReadingFramePath;
-            }
-            set
-            {
-                module.ProgramOption.ReadingFramePath = value;
-                OnPropertyChanged();
+                    return System.IO.Path.GetFileName(module.ProgramOption.ReadingFramePath) + " [" + module.ProgramOption.ReadingFramePath + "]";
             }
         }
         public BindingList<module.SongFrameFile> SongFramePaths_List { get { return module.ProgramOption.SongFrameFiles; } set{}
@@ -149,21 +125,21 @@ namespace BibleProjector_WPF.ViewModel
             FD_BibleFrame.InitialDirectory = System.IO.Path.GetDirectoryName(FD_BibleFrame.FileName) + "\\";
 
             module.ProgramOption.setBibleFrameFile(FD_BibleFrame.FileName);
-            OnPropertyChanged("BibleFramePath_Text");
+            OnPropertyChanged("BibleFramePath_Display");
         }
 
         public void refreshBibleFrame()
         {
-            if (BibleFramePath_Text == null)
+            if (module.ProgramOption.BibleFramePath == null)
                 return;
 
-            if (!new System.IO.FileInfo(BibleFramePath_Text).Exists)
+            if (!new System.IO.FileInfo(module.ProgramOption.BibleFramePath).Exists)
             {
-                System.Windows.MessageBox.Show("해당 틀 파일이 존재하지 않습니다!\r\n" + BibleFramePath_Text, "틀 파일 없음", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
-                BibleFramePath_Text = null;
+                System.Windows.MessageBox.Show("해당 틀 파일이 존재하지 않습니다!\r\n" + module.ProgramOption.BibleFramePath, "틀 파일 없음", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                module.ProgramOption.BibleFramePath = null;
             }
             else
-                Powerpoint.Bible.refreshPresentation(BibleFramePath_Text);
+                Powerpoint.Bible.refreshPresentation(module.ProgramOption.BibleFramePath);
         }
 
         public void setReadingFrame()
@@ -179,21 +155,21 @@ namespace BibleProjector_WPF.ViewModel
             FD_ReadingFrame.InitialDirectory = System.IO.Path.GetDirectoryName(FD_ReadingFrame.FileName) + "\\";
 
             module.ProgramOption.setReadingFrameFile(FD_ReadingFrame.FileName);
-            OnPropertyChanged("ReadingFramePath_Text");
+            OnPropertyChanged("ReadingFramePath_Display");
         }
 
         public void refreshReadingFrame()
         {
-            if (ReadingFramePath_Text == null)
+            if (module.ProgramOption.ReadingFramePath == null)
                 return;
 
-            if (!new System.IO.FileInfo(ReadingFramePath_Text).Exists)
+            if (!new System.IO.FileInfo(module.ProgramOption.ReadingFramePath).Exists)
             {
-                System.Windows.MessageBox.Show("해당 틀 파일이 존재하지 않습니다!\r\n" + ReadingFramePath_Text, "틀 파일 없음", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
-                ReadingFramePath_Text = null;
+                System.Windows.MessageBox.Show("해당 틀 파일이 존재하지 않습니다!\r\n" + module.ProgramOption.ReadingFramePath, "틀 파일 없음", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                module.ProgramOption.ReadingFramePath = null;
             }
             else
-                Powerpoint.Reading.refreshPresentation(ReadingFramePath_Text);
+                Powerpoint.Reading.refreshPresentation(module.ProgramOption.ReadingFramePath);
         }
 
         public void setSongFrame()
