@@ -27,6 +27,24 @@ namespace BibleProjector_WPF
         const int SWP_NOSIZE = 0x0001;
         const int SWP_NOACTIVATE = 0x0010;
 
+        [System.Runtime.InteropServices.DllImport("user32")]
+        public static extern Int32 SetWindowLong(int hWnd, Int32 nIndex, Int32 dwNewLong);
+
+        [System.Runtime.InteropServices.DllImport("user32")]
+        public static extern Int32 GetWindowLong(int hWnd, Int32 nIndex);
+        const Int32 GWL_STYLE = -16;
+        const Int32 WS_VISIBLE = 0x10000000;
+        const Int32 WS_EX_TOOLWINDOW = 0x00000080;
+
+        protected static void SlideShowHideInTaskbar(int windowHWND)
+        {
+            Int32 style = GetWindowLong(windowHWND, GWL_STYLE);
+            style |= WS_EX_TOOLWINDOW;
+            ShowWindow(windowHWND, SW_HIDE);
+            SetWindowLong(windowHWND, GWL_STYLE, style);
+            ShowWindow(windowHWND, SW_SHOW);
+        }
+
         enum PptSlideState
         {
             NotRunning,
@@ -378,6 +396,7 @@ namespace BibleProjector_WPF
                 }
                 else
                     ShowWindow(SlideWindow.HWND, SW_SHOW);
+                SlideShowHideInTaskbar(SlideWindow.HWND);
 
                 pptState = PptSlideState.WindowShow;
             }
@@ -623,6 +642,7 @@ namespace BibleProjector_WPF
                 }
                 else
                     ShowWindow(SlideWindow.HWND, SW_SHOW);
+                SlideShowHideInTaskbar(SlideWindow.HWND);
 
                 pptState = PptSlideState.WindowShow;
             }
@@ -1029,6 +1049,7 @@ namespace BibleProjector_WPF
                 }
                 else
                     ShowWindow(SlideWindow.HWND, SW_SHOW);
+                SlideShowHideInTaskbar(SlideWindow.HWND);
 
                 pptState = PptSlideState.WindowShow;
             }
@@ -1449,6 +1470,7 @@ namespace BibleProjector_WPF
                 }
                 else
                     ShowWindow(SlideWindow.HWND, SW_SHOW);
+                SlideShowHideInTaskbar(SlideWindow.HWND);
 
                 pptState = PptSlideState.WindowShow;
             }
