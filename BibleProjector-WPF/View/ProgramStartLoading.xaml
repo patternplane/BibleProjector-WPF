@@ -12,6 +12,9 @@
         SizeToContent="WidthAndHeight">
     <Grid MaxHeight="700" x:Name="gridView">
         <Image Source="{Binding loadingImage}" x:Name="StdImg" Stretch="None" Visibility="Hidden"/>
-        <Image Source="{Binding loadingImage}" MaxHeight="{Binding ElementName=StdImg, Path=ActualHeight}" Height="{Binding ElementName=gridView, Path=ActualHeight}"/>
+        <Image Source="{Binding loadingImage}"
+               MaxHeight="{Binding ElementName=StdImg, Path=ActualHeight}"
+               Height="{Binding ElementName=gridView, Path=ActualHeight}"
+               RenderOptions.BitmapScalingMode="HighQuality"/>
     </Grid>
 </Window>
