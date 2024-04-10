@@ -28,8 +28,8 @@
                                     Duration="0:0:0.2"
                                     RepeatBehavior="2x">
                                     <ColorAnimationUsingKeyFrames.KeyFrames>
-                                        <LinearColorKeyFrame Value="#00FFFFFF" KeyTime="0:0:0.1"/>
-                                        <LinearColorKeyFrame Value="{x:Static local:ShowItemColor.SongBackgroundBrush}" KeyTime="0:0:0.2"/>
+                                        <LinearColorKeyFrame Value="#FFA2A2A2" KeyTime="0:0:0.1"/>
+                                        <LinearColorKeyFrame Value="{x:Static local:ShowItemColor.SongDefaultColor}" KeyTime="0:0:0.2"/>
                                     </ColorAnimationUsingKeyFrames.KeyFrames>
                                 </ColorAnimationUsingKeyFrames>
                             </Storyboard>
@@ -49,8 +49,8 @@
                                     Duration="0:0:0.2"
                                     RepeatBehavior="2x">
                                     <ColorAnimationUsingKeyFrames.KeyFrames>
-                                        <LinearColorKeyFrame Value="#00FFFFFF" KeyTime="0:0:0.1"/>
-                                        <LinearColorKeyFrame Value="{x:Static local:ShowItemColor.BibleBackgroundBrush}" KeyTime="0:0:0.2"/>
+                                        <LinearColorKeyFrame Value="#FFA2A2A2" KeyTime="0:0:0.1"/>
+                                        <LinearColorKeyFrame Value="{x:Static local:ShowItemColor.BibleDefaultColor}" KeyTime="0:0:0.2"/>
                                     </ColorAnimationUsingKeyFrames.KeyFrames>
                                 </ColorAnimationUsingKeyFrames>
                             </Storyboard>

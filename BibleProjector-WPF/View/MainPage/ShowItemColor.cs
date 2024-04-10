@@ -12,11 +12,11 @@ namespace BibleProjector_WPF.View.MainPage
         public static Brush getBrush(ShowContentType type)
         {
             if (type == ShowContentType.Bible)
-                return new SolidColorBrush(BibleDefaultBrush);
+                return new SolidColorBrush(BibleDefaultColor);
             else if (type == ShowContentType.Song)
-                return new SolidColorBrush(SongDefaultBrush);
+                return new SolidColorBrush(SongDefaultColor);
             else if (type == ShowContentType.PPT)
-                return new SolidColorBrush(PPTDefaultBrush);
+                return new SolidColorBrush(PPTDefaultColor);
             else
                 return Brushes.Gray;
         }
@@ -24,21 +24,21 @@ namespace BibleProjector_WPF.View.MainPage
         public static Brush getBrush2(ShowContentType type)
         {
             if (type == ShowContentType.Bible)
-                return new SolidColorBrush(BibleBackgroundBrush);
+                return new SolidColorBrush(BibleBackgroundColor);
             else if (type == ShowContentType.Song)
-                return new SolidColorBrush(SongBackgroundBrush);
+                return new SolidColorBrush(SongBackgroundColor);
             else if (type == ShowContentType.PPT)
-                return new SolidColorBrush(PPTBackgroundBrush);
+                return new SolidColorBrush(PPTBackgroundColor);
             else
                 return Brushes.Gray;
         }
 
-        public static Color BibleDefaultBrush { get { return Colors.GreenYellow; } }
-        public static Color SongDefaultBrush { get { return Colors.Aquamarine; } }
-        public static Color PPTDefaultBrush { get { return Color.FromArgb(0xFF, 0xFF, 0xC1, 0x83); } }
+        public static Color BibleDefaultColor { get { return Colors.GreenYellow; } }
+        public static Color SongDefaultColor { get { return Colors.Aquamarine; } }
+        public static Color PPTDefaultColor { get { return Color.FromArgb(0xFF, 0xFF, 0xC1, 0x83); } }
 
-        public static Color BibleBackgroundBrush { get { return Color.FromArgb(0xFF, 0xE6, 0xFF, 0xC0); } }
-        public static Color SongBackgroundBrush { get { return Color.FromArgb(0xFF, 0xD8, 0xFF, 0xF2); } }
-        public static Color PPTBackgroundBrush { get { return Color.FromArgb(0xFF, 0xFF, 0xEC, 0xDA); } }
+        public static Color BibleBackgroundColor { get { return Color.FromArgb(0xFF, 0xD2, 0xFF, 0x8C); } }
+        public static Color SongBackgroundColor { get { return Color.FromArgb(0xFF, 0xBF, 0xFF, 0xE9); } }
+        public static Color PPTBackgroundColor { get { return Color.FromArgb(0xFF, 0xFF, 0xDF, 0xBF); } }
     }
 }
