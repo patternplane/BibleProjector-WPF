@@ -39,6 +39,9 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             } 
         }
 
+        public bool DisplayButtonState { get; set; } = false;
+        public bool TextButtonState { get; set; } = false;
+
         // 이전 페이지로 넘어갈 때 동작 설정
         public bool preview_GoLastPage { get; set; } = true;
 
@@ -167,6 +170,8 @@ namespace BibleProjector_WPF.ViewModel.MainPage
                 Powerpoint.SlideShowRun(currentData);
             else
                 Powerpoint.SlideShowHide(currentData);
+            DisplayButtonState = !OnDisplay;
+            OnPropertyChanged("DisplayButtonState");
         }
 
         public void TextVisibility(bool ShowText)
@@ -178,6 +183,8 @@ namespace BibleProjector_WPF.ViewModel.MainPage
                 Powerpoint.ShowText(currentData);
             else
                 Powerpoint.HideText(currentData);
+            TextButtonState = !ShowText;
+            OnPropertyChanged("TextButtonState");
         }
 
         public void SetDisplayTopMost()

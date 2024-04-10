@@ -283,7 +283,7 @@
                         <ColumnDefinition Width="4*"/>
                         <ColumnDefinition Width="50*"/>
                     </Grid.ColumnDefinitions>
-                    <ToggleButton Click="EH_DisplayOffButtonClick">
+                    <ToggleButton Click="EH_DisplayOffButtonClick" IsChecked="{Binding DisplayButtonState}">
                         <ToggleButton.Style>
                             <Style TargetType="ToggleButton">
                                 <Style.Triggers>
@@ -301,7 +301,7 @@
                             </Style>
                         </ToggleButton.Style>
                     </ToggleButton>
-                    <ToggleButton Grid.Column="2" Click="EH_TextShowButtonClick">
+                    <ToggleButton Grid.Column="2" Click="EH_TextShowButtonClick" IsChecked="{Binding TextButtonState}">
                         <ToggleButton.Style>
                             <Style TargetType="ToggleButton">
                                 <Style.Triggers>
