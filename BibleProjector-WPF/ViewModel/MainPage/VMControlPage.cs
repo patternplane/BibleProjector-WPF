@@ -21,6 +21,8 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         public Collection<ViewModel> ExternPPTEditButtons { get; }
 
+        public Predicate<object> IsLoaded { get; set; }
+
         // ========== Gen ===========
 
         public VMControlPage(
@@ -68,12 +70,15 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             if (true == e.KeyOn)
                 return;
 
-            if (VM_ShowControler_bottom == ShowController[0])
-                VM_ShowControler_bottom = ShowController[1];
-            else
-                VM_ShowControler_bottom = ShowController[0];
-            OnPropertyChanged("VM_ShowControler_bottom");
-            ((VMShowControler)VM_ShowControler_bottom).doViewModelChangedAnimation();
+            if (IsLoaded(null))
+            {
+                if (VM_ShowControler_bottom == ShowController[0])
+                    VM_ShowControler_bottom = ShowController[1];
+                else
+                    VM_ShowControler_bottom = ShowController[0];
+                OnPropertyChanged("VM_ShowControler_bottom");
+                ((VMShowControler)VM_ShowControler_bottom).doViewModelChangedAnimation();
+            }
         }
     }
 }

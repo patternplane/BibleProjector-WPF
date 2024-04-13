@@ -23,6 +23,24 @@ namespace BibleProjector_WPF.View.MainPage
         public ControlView()
         {
             InitializeComponent();
+
+            Binding b = new Binding("IsLoaded");
+            b.Mode = BindingMode.OneWayToSource;
+            SetBinding(IsLoadedProperty, b);
+
+            IsLoadedWrapper = ((obj) => IsLoaded);
+        }
+
+        public static readonly DependencyProperty IsLoadedProperty =
+        DependencyProperty.Register(
+            name: "IsLoadedWrapper",
+            propertyType: typeof(Predicate<object>),
+            ownerType: typeof(ControlView));
+
+        public Predicate<object> IsLoadedWrapper 
+        {
+            get => (Predicate<object>)GetValue(IsLoadedProperty);
+            set => SetValue(IsLoadedProperty, value);
         }
     }
 }
