@@ -33,9 +33,9 @@ namespace BibleProjector_WPF.ViewModel.MainPage
                 return _CurrentPageIndex; 
             } 
             set 
-            { 
-                if (_CurrentPageIndex != value) 
-                    MovePage(value);  
+            {
+                if (_CurrentPageIndex != value)
+                    MovePage(value);
             } 
         }
 
@@ -151,11 +151,12 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         void MovePage(int pageIdx)
         {
-            if (pageIdx >= 0 && pageIdx < Pages.Count)
+            if (pageIdx >= -1 && pageIdx < Pages.Count)
             {
                 _CurrentPageIndex = pageIdx;
                 OnPropertyChanged("CurrentPageIndex");
-                Powerpoint.setPageData(currentData, pageIdx);
+                if (pageIdx != -1)
+                    Powerpoint.setPageData(currentData, pageIdx);
             }
         }
 
