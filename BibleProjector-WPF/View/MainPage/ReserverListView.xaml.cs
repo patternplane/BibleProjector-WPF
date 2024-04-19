@@ -238,7 +238,10 @@ namespace BibleProjector_WPF.View.MainPage
 
         private void EH_ItemDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            Keyboard.ClearFocus();
+            FocusManager.SetFocusedElement(FocusManager.GetFocusScope((DependencyObject)sender), null);
             ItemShowStartCommand.Execute(((ListBoxItem)sender).DataContext);
+            e.Handled = true;
         }
 
         /*=======================================================

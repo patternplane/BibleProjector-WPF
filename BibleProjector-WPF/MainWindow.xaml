@@ -8,7 +8,7 @@
         Title="주일성수"
         SizeToContent="WidthAndHeight"
         ResizeMode="CanMinimize"
-        KeyDown="EH_KeyDownCheck"
+        PreviewKeyDown="EH_PreKeyDownCheck"
         KeyUp="EH_KeyUpCheck">
     <ContentControl Content="{Binding VM_Main}"/>
 </Window>

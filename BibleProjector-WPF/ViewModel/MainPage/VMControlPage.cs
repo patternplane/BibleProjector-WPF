@@ -30,6 +30,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             ViewModel searchControl,
             ViewModel reserveList,
             Collection<ViewModel> externPPTEditButtonVMs,
+            KeyDownEventManager keyDownEventManager,
             CapsLockEventManager capsLockEventManager,
             module.ShowStarter showStarter)
         {
@@ -40,6 +41,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             this.VM_ReserveList = reserveList;
             this.ExternPPTEditButtons = externPPTEditButtonVMs;
 
+            keyDownEventManager.KeyDown += KeyInputTask;
             capsLockEventManager.CapsLockStateChanged += CapsLockTask;
 
             showStarter.ShowStartEvent += WhenShowStarted;
@@ -54,15 +56,22 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             {
                 VM_ShowControler_bottom = ShowController[0];
                 OnPropertyChanged("VM_ShowControler_bottom");
-                ((VMShowControler)VM_ShowControler_bottom).doViewModelChangedAnimation();
+                ((VMShowControler)VM_ShowControler_bottom).doViewModelChanged();
             }
             else if (e.showData.getDataType() == ShowContentType.Song
                 && VM_ShowControler_bottom != ShowController[1])
             {
                 VM_ShowControler_bottom = ShowController[1];
                 OnPropertyChanged("VM_ShowControler_bottom");
-                ((VMShowControler)VM_ShowControler_bottom).doViewModelChangedAnimation();
+                ((VMShowControler)VM_ShowControler_bottom).doViewModelChanged();
             }
+        }
+
+        void KeyInputTask(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (IsLoaded(null))
+                foreach (VMShowControler vm in ShowController)
+                    vm.keyInputed(e.Key);
         }
 
         void CapsLockTask(object sender, Event.KeyStateChangedEventArgs e)
@@ -77,7 +86,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
                 else
                     VM_ShowControler_bottom = ShowController[0];
                 OnPropertyChanged("VM_ShowControler_bottom");
-                ((VMShowControler)VM_ShowControler_bottom).doViewModelChangedAnimation();
+                ((VMShowControler)VM_ShowControler_bottom).doViewModelChanged();
             }
         }
     }

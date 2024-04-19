@@ -6,7 +6,12 @@
              xmlns:local="clr-namespace:BibleProjector_WPF.View.MainPage"
              xmlns:home="clr-namespace:BibleProjector_WPF"
              mc:Ignorable="d" 
-             d:DesignHeight="191" d:DesignWidth="1200">
+             d:DesignHeight="191" d:DesignWidth="1200"
+             
+             GotFocus="EH_focusIn"
+             LostFocus="EH_focusOut"
+             PreviewMouseDown="EH_mouseFocus"
+             Focusable="True">
     <UserControl.Resources>
         <local:ShowControllerBrushConverter x:Key="ColorConverter"/>
         <local:ShowControllerBrush2Converter x:Key="BackgroundConverter"/>
@@ -61,347 +66,358 @@
         </Style>
     </UserControl.Style>
 
-    <Grid Margin="8">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="100*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="410*"/>
-            <ColumnDefinition Width="8"/>
-            <ColumnDefinition Width="137"/>
-        </Grid.ColumnDefinitions>
+    <Grid>
+        <Border x:Name="focusBorder" BorderBrush="red"/>
+        <Grid Margin="8">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="410*"/>
+                <ColumnDefinition Width="8"/>
+                <ColumnDefinition Width="137"/>
+            </Grid.ColumnDefinitions>
 
-        <!--리스트표시부-->
-        <ListBox Grid.Column="0" VerticalContentAlignment="Stretch" ScrollViewer.CanContentScroll="False" Focusable="False"
-                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                 ScrollViewer.HorizontalScrollBarVisibility="Visible"
-                 Background="#B2FFFFFF"
-                 ItemsSource="{Binding Pages}"
-                 SelectedIndex="{Binding CurrentPageIndex}">
-            <ListBox.Resources>
-                <DataTemplate x:Key="StringItem">
-                    <Border Padding="5">
-                        <Border.Style>
-                            <Style TargetType="Border">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="true">
-                                        <Setter Property="BorderThickness" Value="2"/>
-                                        <Setter Property="BorderBrush" Value="Orange"/>
-                                        <Setter Property="Background" Value="#33FF7845"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="false">
-                                        <Setter Property="BorderThickness" Value="1"/>
-                                        <Setter Property="BorderBrush" Value="#FFD4D4D4"/>
-                                        <Setter Property="Background" Value="{x:Null}"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Border.Style>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Margin="0,0,5,0"
-                                                           Text="{Binding DisplayIndex}"></TextBlock>
-                            <Border Grid.Column="1" BorderThickness="1,1,1,1" BorderBrush="Black" MinWidth="50" Padding="5,0">
-                                <TextBlock Text="{Binding Content}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                <Border.Style>
-                                    <Style TargetType="Border">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding DoHighlight}" Value="true">
-                                                <Setter Property="Background" Value="#FFBAFC90"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Border.Style>
-                            </Border>
-                        </Grid>
-                    </Border>
-                </DataTemplate>
-                <DataTemplate x:Key="ImageItem">
-                    <Border Padding="5">
-                        <Border.Style>
-                            <Style TargetType="Border">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="true">
-                                        <Setter Property="BorderThickness" Value="2"/>
-                                        <Setter Property="BorderBrush" Value="Red"/>
-                                        <Setter Property="Background" Value="#33FF7845"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="false">
-                                        <Setter Property="BorderThickness" Value="1"/>
-                                        <Setter Property="BorderBrush" Value="#FFD4D4D4"/>
-                                        <Setter Property="Background" Value="{x:Null}"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Border.Style>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Margin="0,0,5,0"
-                                                           Text="{Binding DisplayIndex}"></TextBlock>
-                            <Border Grid.Column="1" BorderThickness="1,1,1,1" MinWidth="50" Padding="0">
-                                <Image Source="{Binding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality"/>
-                                <Border.Style>
-                                    <Style TargetType="Border">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding DoHighlight}" Value="true">
-                                                <Setter Property="BorderBrush" Value="Red"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding DoHighlight}" Value="false">
-                                                <Setter Property="BorderBrush" Value="Black"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Border.Style>
-                            </Border>
-                        </Grid>
-                    </Border>
-                </DataTemplate>
-            </ListBox.Resources>
-            <ListBox.Style>
-                <Style TargetType="ListBox">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Bible}">
-                            <Setter Property="ItemTemplate" Value="{StaticResource ResourceKey=StringItem}"/>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Song}">
-                            <Setter Property="ItemTemplate" Value="{StaticResource ResourceKey=StringItem}"/>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.PPT}">
-                            <Setter Property="ItemTemplate" Value="{StaticResource ResourceKey=ImageItem}"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ListBox.Style>
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal"
-                                VerticalAlignment="Stretch"
-                                HorizontalAlignment="Left"/>
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="ListBoxItem">
-                    <Setter Property="Padding" Value="0"/>
-                    <Setter Property="Margin" Value="1"/>
-                </Style>
-            </ListBox.ItemContainerStyle>
-        </ListBox>
-
-        <!--조작부-->
-        <Grid Grid.Column="2">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="70*"/>
-                    <RowDefinition Height="5*"/>
-                    <RowDefinition Height="25*"/>
-                    <RowDefinition Height="5*"/>
-                    <RowDefinition Height="30*"/>
-                </Grid.RowDefinitions>
-
-                <!--라벨-->
-                <Grid Grid.Row="0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="13*"/>
-                        <RowDefinition Height="60*"/>
-                    </Grid.RowDefinitions>
-
-                    <Border Grid.Row="0" BorderBrush="Black" BorderThickness="1">
-                        <Border.Style>
-                            <Style TargetType="Border">
-                                <Setter Property="Background" Value="{Binding ContentType, Converter={StaticResource ResourceKey=ColorConverter}}"/>
-                            </Style>
-                        </Border.Style>
-                        <Label Padding="0" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="11">
-                            <Label.Style>
-                                <Style TargetType="Label">
+            <!--리스트표시부-->
+            <ListBox Grid.Column="0" VerticalContentAlignment="Stretch"
+                     ScrollViewer.CanContentScroll="False" 
+                     ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                     ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                     Background="#B2FFFFFF"
+                     ItemsSource="{Binding Pages}"
+                     SelectedIndex="{Binding CurrentPageIndex}"
+                     SelectionChanged="EH_SelectedItemFocuser">
+                <ListBox.Resources>
+                    <DataTemplate x:Key="StringItem">
+                        <Border Padding="5">
+                            <Border.Style>
+                                <Style TargetType="Border">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Bible}">
-                                            <Setter Property="Content" Value="말 씀 출 력"/>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="true">
+                                            <Setter Property="BorderThickness" Value="2"/>
+                                            <Setter Property="BorderBrush" Value="Orange"/>
+                                            <Setter Property="Background" Value="#33FF7845"/>
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Song}">
-                                            <Setter Property="Content" Value="찬 양 출 력"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.PPT}">
-                                            <Setter Property="Content" Value="PPT 출 력"/>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="false">
+                                            <Setter Property="BorderThickness" Value="1"/>
+                                            <Setter Property="BorderBrush" Value="#FFD4D4D4"/>
+                                            <Setter Property="Background" Value="{x:Null}"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
-                            </Label.Style>
-                        </Label>
-                    </Border>
-                    <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1,0,1,1" Background="white">
-                        <Grid Margin="0,3,0,5">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="85*"/>
-                                <RowDefinition Height="215*"/>
-                            </Grid.RowDefinitions>
-
-                            <Border Grid.Row="0" VerticalAlignment="Center" BorderBrush="Silver" BorderThickness="0,0,0,1">
-                                <Label Padding="3,0" FontSize="11" Content="{Binding Title1}" />
-                            </Border>
-                            <Border 
-                                Grid.Row="1"
-                                Margin="5,0">
-                                <TextBlock 
-                                    FontWeight="Bold"
-                                    TextTrimming="CharacterEllipsis"
-                                    TextWrapping="Wrap"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Text="{Binding Title2}">
-                                    <TextBlock.Style>
-                                        <Style TargetType="TextBlock">
+                            </Border.Style>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Margin="0,0,5,0"
+                                                               Text="{Binding DisplayIndex}"></TextBlock>
+                                <Border Grid.Column="1" BorderThickness="1,1,1,1" BorderBrush="Black" MinWidth="50" Padding="5,0">
+                                    <TextBlock Text="{Binding Content}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <Border.Style>
+                                        <Style TargetType="Border">
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Bible}">
-                                                    <Setter Property="FontSize" Value="16"/>
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Song}">
-                                                    <Setter Property="FontSize" Value="13"/>
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.PPT}">
-                                                    <Setter Property="FontSize" Value="13"/>
+                                                <DataTrigger Binding="{Binding DoHighlight}" Value="true">
+                                                    <Setter Property="Background" Value="#FFBAFC90"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
-                            </Border>
-                        </Grid>
-                    </Border>
-                </Grid>
-
-                <!--화면조작-->
-                <Grid Grid.Row="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="50*"/>
-                        <ColumnDefinition Width="4*"/>
-                        <ColumnDefinition Width="50*"/>
-                    </Grid.ColumnDefinitions>
-                    <ToggleButton Click="EH_DisplayOffButtonClick" IsChecked="{Binding DisplayButtonState}">
-                        <ToggleButton.Style>
-                            <Style TargetType="ToggleButton">
-                                <Style.Triggers>
-                                    <Trigger Property="IsChecked" Value="True">
-                                        <Setter Property="Content" Value="화면닫기"></Setter>
-                                        <Setter Property="FontWeight" Value="Bold"></Setter>
-                                        <Setter Property="FontSize" Value="13"></Setter>
-                                    </Trigger>
-                                    <Trigger Property="IsChecked" Value="False">
-                                        <Setter Property="Content" Value="화면닫기"></Setter>
-                                        <Setter Property="FontWeight" Value="Normal"></Setter>
-                                        <Setter Property="FontSize" Value="12"></Setter>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </ToggleButton.Style>
-                    </ToggleButton>
-                    <ToggleButton Grid.Column="2" Click="EH_TextShowButtonClick" IsChecked="{Binding TextButtonState}">
-                        <ToggleButton.Style>
-                            <Style TargetType="ToggleButton">
-                                <Style.Triggers>
-                                    <Trigger Property="IsChecked" Value="True">
-                                        <Setter Property="Content" Value="자막끄기"></Setter>
-                                        <Setter Property="FontWeight" Value="Bold"></Setter>
-                                        <Setter Property="FontSize" Value="13"></Setter>
-                                    </Trigger>
-                                    <Trigger Property="IsChecked" Value="False">
-                                        <Setter Property="Content" Value="자막끄기"></Setter>
-                                        <Setter Property="FontWeight" Value="Normal"></Setter>
-                                        <Setter Property="FontSize" Value="12"></Setter>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </ToggleButton.Style>
-                    </ToggleButton>
-                </Grid>
-
-                <!--페이지조작-->
-                <Grid Grid.Row="4">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="50*"/>
-                        <ColumnDefinition Width="4*"/>
-                        <ColumnDefinition Width="50*"/>
-                    </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" Click="EH_GoPrevious">
-                        <Button.Style>
-                            <Style TargetType="{x:Type Button}">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate>
-                                            <Grid>
-                                                <Path x:Name="LeftButtonPath" Stretch="Fill">
-                                                    <Path.Data>
-                                                        <CombinedGeometry GeometryCombineMode="Union">
-                                                            <CombinedGeometry.Geometry1>
-                                                                <EllipseGeometry RadiusX="15.5" RadiusY="15.5" Center="15.5,15.5"/>
-                                                            </CombinedGeometry.Geometry1>
-                                                            <CombinedGeometry.Geometry2>
-                                                                <RectangleGeometry Rect="15.5,0,40,31"/>
-                                                            </CombinedGeometry.Geometry2>
-                                                        </CombinedGeometry>
-                                                    </Path.Data>
-                                                </Path>
-                                                <TextBlock HorizontalAlignment="Center" Text="❮" FontSize="22" VerticalAlignment="Center"></TextBlock>
-                                            </Grid>
-                                            <ControlTemplate.Triggers>
-                                                <DataTrigger Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}" Value="false">
-                                                    <Setter TargetName="LeftButtonPath" Property="Fill" Value="{Binding ContentType, Converter={StaticResource ResourceKey=ColorConverter}}"/>
-                                                    <Setter TargetName="LeftButtonPath" Property="Stroke" Value="Black"/>
+                                    </Border.Style>
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                    <DataTemplate x:Key="ImageItem">
+                        <Border Padding="5">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="true">
+                                            <Setter Property="BorderThickness" Value="2"/>
+                                            <Setter Property="BorderBrush" Value="Red"/>
+                                            <Setter Property="Background" Value="#33FF7845"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="false">
+                                            <Setter Property="BorderThickness" Value="1"/>
+                                            <Setter Property="BorderBrush" Value="#FFD4D4D4"/>
+                                            <Setter Property="Background" Value="{x:Null}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Margin="0,0,5,0"
+                                                               Text="{Binding DisplayIndex}"></TextBlock>
+                                <Border Grid.Column="1" BorderThickness="1,1,1,1" MinWidth="50" Padding="0">
+                                    <Image Source="{Binding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding DoHighlight}" Value="true">
+                                                    <Setter Property="BorderBrush" Value="Red"/>
                                                 </DataTrigger>
-                                                <Trigger Property="IsMouseOver" Value="true">
-                                                    <Setter TargetName="LeftButtonPath" Property="Fill" Value="#FFB9ECF7"/>
-                                                    <Setter TargetName="LeftButtonPath" Property="Stroke" Value="#FF0C43FF"/>
-                                                </Trigger>
-                                            </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </Button.Style>
-                    </Button>
-                    <Button Grid.Column="2" Click="EH_GoNext">
-                        <Button.Style>
-                            <Style TargetType="{x:Type Button}">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate>
-                                            <Grid>
-                                                <Path x:Name="RightButtonPath" Stretch="Fill">
-                                                    <Path.Data>
-                                                        <CombinedGeometry GeometryCombineMode="Union">
-                                                            <CombinedGeometry.Geometry1>
-                                                                <EllipseGeometry RadiusX="15.5" RadiusY="15.5" Center="39.5,15.5" />
-                                                            </CombinedGeometry.Geometry1>
-                                                            <CombinedGeometry.Geometry2>
-                                                                <RectangleGeometry Rect="0,0,39.5,31"/>
-                                                            </CombinedGeometry.Geometry2>
-                                                        </CombinedGeometry>
-                                                    </Path.Data>
-                                                </Path>
-                                                <TextBlock HorizontalAlignment="Center" Text="❯" FontSize="22" VerticalAlignment="Center"></TextBlock>
-                                            </Grid>
-                                            <ControlTemplate.Triggers>
-                                                <DataTrigger Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}" Value="false">
-                                                    <Setter TargetName="RightButtonPath" Property="Fill" Value="{Binding ContentType, Converter={StaticResource ResourceKey=ColorConverter}}"/>
-                                                    <Setter TargetName="RightButtonPath" Property="Stroke" Value="Black"/>
+                                                <DataTrigger Binding="{Binding DoHighlight}" Value="false">
+                                                    <Setter Property="BorderBrush" Value="Black"/>
                                                 </DataTrigger>
-                                                <Trigger Property="IsMouseOver" Value="true">
-                                                    <Setter TargetName="RightButtonPath" Property="Fill" Value="#FFB9ECF7"/>
-                                                    <Setter TargetName="RightButtonPath" Property="Stroke" Value="#FF0C43FF"/>
-                                                </Trigger>
-                                            </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </Button.Style>
-                    </Button>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.Resources>
+                <ListBox.Style>
+                    <Style TargetType="ListBox">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Bible}">
+                                <Setter Property="ItemTemplate" Value="{StaticResource ResourceKey=StringItem}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Song}">
+                                <Setter Property="ItemTemplate" Value="{StaticResource ResourceKey=StringItem}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.PPT}">
+                                <Setter Property="ItemTemplate" Value="{StaticResource ResourceKey=ImageItem}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListBox.Style>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"
+                                    VerticalAlignment="Stretch"
+                                    HorizontalAlignment="Left"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Padding" Value="0"/>
+                        <Setter Property="Margin" Value="1"/>
+                        <Setter Property="KeyboardNavigation.AcceptsReturn" Value="False"/>
+                        <Setter Property="KeyboardNavigation.ControlTabNavigation" Value="None"/>
+                        <Setter Property="KeyboardNavigation.DirectionalNavigation" Value="None"/>
+                        <Setter Property="KeyboardNavigation.IsTabStop" Value="False"/>
+                        <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+                        <EventSetter Event="PreviewKeyDown" Handler="EH_OffUnusedKeyInput"/>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+
+            <!--조작부-->
+            <Grid Grid.Column="2">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="70*"/>
+                        <RowDefinition Height="5*"/>
+                        <RowDefinition Height="25*"/>
+                        <RowDefinition Height="5*"/>
+                        <RowDefinition Height="30*"/>
+                    </Grid.RowDefinitions>
+
+                    <!--라벨-->
+                    <Grid Grid.Row="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="13*"/>
+                            <RowDefinition Height="60*"/>
+                        </Grid.RowDefinitions>
+
+                        <Border Grid.Row="0" BorderBrush="Black" BorderThickness="1">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Background" Value="{Binding ContentType, Converter={StaticResource ResourceKey=ColorConverter}}"/>
+                                </Style>
+                            </Border.Style>
+                            <Label Padding="0" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="11">
+                                <Label.Style>
+                                    <Style TargetType="Label">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Bible}">
+                                                <Setter Property="Content" Value="말 씀 출 력"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Song}">
+                                                <Setter Property="Content" Value="찬 양 출 력"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.PPT}">
+                                                <Setter Property="Content" Value="PPT 출 력"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Label.Style>
+                            </Label>
+                        </Border>
+                        <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1,0,1,1" Background="white">
+                            <Grid Margin="0,3,0,5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="85*"/>
+                                    <RowDefinition Height="215*"/>
+                                </Grid.RowDefinitions>
+
+                                <Border Grid.Row="0" VerticalAlignment="Center" BorderBrush="Silver" BorderThickness="0,0,0,1">
+                                    <Label Padding="3,0" FontSize="11" Content="{Binding Title1}" />
+                                </Border>
+                                <Border 
+                                    Grid.Row="1"
+                                    Margin="5,0">
+                                    <TextBlock 
+                                        FontWeight="Bold"
+                                        TextTrimming="CharacterEllipsis"
+                                        TextWrapping="Wrap"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding Title2}">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Bible}">
+                                                        <Setter Property="FontSize" Value="16"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Song}">
+                                                        <Setter Property="FontSize" Value="13"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.PPT}">
+                                                        <Setter Property="FontSize" Value="13"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </Grid>
+
+                    <!--화면조작-->
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50*"/>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="50*"/>
+                        </Grid.ColumnDefinitions>
+                        <ToggleButton Click="EH_DisplayOffButtonClick" IsChecked="{Binding DisplayButtonState}">
+                            <ToggleButton.Style>
+                                <Style TargetType="ToggleButton">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsChecked" Value="True">
+                                            <Setter Property="Content" Value="화면닫기"></Setter>
+                                            <Setter Property="FontWeight" Value="Bold"></Setter>
+                                            <Setter Property="FontSize" Value="13"></Setter>
+                                        </Trigger>
+                                        <Trigger Property="IsChecked" Value="False">
+                                            <Setter Property="Content" Value="화면닫기"></Setter>
+                                            <Setter Property="FontWeight" Value="Normal"></Setter>
+                                            <Setter Property="FontSize" Value="12"></Setter>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ToggleButton.Style>
+                        </ToggleButton>
+                        <ToggleButton Grid.Column="2" Click="EH_TextShowButtonClick" IsChecked="{Binding TextButtonState}">
+                            <ToggleButton.Style>
+                                <Style TargetType="ToggleButton">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsChecked" Value="True">
+                                            <Setter Property="Content" Value="자막끄기"></Setter>
+                                            <Setter Property="FontWeight" Value="Bold"></Setter>
+                                            <Setter Property="FontSize" Value="13"></Setter>
+                                        </Trigger>
+                                        <Trigger Property="IsChecked" Value="False">
+                                            <Setter Property="Content" Value="자막끄기"></Setter>
+                                            <Setter Property="FontWeight" Value="Normal"></Setter>
+                                            <Setter Property="FontSize" Value="12"></Setter>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ToggleButton.Style>
+                        </ToggleButton>
+                    </Grid>
+
+                    <!--페이지조작-->
+                    <Grid Grid.Row="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50*"/>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="50*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Click="EH_GoPrevious">
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <Grid>
+                                                    <Path x:Name="LeftButtonPath" Stretch="Fill">
+                                                        <Path.Data>
+                                                            <CombinedGeometry GeometryCombineMode="Union">
+                                                                <CombinedGeometry.Geometry1>
+                                                                    <EllipseGeometry RadiusX="15.5" RadiusY="15.5" Center="15.5,15.5"/>
+                                                                </CombinedGeometry.Geometry1>
+                                                                <CombinedGeometry.Geometry2>
+                                                                    <RectangleGeometry Rect="15.5,0,40,31"/>
+                                                                </CombinedGeometry.Geometry2>
+                                                            </CombinedGeometry>
+                                                        </Path.Data>
+                                                    </Path>
+                                                    <TextBlock HorizontalAlignment="Center" Text="❮" FontSize="22" VerticalAlignment="Center"></TextBlock>
+                                                </Grid>
+                                                <ControlTemplate.Triggers>
+                                                    <DataTrigger Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}" Value="false">
+                                                        <Setter TargetName="LeftButtonPath" Property="Fill" Value="{Binding ContentType, Converter={StaticResource ResourceKey=ColorConverter}}"/>
+                                                        <Setter TargetName="LeftButtonPath" Property="Stroke" Value="Black"/>
+                                                    </DataTrigger>
+                                                    <Trigger Property="IsMouseOver" Value="true">
+                                                        <Setter TargetName="LeftButtonPath" Property="Fill" Value="#FFB9ECF7"/>
+                                                        <Setter TargetName="LeftButtonPath" Property="Stroke" Value="#FF0C43FF"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Button Grid.Column="2" Click="EH_GoNext">
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <Grid>
+                                                    <Path x:Name="RightButtonPath" Stretch="Fill">
+                                                        <Path.Data>
+                                                            <CombinedGeometry GeometryCombineMode="Union">
+                                                                <CombinedGeometry.Geometry1>
+                                                                    <EllipseGeometry RadiusX="15.5" RadiusY="15.5" Center="39.5,15.5" />
+                                                                </CombinedGeometry.Geometry1>
+                                                                <CombinedGeometry.Geometry2>
+                                                                    <RectangleGeometry Rect="0,0,39.5,31"/>
+                                                                </CombinedGeometry.Geometry2>
+                                                            </CombinedGeometry>
+                                                        </Path.Data>
+                                                    </Path>
+                                                    <TextBlock HorizontalAlignment="Center" Text="❯" FontSize="22" VerticalAlignment="Center"></TextBlock>
+                                                </Grid>
+                                                <ControlTemplate.Triggers>
+                                                    <DataTrigger Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}" Value="false">
+                                                        <Setter TargetName="RightButtonPath" Property="Fill" Value="{Binding ContentType, Converter={StaticResource ResourceKey=ColorConverter}}"/>
+                                                        <Setter TargetName="RightButtonPath" Property="Stroke" Value="Black"/>
+                                                    </DataTrigger>
+                                                    <Trigger Property="IsMouseOver" Value="true">
+                                                        <Setter TargetName="RightButtonPath" Property="Fill" Value="#FFB9ECF7"/>
+                                                        <Setter TargetName="RightButtonPath" Property="Stroke" Value="#FF0C43FF"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </Grid>
                 </Grid>
             </Grid>
         </Grid>

@@ -14,8 +14,10 @@
         </Grid.RowDefinitions>
 
         <!--상/하단 페이지 컨트롤러-->
-        <ContentControl Grid.Row="0" Content="{Binding VM_ShowControler_top}"></ContentControl>
-        <ContentControl Grid.Row="2" Content="{Binding VM_ShowControler_bottom}"></ContentControl>
+        <ContentControl Grid.Row="0" Content="{Binding VM_ShowControler_top}"
+                        KeyboardNavigation.DirectionalNavigation="Contained"></ContentControl>
+        <ContentControl Grid.Row="2" Content="{Binding VM_ShowControler_bottom}"
+                        KeyboardNavigation.DirectionalNavigation="Contained"></ContentControl>
 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>

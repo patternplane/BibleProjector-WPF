@@ -30,11 +30,9 @@ namespace BibleProjector_WPF
             InitializeComponent();
             this.DataContext = VM_MainWindow;
 
-            Binding b = new Binding("shiftEventManager");
-            this.SetBinding(shiftEventManagerProperty, b);
-
-            b = new Binding("capsLockEventManager");
-            this.SetBinding(capsLockEventManagerProperty, b);
+            this.SetBinding(shiftEventManagerProperty, new Binding("shiftEventManager"));
+            this.SetBinding(capsLockEventManagerProperty, new Binding("capsLockEventManager"));
+            this.SetBinding(keyDownEventManagerProperty, new Binding("keyDownEventManager"));
         }
 
         // =================================================== 키 상태 광역 전달 ======================================================
@@ -63,13 +61,27 @@ namespace BibleProjector_WPF
             set => SetValue(capsLockEventManagerProperty, value);
         }
 
-        private void EH_KeyDownCheck(object sender, KeyEventArgs e)
+        public static readonly DependencyProperty keyDownEventManagerProperty =
+        DependencyProperty.Register(
+            name: "keyDownEventManager",
+            propertyType: typeof(ViewModel.KeyDownEventManager),
+            ownerType: typeof(MainWindow));
+
+        public ViewModel.KeyDownEventManager keyDownEventManager
+        {
+            get => (ViewModel.KeyDownEventManager)GetValue(keyDownEventManagerProperty);
+            set => SetValue(keyDownEventManagerProperty, value);
+        }
+
+        private void EH_PreKeyDownCheck(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.LeftShift
                 || e.Key == Key.RightShift)
                 shiftEventManager.invokeShiftChange(true);
             else if (e.Key == Key.CapsLock)
                 capsLockEventManager.invokeCapsLockChange(true);
+
+            keyDownEventManager.invokeKeyDown(e);
         }
 
         private void EH_KeyUpCheck(object sender, KeyEventArgs e)

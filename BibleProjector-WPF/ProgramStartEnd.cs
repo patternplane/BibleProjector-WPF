@@ -90,6 +90,7 @@ namespace BibleProjector_WPF
                 new module.ExternPPTSearcher(
                     pptMan));
 
+            ViewModel.KeyDownEventManager keyDownEventManager = new ViewModel.KeyDownEventManager();
             ViewModel.ShiftEventManager shiftEventManager = new ViewModel.ShiftEventManager();
             ViewModel.CapsLockEventManager capsLockEventManager = new ViewModel.CapsLockEventManager();
 
@@ -119,11 +120,13 @@ namespace BibleProjector_WPF
                             new ViewModel.MainPage.VMSearchControl(searcher, reserveDataManager, showStarter),
                             new ViewModel.MainPage.VMReserveList(reserveDataManager, showStarter),
                             buttonVMs,
+                            keyDownEventManager,
                             capsLockEventManager,
                             showStarter),
                         new ViewModel.OptionViewModel(),
                         new ViewModel.MainPage.VMOptionBar(),
                         new ViewModel.LyricViewModel(showStarter, songMan, reserveDataManager)),
+                    keyDownEventManager,
                     shiftEventManager,
                     capsLockEventManager)
                 ).Show();

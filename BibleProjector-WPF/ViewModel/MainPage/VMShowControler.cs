@@ -42,6 +42,8 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public bool DisplayButtonState { get; set; } = false;
         public bool TextButtonState { get; set; } = false;
 
+        public bool hasFocus { get; set; }
+
         // 이전 페이지로 넘어갈 때 동작 설정
         public bool preview_GoLastPage { get; set; } = true;
 
@@ -81,12 +83,77 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         // ================================================ 메소드 ================================================
 
-        public void doViewModelChangedAnimation()
+        public void doViewModelChanged()
         {
             DoAnimation = true;
             OnPropertyChanged("DoAnimation");
             DoAnimation = false;
             OnPropertyChanged("DoAnimation");
+
+            hasFocus = true;
+            OnPropertyChanged("hasFocus");
+        }
+
+        public void keyInputed(Key inputKey)
+        {
+            if (hasFocus)
+            {
+                switch (inputKey)
+                {
+                    case Key.Enter:
+                    case Key.Up:
+                    case Key.Right:
+                        GoNextPage();
+                        break;
+                    case Key.Back:
+                    case Key.Down:
+                    case Key.Left:
+                        GoPreviousPage();
+                        break;
+                }
+            }
+
+            // 언제 숫자입력값을 다시 초기화해야 할지 곰곰히 생각해봐야 할 듯 합니다.
+            /*void Window_Activated(object sender, EventArgs e)
+            {
+                VM_BibleControl.NumInput_Remove();
+            }*//*
+
+            void Window_KeyDown(object sender, KeyEventArgs e)
+            {
+                if (e.Key >= Key.D0 && e.Key <= Key.D9
+                    || e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9)
+                {
+                    VM_BibleControl.NumInput(KeyToNum(e.Key));
+                    return;
+                }
+
+                switch (e.Key)
+                {
+                    case Key.Up:
+                    case Key.Right:
+                        VM_BibleControl.RunNextPage();
+                        break;
+                    case Key.Down:
+                    case Key.Left:
+                        VM_BibleControl.RunPreviousPage();
+                        break;
+                    case Key.Enter:
+                        VM_BibleControl.NumInput_Enter();
+                        break;
+                }
+
+                VM_BibleControl.NumInput_Remove();
+            }
+            int KeyToNum(Key key)
+            {
+                if (key >= Key.D0 && key <= Key.D9)
+                    return (key - Key.D0);
+                else if (key >= Key.NumPad0 && key <= Key.NumPad9)
+                    return (key - Key.NumPad0);
+                else
+                    return -1;
+            }*/
         }
 
         public void newShowStart(module.Data.ShowData data)
@@ -99,6 +166,9 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             TextVisibility(true);
             DisplayVisibility(true);
             SetDisplayTopMost();
+
+            hasFocus = true;
+            OnPropertyChanged("hasFocus");
         }
 
         public void refreshData(object sender, EventArgs e)

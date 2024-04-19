@@ -97,6 +97,7 @@
     <Compile Include="ReserveViewType.cs" />
     <Compile Include="ShowContentType.cs" />
     <Compile Include="ViewModel\CapsLockEventManager.cs" />
+    <Compile Include="ViewModel\KeyDownEventManager.cs" />
     <Compile Include="ViewModel\MainPage\VMExternPPTEditButton.cs" />
     <Compile Include="ViewModel\MainPage\VMReserveData.cs" />
     <Compile Include="ViewModel\MainPage\VMReserveList.cs" />

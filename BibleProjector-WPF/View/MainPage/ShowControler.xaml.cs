@@ -24,52 +24,14 @@ namespace BibleProjector_WPF.View.MainPage
         public ShowControler()
         {
             InitializeComponent();
+
+            SetBinding(hasFocusProperty, new Binding("hasFocus") { Mode = BindingMode.TwoWay });
+
+            hasFocus = false;
         }
-
-        // 언제 숫자입력값을 다시 초기화해야 할지 곰곰히 생각해봐야 할 듯 합니다.
-        /*void Window_Activated(object sender, EventArgs e)
-        {
-            VM_BibleControl.NumInput_Remove();
-        }*//*
-
-        void Window_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key >= Key.D0 && e.Key <= Key.D9
-                || e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9)
-            {
-                VM_BibleControl.NumInput(KeyToNum(e.Key));
-                return;
-            }
-
-            switch (e.Key)
-            {
-                case Key.Up:
-                case Key.Right:
-                    VM_BibleControl.RunNextPage();
-                    break;
-                case Key.Down:
-                case Key.Left:
-                    VM_BibleControl.RunPreviousPage();
-                    break;
-                case Key.Enter:
-                    VM_BibleControl.NumInput_Enter();
-                    break;
-            }
-
-            VM_BibleControl.NumInput_Remove();
-        }
-        int KeyToNum(Key key)
-        {
-            if (key >= Key.D0 && key <= Key.D9)
-                return (key - Key.D0);
-            else if (key >= Key.NumPad0 && key <= Key.NumPad9)
-                return (key - Key.NumPad0);
-            else
-                return -1;
-        }*/
 
         // ========== BindingProperties ==========
-        
+
         System.Reflection.PropertyInfo _CDisplayOnOffProperty = null;
         ICommand getCDisplayOnOffProperty(object obj)
         {
@@ -120,6 +82,31 @@ namespace BibleProjector_WPF.View.MainPage
             return (ICommand)_CSetDisplayTopMostProperty.GetValue(obj);
         }
 
+        public static readonly DependencyProperty hasFocusProperty =
+            DependencyProperty.Register(
+                name: "hasFocus",
+                propertyType: typeof(bool),
+                ownerType: typeof(ShowControler),
+                new PropertyMetadata(hasFocusChanged));
+
+        public bool hasFocus
+        {
+            get => (bool)GetValue(hasFocusProperty);
+            set => SetValue(hasFocusProperty, value);
+        }
+
+        static void hasFocusChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+       {
+            if ((bool)e.NewValue)
+            {
+                if (!((ShowControler)d).IsKeyboardFocusWithin)
+                    ((ShowControler)d).Focus();
+                ((ShowControler)d).focusBorder.BorderThickness = new Thickness(2);
+            }
+            else
+                ((ShowControler)d).focusBorder.BorderThickness = new Thickness(0);
+        }
+
         // ========== EventHandler ==========
 
         void EH_GoPrevious(object sender, RoutedEventArgs e)
@@ -140,6 +127,33 @@ namespace BibleProjector_WPF.View.MainPage
         private void EH_TextShowButtonClick(object sender, RoutedEventArgs e)
         {
             getCTextShowHideProperty(this.DataContext).Execute(!((ToggleButton)sender).IsChecked);
+        }
+
+        // =============================== focusing and key ignore =============================== 
+
+        private void EH_focusIn(object sender, RoutedEventArgs e)
+        {
+            hasFocus = true;
+        }
+
+        private void EH_mouseFocus(object sender, MouseButtonEventArgs e)
+        {
+            hasFocus = true;
+        }
+
+        private void EH_focusOut(object sender, RoutedEventArgs e)
+        {
+            hasFocus = false;
+        }
+
+        private void EH_SelectedItemFocuser(object sender, SelectionChangedEventArgs e)
+        {
+            ((ListBoxItem)((ListBox)sender).ItemContainerGenerator.ContainerFromItem(((ListBox)sender).SelectedItem))?.Focus();
+        }
+
+        private void EH_OffUnusedKeyInput(object sender, KeyEventArgs e)
+        {
+            e.Handled = true;
         }
     }
 }
