@@ -53,18 +53,10 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         {
             if (e.showData.getDataType() == ShowContentType.Bible
                 && VM_ShowControler_bottom != ShowController[0])
-            {
-                VM_ShowControler_bottom = ShowController[0];
-                OnPropertyChanged("VM_ShowControler_bottom");
-                ((VMShowControler)VM_ShowControler_bottom).doViewModelChanged();
-            }
+                changeBottomShowController(0);
             else if (e.showData.getDataType() == ShowContentType.Song
                 && VM_ShowControler_bottom != ShowController[1])
-            {
-                VM_ShowControler_bottom = ShowController[1];
-                OnPropertyChanged("VM_ShowControler_bottom");
-                ((VMShowControler)VM_ShowControler_bottom).doViewModelChanged();
-            }
+                changeBottomShowController(1);
         }
 
         void KeyInputTask(object sender, System.Windows.Input.KeyEventArgs e)
@@ -82,12 +74,24 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             if (IsLoaded(null))
             {
                 if (VM_ShowControler_bottom == ShowController[0])
-                    VM_ShowControler_bottom = ShowController[1];
+                    changeBottomShowController(1);
                 else
-                    VM_ShowControler_bottom = ShowController[0];
-                OnPropertyChanged("VM_ShowControler_bottom");
-                ((VMShowControler)VM_ShowControler_bottom).doViewModelChanged();
+                    changeBottomShowController(0);
             }
+        }
+
+        void changeBottomShowController(int index)
+        {
+            if (index < 0 || index >= ShowController.Length)
+                throw new Exception("잘못된 쇼 컨트롤러 인덱스 : " + index + "번 컨트롤러는 없습니다! / " + ShowController.Length);
+
+            if (VM_ShowControler_bottom != ShowController[index])
+            {
+                ((VMShowControler)VM_ShowControler_bottom).hasFocus = false;
+                VM_ShowControler_bottom = ShowController[index];
+            }
+            OnPropertyChanged("VM_ShowControler_bottom");
+            ((VMShowControler)VM_ShowControler_bottom).doViewModelChanged();
         }
     }
 }
