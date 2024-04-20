@@ -1221,37 +1221,13 @@ namespace BibleProjector_WPF
                 }
             }
 
-            static public int goToSlide(string fullPath, int slideIndex)
+            static public void goToSlide(string fullPath, int slideIndex)
             {
                 int index;
                 if ((index = pptFinder_fullPath(fullPath)) != -1)
                 {
-                    return ppt[index].goToSlide(slideIndex);
+                    ppt[index].goToSlide(slideIndex);
                 }
-
-                return -1;
-            }
-
-            static public int goNextSlide(string PPTName)
-            {
-                int index;
-                if ((index = pptFinder(PPTName)) != -1)
-                {
-                    return ppt[index].goNextSlide();
-                }
-
-                return -1;
-            }
-
-            static public int goPreviousSlide(string PPTName)
-            {
-                int index;
-                if ((index = pptFinder(PPTName)) != -1)
-                {
-                    return ppt[index].goPreviousSlide();
-                }
-
-                return -1;
             }
 
             static public void SlideShowHide(string fullPath)
@@ -1481,12 +1457,9 @@ namespace BibleProjector_WPF
                 TopMost();
             }
 
-            /// <summary>
-            /// 이동한 슬라이드 위치를 반환
-            /// </summary>
-            /// <param name="slideIndex"></param>
-            /// <returns></returns>
-            public int goToSlide(int slideIndex)
+            System.Threading.Mutex slideControlMutex = new System.Threading.Mutex();
+
+            public void goToSlide(int slideIndex)
             {
                 if (slideIndex < 1)
                     currentSlideNum = 1;
@@ -1495,20 +1468,19 @@ namespace BibleProjector_WPF
                 else
                     currentSlideNum = slideIndex;
 
-                if (SlideWindow != null)
-                    SlideWindow.View.GotoSlide(currentSlideNum);
-
-                return currentSlideNum;
+                new System.Threading.Thread(threadedSlideMover)
+                    .Start(currentSlideNum);
             }
 
-            public int goNextSlide()
+            private void threadedSlideMover(object slideIndex)
             {
-                return goToSlide(currentSlideNum + 1);
-            }
+                slideControlMutex.WaitOne();
+                
+                if (currentSlideNum == (int)slideIndex)
+                    if (SlideWindow != null)
+                        SlideWindow.View.GotoSlide((int)slideIndex);
 
-            public int goPreviousSlide()
-            {
-                return goToSlide(currentSlideNum - 1);
+                slideControlMutex.ReleaseMutex();
             }
 
             public void SlideShowHide()
