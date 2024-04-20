@@ -35,14 +35,20 @@ namespace BibleProjector_WPF
         const Int32 GWL_STYLE = -16;
         const Int32 WS_VISIBLE = 0x10000000;
         const Int32 WS_EX_TOOLWINDOW = 0x00000080;
+        const Int32 WS_EX_APPWINDOW = 0x00040000;
+        const Int32 WS_EX_NOACTIVATE = 0x08000000;
 
         protected static void SlideShowHideInTaskbar(int windowHWND)
         {
             Int32 style = GetWindowLong(windowHWND, GWL_STYLE);
+
+            style |= WS_VISIBLE;
+            style &= ~(WS_EX_APPWINDOW);
             style |= WS_EX_TOOLWINDOW;
+            style |= WS_EX_NOACTIVATE;
+
             ShowWindow(windowHWND, SW_HIDE);
             SetWindowLong(windowHWND, GWL_STYLE, style);
-            ShowWindow(windowHWND, SW_SHOW);
         }
 
         enum PptSlideState
@@ -394,11 +400,11 @@ namespace BibleProjector_WPF
                     else
                         SlideWindow = ppt.SlideShowSettings.Run();
                 }
-                else
-                    ShowWindow(SlideWindow.HWND, SW_SHOW);
                 SlideShowHideInTaskbar(SlideWindow.HWND);
+                SlideWindow.View.GotoSlide(SlideWindow.View.CurrentShowPosition);
 
                 pptState = PptSlideState.WindowShow;
+                TopMost();
             }
 
             static public void SlideShowHide()
@@ -640,11 +646,11 @@ namespace BibleProjector_WPF
                     else
                         SlideWindow = ppt.SlideShowSettings.Run();
                 }
-                else
-                    ShowWindow(SlideWindow.HWND, SW_SHOW);
                 SlideShowHideInTaskbar(SlideWindow.HWND);
+                SlideWindow.View.GotoSlide(SlideWindow.View.CurrentShowPosition);
 
                 pptState = PptSlideState.WindowShow;
+                TopMost();
             }
 
             static public void SlideShowHide()
@@ -1047,11 +1053,11 @@ namespace BibleProjector_WPF
                     else
                         SlideWindow = ppt.SlideShowSettings.Run();
                 }
-                else
-                    ShowWindow(SlideWindow.HWND, SW_SHOW);
                 SlideShowHideInTaskbar(SlideWindow.HWND);
+                SlideWindow.View.GotoSlide(SlideWindow.View.CurrentShowPosition);
 
                 pptState = PptSlideState.WindowShow;
+                TopMost();
             }
 
             public void SlideShowHide()
@@ -1468,11 +1474,11 @@ namespace BibleProjector_WPF
                     else
                         SlideWindow = ppt.SlideShowSettings.Run();
                 }
-                else
-                    ShowWindow(SlideWindow.HWND, SW_SHOW);
                 SlideShowHideInTaskbar(SlideWindow.HWND);
+                SlideWindow.View.GotoSlide(SlideWindow.View.CurrentShowPosition);
 
                 pptState = PptSlideState.WindowShow;
+                TopMost();
             }
 
             /// <summary>
