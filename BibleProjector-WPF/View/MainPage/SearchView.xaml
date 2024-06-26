@@ -75,6 +75,7 @@
                             x:Name="ResultListBox"
                             ItemsSource="{Binding SearchResultList, Mode=TwoWay}"
                             SelectionChanged="EH_SearchItemSelectionChanged"
+                            PreviewKeyUp="EH_ListBoxKeyUp"
                             PreviewKeyDown="EH_ListBoxKeyDown"
                             Background="#FFF5FFF4"
                             BorderThickness="0">
@@ -92,7 +93,7 @@
                             </ListBox.ItemTemplate>
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem">
-                                    <EventSetter Event="PreviewMouseDown" Handler="ListBoxItem_MouseDown"/>
+                                    <EventSetter Event="PreviewMouseUp" Handler="ListBoxItem_MouseClick"/>
                                 </Style>
                             </ListBox.ItemContainerStyle>
                         </ListBox>
@@ -100,7 +101,7 @@
                 </Border>
             </Popup>
             <Button Grid.Column="1" FontSize="16" BorderBrush="Black" Background="#FF0272AA"
-                    Command="{Binding CSearchStart}">
+                    PreviewMouseUp="EH_SearchButtonClick">
                 검 색
             </Button>
         </Grid>

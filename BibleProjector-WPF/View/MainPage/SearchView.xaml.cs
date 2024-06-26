@@ -85,34 +85,57 @@ namespace BibleProjector_WPF.View.MainPage
 
         // ========== EventHander ==========
 
+        private void EHS_NewResult()
+        {
+            ((ICommand)CSearchStartProperty.GetValue(this.DataContext)).Execute(null);
+            if (ResultListBox.Items.Count > 0)
+            {
+                ResultListBox.Focus();
+                try
+                {
+                    ((ListBoxItem)ResultListBox.ItemContainerGenerator.ContainerFromIndex(0)).Focus();
+                }
+                catch { }
+            }
+        }
+
         void EH_TextBoxKeyUp(object sender, KeyEventArgs e)
         {
             ((TextBox)sender).GetBindingExpression(TextBox.TextProperty).UpdateSource();
 
             if (e.Key == Key.Enter)
-                ((ICommand)CSearchStartProperty.GetValue(this.DataContext)).Execute(null);
+                EHS_NewResult();
             else if (e.Key == Key.Escape)
                 ((ICommand)CPopupHideProperty.GetValue(this.DataContext)).Execute(null);
             else if (e.Key == Key.Down)
             {
                 if (ResultListBox.Items.Count != 0)
                 {
-                    ((ICommand)CLastestResultShowProperty.GetValue(this.DataContext)).Execute(null);
                     ResultListBox.Focus();
-                    ((ListBoxItem)ResultListBox.ItemContainerGenerator.ContainerFromIndex(0)).Focus();
+                    ((ICommand)CLastestResultShowProperty.GetValue(this.DataContext)).Execute(null);
+                    ((ListBoxItem)ResultListBox.ItemContainerGenerator.ContainerFromIndex(
+                        ResultListBox.SelectedIndex < 0 ? 0 : ResultListBox.SelectedIndex
+                        )).Focus();
                 }
             }
         }
 
+        int currentSelectedIdx = -1;
         void EH_ListBoxKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Escape)
+            currentSelectedIdx = ResultListBox.SelectedIndex;
+        }
+
+        void EH_ListBoxKeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape
+                || e.Key == Key.Enter)
             {
                 ((ICommand)CPopupHideProperty.GetValue(this.DataContext)).Execute(null);
                 SearchTextBox.Focus();
             }
             else if (e.Key == Key.Up
-                && ResultListBox.SelectedIndex == 0)
+                && currentSelectedIdx == 0)
                 SearchTextBox.Focus();
         }
 
@@ -122,26 +145,15 @@ namespace BibleProjector_WPF.View.MainPage
                 ItemSelectedCommand?.Execute(e.AddedItems[0]);
         }
 
-        // ======================= 테스팅용 =======================
-
-        /*public static readonly DependencyProperty CItemClickProperty =
-        DependencyProperty.Register(
-            name: "CItemClick",
-            propertyType: typeof(ICommand),
-            ownerType: typeof(SearchView));
-
-        public ICommand CItemClick
+        private void ListBoxItem_MouseClick(object sender, MouseButtonEventArgs e)
         {
-            get => (ICommand)GetValue(CItemClickProperty);
-            set => SetValue(CItemClickProperty, value);
-        }*/
-        private void ListBoxItem_MouseDown(object sender, MouseButtonEventArgs e)
+            ((ICommand)CPopupHideProperty.GetValue(this.DataContext)).Execute(null);
+            SearchTextBox.Focus();
+        }
+
+        private void EH_SearchButtonClick(object sender, MouseButtonEventArgs e)
         {
-            ViewModel.MainPage.VMSearchResult item = (ViewModel.MainPage.VMSearchResult)((ListBoxItem)sender).DataContext;
-            
-            Console.WriteLine(item.DisplayTitle);
-            // 테스팅용
-            //CItemClick.Execute(item.getData());
+            EHS_NewResult();
         }
     }
 }
