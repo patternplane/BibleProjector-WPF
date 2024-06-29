@@ -67,7 +67,6 @@
     </UserControl.Style>
 
     <Grid>
-        <Border x:Name="focusBorder" BorderBrush="red"/>
         <Grid Margin="8">
             <Grid.RowDefinitions>
                 <RowDefinition Height="100*"/>
@@ -471,5 +470,6 @@
                 </Grid>
             </Grid>
         </Grid>
+        <Border IsHitTestVisible="False" x:Name="focusBorder" Background="#A55B5B5B"/>
     </Grid>
 </UserControl>

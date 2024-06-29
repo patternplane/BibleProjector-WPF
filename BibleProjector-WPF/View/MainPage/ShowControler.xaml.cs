@@ -101,10 +101,10 @@ namespace BibleProjector_WPF.View.MainPage
             {
                 if (!((ShowControler)d).IsKeyboardFocusWithin)
                     ((ShowControler)d).Focus();
-                ((ShowControler)d).focusBorder.BorderThickness = new Thickness(2);
+                ((ShowControler)d).focusBorder.Visibility = Visibility.Hidden;
             }
             else
-                ((ShowControler)d).focusBorder.BorderThickness = new Thickness(0);
+                ((ShowControler)d).focusBorder.Visibility = Visibility.Visible;
         }
 
         // ========== EventHandler ==========
