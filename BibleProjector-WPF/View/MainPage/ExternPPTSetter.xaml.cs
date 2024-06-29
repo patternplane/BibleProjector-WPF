@@ -167,7 +167,12 @@ namespace BibleProjector_WPF.View.MainPage
             if (getOnShiftProperty(this.DataContext))
                 DeletePPTTask();
             else
-                AddPPTTask();
+            {
+                if (getHasItemProperty(this.DataContext))
+                    RefreshPPTTask();
+                else
+                    AddPPTTask();
+            }
         }
 
         private void EH_SecondButtonClick(object sender, RoutedEventArgs e)
@@ -182,31 +187,6 @@ namespace BibleProjector_WPF.View.MainPage
 
         void AddPPTTask()
         {
-            if (getHasItemProperty(this.DataContext))
-            {
-                MessageBoxResult result = MessageBox.Show("Yes : 기존 파일을 새로고침합니다.\n(No : 새 PPT를 등록합니다.)", "PPT 새로고침", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
-
-                if (result == MessageBoxResult.Cancel)
-                    return;
-
-                else if (result == MessageBoxResult.Yes)
-                {
-                    if (getCRefreshPPTFileProperty(this.DataContext).CanExecute(null))
-                        getCRefreshPPTFileProperty(this.DataContext).Execute(null);
-                    else
-                    {
-                        int errorCode = getRefreshPPTFileErrorProperty(this.DataContext);
-                        if (errorCode == 1)
-                            MessageBox.Show("편집한 PPT의 슬라이드 수가 너무 많습니다.\r\n한 PPT에 허용되는 최대 슬라이드 수는 " + getMaxSlideSizeProperty(this.DataContext) + "개 입니다.", "슬라이드 수 초과", MessageBoxButton.OK, MessageBoxImage.Error);
-                        else if (errorCode == 2)
-                            MessageBox.Show("해당 PPT파일의 원본이 없어 새로고침하지 못했습니다!\n경로 : " + getFilePathProperty(this.DataContext), "파일 없음", MessageBoxButton.OK, MessageBoxImage.Error);
-                        else
-                            MessageBox.Show("알 수 없는 오류 : " + errorCode, "알 수 없는 오류", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                    return;
-                }
-            }
-
             if (ExternPPTFileDialog.FD_ExternPPT.ShowDialog() == System.Windows.Forms.DialogResult.Cancel)
                 return;
 
@@ -219,6 +199,22 @@ namespace BibleProjector_WPF.View.MainPage
                     MessageBox.Show("너무 큰 용량의 PPT를 등록하려 했습니다.\r\n한 PPT에 허용되는 최대 슬라이드 수는 " + getMaxSlideSizeProperty(this.DataContext) + "개 입니다.", "너무 큰 파일 등록", MessageBoxButton.OK, MessageBoxImage.Error);
                 else if (errorCode == 3)
                     MessageBox.Show("이미 등록된 파일입니다.", "중복 등록", MessageBoxButton.OK, MessageBoxImage.Error);
+                else
+                    MessageBox.Show("알 수 없는 오류 : " + errorCode, "알 수 없는 오류", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        void RefreshPPTTask()
+        {
+            if (getCRefreshPPTFileProperty(this.DataContext).CanExecute(null))
+                getCRefreshPPTFileProperty(this.DataContext).Execute(null);
+            else
+            {
+                int errorCode = getRefreshPPTFileErrorProperty(this.DataContext);
+                if (errorCode == 1)
+                    MessageBox.Show("편집한 PPT의 슬라이드 수가 너무 많습니다.\r\n한 PPT에 허용되는 최대 슬라이드 수는 " + getMaxSlideSizeProperty(this.DataContext) + "개 입니다.", "슬라이드 수 초과", MessageBoxButton.OK, MessageBoxImage.Error);
+                else if (errorCode == 2)
+                    MessageBox.Show("해당 PPT파일의 원본이 없어 새로고침하지 못했습니다!\n경로 : " + getFilePathProperty(this.DataContext), "파일 없음", MessageBoxButton.OK, MessageBoxImage.Error);
                 else
                     MessageBox.Show("알 수 없는 오류 : " + errorCode, "알 수 없는 오류", MessageBoxButton.OK, MessageBoxImage.Error);
             }

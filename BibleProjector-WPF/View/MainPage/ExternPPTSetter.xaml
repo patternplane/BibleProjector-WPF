@@ -78,7 +78,7 @@
                                 <Setter Property="Content" Value="등 록"/>
                             </DataTrigger>
                             <DataTrigger Binding="{Binding HasItem}" Value="true">
-                                <Setter Property="Content" Value="재등록"/>
+                                <Setter Property="Content" Value="새로고침"/>
                             </DataTrigger>
 
                             <DataTrigger Binding="{Binding OnShift}" Value="False">
