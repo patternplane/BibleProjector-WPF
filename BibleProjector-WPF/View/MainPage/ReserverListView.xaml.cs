@@ -208,12 +208,6 @@ namespace BibleProjector_WPF.View.MainPage
                 DeleteSelections();
         }
 
-        private void EH_ReserveListBox_PreviewKeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Delete)
-                DeleteSelections();
-        }
-
         void DeleteSelections()
         {
             if (selections.Count > 0)

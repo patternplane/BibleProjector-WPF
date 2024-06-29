@@ -40,7 +40,6 @@
                     AllowDrop="true"
                     
                     PreviewMouseWheel="EH_ScrollByWheel"
-                    PreviewKeyUp="EH_ReserveListBox_PreviewKeyUp"
                     
                     PreviewMouseDown="EH_ReserveListBox_PreviewMouseDown"
                     MouseUp="EH_ConfirmSelection"
