@@ -66,38 +66,35 @@
                 <Border
                     BorderBrush="LightGray"
                     BorderThickness="1">
-                    <ScrollViewer
+                    <ListBox
+                        x:Name="ResultListBox"
                         Width="271"
                         MaxHeight="210"
-                        VerticalScrollBarVisibility="Auto"
-                        HorizontalScrollBarVisibility="Auto">
-                        <ListBox
-                            x:Name="ResultListBox"
-                            ItemsSource="{Binding SearchResultList, Mode=TwoWay}"
-                            SelectionChanged="EH_SearchItemSelectionChanged"
-                            PreviewKeyUp="EH_ListBoxKeyUp"
-                            PreviewKeyDown="EH_ListBoxKeyDown"
-                            Background="#FFF5FFF4"
-                            BorderThickness="0">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition/>
-                                            <ColumnDefinition/>
-                                            <ColumnDefinition/>
-                                        </Grid.ColumnDefinitions>
-                                        <Label Content="{Binding DisplayTitle}"/>
-                                    </Grid>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                            <ListBox.ItemContainerStyle>
-                                <Style TargetType="ListBoxItem">
-                                    <EventSetter Event="PreviewMouseUp" Handler="ListBoxItem_MouseClick"/>
-                                </Style>
-                            </ListBox.ItemContainerStyle>
-                        </ListBox>
-                    </ScrollViewer>
+                        ItemsSource="{Binding SearchResultList, Mode=TwoWay}"
+                        SelectionChanged="EH_SearchItemSelectionChanged"
+                        PreviewKeyUp="EH_ListBoxKeyUp"
+                        PreviewKeyDown="EH_ListBoxKeyDown"
+                        Background="#FFF5FFF4"
+                        BorderThickness="0"
+                        ScrollViewer.CanContentScroll="False">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Content="{Binding DisplayTitle}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <EventSetter Event="PreviewMouseUp" Handler="ListBoxItem_MouseClick"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
                 </Border>
             </Popup>
             <Button Grid.Column="1" FontSize="16" BorderBrush="Black" Background="#FF0272AA"
