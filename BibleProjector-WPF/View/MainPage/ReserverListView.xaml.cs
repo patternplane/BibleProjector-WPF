@@ -267,6 +267,10 @@ namespace BibleProjector_WPF.View.MainPage
 
                 getCSetDragDropProperty(ReserveListBox.DataContext).Execute(selections.ToArray());
 
+                // 미리보기 위치 조정
+
+                dragPreview(e.GetPosition, initialOffset);
+
                 DropPreviewItem.Visibility = Visibility.Visible;
                 DragDropEffects result = DragDrop.DoDragDrop(
                     itemUnderMouse,
@@ -283,47 +287,11 @@ namespace BibleProjector_WPF.View.MainPage
             prevTime = DateTime.Now;
         }
 
-        TranslateTransform transformData = new TranslateTransform();
-        const double SCROLL_RANGE = 60.0d;
-        DateTime prevTime;
         private void EH_OnDragOver(object sender, DragEventArgs e)
         {
-            // 미리보기 위치 이동
+            // 미리보기 조정
 
-            Point initialPosOffset = (Point)e.Data.GetData(typeof(Point));
-            Point pos_s = e.GetPosition(DragPreviewItem);
-
-            transformData.X = transformData.X + pos_s.X - initialPosOffset.X / 2.0;
-            transformData.Y = transformData.Y + pos_s.Y - initialPosOffset.Y;
-            DragPreviewItem.RenderTransform = transformData;
-            DragPreviewItem.Visibility = Visibility.Visible;
-            DragPreviewItem.IsSelected = true;
-
-            // 드롭 할 위치 찾기
-
-            ItemContainerGenerator reserveContainerGenerator = ReserveListBox.ItemContainerGenerator;
-            int NextItemIdx = 0; // NextItemIdx 항목의 앞자리가 적정위치임을 표시
-            for (; NextItemIdx < reserveContainerGenerator.Items.Count; NextItemIdx++)
-            {
-                ListBoxItem item = (ListBoxItem)reserveContainerGenerator.ContainerFromIndex(NextItemIdx);
-                if (getViewTypeProperty(ReserveListBox.Items[NextItemIdx]) != ReserveViewType.DragPreview
-                    && getViewTypeProperty(ReserveListBox.Items[NextItemIdx]) != ReserveViewType.DropPreview
-                    && e.GetPosition(item).Y - 10 < 0)
-                {
-                    break;
-                }
-            }
-
-            if (NextItemIdx == 0
-                || getViewTypeProperty(ReserveListBox.Items[NextItemIdx - 1]) != ReserveViewType.DropPreview)
-            {
-                object item = reserveContainerGenerator.ItemFromContainer(DropPreviewItem);
-
-                getCSetDropPreviewPosProperty(ReserveListBox.DataContext).Execute(NextItemIdx);
-                ReserveListBox.UpdateLayout();
-
-                DropPreviewItem = (ListBoxItem)reserveContainerGenerator.ContainerFromItem(item);
-            }
+            dragPreview(e.GetPosition, (Point)e.Data.GetData(typeof(Point)));
 
             // 드래그 중 스크롤 이동
 
@@ -347,12 +315,55 @@ namespace BibleProjector_WPF.View.MainPage
             prevTime = currentTime;
         }
 
+        private delegate Point positionGetter(IInputElement d);
+        private TranslateTransform transformData = new TranslateTransform();
+        private const double SCROLL_RANGE = 60.0d;
+        private DateTime prevTime;
+        private void dragPreview(positionGetter pos, Point initPos)
+        {
+            // 미리보기 위치 이동
+
+            Point pos_s = pos(DragPreviewItem);
+
+            transformData.X = transformData.X + pos_s.X - initPos.X / 2.0;
+            transformData.Y = transformData.Y + pos_s.Y - initPos.Y;
+            DragPreviewItem.RenderTransform = transformData;
+            DragPreviewItem.Visibility = Visibility.Visible;
+            DragPreviewItem.IsSelected = true;
+
+            // 드롭 할 위치 찾기
+
+            ItemContainerGenerator reserveContainerGenerator = ReserveListBox.ItemContainerGenerator;
+            int NextItemIdx = 0; // NextItemIdx 항목의 앞자리가 적정위치임을 표시
+            for (; NextItemIdx < reserveContainerGenerator.Items.Count; NextItemIdx++)
+            {
+                ListBoxItem item = (ListBoxItem)reserveContainerGenerator.ContainerFromIndex(NextItemIdx);
+                if (getViewTypeProperty(ReserveListBox.Items[NextItemIdx]) != ReserveViewType.DragPreview
+                    && getViewTypeProperty(ReserveListBox.Items[NextItemIdx]) != ReserveViewType.DropPreview
+                    && pos(item).Y - 10 < 0)
+                {
+                    break;
+                }
+            }
+
+            if (NextItemIdx == 0
+                || getViewTypeProperty(ReserveListBox.Items[NextItemIdx - 1]) != ReserveViewType.DropPreview)
+            {
+                object item = reserveContainerGenerator.ItemFromContainer(DropPreviewItem);
+
+                getCSetDropPreviewPosProperty(ReserveListBox.DataContext).Execute(NextItemIdx);
+                ReserveListBox.UpdateLayout();
+
+                DropPreviewItem = (ListBoxItem)reserveContainerGenerator.ContainerFromItem(item);
+            }
+        }
+
         private void EH_DragEnd(object sender, DragEventArgs e)
         {
             DoDragEnd();
         }
 
-        void DoDragEnd()
+        private void DoDragEnd()
         {
             int dropIdx = ReserveListBox.ItemContainerGenerator.IndexFromContainer(DropPreviewItem);
             getCApplyDragProperty(ReserveListBox.DataContext).Execute(dropIdx);
