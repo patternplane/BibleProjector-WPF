@@ -81,6 +81,27 @@
                                     <Setter Property="Panel.ZIndex" Value="1"/>
                                     <Setter Property="Margin" Value="0,-22,0,0"/>
                                 </DataTrigger>
+                                <DataTrigger Binding="{Binding ContentType}" Value="{x:Static rtype:ShowContentType.Bible}">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <SolidColorBrush Color="{x:Static local:ShowItemColor.BibleBackgroundColor}"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ContentType}" Value="{x:Static rtype:ShowContentType.Song}">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <SolidColorBrush Color="{x:Static local:ShowItemColor.SongBackgroundColor}"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ContentType}" Value="{x:Static rtype:ShowContentType.PPT}">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <SolidColorBrush Color="{x:Static local:ShowItemColor.PPTBackgroundColor}"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
                             </Style.Triggers>
                         </Style>
                     </ListBox.ItemContainerStyle>

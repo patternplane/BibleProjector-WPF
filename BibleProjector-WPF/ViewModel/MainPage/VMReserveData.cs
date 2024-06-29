@@ -25,6 +25,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         }
         public ReserveViewType ViewType { get; set; }
         public module.Data.ShowData Data;
+        public ShowContentType? ContentType { get { return Data?.getDataType(); } }
         
         string title;
 
