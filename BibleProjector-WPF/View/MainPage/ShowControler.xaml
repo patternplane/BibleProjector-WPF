@@ -293,6 +293,21 @@
 
                     <!--화면조작-->
                     <Grid Grid.Row="2">
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Bible}">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Song}">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.PPT}">
+                                        <Setter Property="Visibility" Value="Hidden"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="50*"/>
                             <ColumnDefinition Width="4*"/>
@@ -327,6 +342,41 @@
                                         </Trigger>
                                         <Trigger Property="IsChecked" Value="False">
                                             <Setter Property="Content" Value="자막끄기"></Setter>
+                                            <Setter Property="FontWeight" Value="Normal"></Setter>
+                                            <Setter Property="FontSize" Value="12"></Setter>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ToggleButton.Style>
+                        </ToggleButton>
+                    </Grid>
+                    <Grid Grid.Row="2">
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Bible}">
+                                        <Setter Property="Visibility" Value="Hidden"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.Song}">
+                                        <Setter Property="Visibility" Value="Hidden"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding ContentType}" Value="{x:Static home:ShowContentType.PPT}">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>
+                        <ToggleButton Click="EH_DisplayOffButtonClick" IsChecked="{Binding DisplayButtonState}">
+                            <ToggleButton.Style>
+                                <Style TargetType="ToggleButton">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsChecked" Value="True">
+                                            <Setter Property="Content" Value="화면닫기"></Setter>
+                                            <Setter Property="FontWeight" Value="Bold"></Setter>
+                                            <Setter Property="FontSize" Value="13"></Setter>
+                                        </Trigger>
+                                        <Trigger Property="IsChecked" Value="False">
+                                            <Setter Property="Content" Value="화면닫기"></Setter>
                                             <Setter Property="FontWeight" Value="Normal"></Setter>
                                             <Setter Property="FontSize" Value="12"></Setter>
                                         </Trigger>
