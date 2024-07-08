@@ -6,9 +6,16 @@
         xmlns:local="clr-namespace:BibleProjector_WPF"
         mc:Ignorable="d"
         Title="주일성수"
-        SizeToContent="WidthAndHeight"
-        ResizeMode="CanMinimize"
+        
+        ResizeMode="CanResize"
+        SizeChanged="EH_WindowSizeChanged"
+        
         PreviewKeyDown="EH_PreKeyDownCheck"
-        KeyUp="EH_KeyUpCheck">
-    <ContentControl Content="{Binding VM_Main}"/>
+        KeyUp="EH_KeyUpCheck"
+        d:DesignWidth="191.75" d:DesignHeight="125.75">
+    <Border x:Name="WindowContent">
+        <Viewbox>
+            <ContentControl local:MainWindow.RatioSize="True" Content="{Binding VM_Main}"/>
+        </Viewbox>
+    </Border>
 </Window>

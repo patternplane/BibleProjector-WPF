@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:BibleProjector_WPF.View.MainPage"
              xmlns:home="clr-namespace:BibleProjector_WPF"
              mc:Ignorable="d" 
-             d:DesignHeight="191" d:DesignWidth="1200"
+             Height="190" d:DesignWidth="1200"
              
              GotFocus="EH_focusIn"
              LostFocus="EH_focusOut"
