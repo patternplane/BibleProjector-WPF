@@ -107,18 +107,18 @@
         <Border Grid.Row="4" BorderBrush="Black" BorderThickness="1">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
                     <RowDefinition Height="30"/>
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
-                <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
+                <Border Grid.Row="0" BorderBrush="Gray" BorderThickness="0,0,0,2">
+                    <TextBlock Margin="5,0,1,0" FontSize="15" Text="{Binding SelectionItem.DisplayTitle}" VerticalAlignment="Center" FontWeight="Bold">
+                    </TextBlock>
+                </Border>
+                <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
                               VerticalAlignment="Bottom">
                     <TextBlock FontSize="14" Margin="3" Text="{Binding SelectionItem.PreviewContent}" TextWrapping="Wrap">
                     </TextBlock>
                 </ScrollViewer>
-                <Border Grid.Row="1" BorderBrush="Gray" BorderThickness="0,2,0,0">
-                    <TextBlock Margin="5,0,1,0" FontSize="15" Text="{Binding SelectionItem.DisplayTitle}" VerticalAlignment="Center" FontWeight="Bold">
-                    </TextBlock>
-                </Border>
             </Grid>
         </Border>
 
