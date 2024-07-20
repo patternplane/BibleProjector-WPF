@@ -63,67 +63,64 @@ namespace BibleProjector_WPF.module.Data
             // 반드시 songData는 모든 슬라이드마다 0. 제목, 1. 가사 일 것!
             // songData 규격 : [정보 번호][커맨드문구(0)냐 내용(1)이냐]
 
-            if (currentContents == null)
+            List<ShowContentData> songData = new List<ShowContentData>();
+
+            for (int verse = 0; verse < songContent.lyricCount; verse++)
             {
-                List<ShowContentData> songData = new List<ShowContentData>();
-
-                for (int verse = 0; verse < songContent.lyricCount; verse++)
+                string[] pages = StringModifier.makePageWithLines(songContent.getContentByVerse(verse), linePerSlide);
+                if (this.songType == SongDataTypeEnum.CCM)
                 {
-                    string[] pages = StringModifier.makePageWithLines(songContent.getContentByVerse(verse), linePerSlide);
-                    if (this.songType == SongDataTypeEnum.CCM)
+                    for (int j = 0; j < pages.Length; j++)
                     {
-                        for (int j = 0; j < pages.Length; j++)
-                        {
-                            string[][] pageData = new string[2][];
+                        string[][] pageData = new string[2][];
 
-                            pageData[0] = new string[2];
-                            pageData[0][0] = "{t}";
-                            pageData[0][1] = songTitle;
+                        pageData[0] = new string[2];
+                        pageData[0][0] = "{t}";
+                        pageData[0][1] = songTitle;
 
-                            pageData[1] = new string[2];
-                            pageData[1][0] = "{c}";
-                            pageData[1][1] = pages[j];
+                        pageData[1] = new string[2];
+                        pageData[1][0] = "{c}";
+                        pageData[1][1] = pages[j];
 
-                            songData.Add(new ShowContentData(pageData, pages[j], false));
-                        }
+                        songData.Add(new ShowContentData(pageData, pages[j], false));
                     }
-                    else if (this.songType == SongDataTypeEnum.HYMN)
-                    {
-                        for (int j = 0; j < pages.Length; j++)
-                        {
-                            string[][] pageData = new string[4][];
-
-                            pageData[0] = new string[2];
-                            pageData[0][0] = "{t}";
-                            pageData[0][1] = songTitle;
-
-                            pageData[1] = new string[2];
-                            pageData[1][0] = "{c}";
-                            pageData[1][1] = pages[j];
-
-                            pageData[2] = new string[2];
-                            pageData[2][0] = "{v}";
-                            pageData[2][1] = (j == 0) ?
-                                (verse + 1).ToString()
-                                : "";
-
-                            pageData[3] = new string[2];
-                            pageData[3][0] = "{va}";
-                            pageData[3][1] = (verse + 1).ToString();
-
-                            if (j == 0)
-                                songData.Add(new ShowContentData(pageData, "    " + (verse + 1) + " 절\r\n" + pages[j] + "\r\n", true));
-                            else
-                                songData.Add(new ShowContentData(pageData, pages[j], false));
-                        }
-                    }
-                    else
-                        throw new Exception("가사 처리 오류 : [" + this.songType.ToString() + "] 형식의 가사를 처리할 수 없습니다!");
                 }
+                else if (this.songType == SongDataTypeEnum.HYMN)
+                {
+                    for (int j = 0; j < pages.Length; j++)
+                    {
+                        string[][] pageData = new string[4][];
 
-                currentContents = songData.ToArray();
+                        pageData[0] = new string[2];
+                        pageData[0][0] = "{t}";
+                        pageData[0][1] = songTitle;
+
+                        pageData[1] = new string[2];
+                        pageData[1][0] = "{c}";
+                        pageData[1][1] = pages[j];
+
+                        pageData[2] = new string[2];
+                        pageData[2][0] = "{v}";
+                        pageData[2][1] = (j == 0) ?
+                            (verse + 1).ToString()
+                            : "";
+
+                        pageData[3] = new string[2];
+                        pageData[3][0] = "{va}";
+                        pageData[3][1] = (verse + 1).ToString();
+
+                        if (j == 0)
+                            songData.Add(new ShowContentData(pageData, "    " + (verse + 1) + " 절\r\n" + pages[j] + "\r\n", true));
+                        else
+                            songData.Add(new ShowContentData(pageData, pages[j], false));
+                    }
+                }
+                else
+                    throw new Exception("가사 처리 오류 : [" + this.songType.ToString() + "] 형식의 가사를 처리할 수 없습니다!");
             }
 
+            currentContents = songData.ToArray();
+            
             return currentContents;
         }
 
