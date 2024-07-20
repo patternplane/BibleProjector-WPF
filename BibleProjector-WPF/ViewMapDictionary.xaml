@@ -17,6 +17,10 @@
         <vw_mp:ShowControler></vw_mp:ShowControler>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type vm_mp:VMBibleSeletion}">
+        <vw_mp:BibleSelectionView></vw_mp:BibleSelectionView>
+    </DataTemplate>
+    
     <DataTemplate DataType="{x:Type vm_mp:VMSearchControl}">
         <vw_mp:SearchView></vw_mp:SearchView>
     </DataTemplate>

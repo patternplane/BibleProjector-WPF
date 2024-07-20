@@ -55,7 +55,7 @@ namespace BibleProjector_WPF
             if (h == 0 || w == 0)
                 return;
 
-            double DEFALT_W = 1200.0;
+            double DEFALT_W = 1475.0;
             double DEFALT_H = 830.0;
 
             foreach (FrameworkElement f in RatioSizeElements)

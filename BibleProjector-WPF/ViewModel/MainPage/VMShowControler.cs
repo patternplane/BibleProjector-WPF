@@ -21,6 +21,8 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         public ShowContentType ContentType { get; set; }
 
+        private BibleSelectionEventManager bibleSelectionEventManager;
+
         public string Title1 { get; set; }
         public string Title2 { get; set; }
 
@@ -56,7 +58,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         // ================================================ 세팅 ================================================
 
-        public VMShowControler(ShowContentType type, module.ShowStarter showStarter)
+        public VMShowControler(ShowContentType type, module.ShowStarter showStarter, BibleSelectionEventManager bibleSelectionEventManager = null)
         {
             CDisplayOnOff = new RelayCommand(obj => DisplayVisibility((bool)obj));
             CTextShowHide = new RelayCommand(obj => TextVisibility((bool)obj));
@@ -65,6 +67,9 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             CSetDisplayTopMost = new RelayCommand(obj => SetDisplayTopMost());
 
             this.ContentType = type;
+            this.bibleSelectionEventManager = bibleSelectionEventManager;
+            if (type == ShowContentType.Bible && bibleSelectionEventManager == null)
+                throw new Exception("성경 컨트롤러는 BibleSelectionEventManager 객체를 요구합니다. (부족한 생성자 매개변수)");
 
             module.ProgramOption.FrameDeletedEvent += FrameDeleted;
             showStarter.ShowStartEvent += startShow;
@@ -193,6 +198,9 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         void dataSetter(module.Data.ShowData data)
         {
+            if (ContentType == ShowContentType.Bible)
+                bibleSelectionEventManager.InvokeBibleSelection(((module.Data.BibleData)data).book, ((module.Data.BibleData)data).chapter, ((module.Data.BibleData)data).verse);
+
             this.currentData = data;
 
             if (data == null)

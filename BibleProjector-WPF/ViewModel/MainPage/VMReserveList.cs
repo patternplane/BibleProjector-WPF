@@ -16,24 +16,30 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public ICommand CApplyDrag { get; set; }
         public ICommand CDeleteItems { get; set; }
         public ICommand CItemShowStart { get; set; }
+        public ICommand CItemSelection { get; set; }
 
         VMReserveData dragPreviewItem;
         VMReserveData dropPreviewItem;
 
+        private BibleSelectionEventManager bibleSelectionEventManager;
+
         module.ReserveDataManager reserveDataManager;
         module.ShowStarter showStarter;
 
-        public VMReserveList(module.ReserveDataManager reserveDataManager, module.ShowStarter showStarter)
+        public VMReserveList(module.ReserveDataManager reserveDataManager, module.ShowStarter showStarter, BibleSelectionEventManager bibleSelectionEventManager)
         {
             this.CSetDragDrop = new RelayCommand((obj) => SetDragDrop((ViewModel[])obj));
             this.CSetDropPreviewPos = new RelayCommand(SetDropPreviewPos);
             this.CApplyDrag = new RelayCommand(ApplyDrag);
             this.CDeleteItems = new RelayCommand((obj) => DeleteItems((ViewModel[])obj));
             this.CItemShowStart = new RelayCommand((obj) => ItemShowStart((VMReserveData)obj));
+            this.CItemSelection = new RelayCommand((obj) => ItemSelection((System.Collections.IList)obj));
 
             reserveDataManager.ListChangedEvent += OnReserveDataUpdated;
             this.reserveDataManager = reserveDataManager;
             this.showStarter = showStarter;
+
+            this.bibleSelectionEventManager = bibleSelectionEventManager;
 
             dragPreviewItem = new VMReserveData("", ReserveViewType.DragPreview);
             dropPreviewItem = new VMReserveData("", ReserveViewType.DropPreview);
@@ -113,6 +119,17 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         void ItemShowStart(VMReserveData data)
         {
             showStarter.Show(data.Data);
+        }
+
+        private void ItemSelection(System.Collections.IList items)
+        {
+            for (int i = items.Count - 1; i >= 0; i--)
+                if (((VMReserveData)items[i]).ContentType == ShowContentType.Bible)
+                {
+                    module.Data.BibleData data = (module.Data.BibleData)((VMReserveData)items[i]).Data;
+                    bibleSelectionEventManager.InvokeBibleSelection(data.book, data.chapter, data.verse);
+                    return;
+                }
         }
 
         // ========== Command - Drag & Drop ==========

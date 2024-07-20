@@ -24,8 +24,8 @@ namespace BibleProjector_WPF.View.MainPage
         {
             InitializeComponent();
 
-            Binding b = new Binding("CItemShowStart");
-            this.SetBinding(ItemShowStartCommandProperty, b);
+            this.SetBinding(ItemShowStartCommandProperty, new Binding("CItemShowStart"));
+            this.SetBinding(ItemSelectionCommandProperty, new Binding("CItemSelection"));
         }
 
         private void EH_UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -129,6 +129,18 @@ namespace BibleProjector_WPF.View.MainPage
             set => SetValue(ItemShowStartCommandProperty, value);
         }
 
+        public static readonly DependencyProperty ItemSelectionCommandProperty =
+        DependencyProperty.Register(
+            name: "ItemSelectionCommand",
+            propertyType: typeof(ICommand),
+            ownerType: typeof(ReserverListView));
+
+        public ICommand ItemSelectionCommand
+        {
+            get => (ICommand)GetValue(ItemSelectionCommandProperty);
+            set => SetValue(ItemSelectionCommandProperty, value);
+        }
+
         // ========== Reserve View Scroll ==========
 
         private void EH_ScrollByWheel(object sender, MouseWheelEventArgs e)
@@ -173,6 +185,8 @@ namespace BibleProjector_WPF.View.MainPage
 
         private void EH_ReserveListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            ItemSelectionCommand.Execute(e.AddedItems);
+
             if (allowSelect)
                 confirmSelection();
         }

@@ -96,8 +96,10 @@
     <Compile Include="ReserveType.cs" />
     <Compile Include="ReserveViewType.cs" />
     <Compile Include="ShowContentType.cs" />
+    <Compile Include="ViewModel\BibleSelectionEventManager.cs" />
     <Compile Include="ViewModel\CapsLockEventManager.cs" />
     <Compile Include="ViewModel\KeyDownEventManager.cs" />
+    <Compile Include="ViewModel\MainPage\VMBibleSeletion.cs" />
     <Compile Include="ViewModel\MainPage\VMExternPPTEditButton.cs" />
     <Compile Include="ViewModel\MainPage\VMReserveData.cs" />
     <Compile Include="ViewModel\MainPage\VMReserveList.cs" />
@@ -117,6 +119,9 @@
     <Compile Include="Event\ReserveListChanged.cs" />
     <Compile Include="View\MainPage\AdditionalContentButton.xaml.cs">
       <DependentUpon>AdditionalContentButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainPage\BibleSelectionView.xaml.cs">
+      <DependentUpon>BibleSelectionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\MainPage\ControlView.xaml.cs">
       <DependentUpon>ControlView.xaml</DependentUpon>
@@ -186,6 +191,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\MainPage\AdditionalContentButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MainPage\BibleSelectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

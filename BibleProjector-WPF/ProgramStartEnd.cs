@@ -93,6 +93,7 @@ namespace BibleProjector_WPF
             ViewModel.KeyDownEventManager keyDownEventManager = new ViewModel.KeyDownEventManager();
             ViewModel.ShiftEventManager shiftEventManager = new ViewModel.ShiftEventManager();
             ViewModel.CapsLockEventManager capsLockEventManager = new ViewModel.CapsLockEventManager();
+            ViewModel.BibleSelectionEventManager bibleSelectionEventManager = new ViewModel.BibleSelectionEventManager();
 
             module.ShowStarter showStarter = new module.ShowStarter();
 
@@ -102,7 +103,7 @@ namespace BibleProjector_WPF
                 buttonVMs.Add(new ViewModel.MainPage.VMExternPPTEditButton(reserveDataManager, pptMan, shiftEventManager, i, showStarter));
 
             ViewModel.MainPage.VMShowControler[] showControlers = new ViewModel.MainPage.VMShowControler[3];
-            showControlers[0] = new ViewModel.MainPage.VMShowControler(ShowContentType.Bible, showStarter);
+            showControlers[0] = new ViewModel.MainPage.VMShowControler(ShowContentType.Bible, showStarter, bibleSelectionEventManager);
             showControlers[1] = new ViewModel.MainPage.VMShowControler(ShowContentType.Song, showStarter);
             showControlers[2] = new ViewModel.MainPage.VMShowControler(ShowContentType.PPT, showStarter);
 
@@ -117,8 +118,9 @@ namespace BibleProjector_WPF
                     new ViewModel.MainPage.VMMain(
                         new ViewModel.MainPage.VMControlPage(
                             showControlers,
-                            new ViewModel.MainPage.VMSearchControl(searcher, reserveDataManager, showStarter),
-                            new ViewModel.MainPage.VMReserveList(reserveDataManager, showStarter),
+                            new ViewModel.MainPage.VMBibleSeletion(reserveDataManager, showStarter, bibleSelectionEventManager),
+                            new ViewModel.MainPage.VMSearchControl(searcher, reserveDataManager, showStarter, bibleSelectionEventManager),
+                            new ViewModel.MainPage.VMReserveList(reserveDataManager, showStarter, bibleSelectionEventManager),
                             buttonVMs,
                             keyDownEventManager,
                             capsLockEventManager,
