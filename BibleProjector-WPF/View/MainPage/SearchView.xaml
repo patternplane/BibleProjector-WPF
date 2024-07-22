@@ -57,7 +57,11 @@
 
             <Border Grid.Column="0" BorderBrush="black" BorderThickness="1,1,0,1">
                 <TextBox x:Name="SearchTextBox" FontSize="15" Text="{Binding SearchText}" Padding="0"
-                         PreviewKeyUp="EH_TextBoxKeyUp">
+                         PreviewKeyUp="EH_TextBoxKeyUp"
+                         
+                         GotFocus="EH_TextBoxGotFocus"
+                         PreviewMouseDown="EH_TextBoxClick"
+                         PreviewMouseDoubleClick="EH_TextBoxDoubleClick">
                 </TextBox>
             </Border>
             <Popup Grid.ColumnSpan="2"

@@ -155,5 +155,26 @@ namespace BibleProjector_WPF.View.MainPage
         {
             EHS_NewResult();
         }
+
+        // ======================= 자동 텍스트 전체선택 =======================
+
+        private void EH_TextBoxGotFocus(object sender, RoutedEventArgs e)
+        {
+            SearchTextBox.SelectAll();
+        }
+
+        private void EH_TextBoxClick(object sender, MouseButtonEventArgs e)
+        {
+            if (!SearchTextBox.IsFocused)
+            {
+                SearchTextBox.Focus();
+                e.Handled = true;
+            }
+        }
+
+        private void EH_TextBoxDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            SearchTextBox.SelectAll();
+        }
     }
 }
