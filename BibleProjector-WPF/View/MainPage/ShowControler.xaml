@@ -317,7 +317,7 @@
                                 <Style TargetType="ToggleButton">
                                     <Style.Triggers>
                                         <Trigger Property="IsChecked" Value="True">
-                                            <Setter Property="Content" Value="화면닫기"></Setter>
+                                            <Setter Property="Content" Value="화면열기"></Setter>
                                             <Setter Property="FontWeight" Value="Bold"></Setter>
                                             <Setter Property="FontSize" Value="13"></Setter>
                                         </Trigger>
@@ -335,7 +335,7 @@
                                 <Style TargetType="ToggleButton">
                                     <Style.Triggers>
                                         <Trigger Property="IsChecked" Value="True">
-                                            <Setter Property="Content" Value="자막끄기"></Setter>
+                                            <Setter Property="Content" Value="자막켜기"></Setter>
                                             <Setter Property="FontWeight" Value="Bold"></Setter>
                                             <Setter Property="FontSize" Value="13"></Setter>
                                         </Trigger>
@@ -370,7 +370,7 @@
                                 <Style TargetType="ToggleButton">
                                     <Style.Triggers>
                                         <Trigger Property="IsChecked" Value="True">
-                                            <Setter Property="Content" Value="화면닫기"></Setter>
+                                            <Setter Property="Content" Value="화면열기"></Setter>
                                             <Setter Property="FontWeight" Value="Bold"></Setter>
                                             <Setter Property="FontSize" Value="13"></Setter>
                                         </Trigger>
