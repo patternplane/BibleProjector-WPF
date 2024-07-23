@@ -22,11 +22,11 @@ namespace BibleProjector_WPF.module.Data
         public ICollection<SearchData> getSearchResult(string phrase)
         {
             List<SearchData> searchResults = new List<SearchData>();
+            searchResults.AddRange(externPPTSearcher.getSearchResult(phrase));
             searchResults.AddRange(bibleSearcher.getSearchResult(phrase));
             searchResults.AddRange(songSearcher.getSearchResult(phrase));
-            searchResults.AddRange(externPPTSearcher.getSearchResult(phrase));
 
-            searchResults.Sort();
+            //searchResults.Sort();
             return searchResults;
         }
     }
