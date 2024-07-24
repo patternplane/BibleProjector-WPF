@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BibleProjector_WPF.View.MainPage"
+             xmlns:rootns ="clr-namespace:BibleProjector_WPF"
              mc:Ignorable="d" 
              Height="auto" Width="360">
 
@@ -118,9 +119,19 @@
                     <TextBlock Margin="5,0,1,0" FontSize="15" Text="{Binding SelectionItem.DisplayTitle}" VerticalAlignment="Center" FontWeight="Bold">
                     </TextBlock>
                 </Border>
-                <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                    <TextBlock FontSize="14" Margin="3" Text="{Binding SelectionItem.PreviewContent}" TextWrapping="Wrap">
-                    </TextBlock>
+                <ScrollViewer Grid.Row="1">
+                    <ScrollViewer.Style>
+                        <Style TargetType="ScrollViewer">
+                            <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+                            <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectionItem.Type}" Value="{x:Static rootns:ShowContentType.Bible}">
+                                    <Setter Property="HorizontalScrollBarVisibility" Value="Disabled"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ScrollViewer.Style>
+                    <TextBlock FontSize="14" Margin="3" Text="{Binding SelectionItem.PreviewContent}" TextWrapping="Wrap"/>
                 </ScrollViewer>
             </Grid>
         </Border>

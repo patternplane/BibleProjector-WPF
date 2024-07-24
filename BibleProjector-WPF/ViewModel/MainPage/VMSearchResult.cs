@@ -10,7 +10,8 @@ namespace BibleProjector_WPF.ViewModel.MainPage
     {
         public string DisplayTitle { get; }
         public string PreviewContent { get { return searchData.previewContent; } }
-        module.SearchData searchData;
+        public ShowContentType Type { get { return searchData.data.getDataType(); } }
+        private module.SearchData searchData;
 
         public VMSearchResult(module.SearchData data)
         {
