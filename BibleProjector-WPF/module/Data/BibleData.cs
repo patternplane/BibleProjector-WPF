@@ -19,19 +19,6 @@ namespace BibleProjector_WPF.module.Data
 
         public BibleData(int book, int chapter, int verse)
         {
-            setupBible(book, chapter, verse);
-        }
-
-        void setupBible(string Kjjeul)
-        {
-            setupBible(
-                int.Parse(Kjjeul.Substring(0, 2))
-                , int.Parse(Kjjeul.Substring(2,3))
-                , int.Parse(Kjjeul.Substring(5,3)));
-        }
-
-        void setupBible(int book, int chapter, int verse)
-        {
             this.book = -1;
             this.chapter = -1;
             this.verse = -1;
@@ -109,14 +96,23 @@ namespace BibleProjector_WPF.module.Data
 
         public override ShowData getNextShowData()
         {
-            setupBible(Database.getBibleIndex_Next(book.ToString("D2") + chapter.ToString("D3") + verse.ToString("D3")));
-            return this;
+            string Kjjeul = Database.getBibleIndex_Next(book.ToString("D2") + chapter.ToString("D3") + verse.ToString("D3"));
+            return
+                new BibleData(
+                    int.Parse(Kjjeul.Substring(0, 2)),
+                    int.Parse(Kjjeul.Substring(2, 3)),
+                    int.Parse(Kjjeul.Substring(5, 3)));
         }
 
         public override ShowData getPrevShowData()
         {
-            setupBible(Database.getBibleIndex_Previous(book.ToString("D2") + chapter.ToString("D3") + verse.ToString("D3")));
-            return this;
+
+            string Kjjeul = Database.getBibleIndex_Previous(book.ToString("D2") + chapter.ToString("D3") + verse.ToString("D3"));
+            return
+                new BibleData(
+                    int.Parse(Kjjeul.Substring(0, 2)),
+                    int.Parse(Kjjeul.Substring(2, 3)),
+                    int.Parse(Kjjeul.Substring(5, 3)));
         }
 
         public override ShowContentType getDataType()
