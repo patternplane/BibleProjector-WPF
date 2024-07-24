@@ -27,6 +27,8 @@ namespace BibleProjector_WPF.View.MainPage
             SetBinding(CBookSelectionProperty, new Binding("CBookSelection"));
             SetBinding(CChapterSelectionProperty, new Binding("CChapterSelection")); 
             SetBinding(CVerseSelectionProperty, new Binding("CVerseSelection"));
+            SetBinding(CShowBibleProperty, new Binding("CShowBible"));
+            SetBinding(CReserveBibleProperty, new Binding("CReserveBible"));
 
             SetBinding(SetBookSelectionProperty, new Binding("BookSetter") { Mode = BindingMode.TwoWay });
             SetBinding(SetChapterSelectionProperty, new Binding("ChapterSetter") { Mode = BindingMode.TwoWay });
@@ -69,6 +71,30 @@ namespace BibleProjector_WPF.View.MainPage
         {
             get => (ICommand)GetValue(CVerseSelectionProperty);
             set => SetValue(CVerseSelectionProperty, value);
+        }
+
+        public static readonly DependencyProperty CShowBibleProperty =
+            DependencyProperty.Register(
+                name: "CShowBible",
+                propertyType: typeof(ICommand),
+                ownerType: typeof(BibleSelectionView));
+
+        public ICommand CShowBible
+        {
+            get => (ICommand)GetValue(CShowBibleProperty);
+            set => SetValue(CShowBibleProperty, value);
+        }
+
+        public static readonly DependencyProperty CReserveBibleProperty =
+            DependencyProperty.Register(
+                name: "CReserveBible",
+                propertyType: typeof(ICommand),
+                ownerType: typeof(BibleSelectionView));
+
+        public ICommand CReserveBible
+        {
+            get => (ICommand)GetValue(CReserveBibleProperty);
+            set => SetValue(CReserveBibleProperty, value);
         }
 
         public static readonly DependencyProperty SetBookSelectionProperty =
@@ -222,6 +248,21 @@ namespace BibleProjector_WPF.View.MainPage
             me.allowResponse = true;
 
             d.SetValue(SetVerseSelectionProperty, 0);
+        }
+
+        private void EH_BibleOpenDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            CShowBible.Execute(null);
+        }
+
+        private void EH_ShowBibleButtonClick(object sender, RoutedEventArgs e)
+        {
+            CShowBible.Execute(null);
+        }
+
+        private void EH_ReserveBibleButtonClick(object sender, RoutedEventArgs e)
+        {
+            CReserveBible.Execute(null);
         }
     }
 }
