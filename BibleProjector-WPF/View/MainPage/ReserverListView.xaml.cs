@@ -387,5 +387,18 @@ namespace BibleProjector_WPF.View.MainPage
 
             allowSelect = true;
         }
+
+        private void EH_ReserveListBox_Focus_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (ReserveListBox.SelectedIndex == -1 && ReserveListBox.Items.Count > 0) 
+            {
+                ReserveListBox.Focus();
+                ((ListBoxItem)ReserveListBox.ItemContainerGenerator.ContainerFromIndex(0)).Focus();
+            }
+            else if (ReserveListBox.SelectedIndex >= 0)
+            {
+                ((ListBoxItem)ReserveListBox.ItemContainerGenerator.ContainerFromIndex(ReserveListBox.SelectedIndex)).Focus();
+            }
+        }
     }
 }

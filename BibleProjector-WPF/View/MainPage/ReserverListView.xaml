@@ -27,7 +27,8 @@
                 HorizontalScrollBarVisibility="Auto"
                 VerticalScrollBarVisibility="Visible"
                 VerticalContentAlignment="Stretch"
-                HorizontalContentAlignment="Stretch">
+                HorizontalContentAlignment="Stretch"
+                PreviewMouseUp="EH_ReserveListBox_Focus_PreviewMouseUp">
                 <ScrollViewer.Resources>
                     <local:ReserveItemTemplateSelector x:Key="reserveItemTemplateSelector"/>
                 </ScrollViewer.Resources>
@@ -38,6 +39,7 @@
                     Padding="5,0"
                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                     AllowDrop="true"
+                    PreviewMouseUp="EH_ReserveListBox_Focus_PreviewMouseUp"
                     
                     PreviewMouseWheel="EH_ScrollByWheel"
                     
