@@ -5,16 +5,38 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BibleProjector_WPF"
         mc:Ignorable="d"
-        Title="ProgramStartLoading"
+        Title="주일성수 로딩중"
         WindowStyle="None" Background="{x:Null}" Foreground="{x:Null}"
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
-        SizeToContent="WidthAndHeight">
+        SizeToContent="WidthAndHeight"
+        ContentRendered="EH_Loaded">
     <Grid MaxHeight="700" x:Name="gridView">
         <Image Source="{Binding loadingImage}" x:Name="StdImg" Stretch="None" Visibility="Hidden"/>
         <Image Source="{Binding loadingImage}"
-               MaxHeight="{Binding ElementName=StdImg, Path=ActualHeight}"
-               Height="{Binding ElementName=gridView, Path=ActualHeight}"
-               RenderOptions.BitmapScalingMode="HighQuality"/>
+                MaxHeight="{Binding ElementName=StdImg, Path=ActualHeight}"
+                Height="{Binding ElementName=gridView, Path=ActualHeight}"
+                RenderOptions.BitmapScalingMode="HighQuality"/>
+        <StackPanel VerticalAlignment="Bottom">
+            <TextBlock Margin="4,2" Text="{Binding Version}" Foreground="Black"/>
+            <Grid HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Margin="4,2" Text="{Binding loadingText}" Foreground="Black"/>
+                <Grid Margin="2" Grid.Column="2">
+                    <Border HorizontalAlignment="Left" BorderBrush="LimeGreen" BorderThickness="2"
+                        Width="100" Height="20" CornerRadius="4">
+                        <Border Width="94">
+                            <Border Width="{Binding loadingBarLength}" HorizontalAlignment="Left">
+                                <Border Background="#FF18A618" Width="94" Height="14" CornerRadius="2"/>
+                            </Border>
+                        </Border>
+                    </Border>
+                </Grid>
+            </Grid>
+        </StackPanel>
     </Grid>
 </Window>

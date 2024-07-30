@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace BibleProjector_WPF
 {
@@ -26,7 +26,7 @@ namespace BibleProjector_WPF
         // ================== 프로그램 유일성 점검 =================
 
         const string PROGRAM_FULLNAME = "WorshipProjector-WPF-BSS";
-        System.Threading.Mutex programMutex;
+        Mutex programMutex;
 
         bool isProgramDuplicated()
         {
@@ -48,14 +48,11 @@ namespace BibleProjector_WPF
 
         // ================== 프로그램 시작 작업 =================
 
-        public void doProgramInit()
+        private void ProgramInit(ProgramStartLoading loadingWindow)
         {
-            //===============================================================================================================
+            while (!loadingWindow.onReady) ;
 
-            // 프로그램 로딩 창
-            ProgramStartLoading startLodingWindow = new ProgramStartLoading();
-            startLodingWindow.Show();
-
+            loadingWindow.setLoadingState("필수 파일 확인중...", 20);
             try
             {
                 module.ProgramData.Initialize();
@@ -66,7 +63,10 @@ namespace BibleProjector_WPF
                 throw new Exception("필수 파일 없음");
             }
 
+            loadingWindow.setLoadingState("필수 파일 확인중...", 30);
             Database.DatabaseInitailize();
+
+            loadingWindow.setLoadingState("PPT 파일 여는중...", 50);
             Powerpoint.Initialize();
             string error = module.ProgramOption.Initialize();
             if (error != null)
@@ -78,6 +78,7 @@ namespace BibleProjector_WPF
                     System.Windows.MessageBoxImage.Information
                     );
 
+            loadingWindow.setLoadingState("UI 로딩중...", 65);
             module.ExternPPTManager pptMan = new module.ExternPPTManager();
             module.Data.SongManager songMan = new module.Data.SongManager();
             module.BibleDataManager bibleMan = new module.BibleDataManager();
@@ -95,6 +96,7 @@ namespace BibleProjector_WPF
             ViewModel.CapsLockEventManager capsLockEventManager = new ViewModel.CapsLockEventManager();
             ViewModel.BibleSelectionEventManager bibleSelectionEventManager = new ViewModel.BibleSelectionEventManager();
 
+            loadingWindow.setLoadingState("UI 로딩중...", 80);
             module.ShowStarter showStarter = new module.ShowStarter();
 
             System.Collections.ObjectModel.Collection<ViewModel.ViewModel> buttonVMs
@@ -107,13 +109,15 @@ namespace BibleProjector_WPF
             showControlers[1] = new ViewModel.MainPage.VMShowControler(ShowContentType.Song, showStarter);
             showControlers[2] = new ViewModel.MainPage.VMShowControler(ShowContentType.PPT, showStarter);
 
+            loadingWindow.setLoadingState("UI 로딩중...", 90);
             module.ProgramData.SaveDataEvent += songMan.saveData_Lyric;
             module.ProgramData.SaveDataEvent += songMan.saveData_Hymn;
             module.ProgramData.SaveDataEvent += pptMan.saveData;
             module.ProgramData.SaveDataEvent += reserveDataManager.saveData;
             module.ProgramData.SaveDataEvent += module.ProgramOption.saveData;
 
-            new MainWindow(
+            loadingWindow.setLoadingState("UI 로딩중...", 100);
+            ViewModel.VMMainWindow mainViewModel = 
                 new ViewModel.VMMainWindow(
                     new ViewModel.MainPage.VMMain(
                         new ViewModel.MainPage.VMControlPage(
@@ -130,13 +134,20 @@ namespace BibleProjector_WPF
                         new ViewModel.LyricViewModel(showStarter, songMan, reserveDataManager)),
                     keyDownEventManager,
                     shiftEventManager,
-                    capsLockEventManager)
-                ).Show();
-            
-            // 프로그램 로딩 창 종료
-            startLodingWindow.Close();
+                    capsLockEventManager);
 
-            //===============================================================================================================
+            loadingWindow.Dispatcher.BeginInvoke(
+                new Action<ViewModel.VMMainWindow>(loadingWindow.InitializeDone),
+                mainViewModel);
+        }
+
+        public void doProgramInit()
+        {
+            ProgramStartLoading loadingWindow = new ProgramStartLoading();
+            loadingWindow.Show();
+            
+            Thread initThread = new Thread((obj) => ProgramInit((ProgramStartLoading)obj));
+            initThread.Start(loadingWindow);
         }
 
         // ================== 프로그램 종료 작업 =================
