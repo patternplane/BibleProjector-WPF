@@ -392,7 +392,7 @@
                             <ColumnDefinition Width="4*"/>
                             <ColumnDefinition Width="50*"/>
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Click="EH_GoPrevious">
+                        <Button Grid.Column="0" PreviewMouseUp="EH_PreviousButtonClick">
                             <Button.Style>
                                 <Style TargetType="{x:Type Button}">
                                     <Setter Property="Template">
@@ -411,7 +411,18 @@
                                                             </CombinedGeometry>
                                                         </Path.Data>
                                                     </Path>
-                                                    <TextBlock HorizontalAlignment="Center" Text="❮" FontSize="22" VerticalAlignment="Center"></TextBlock>
+                                                    <TextBlock HorizontalAlignment="Center" FontSize="22" VerticalAlignment="Center">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="TextBlock">
+                                                                <Setter Property="Text" Value="❮"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding doFastPass}" Value="true">
+                                                                        <Setter Property="Text" Value="❮❮"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
                                                 </Grid>
                                                 <ControlTemplate.Triggers>
                                                     <DataTrigger Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}" Value="false">
@@ -429,7 +440,7 @@
                                 </Style>
                             </Button.Style>
                         </Button>
-                        <Button Grid.Column="2" Click="EH_GoNext">
+                        <Button Grid.Column="2" PreviewMouseUp="EH_NextButtonClick">
                             <Button.Style>
                                 <Style TargetType="{x:Type Button}">
                                     <Setter Property="Template">
@@ -448,7 +459,18 @@
                                                             </CombinedGeometry>
                                                         </Path.Data>
                                                     </Path>
-                                                    <TextBlock HorizontalAlignment="Center" Text="❯" FontSize="22" VerticalAlignment="Center"></TextBlock>
+                                                    <TextBlock HorizontalAlignment="Center" FontSize="22" VerticalAlignment="Center">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="TextBlock">
+                                                                <Setter Property="Text" Value="❯"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding doFastPass}" Value="true">
+                                                                        <Setter Property="Text" Value="❯❯"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
                                                 </Grid>
                                                 <ControlTemplate.Triggers>
                                                     <DataTrigger Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}" Value="false">

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -46,8 +45,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         public bool hasFocus { get; set; }
 
-        // 이전 페이지로 넘어갈 때 동작 설정
-        public bool preview_GoLastPage { get; set; } = true;
+        public bool doFastPass { get; private set; } = false;
 
         // 애니메이션 효과
         public bool DoAnimation { get; set; } = false;
@@ -62,8 +60,8 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         {
             CDisplayOnOff = new RelayCommand(obj => DisplayVisibility((bool)obj));
             CTextShowHide = new RelayCommand(obj => TextVisibility((bool)obj));
-            CGoNextPage = new RelayCommand(obj => GoNextPage());
-            CGoPreviousPage = new RelayCommand(obj => GoPreviousPage());
+            CGoNextPage = new RelayCommand(obj => GoNextPage((bool)obj || doFastPass));
+            CGoPreviousPage = new RelayCommand(obj => GoPreviousPage((bool)obj || doFastPass));
             CSetDisplayTopMost = new RelayCommand(obj => SetDisplayTopMost());
 
             this.ContentType = type;
@@ -99,21 +97,36 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             OnPropertyChanged("hasFocus");
         }
 
-        public void keyInputed(Key inputKey)
+        public void keyInputed(Key inputKey, bool isDown)
         {
-            if (hasFocus)
+            if (inputKey == Key.LeftCtrl
+                || inputKey == Key.RightCtrl)
+            {
+                if (isDown)
+                {
+                    doFastPass = true;
+                    OnPropertyChanged(nameof(doFastPass));
+                }
+                else
+                {
+                    doFastPass = false;
+                    OnPropertyChanged(nameof(doFastPass));
+                }
+            }
+
+            if (hasFocus && isDown)
             {
                 switch (inputKey)
                 {
                     case Key.Enter:
                     case Key.Up:
                     case Key.Right:
-                        GoNextPage();
+                        GoNextPage(doFastPass);
                         break;
                     case Key.Back:
                     case Key.Down:
                     case Key.Left:
-                        GoPreviousPage();
+                        GoPreviousPage(doFastPass);
                         break;
                 }
             }
@@ -238,7 +251,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             }
         }
 
-        // ================================================ 이벤트에 쓰일 함수 ================================================
+        // ================================================ 커맨드에 쓰일 함수 ================================================
 
         public void DisplayVisibility(bool OnDisplay)
         {
@@ -274,14 +287,12 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             Powerpoint.TopMost(currentData);
         }
 
-        public void GoNextPage()
-       {
+        public void GoNextPage(bool fastPass)
+        {
             if (currentData == null)
                 return;
 
-            if (CurrentPageIndex != Pages.Count - 1)
-                MovePage(CurrentPageIndex + 1);
-            else
+            if (fastPass || CurrentPageIndex == Pages.Count - 1)
             {
                 module.Data.ShowData nextData = currentData.getNextShowData();
                 if (nextData != null)
@@ -291,30 +302,36 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
                     // Bible.tempBibleAccesser.applyBibleMoving(Kjjeul.Substring(0, 2), Kjjeul.Substring(2, 3), Kjjeul.Substring(5, 3));
                 }
+                else if (CurrentPageIndex < Pages.Count - 1)
+                    MovePage(CurrentPageIndex + 1);
             }
+            else
+                MovePage(CurrentPageIndex + 1);
         }
 
-        public void GoPreviousPage()
+        public void GoPreviousPage(bool fastPass)
         {
             if (currentData == null)
                 return;
 
-            if (CurrentPageIndex != 0)
-                MovePage(CurrentPageIndex - 1);
-            else
+            if (fastPass || CurrentPageIndex == 0)
             {
                 module.Data.ShowData prevData = currentData.getPrevShowData();
                 if (prevData != null)
                 {
                     dataSetter(prevData);
-                    if (preview_GoLastPage)
-                        MovePage(Pages.Count - 1);
-                    else
+                    if (fastPass)
                         MovePage(0);
+                    else
+                        MovePage(Pages.Count - 1);
 
                     // Bible.tempBibleAccesser.applyBibleMoving(Kjjeul.Substring(0, 2), Kjjeul.Substring(2, 3), Kjjeul.Substring(5, 3));
                 }
+                else if (CurrentPageIndex > 0)
+                    MovePage(CurrentPageIndex - 1);
             }
+            else
+                MovePage(CurrentPageIndex - 1);
         }
 
         int inputedNum = 0;

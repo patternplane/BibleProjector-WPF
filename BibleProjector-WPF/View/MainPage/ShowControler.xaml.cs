@@ -2,17 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Threading;
 
 namespace BibleProjector_WPF.View.MainPage
 {
@@ -109,14 +104,20 @@ namespace BibleProjector_WPF.View.MainPage
 
         // ========== EventHandler ==========
 
-        void EH_GoPrevious(object sender, RoutedEventArgs e)
+        void EH_PreviousButtonClick(object sender, MouseButtonEventArgs e)
         {
-            getCGoPreviousPageProperty(this.DataContext).Execute(null);
+            if (e.ChangedButton == MouseButton.Left)
+                getCGoPreviousPageProperty(this.DataContext).Execute(false);
+            else if (e.ChangedButton == MouseButton.Right)
+                getCGoPreviousPageProperty(this.DataContext).Execute(true);
         }
 
-        void EH_GoNext(object sender, RoutedEventArgs e)
+        void EH_NextButtonClick(object sender, MouseButtonEventArgs e)
         {
-            getCGoNextPageProperty(this.DataContext).Execute(null);
+            if (e.ChangedButton == MouseButton.Left)
+                getCGoNextPageProperty(this.DataContext).Execute(false);
+            else if (e.ChangedButton == MouseButton.Right)
+                getCGoNextPageProperty(this.DataContext).Execute(true);
         }
 
         private void EH_DisplayOffButtonClick(object sender, RoutedEventArgs e)
