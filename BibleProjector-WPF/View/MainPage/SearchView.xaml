@@ -50,7 +50,7 @@
         </ContentControl>
 
         <!--검색 : 검색창-->
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="2" x:Name="SearchInputGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="179*"/>
                 <ColumnDefinition Width="42*"/>
@@ -67,13 +67,13 @@
             </Border>
             <Popup Grid.ColumnSpan="2"
                    StaysOpen="False" IsOpen="{Binding ResultPopupOpen}"
-                   PopupAnimation="Scroll" AllowsTransparency="true">
+                   PopupAnimation="Scroll" AllowsTransparency="true"
+                   Width="{Binding ElementName=SearchInputGrid, Path=ActualWidth}">
                 <Border
                     BorderBrush="LightGray"
                     BorderThickness="1">
                     <ListBox
                         x:Name="ResultListBox"
-                        Width="271"
                         MaxHeight="210"
                         ItemsSource="{Binding SearchResultList, Mode=TwoWay}"
                         SelectionChanged="EH_SearchItemSelectionChanged"
