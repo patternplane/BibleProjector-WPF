@@ -30,9 +30,7 @@ namespace BibleProjector_WPF
             InitializeComponent();
             this.DataContext = VM_MainWindow;
 
-            this.SetBinding(shiftEventManagerProperty, new Binding("shiftEventManager"));
-            this.SetBinding(capsLockEventManagerProperty, new Binding("capsLockEventManager"));
-            this.SetBinding(keyDownEventManagerProperty, new Binding("keyDownEventManager"));
+            this.SetBinding(keyInputEventManagerProperty, new Binding("keyInputEventManager"));
 
             setMinSize();
             setInnerContentSize();
@@ -109,60 +107,58 @@ namespace BibleProjector_WPF
 
         // =================================================== 키 상태 광역 전달 ======================================================
 
-        public static readonly DependencyProperty shiftEventManagerProperty =
+        public static readonly DependencyProperty keyInputEventManagerProperty =
         DependencyProperty.Register(
-            name: "shiftEventManager",
-            propertyType: typeof(ViewModel.ShiftEventManager),
+            name: "keyInputEventManager",
+            propertyType: typeof(ViewModel.KeyInputEventManager),
             ownerType: typeof(MainWindow));
 
-        public ViewModel.ShiftEventManager shiftEventManager
+        public ViewModel.KeyInputEventManager keyInputEventManager
         {
-            get => (ViewModel.ShiftEventManager)GetValue(shiftEventManagerProperty);
-            set => SetValue(shiftEventManagerProperty, value);
-        }
-
-        public static readonly DependencyProperty capsLockEventManagerProperty =
-        DependencyProperty.Register(
-            name: "capsLockEventManager",
-            propertyType: typeof(ViewModel.CapsLockEventManager),
-            ownerType: typeof(MainWindow));
-
-        public ViewModel.CapsLockEventManager capsLockEventManager
-        {
-            get => (ViewModel.CapsLockEventManager)GetValue(capsLockEventManagerProperty);
-            set => SetValue(capsLockEventManagerProperty, value);
-        }
-
-        public static readonly DependencyProperty keyDownEventManagerProperty =
-        DependencyProperty.Register(
-            name: "keyDownEventManager",
-            propertyType: typeof(ViewModel.KeyDownEventManager),
-            ownerType: typeof(MainWindow));
-
-        public ViewModel.KeyDownEventManager keyDownEventManager
-        {
-            get => (ViewModel.KeyDownEventManager)GetValue(keyDownEventManagerProperty);
-            set => SetValue(keyDownEventManagerProperty, value);
+            get => (ViewModel.KeyInputEventManager)GetValue(keyInputEventManagerProperty);
+            set => SetValue(keyInputEventManagerProperty, value);
         }
 
         private void EH_PreKeyDownCheck(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.LeftShift
-                || e.Key == Key.RightShift)
-                shiftEventManager.invokeShiftChange(true);
-            else if (e.Key == Key.CapsLock)
-                capsLockEventManager.invokeCapsLockChange(true);
+            foreach (TrackedKey k in TrackedKeys)
+                if (k.key == e.Key)
+                    k.state = true;
 
-            keyDownEventManager.invokeKeyDown(e);
+            if (!e.IsRepeat)
+                keyInputEventManager.invokeKeyInput(e.Key, true);
         }
 
         private void EH_KeyUpCheck(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.LeftShift
-                || e.Key == Key.RightShift)
-                shiftEventManager.invokeShiftChange(false);
-            else if (e.Key == Key.CapsLock)
-                capsLockEventManager.invokeCapsLockChange(false);
+            foreach (TrackedKey k in TrackedKeys)
+                if (k.key == e.Key)
+                    k.state = false;
+
+            if (!e.IsRepeat)
+                keyInputEventManager.invokeKeyInput(e.Key, false);
+        }
+
+        private class TrackedKey
+        {
+            public Key key;
+            public bool state;
+        }
+
+        private TrackedKey[] TrackedKeys =
+        {
+            new TrackedKey() { key = Key.LeftShift, state = false},
+            new TrackedKey() { key = Key.RightShift, state = false},
+            new TrackedKey() { key = Key.LeftCtrl, state = false},
+            new TrackedKey() { key = Key.RightCtrl, state = false},
+            new TrackedKey() { key = Key.CapsLock, state = false}
+        };
+
+        private void EH_Window_Activated(object sender, EventArgs e)
+        {
+            foreach (TrackedKey k in TrackedKeys) 
+                if (Keyboard.IsKeyDown(k.key) != k.state)
+                    keyInputEventManager.invokeKeyInput(k.key, Keyboard.IsKeyDown(k.key));
         }
 
         // =================================================== 프로그램 종료 처리 ======================================================

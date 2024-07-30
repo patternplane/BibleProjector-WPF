@@ -91,9 +91,7 @@ namespace BibleProjector_WPF
                 new module.ExternPPTSearcher(
                     pptMan));
 
-            ViewModel.KeyDownEventManager keyDownEventManager = new ViewModel.KeyDownEventManager();
-            ViewModel.ShiftEventManager shiftEventManager = new ViewModel.ShiftEventManager();
-            ViewModel.CapsLockEventManager capsLockEventManager = new ViewModel.CapsLockEventManager();
+            ViewModel.KeyInputEventManager keyInputEventManager = new ViewModel.KeyInputEventManager();
             ViewModel.BibleSelectionEventManager bibleSelectionEventManager = new ViewModel.BibleSelectionEventManager();
 
             loadingWindow.setLoadingState("UI 로딩중...", 80);
@@ -102,7 +100,7 @@ namespace BibleProjector_WPF
             System.Collections.ObjectModel.Collection<ViewModel.ViewModel> buttonVMs
                 = new System.Collections.ObjectModel.Collection<ViewModel.ViewModel>();
             for (int i = 0; i < 6; i++)
-                buttonVMs.Add(new ViewModel.MainPage.VMExternPPTEditButton(reserveDataManager, pptMan, shiftEventManager, i, showStarter));
+                buttonVMs.Add(new ViewModel.MainPage.VMExternPPTEditButton(reserveDataManager, pptMan, keyInputEventManager, i, showStarter));
 
             ViewModel.MainPage.VMShowControler[] showControlers = new ViewModel.MainPage.VMShowControler[3];
             showControlers[0] = new ViewModel.MainPage.VMShowControler(ShowContentType.Bible, showStarter, bibleSelectionEventManager);
@@ -126,15 +124,12 @@ namespace BibleProjector_WPF
                             new ViewModel.MainPage.VMSearchControl(searcher, reserveDataManager, showStarter, bibleSelectionEventManager),
                             new ViewModel.MainPage.VMReserveList(reserveDataManager, showStarter, bibleSelectionEventManager),
                             buttonVMs,
-                            keyDownEventManager,
-                            capsLockEventManager,
+                            keyInputEventManager,
                             showStarter),
                         new ViewModel.OptionViewModel(),
                         new ViewModel.MainPage.VMOptionBar(),
                         new ViewModel.LyricViewModel(showStarter, songMan, reserveDataManager)),
-                    keyDownEventManager,
-                    shiftEventManager,
-                    capsLockEventManager);
+                    keyInputEventManager);
 
             loadingWindow.Dispatcher.BeginInvoke(
                 new Action<ViewModel.VMMainWindow>(loadingWindow.InitializeDone),

@@ -32,8 +32,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             ViewModel searchControl,
             ViewModel reserveList,
             Collection<ViewModel> externPPTEditButtonVMs,
-            KeyDownEventManager keyDownEventManager,
-            CapsLockEventManager capsLockEventManager,
+            KeyInputEventManager keyInputEventManager,
             module.ShowStarter showStarter)
         {
             this.ShowController = ShowControlers;
@@ -44,8 +43,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             this.VM_ReserveList = reserveList;
             this.ExternPPTEditButtons = externPPTEditButtonVMs;
 
-            keyDownEventManager.KeyDown += KeyInputTask;
-            capsLockEventManager.CapsLockStateChanged += CapsLockTask;
+            keyInputEventManager.KeyDown += KeyInputTask;
 
             showStarter.ShowStartEvent += WhenShowStarted;
         }
@@ -62,24 +60,20 @@ namespace BibleProjector_WPF.ViewModel.MainPage
                 changeBottomShowController(1);
         }
 
-        void KeyInputTask(object sender, System.Windows.Input.KeyEventArgs e)
+        void KeyInputTask(System.Windows.Input.Key key, bool isDown)
         {
-            if (IsLoaded(null))
+            if (IsLoaded(null)) {
                 foreach (VMShowControler vm in ShowController)
-                    vm.keyInputed(e.Key);
-        }
+                    vm.keyInputed(key, isDown);
 
-        void CapsLockTask(object sender, Event.KeyStateChangedEventArgs e)
-        {
-            if (true == e.KeyOn)
-                return;
-
-            if (IsLoaded(null))
-            {
-                if (VM_ShowControler_bottom == ShowController[0])
-                    changeBottomShowController(1);
-                else
-                    changeBottomShowController(0);
+                if (key == System.Windows.Input.Key.CapsLock
+                    && isDown)
+                {
+                    if (VM_ShowControler_bottom == ShowController[0])
+                        changeBottomShowController(1);
+                    else
+                        changeBottomShowController(0);
+                }
             }
         }
 

@@ -34,10 +34,13 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public ICommand CDoReserve { get; set; }
         public bool OnShift { get; private set; }
 
-        void OnShiftTask(object sender ,Event.KeyStateChangedEventArgs e)
+        void OnKeyInputTask(Key key, bool isDown)
         {
-            OnShift = e.KeyOn;
-            OnPropertyChanged("OnShift");
+            if (key == Key.LeftShift)
+            {
+                OnShift = isDown;
+                OnPropertyChanged("OnShift");
+            }
         }
 
         ReserveDataManager reserveManager;
@@ -62,11 +65,11 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         int myIdx;
 
-        public VMExternPPTEditButton(ReserveDataManager reserveManager, ExternPPTManager pptManager, ShiftEventManager shiftEventManager, int idx, ShowStarter showStarter)
+        public VMExternPPTEditButton(ReserveDataManager reserveManager, ExternPPTManager pptManager, KeyInputEventManager keyInputEventManager, int idx, ShowStarter showStarter)
         {
             this.reserveManager = reserveManager;
             this.pptManager = pptManager;
-            shiftEventManager.ShiftStateChanged += OnShiftTask;
+            keyInputEventManager.KeyDown += OnKeyInputTask;
             this.showStarter = showStarter;
             this.myIdx = idx;
 
