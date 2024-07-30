@@ -22,7 +22,7 @@ namespace BibleProjector_WPF
     {
         public bool onReady { get; private set; } = false;
 
-        public BitmapImage loadingImage { get; set; }
+        public BitmapImage loadingImage { get; set; } = null;
         const string LOADING_IMAGE_PATH = ".\\programData\\LoadingImage";
 
         public string loadingText { get; private set; } = "";
