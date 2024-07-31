@@ -100,7 +100,7 @@ namespace BibleProjector_WPF
 
             System.Collections.ObjectModel.Collection<ViewModel.ViewModel> buttonVMs
                 = new System.Collections.ObjectModel.Collection<ViewModel.ViewModel>();
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < 6; i++) 
                 buttonVMs.Add(new ViewModel.MainPage.VMExternPPTEditButton(reserveDataManager, pptMan, keyInputEventManager, i, showStarter));
 
             ViewModel.MainPage.VMShowControler[] showControlers = new ViewModel.MainPage.VMShowControler[3];
@@ -142,7 +142,7 @@ namespace BibleProjector_WPF
         {
             ProgramStartLoading loadingWindow = new ProgramStartLoading();
             loadingWindow.Show();
-            
+
             Thread initThread = new Thread((obj) => ProgramInit((ProgramStartLoading)obj));
             initThread.Start(loadingWindow);
         }
@@ -161,7 +161,7 @@ namespace BibleProjector_WPF
             module.ProgramData.saveProgramData();
             Powerpoint.FinallProcess();
 
-            System.Windows.MessageBox.Show("프로그램 결함으로 강제 종료합니다.");
+            System.Windows.MessageBox.Show("프로그램을 종료합니다.");
         }
     }
 }
