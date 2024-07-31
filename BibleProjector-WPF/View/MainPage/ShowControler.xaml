@@ -11,6 +11,7 @@
              GotFocus="EH_focusIn"
              LostFocus="EH_focusOut"
              PreviewMouseDown="EH_mouseFocus"
+             MouseDoubleClick="EH_MouseDoubleClick"
              Focusable="True">
     <UserControl.Resources>
         <local:ShowControllerBrushConverter x:Key="ColorConverter"/>

@@ -12,11 +12,11 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         // ================================================ Binding Properties ================================================
 
-        public ICommand CDisplayOnOff { get; set; }
-        public ICommand CTextShowHide { get; set; }
-        public ICommand CGoNextPage { get; set; }
-        public ICommand CGoPreviousPage { get; set; }
-        public ICommand CSetDisplayTopMost { get; set; }
+        public ICommand CDisplayOnOff { get; }
+        public ICommand CTextShowHide { get; }
+        public ICommand CGoNextPage { get; }
+        public ICommand CGoPreviousPage { get; }
+        public ICommand CSetDisplayTopMost { get; }
 
         public ShowContentType ContentType { get; set; }
 

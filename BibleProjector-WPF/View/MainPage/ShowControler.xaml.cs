@@ -21,8 +21,9 @@ namespace BibleProjector_WPF.View.MainPage
             InitializeComponent();
 
             SetBinding(hasFocusProperty, new Binding("hasFocus") { Mode = BindingMode.TwoWay });
+            SetBinding(CSetTopMostProperty, new Binding("CSetDisplayTopMost")); 
 
-            hasFocus = false;
+             hasFocus = false;
         }
 
         // ========== BindingProperties ==========
@@ -67,14 +68,16 @@ namespace BibleProjector_WPF.View.MainPage
             return (ICommand)_CGoPreviousPageProperty.GetValue(obj);
         }
 
-        System.Reflection.PropertyInfo _CSetDisplayTopMostProperty = null;
-        ICommand getCSetDisplayTopMostProperty(object obj)
-        {
-            if (_CSetDisplayTopMostProperty == null)
-                _CSetDisplayTopMostProperty = obj.GetType().GetProperty("CSetDisplayTopMost")
-                    ?? throw new Exception("Binding Error");
+        public static readonly DependencyProperty CSetTopMostProperty =
+            DependencyProperty.Register(
+                name: "CSetTopMost",
+                propertyType: typeof(ICommand),
+                ownerType: typeof(ShowControler));
 
-            return (ICommand)_CSetDisplayTopMostProperty.GetValue(obj);
+        public ICommand CSetTopMost
+        {
+            get => (ICommand)GetValue(CSetTopMostProperty);
+            set => SetValue(CSetTopMostProperty, value);
         }
 
         public static readonly DependencyProperty hasFocusProperty =
@@ -123,6 +126,11 @@ namespace BibleProjector_WPF.View.MainPage
         private void EH_TextShowButtonClick(object sender, RoutedEventArgs e)
         {
             getCTextShowHideProperty(this.DataContext).Execute(!((ToggleButton)sender).IsChecked);
+        }
+
+        private void EH_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            CSetTopMost.Execute(null);
         }
 
         // =============================== focusing and key ignore =============================== 
