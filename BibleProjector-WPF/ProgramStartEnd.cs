@@ -48,6 +48,20 @@ namespace BibleProjector_WPF
 
         // ================== 프로그램 시작 작업 =================
 
+        private System.Windows.Threading.Dispatcher dispatcher;
+
+        private void TH_Init(ProgramStartLoading loadingWindow)
+        {
+            try
+            {
+                ProgramInit(loadingWindow);
+            }
+            catch (Exception e)
+            {
+                dispatcher.BeginInvoke(new Action(() => throw e));
+            }
+        }
+
         private void ProgramInit(ProgramStartLoading loadingWindow)
         {
             while (!loadingWindow.onReady) ;
@@ -59,15 +73,25 @@ namespace BibleProjector_WPF
             }
             catch (Exception e)
             {
-                System.Windows.MessageBox.Show(e.Message, "필수 파일 없음", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
-                throw new Exception("필수 파일 없음");
+                System.Windows.MessageBox.Show("● 필수 파일 없음\n" + e.Message, "필수 파일을 찾을 수 없습니다!", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+                throw new Exception("필수 파일 없음\n" + e.Message);
             }
 
             loadingWindow.setLoadingState("필수 파일 확인중...", 30);
             Database.DatabaseInitailize();
 
             loadingWindow.setLoadingState("PPT 파일 여는중...", 50);
-            Powerpoint.Initialize();
+            try
+            {
+                Powerpoint.Initialize();
+            }
+            catch (Exception e)
+            {
+                System.Windows.MessageBox.Show("● PPT 프로그램 오류\n" + e.Message, "PPT 프로그램 오류입니다! (PPT 프로그램 강제종료 필요)", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+                throw new Exception("PPT 프로그램 오류\n" + e.Message);
+            }
+
+            loadingWindow.setLoadingState("설정값 불러오는 중...", 60);
             string error = module.ProgramOption.Initialize();
             if (error != null)
                 System.Windows.MessageBox.Show
@@ -143,8 +167,8 @@ namespace BibleProjector_WPF
             ProgramStartLoading loadingWindow = new ProgramStartLoading();
             loadingWindow.Show();
 
-            Thread initThread = new Thread((obj) => ProgramInit((ProgramStartLoading)obj));
-            initThread.Start(loadingWindow);
+            dispatcher = System.Windows.Threading.Dispatcher.CurrentDispatcher;
+            new Thread((obj) => TH_Init((ProgramStartLoading)obj)).Start(loadingWindow);
         }
 
         // ================== 프로그램 종료 작업 =================
