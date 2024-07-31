@@ -1298,6 +1298,7 @@ namespace BibleProjector_WPF
                     bi.UriSource = new Uri(f.FullName, UriKind.Absolute);
                     bi.CacheOption = System.Windows.Media.Imaging.BitmapCacheOption.OnLoad;
                     bi.EndInit();
+                    bi.Freeze();
 
                     idx = int.Parse(module.StringModifier.makeOnlyNum(f.Name)) - 1;
                     imageData[idx] = bi;
@@ -1451,7 +1452,7 @@ namespace BibleProjector_WPF
                         SlideWindow = ppt.SlideShowSettings.Run();
                 }
                 SlideShowHideInTaskbar(SlideWindow.HWND);
-                SlideWindow.View.GotoSlide(SlideWindow.View.CurrentShowPosition);
+                    SlideWindow.View.GotoSlide(SlideWindow.View.CurrentShowPosition);
 
                 pptState = PptSlideState.WindowShow;
                 TopMost();
