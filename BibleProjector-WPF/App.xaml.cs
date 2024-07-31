@@ -36,17 +36,35 @@ namespace BibleProjector_WPF
             ProgramStartEnd.getProgramStartEnd().doPostProcess_byNonError();
         }
 
+        private static bool errorInvoked = false;
+        private static bool ignoreAdditionError = false;
+
         void ExitFromError(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
+            if (ignoreAdditionError)
+                return;
+
             System.Text.StringBuilder log = new System.Text.StringBuilder();
 
             log.AppendLine("예외 메세지 : ");
             log.Append(e.Exception.Message).AppendLine().AppendLine();
-            log.AppendLine("스택 추적 : ");
+            log.AppendLine("Evironment 스택 추적 : ");
+            log.Append(Environment.StackTrace).AppendLine().AppendLine();
+            log.AppendLine("Error 스택 추적 : ");
             log.Append(e.Exception.StackTrace);
-            module.ProgramData.writeErrorLog(log.ToString());
 
-            ProgramStartEnd.getProgramStartEnd().doPostProcess_byError();
+            if (errorInvoked)
+            {
+                ignoreAdditionError = true;
+                log.Insert(0, "● 프로그램 종료 진행 중 에러 (Thread 에러 등의 다른 원인에 의한 에러 중복)\r\n\r\n");
+                module.ProgramData.writeErrorLog(log.ToString());
+            }
+            else
+            {
+                errorInvoked = true;
+                module.ProgramData.writeErrorLog(log.ToString());
+                ProgramStartEnd.getProgramStartEnd().doPostProcess_byError();
+            }
         }
     }
 }

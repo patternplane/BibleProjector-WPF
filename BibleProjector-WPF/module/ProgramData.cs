@@ -101,8 +101,15 @@ namespace BibleProjector_WPF.module
 
         static public void writeErrorLog(string data)
         {
+            string time = (new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds()).ToString();
+            string fileName = ERROR_LOG_OUTPUT + "\\" + time + ".txt";
+            if (new FileInfo(fileName).Exists) {
+                long i = new DirectoryInfo(ERROR_LOG_OUTPUT).GetFiles(time + "*.txt").Length;
+                fileName = ERROR_LOG_OUTPUT + "\\" + time + "_" + i + ".txt";
+            }
+            
             StreamWriter file = new StreamWriter(
-                ERROR_LOG_OUTPUT + "\\" + (new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds()) + ".txt",
+                fileName,
                 false);
             file.Write(data);
             file.Close();
