@@ -10,9 +10,9 @@ namespace BibleProjector_WPF.ViewModel
     {
         public ViewModel VM_Main { get; set; }
 
-        public KeyInputEventManager keyInputEventManager { get; set; }
+        public Event.KeyInputEventManager keyInputEventManager { get; set; }
 
-        public VMMainWindow(ViewModel vmMain, KeyInputEventManager keyInputEventManager)
+        public VMMainWindow(ViewModel vmMain, Event.KeyInputEventManager keyInputEventManager)
         {
             this.VM_Main = vmMain;
             this.keyInputEventManager = keyInputEventManager;

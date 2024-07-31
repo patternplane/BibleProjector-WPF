@@ -95,8 +95,8 @@
     <Compile Include="ReserveType.cs" />
     <Compile Include="ReserveViewType.cs" />
     <Compile Include="ShowContentType.cs" />
-    <Compile Include="ViewModel\BibleSelectionEventManager.cs" />
-    <Compile Include="ViewModel\KeyInputEventManager.cs" />
+    <Compile Include="Event\BibleSelectionEventManager.cs" />
+    <Compile Include="Event\KeyInputEventManager.cs" />
     <Compile Include="ViewModel\MainPage\VMBibleSeletion.cs" />
     <Compile Include="ViewModel\MainPage\VMExternPPTEditButton.cs" />
     <Compile Include="ViewModel\MainPage\VMReserveData.cs" />

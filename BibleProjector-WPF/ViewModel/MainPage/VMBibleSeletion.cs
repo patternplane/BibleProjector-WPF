@@ -38,7 +38,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         private module.ReserveDataManager reserveDataManager;
         private module.ShowStarter showStarter;
 
-        public VMBibleSeletion(module.ReserveDataManager reserveDataManager, module.ShowStarter showStarter, BibleSelectionEventManager bibleSelectionEventManager)
+        public VMBibleSeletion(module.ReserveDataManager reserveDataManager, module.ShowStarter showStarter, Event.BibleSelectionEventManager bibleSelectionEventManager)
         {
             this.CBookSelection = new RelayCommand(obj => bookSelector((int)obj));
             this.CChapterSelection = new RelayCommand(obj => chapterSelector((int)obj));

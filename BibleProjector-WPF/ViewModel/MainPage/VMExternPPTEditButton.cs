@@ -65,7 +65,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         int myIdx;
 
-        public VMExternPPTEditButton(ReserveDataManager reserveManager, ExternPPTManager pptManager, KeyInputEventManager keyInputEventManager, int idx, ShowStarter showStarter)
+        public VMExternPPTEditButton(ReserveDataManager reserveManager, ExternPPTManager pptManager, Event.KeyInputEventManager keyInputEventManager, int idx, ShowStarter showStarter)
         {
             this.reserveManager = reserveManager;
             this.pptManager = pptManager;

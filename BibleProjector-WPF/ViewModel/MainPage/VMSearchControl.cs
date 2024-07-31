@@ -30,11 +30,11 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         module.ISearcher searcher = null;
         module.ReserveDataManager reserveManager;
         module.ShowStarter showStarter;
-        BibleSelectionEventManager bibleSelectionEventManager;
+        Event.BibleSelectionEventManager bibleSelectionEventManager;
 
         // ========== Gen ==========
 
-        public VMSearchControl(module.ISearcher searcher, module.ReserveDataManager reserveManager, module.ShowStarter showStarter, BibleSelectionEventManager bibleSelectionEventManager)
+        public VMSearchControl(module.ISearcher searcher, module.ReserveDataManager reserveManager, module.ShowStarter showStarter, Event.BibleSelectionEventManager bibleSelectionEventManager)
         {
             CSearchStart = new RelayCommand(obj => SearchStart());
             CPopupHide = new RelayCommand(obj => PopupHide());

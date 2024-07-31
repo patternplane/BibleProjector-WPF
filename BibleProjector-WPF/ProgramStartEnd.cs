@@ -91,8 +91,8 @@ namespace BibleProjector_WPF
                 new module.ExternPPTSearcher(
                     pptMan));
 
-            ViewModel.KeyInputEventManager keyInputEventManager = new ViewModel.KeyInputEventManager();
-            ViewModel.BibleSelectionEventManager bibleSelectionEventManager = new ViewModel.BibleSelectionEventManager();
+            Event.KeyInputEventManager keyInputEventManager = new Event.KeyInputEventManager();
+            Event.BibleSelectionEventManager bibleSelectionEventManager = new Event.BibleSelectionEventManager();
 
             loadingWindow.setLoadingState("UI 로딩중...", 80);
             module.ShowStarter showStarter = new module.ShowStarter();

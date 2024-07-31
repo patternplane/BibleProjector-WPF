@@ -21,12 +21,12 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         VMReserveData dragPreviewItem;
         VMReserveData dropPreviewItem;
 
-        private BibleSelectionEventManager bibleSelectionEventManager;
+        private Event.BibleSelectionEventManager bibleSelectionEventManager;
 
         module.ReserveDataManager reserveDataManager;
         module.ShowStarter showStarter;
 
-        public VMReserveList(module.ReserveDataManager reserveDataManager, module.ShowStarter showStarter, BibleSelectionEventManager bibleSelectionEventManager)
+        public VMReserveList(module.ReserveDataManager reserveDataManager, module.ShowStarter showStarter, Event.BibleSelectionEventManager bibleSelectionEventManager)
         {
             this.CSetDragDrop = new RelayCommand((obj) => SetDragDrop((ViewModel[])obj));
             this.CSetDropPreviewPos = new RelayCommand(SetDropPreviewPos);

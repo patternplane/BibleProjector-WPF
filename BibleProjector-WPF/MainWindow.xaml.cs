@@ -110,12 +110,12 @@ namespace BibleProjector_WPF
         public static readonly DependencyProperty keyInputEventManagerProperty =
         DependencyProperty.Register(
             name: "keyInputEventManager",
-            propertyType: typeof(ViewModel.KeyInputEventManager),
+            propertyType: typeof(Event.KeyInputEventManager),
             ownerType: typeof(MainWindow));
 
-        public ViewModel.KeyInputEventManager keyInputEventManager
+        public Event.KeyInputEventManager keyInputEventManager
         {
-            get => (ViewModel.KeyInputEventManager)GetValue(keyInputEventManagerProperty);
+            get => (Event.KeyInputEventManager)GetValue(keyInputEventManagerProperty);
             set => SetValue(keyInputEventManagerProperty, value);
         }
 

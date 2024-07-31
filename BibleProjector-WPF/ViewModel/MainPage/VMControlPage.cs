@@ -32,7 +32,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             ViewModel searchControl,
             ViewModel reserveList,
             Collection<ViewModel> externPPTEditButtonVMs,
-            KeyInputEventManager keyInputEventManager,
+            Event.KeyInputEventManager keyInputEventManager,
             module.ShowStarter showStarter)
         {
             this.ShowController = ShowControlers;

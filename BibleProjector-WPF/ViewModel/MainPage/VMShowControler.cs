@@ -20,7 +20,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         public ShowContentType ContentType { get; set; }
 
-        private BibleSelectionEventManager bibleSelectionEventManager;
+        private Event.BibleSelectionEventManager bibleSelectionEventManager;
 
         public string Title1 { get; set; }
         public string Title2 { get; set; }
@@ -56,7 +56,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         // ================================================ 세팅 ================================================
 
-        public VMShowControler(ShowContentType type, module.ShowStarter showStarter, BibleSelectionEventManager bibleSelectionEventManager = null)
+        public VMShowControler(ShowContentType type, module.ShowStarter showStarter, Event.BibleSelectionEventManager bibleSelectionEventManager = null)
         {
             CDisplayOnOff = new RelayCommand(obj => DisplayVisibility((bool)obj));
             CTextShowHide = new RelayCommand(obj => TextVisibility((bool)obj));
