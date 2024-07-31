@@ -220,6 +220,8 @@ namespace BibleProjector_WPF.View.MainPage
         {
             if(e.Key == Key.Delete)
                 DeleteSelections();
+            else if (e.Key == Key.Enter)
+                ItemShowStartCommand.Execute(((ListBoxItem)sender).DataContext);
         }
 
         void DeleteSelections()
