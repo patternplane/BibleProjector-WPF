@@ -43,7 +43,14 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public bool DisplayButtonState { get; set; } = false;
         public bool TextButtonState { get; set; } = false;
 
-        public bool hasFocus { get; set; }
+        private bool _hasFocus;
+        public bool hasFocus
+        {
+            get { return _hasFocus; }
+            set { _hasFocus = value; OnPropertyChanged(nameof(isActive)); }
+        }
+        private bool activation;
+        public bool isActive { get { return hasFocus && activation; } }
 
         public bool doFastPass { get; private set; } = false;
 
@@ -56,7 +63,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         // ================================================ 세팅 ================================================
 
-        public VMShowControler(ShowContentType type, module.ShowStarter showStarter, Event.BibleSelectionEventManager bibleSelectionEventManager = null)
+        public VMShowControler(ShowContentType type, module.ShowStarter showStarter,Event.WindowActivateChangedEventManager windowActivateChangedEventManager , Event.BibleSelectionEventManager bibleSelectionEventManager = null)
         {
             CDisplayOnOff = new RelayCommand(obj => DisplayVisibility((bool)obj));
             CTextShowHide = new RelayCommand(obj => TextVisibility((bool)obj));
@@ -68,6 +75,8 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             this.bibleSelectionEventManager = bibleSelectionEventManager;
             if (type == ShowContentType.Bible && bibleSelectionEventManager == null)
                 throw new Exception("성경 컨트롤러는 BibleSelectionEventManager 객체를 요구합니다. (부족한 생성자 매개변수)");
+
+            windowActivateChangedEventManager.windowActivateChanged += UIActiveChanged;
 
             module.ProgramOption.FrameDeletedEvent += FrameDeleted;
             showStarter.ShowStartEvent += startShow;
@@ -95,6 +104,15 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
             hasFocus = true;
             OnPropertyChanged("hasFocus");
+        }
+
+        private void UIActiveChanged(bool isActive)
+        {
+            if (activation != isActive)
+            {
+                activation = isActive;
+                OnPropertyChanged(nameof(isActive));
+            }
         }
 
         public void keyInputed(Key inputKey, bool isDown)

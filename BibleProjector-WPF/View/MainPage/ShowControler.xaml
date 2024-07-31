@@ -492,6 +492,19 @@
                 </Grid>
             </Grid>
         </Grid>
-        <Border IsHitTestVisible="False" x:Name="focusBorder" Background="#A55B5B5B"/>
+        <Border IsHitTestVisible="False" x:Name="focusBorder" Background="#A55B5B5B">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding isActive}" Value="True">
+                            <Setter Property="Visibility" Value="Hidden"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding isActive}" Value="False">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+        </Border>
     </Grid>
 </UserControl>

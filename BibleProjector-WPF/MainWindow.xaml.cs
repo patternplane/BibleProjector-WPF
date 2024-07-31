@@ -31,6 +31,7 @@ namespace BibleProjector_WPF
             this.DataContext = VM_MainWindow;
 
             this.SetBinding(keyInputEventManagerProperty, new Binding("keyInputEventManager"));
+            this.SetBinding(windowActivateChangedEventManagerProperty, new Binding("windowActivateChangedEventManager"));
 
             setMinSize();
             setInnerContentSize();
@@ -154,11 +155,32 @@ namespace BibleProjector_WPF
             new TrackedKey() { key = Key.CapsLock, state = false}
         };
 
+        // =================================================== 윈도우 활성화 상태 처리 ======================================================
+
+        public static readonly DependencyProperty windowActivateChangedEventManagerProperty =
+        DependencyProperty.Register(
+            name: "windowActivateChangedEventManager",
+            propertyType: typeof(Event.WindowActivateChangedEventManager),
+            ownerType: typeof(MainWindow));
+
+        public Event.WindowActivateChangedEventManager windowActivateChangedEventManager
+        {
+            get => (Event.WindowActivateChangedEventManager)GetValue(windowActivateChangedEventManagerProperty);
+            set => SetValue(windowActivateChangedEventManagerProperty, value);
+        }
+
         private void EH_Window_Activated(object sender, EventArgs e)
         {
             foreach (TrackedKey k in TrackedKeys) 
                 if (Keyboard.IsKeyDown(k.key) != k.state)
                     keyInputEventManager.invokeKeyInput(k.key, Keyboard.IsKeyDown(k.key));
+
+            windowActivateChangedEventManager.invoke(true);
+        }
+
+        private void EH_Window_Deactivated(object sender, EventArgs e)
+        {
+            windowActivateChangedEventManager.invoke(false);
         }
 
         // =================================================== 프로그램 종료 처리 ======================================================

@@ -92,6 +92,7 @@ namespace BibleProjector_WPF
                     pptMan));
 
             Event.KeyInputEventManager keyInputEventManager = new Event.KeyInputEventManager();
+            Event.WindowActivateChangedEventManager WACEventManager = new Event.WindowActivateChangedEventManager();
             Event.BibleSelectionEventManager bibleSelectionEventManager = new Event.BibleSelectionEventManager();
 
             loadingWindow.setLoadingState("UI 로딩중...", 80);
@@ -103,9 +104,9 @@ namespace BibleProjector_WPF
                 buttonVMs.Add(new ViewModel.MainPage.VMExternPPTEditButton(reserveDataManager, pptMan, keyInputEventManager, i, showStarter));
 
             ViewModel.MainPage.VMShowControler[] showControlers = new ViewModel.MainPage.VMShowControler[3];
-            showControlers[0] = new ViewModel.MainPage.VMShowControler(ShowContentType.Bible, showStarter, bibleSelectionEventManager);
-            showControlers[1] = new ViewModel.MainPage.VMShowControler(ShowContentType.Song, showStarter);
-            showControlers[2] = new ViewModel.MainPage.VMShowControler(ShowContentType.PPT, showStarter);
+            showControlers[0] = new ViewModel.MainPage.VMShowControler(ShowContentType.Bible, showStarter, WACEventManager, bibleSelectionEventManager);
+            showControlers[1] = new ViewModel.MainPage.VMShowControler(ShowContentType.Song, showStarter, WACEventManager);
+            showControlers[2] = new ViewModel.MainPage.VMShowControler(ShowContentType.PPT, showStarter, WACEventManager);
 
             loadingWindow.setLoadingState("UI 로딩중...", 90);
             module.ProgramData.SaveDataEvent += songMan.saveData_Lyric;
@@ -129,7 +130,8 @@ namespace BibleProjector_WPF
                         new ViewModel.OptionViewModel(),
                         new ViewModel.MainPage.VMOptionBar(),
                         new ViewModel.LyricViewModel(showStarter, songMan, reserveDataManager)),
-                    keyInputEventManager);
+                    keyInputEventManager,
+                    WACEventManager);
 
             loadingWindow.Dispatcher.BeginInvoke(
                 new Action<ViewModel.VMMainWindow>(loadingWindow.InitializeDone),

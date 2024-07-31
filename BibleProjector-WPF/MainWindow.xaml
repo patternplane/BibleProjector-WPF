@@ -14,6 +14,7 @@
         KeyUp="EH_KeyUpCheck"
         
         Activated="EH_Window_Activated"
+        Deactivated="EH_Window_Deactivated"
         d:DesignWidth="191.75" d:DesignHeight="125.75">
     <Border x:Name="WindowContent">
         <Viewbox>

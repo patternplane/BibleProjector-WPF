@@ -91,15 +91,10 @@ namespace BibleProjector_WPF.View.MainPage
         }
 
         static void hasFocusChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-       {
+        {
             if ((bool)e.NewValue)
-            {
                 if (!((ShowControler)d).IsKeyboardFocusWithin)
                     ((ShowControler)d).Focus();
-                ((ShowControler)d).focusBorder.Visibility = Visibility.Hidden;
-            }
-            else
-                ((ShowControler)d).focusBorder.Visibility = Visibility.Visible;
         }
 
         // ========== EventHandler ==========
