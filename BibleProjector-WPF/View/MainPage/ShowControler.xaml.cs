@@ -21,9 +21,9 @@ namespace BibleProjector_WPF.View.MainPage
             InitializeComponent();
 
             SetBinding(hasFocusProperty, new Binding("hasFocus") { Mode = BindingMode.TwoWay });
-            SetBinding(CSetTopMostProperty, new Binding("CSetDisplayTopMost")); 
+            SetBinding(CSetTopMostProperty, new Binding("CSetDisplayTopMost"));
 
-             hasFocus = false;
+            hasFocus = false;
         }
 
         // ========== BindingProperties ==========
@@ -137,17 +137,23 @@ namespace BibleProjector_WPF.View.MainPage
 
         private void EH_focusIn(object sender, RoutedEventArgs e)
         {
-            hasFocus = true;
+            if (!hasFocus)
+                hasFocus = true;
         }
 
         private void EH_mouseFocus(object sender, MouseButtonEventArgs e)
         {
-            hasFocus = true;
+            if (!hasFocus)
+                hasFocus = true;
         }
 
         private void EH_focusOut(object sender, RoutedEventArgs e)
         {
-            hasFocus = false;
+            if (this.IsKeyboardFocusWithin)
+                return;
+
+            if (hasFocus)
+                hasFocus = false;
         }
 
         private void EH_SelectedItemFocuser(object sender, SelectionChangedEventArgs e)
@@ -157,7 +163,7 @@ namespace BibleProjector_WPF.View.MainPage
 
         private void EH_OffUnusedKeyInput(object sender, KeyEventArgs e)
         {
-            e.Handled = true;
+                e.Handled = true;
         }
     }
 }
