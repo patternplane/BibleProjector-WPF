@@ -76,9 +76,30 @@ namespace BibleProjector_WPF
         {
             app = new Application();
 
+            closePPTFiles(System.IO.Path.GetDirectoryName(System.IO.Path.GetFullPath(FRAME_TEMP_DIRECTORY))); // Notice : if last has \\, use GetDirectoryName!!
             if (System.IO.Directory.Exists(FRAME_TEMP_DIRECTORY))
                 System.IO.Directory.Delete(FRAME_TEMP_DIRECTORY, true);
             System.IO.Directory.CreateDirectory(FRAME_TEMP_DIRECTORY);
+
+            closePPTFiles(System.IO.Path.GetDirectoryName(System.IO.Path.GetFullPath(EXTERN_TEMP_DIRECTORY))); // Notice : if last has \\, use GetDirectoryName!!
+            if (System.IO.Directory.Exists(EXTERN_TEMP_DIRECTORY))
+                System.IO.Directory.Delete(EXTERN_TEMP_DIRECTORY, true);
+            System.IO.Directory.CreateDirectory(EXTERN_TEMP_DIRECTORY);
+
+            if (System.IO.Directory.Exists(EXTERN_THUMBNAIL_DIRECTORY))
+                System.IO.Directory.Delete(EXTERN_THUMBNAIL_DIRECTORY, true);
+            System.IO.Directory.CreateDirectory(EXTERN_THUMBNAIL_DIRECTORY);
+        }
+
+        static private void closePPTFiles(string dirFullPath)
+        {
+            List<Presentation> ppts = new List<Presentation>();
+            foreach (Presentation p in app.Presentations)
+                if (System.IO.Path.GetDirectoryName(p.FullName).CompareTo(dirFullPath) == 0)
+                    ppts.Add(p);
+
+            foreach (Presentation p in ppts)
+                p.Close();
         }
 
         static public void FinallProcess()
@@ -1124,26 +1145,8 @@ namespace BibleProjector_WPF
 
             // ============================================ 세팅 및 종료 ============================================ 
 
-            static bool isSetup = false;
-            static void Initialize()
-            {
-                if (isSetup)
-                    return;
-                else
-                    isSetup = true;
-
-                if (System.IO.Directory.Exists(EXTERN_TEMP_DIRECTORY))
-                    System.IO.Directory.Delete(EXTERN_TEMP_DIRECTORY, true);
-                System.IO.Directory.CreateDirectory(EXTERN_TEMP_DIRECTORY);
-
-                if (System.IO.Directory.Exists(EXTERN_THUMBNAIL_DIRECTORY))
-                    System.IO.Directory.Delete(EXTERN_THUMBNAIL_DIRECTORY, true);
-                System.IO.Directory.CreateDirectory(EXTERN_THUMBNAIL_DIRECTORY);
-            }
-
             static public void setPresentation(string path)
             {
-                Initialize();
                 ppt.Add(new ExternPPT(path));
             }
 
