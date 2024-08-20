@@ -16,9 +16,11 @@
         Activated="EH_Window_Activated"
         Deactivated="EH_Window_Deactivated"
         d:DesignWidth="191.75" d:DesignHeight="125.75">
-    <Border x:Name="WindowContent">
-        <Viewbox>
-            <ContentControl local:MainWindow.RatioSize="True" Content="{Binding VM_Main}"/>
-        </Viewbox>
-    </Border>
+    <Grid x:Name="WindoeInnerGrid">
+        <Border x:Name="WindowContent">
+            <Viewbox>
+                <ContentControl local:MainWindow.RatioSize="True" Content="{Binding VM_Main}"/>
+            </Viewbox>
+        </Border>
+    </Grid>
 </Window>

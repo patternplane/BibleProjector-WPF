@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -25,6 +25,8 @@ namespace BibleProjector_WPF
 
         // =================================================== 프로그램 시작 처리 ======================================================
 
+        private Thread monitorDetector = null;
+
         public MainWindow(object VM_MainWindow)
         {
             InitializeComponent();
@@ -35,15 +37,51 @@ namespace BibleProjector_WPF
 
             setMinSize();
             setInnerContentSize();
+
+            monitorDetector = new Thread(monitorSizeDetector) { IsBackground = true };
+            monitorDetector.Start();
         }
 
         // =================================================== 윈도우 리사이징 처리 ======================================================
 
+        private const double DEFALT_W = 1475.0;
+        private const double DEFALT_H = 830.0;
+
+        private void monitorSizeDetector()
+        {
+            double monitorHeight = SystemParameters.PrimaryScreenHeight;
+            double monitorWidth = SystemParameters.PrimaryScreenWidth;
+
+            Action task = new Action(this.setMinSize);
+
+            while (true)
+                if (monitorHeight != SystemParameters.PrimaryScreenHeight
+                    || monitorWidth != SystemParameters.PrimaryScreenWidth) {
+                    this.Dispatcher.BeginInvoke(task);
+                    monitorHeight = SystemParameters.PrimaryScreenHeight;
+                    monitorWidth = SystemParameters.PrimaryScreenWidth;
+                }
+        }
+
         private void setMinSize()
         {
-            double h = SystemParameters.PrimaryScreenHeight / 2;
-            this.MinHeight = h;
-            this.MinWidth = h / 0.8 * 1.2;
+            double ratio = 0.8;
+
+            if (DEFALT_H / DEFALT_W > SystemParameters.PrimaryScreenHeight / SystemParameters.PrimaryScreenWidth)
+            {
+                double h = SystemParameters.PrimaryScreenHeight * ratio;
+                WindowContent.MinHeight = h;
+                WindowContent.MinWidth = h * DEFALT_W / DEFALT_H;
+            }
+            else
+            {
+                double w = SystemParameters.PrimaryScreenWidth * ratio;
+                WindowContent.MinHeight = w * DEFALT_H / DEFALT_W;
+                WindowContent.MinWidth = w;
+            }
+
+            this.MinHeight = WindowContent.MinHeight + (this.ActualHeight - WindoeInnerGrid.ActualHeight);
+            this.MinWidth = WindowContent.MinWidth + (this.ActualWidth - WindoeInnerGrid.ActualWidth);
         }
 
         private void setInnerContentSize()
@@ -53,9 +91,6 @@ namespace BibleProjector_WPF
 
             if (h == 0 || w == 0)
                 return;
-
-            double DEFALT_W = 1475.0;
-            double DEFALT_H = 830.0;
 
             foreach (FrameworkElement f in RatioSizeElements)
             {
