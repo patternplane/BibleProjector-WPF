@@ -163,6 +163,10 @@ namespace BibleProjector_WPF.View.MainPage
 
         private void EH_OffUnusedKeyInput(object sender, KeyEventArgs e)
         {
+            if (e.Key == Key.Left
+                || e.Key == Key.Down
+                || e.Key == Key.Right
+                || e.Key == Key.Up)
                 e.Handled = true;
         }
     }

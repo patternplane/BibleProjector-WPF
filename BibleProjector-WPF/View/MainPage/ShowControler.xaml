@@ -198,12 +198,10 @@
                     <Style TargetType="ListBoxItem">
                         <Setter Property="Padding" Value="0"/>
                         <Setter Property="Margin" Value="1"/>
-                        <Setter Property="KeyboardNavigation.AcceptsReturn" Value="False"/>
-                        <Setter Property="KeyboardNavigation.ControlTabNavigation" Value="None"/>
-                        <Setter Property="KeyboardNavigation.DirectionalNavigation" Value="None"/>
-                        <Setter Property="KeyboardNavigation.IsTabStop" Value="False"/>
-                        <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
                         <EventSetter Event="PreviewKeyDown" Handler="EH_OffUnusedKeyInput"/>
+                        <EventSetter Event="PreviewKeyUp" Handler="EH_OffUnusedKeyInput"/>
+                        <EventSetter Event="KeyDown" Handler="EH_OffUnusedKeyInput"/>
+                        <EventSetter Event="KeyUp" Handler="EH_OffUnusedKeyInput"/>
                     </Style>
                 </ListBox.ItemContainerStyle>
             </ListBox>
@@ -258,7 +256,7 @@
                                 </Grid.RowDefinitions>
 
                                 <Border Grid.Row="0" VerticalAlignment="Center" BorderBrush="Silver" BorderThickness="0,0,0,1">
-                                    <Label Padding="3,0" FontSize="11" Content="{Binding Title1}" />
+                                        <Label Padding="3,0" FontSize="11" Content="{Binding Title1}" />
                                 </Border>
                                 <Border 
                                     Grid.Row="1"
