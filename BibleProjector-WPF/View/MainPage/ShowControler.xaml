@@ -256,7 +256,10 @@
                                 </Grid.RowDefinitions>
 
                                 <Border Grid.Row="0" VerticalAlignment="Center" BorderBrush="Silver" BorderThickness="0,0,0,1">
+                                    <Grid>
                                         <Label Padding="3,0" FontSize="11" Content="{Binding Title1}" />
+                                        <Label Padding="3,0" FontSize="15" HorizontalAlignment="Right" FontWeight="Bold" Content="{Binding MoveNumber}"/>
+                                    </Grid>
                                 </Border>
                                 <Border 
                                     Grid.Row="1"

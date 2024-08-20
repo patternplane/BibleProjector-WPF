@@ -25,6 +25,9 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public string Title1 { get; set; }
         public string Title2 { get; set; }
 
+        private int moveNumber = 0;
+        public string MoveNumber { get; set; }
+
         public ObservableCollection<VMShowItem> Pages { get; set; }
         int _CurrentPageIndex;
         public int CurrentPageIndex 
@@ -47,7 +50,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public bool hasFocus
         {
             get { return _hasFocus; }
-            set { _hasFocus = value; OnPropertyChanged(nameof(isActive)); }
+            set { _hasFocus = value; OnPropertyChanged(nameof(isActive)); removeMoveNumber(true); }
         }
         private bool activation;
         public bool isActive { get { return hasFocus && activation; } }
@@ -59,7 +62,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         // ================================================ Properties ================================================
 
-        module.Data.ShowData currentData;
+        private module.Data.ShowData currentData;
 
         // ================================================ 세팅 ================================================
 
@@ -115,6 +118,58 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             }
         }
 
+        // =========== 숫자 이동 입력 ===========
+
+        private void setMoveNumber(int n)
+        {
+            moveNumber = n;
+            if (moveNumber == 0)
+                MoveNumber = "";
+            else
+                MoveNumber = moveNumber.ToString();
+            OnPropertyChanged(nameof(MoveNumber));
+        }
+
+        private void addMoveNumber(int n)
+        {
+            if (Pages == null)
+                setMoveNumber(0);
+            else if (1 <= 10 * moveNumber + n  && 10 * moveNumber + n <= Pages.Count)
+                setMoveNumber(10 * moveNumber + n);
+            else if (n <= Pages.Count)
+            {
+                if (n == 0)
+                    setMoveNumber(0);
+                else
+                    setMoveNumber(n);
+            }
+        }
+
+        private void removeMoveNumber(bool deleteAll)
+        {
+            if (deleteAll)
+                setMoveNumber(0);
+            else if (moveNumber != 0) 
+            {
+                if (moveNumber / 10 == 0)
+                    setMoveNumber(0);
+                else
+                    setMoveNumber(moveNumber / 10);
+            }
+        }
+
+        // =================================
+
+        int KeyToNum(Key key)
+        {
+            if (key >= Key.D0 && key <= Key.D9)
+                return (key - Key.D0);
+            else if (key >= Key.NumPad0 && key <= Key.NumPad9)
+                return (key - Key.NumPad0);
+            else
+                return -1;
+        }
+
         public void keyInputed(Key inputKey, bool isDown)
         {
             if (inputKey == Key.LeftCtrl
@@ -134,62 +189,41 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
             if (hasFocus && isDown)
             {
-                switch (inputKey)
+                if (inputKey >= Key.D0 && inputKey <= Key.D9
+                    || inputKey >= Key.NumPad0 && inputKey <= Key.NumPad9) 
                 {
-                    case Key.Enter:
-                    case Key.Up:
-                    case Key.Right:
-                        GoNextPage(doFastPass);
-                        break;
-                    case Key.Back:
-                    case Key.Down:
-                    case Key.Left:
-                        GoPreviousPage(doFastPass);
-                        break;
+                    addMoveNumber(KeyToNum(inputKey));
                 }
-            }
-
-            // 언제 숫자입력값을 다시 초기화해야 할지 곰곰히 생각해봐야 할 듯 합니다.
-            /*void Window_Activated(object sender, EventArgs e)
-            {
-                VM_BibleControl.NumInput_Remove();
-            }*//*
-
-            void Window_KeyDown(object sender, KeyEventArgs e)
-            {
-                if (e.Key >= Key.D0 && e.Key <= Key.D9
-                    || e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9)
-                {
-                    VM_BibleControl.NumInput(KeyToNum(e.Key));
-                    return;
-                }
-
-                switch (e.Key)
-                {
-                    case Key.Up:
-                    case Key.Right:
-                        VM_BibleControl.RunNextPage();
-                        break;
-                    case Key.Down:
-                    case Key.Left:
-                        VM_BibleControl.RunPreviousPage();
-                        break;
-                    case Key.Enter:
-                        VM_BibleControl.NumInput_Enter();
-                        break;
-                }
-
-                VM_BibleControl.NumInput_Remove();
-            }
-            int KeyToNum(Key key)
-            {
-                if (key >= Key.D0 && key <= Key.D9)
-                    return (key - Key.D0);
-                else if (key >= Key.NumPad0 && key <= Key.NumPad9)
-                    return (key - Key.NumPad0);
                 else
-                    return -1;
-            }*/
+                {
+                    switch (inputKey)
+                    {
+                        case Key.Enter:
+                            if (moveNumber != 0
+                                && Pages != null
+                                && 1 <= moveNumber && moveNumber <= Pages.Count)
+                            {
+                                MovePage(moveNumber - 1);
+                                removeMoveNumber(true);
+                            }
+                            else
+                                GoNextPage(doFastPass);
+                            break;
+                        case Key.Up:
+                        case Key.Right:
+                            GoNextPage(doFastPass);
+                            break;
+                        case Key.Down:
+                        case Key.Left:
+                            GoPreviousPage(doFastPass);
+                            break;
+                        case Key.Delete:
+                        case Key.Back:
+                            removeMoveNumber(true);
+                            break;
+                    }
+                }
+            }
         }
 
         public void newShowStart(module.Data.ShowData data)
@@ -205,6 +239,8 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
             hasFocus = true;
             OnPropertyChanged("hasFocus");
+
+            removeMoveNumber(true);
         }
 
         public void refreshData(object sender, EventArgs e)
