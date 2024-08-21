@@ -24,12 +24,9 @@ namespace BibleProjector_WPF.View.MainPage
         {
             InitializeComponent();
 
-            Binding b = new Binding("CItemSelected");
-            this.SetBinding(ItemSelectedCommandProperty, b);
-
-            // 테스팅용
-            //b = new Binding("CItemClick");
-            //this.SetBinding(CItemClickProperty, b);
+            this.SetBinding(ItemSelectedCommandProperty, new Binding("CItemSelected"));
+            this.SetBinding(OpenEditorCommandProperty, new Binding("COpenEditor"));
+            this.SetBinding(OpenAdderCommandProperty, new Binding("COpenAdder"));
         }
 
         // ========== BindingProperties ==========
@@ -81,6 +78,30 @@ namespace BibleProjector_WPF.View.MainPage
         {
             get => (ICommand)GetValue(ItemSelectedCommandProperty);
             set => SetValue(ItemSelectedCommandProperty, value);
+        }
+
+        public static readonly DependencyProperty OpenEditorCommandProperty =
+        DependencyProperty.Register(
+            name: "OpenEditorCommand",
+            propertyType: typeof(ICommand),
+            ownerType: typeof(SearchView));
+
+        public ICommand OpenEditorCommand
+        {
+            get => (ICommand)GetValue(OpenEditorCommandProperty);
+            set => SetValue(OpenEditorCommandProperty, value);
+        }
+
+        public static readonly DependencyProperty OpenAdderCommandProperty =
+        DependencyProperty.Register(
+            name: "OpenAdderCommand",
+            propertyType: typeof(ICommand),
+            ownerType: typeof(SearchView));
+
+        public ICommand OpenAdderCommand
+        {
+            get => (ICommand)GetValue(OpenAdderCommandProperty);
+            set => SetValue(OpenAdderCommandProperty, value);
         }
 
         // ========== EventHander ==========
@@ -175,6 +196,18 @@ namespace BibleProjector_WPF.View.MainPage
         private void EH_TextBoxDoubleClick(object sender, MouseButtonEventArgs e)
         {
             SearchTextBox.SelectAll();
+        }
+
+        // ======================= 수정/추가 버튼 클릭 =======================
+
+        private void EH_Edit_Button_Click(object sender, RoutedEventArgs e)
+        {
+            OpenEditorCommand.Execute(null);
+        }
+
+        private void EH_Add_Button_Click(object sender, RoutedEventArgs e)
+        {
+            OpenAdderCommand.Execute(null);
         }
     }
 }

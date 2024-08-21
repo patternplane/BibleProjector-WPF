@@ -150,6 +150,7 @@
     <Compile Include="View\MainPage\ShowControllerBrush2Converter.cs" />
     <Compile Include="View\MainPage\ShowControllerBrushConverter.cs" />
     <Compile Include="View\MainPage\ShowItemColor.cs" />
+    <Compile Include="View\MainPage\VisibilityConverter.cs" />
     <Compile Include="View\ManualTab.xaml.cs">
       <DependentUpon>ManualTab.xaml</DependentUpon>
     </Compile>

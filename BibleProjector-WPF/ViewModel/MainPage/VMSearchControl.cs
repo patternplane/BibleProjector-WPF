@@ -25,6 +25,8 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public ICommand CStartShow { get; set; }
         public ICommand CReserveThis { get; set; }
 
+        public bool CanOpenEditor { get; private set; } = false;
+
         // ========== Members ==========
 
         module.ISearcher searcher = null;
@@ -39,7 +41,6 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             CSearchStart = new RelayCommand(obj => SearchStart());
             CPopupHide = new RelayCommand(obj => PopupHide());
             CLastestResultShow = new RelayCommand(obj => PopupShow());
-            //CItemClick = new RelayCommand(itemClick);
             CItemSelected = new RelayCommand(obj => ItemSelected((VMSearchResult)obj));
             CStartShow = new RelayCommand((obj) => StartShow());
             CReserveThis = new RelayCommand((obj) => ReserveThis());
@@ -51,13 +52,6 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         }
 
         // ========== Command ==========
-
-        /*void itemClick(object obj)
-        {
-            module.Data.ShowData data = (module.Data.ShowData)obj;
-
-            Console.WriteLine("Click");
-        }*/
 
         void SearchStart()
         {
@@ -97,6 +91,19 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             if (item.getData().isAvailData())
             {
                 this.SelectionItem = item;
+
+                if (item.Type == ShowContentType.Bible
+                    || item.Type == ShowContentType.Song)
+                {
+                    CanOpenEditor = true;
+                    OnPropertyChanged(nameof(CanOpenEditor));
+                }
+                else
+                {
+                    CanOpenEditor = false;
+                    OnPropertyChanged(nameof(CanOpenEditor));
+                }
+
                 if (item.getData() is module.Data.BibleData)
                 {
                     module.Data.BibleData data = (module.Data.BibleData)item.getData();
