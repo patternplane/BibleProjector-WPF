@@ -93,7 +93,7 @@
                                         <ColumnDefinition/>
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
-                                    <Label Content="{Binding DisplayTitle}"/>
+                                    <Label Content="{Binding DisplayTitle}" FontSize="15"/>
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
@@ -137,7 +137,7 @@
                                 </Style.Triggers>
                             </Style>
                         </ScrollViewer.Style>
-                        <TextBlock FontSize="14" Margin="3" Text="{Binding SelectionItem.PreviewContent}" TextWrapping="Wrap"/>
+                        <TextBlock FontSize="15" Margin="3" Text="{Binding SelectionItem.PreviewContent}" TextWrapping="Wrap"/>
                     </ScrollViewer>
                     <DockPanel>
                         <Button Margin="3,3"
