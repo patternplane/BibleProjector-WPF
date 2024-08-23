@@ -239,8 +239,6 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
             hasFocus = true;
             OnPropertyChanged("hasFocus");
-
-            removeMoveNumber(true);
         }
 
         public void refreshData(object sender, EventArgs e)
@@ -292,6 +290,8 @@ namespace BibleProjector_WPF.ViewModel.MainPage
                 this.Pages = displayPages;
                 OnPropertyChanged("Pages");
             }
+
+            removeMoveNumber(true);
         }
 
         void MovePage(int pageIdx)
