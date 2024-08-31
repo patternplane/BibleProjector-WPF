@@ -125,7 +125,7 @@
                 <Grid Grid.Row="1"
                       Name="PreviewArea"
                       Background="#00000000">
-                    <ScrollViewer>
+                    <ScrollViewer Name="PreviewViewScrollViewer">
                         <ScrollViewer.Style>
                             <Style TargetType="ScrollViewer">
                                 <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
@@ -139,7 +139,7 @@
                         </ScrollViewer.Style>
                         <TextBlock FontSize="15" Margin="3" Text="{Binding SelectionItem.PreviewContent}" TextWrapping="Wrap"/>
                     </ScrollViewer>
-                    <DockPanel>
+                    <DockPanel Width="{Binding ElementName=PreviewViewScrollViewer, Path=ViewportWidth}" HorizontalAlignment="Left">
                         <Button Margin="3,3"
                                 DockPanel.Dock="Right"
                                 HorizontalAlignment="Right"
