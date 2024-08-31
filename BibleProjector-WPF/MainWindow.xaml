@@ -9,6 +9,7 @@
         
         ResizeMode="CanResize"
         SizeChanged="EH_WindowSizeChanged"
+        WindowStartupLocation="CenterScreen"
         
         PreviewKeyDown="EH_PreKeyDownCheck"
         KeyUp="EH_KeyUpCheck"
