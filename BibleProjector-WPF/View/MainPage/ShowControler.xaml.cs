@@ -133,6 +133,14 @@ namespace BibleProjector_WPF.View.MainPage
             CSetTopMost.Execute(null);
         }
 
+        private void EH_ListBox_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (e.Delta >= 0)
+                getCGoPreviousPageProperty(this.DataContext).Execute(false);
+            else
+                getCGoNextPageProperty(this.DataContext).Execute(false);
+        }
+
         // =============================== focusing and key ignore =============================== 
 
         private void EH_focusIn(object sender, RoutedEventArgs e)

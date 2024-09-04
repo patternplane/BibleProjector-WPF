@@ -83,6 +83,7 @@
                      ScrollViewer.CanContentScroll="False" 
                      ScrollViewer.VerticalScrollBarVisibility="Disabled"
                      ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                     PreviewMouseWheel="EH_ListBox_PreviewMouseWheel"
                      Background="#B2FFFFFF"
                      ItemsSource="{Binding Pages}"
                      SelectedIndex="{Binding CurrentPageIndex}"
