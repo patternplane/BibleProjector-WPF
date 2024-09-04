@@ -15,9 +15,9 @@
     <Grid Margin="1,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="32"/>
-            <RowDefinition Height="4"/>
+            <RowDefinition Height="6"/>
             <RowDefinition Height="70*"/>
-            <RowDefinition Height="4"/>
+            <RowDefinition Height="6"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="4"/>
             <RowDefinition Height="43"/>
@@ -53,13 +53,13 @@
         </ContentControl>
 
         <!--검색 : 미리보기-->
-        <Border Grid.Row="2" BorderBrush="Black" BorderThickness="1">
+        <Border Grid.Row="2" BorderBrush="Black" BorderThickness="2">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Border Grid.Row="0" BorderBrush="Gray" BorderThickness="0,0,0,2">
+                <Border Grid.Row="0" BorderBrush="LightGray" BorderThickness="0,0,0,1">
                     <Grid>
                         <TextBlock Margin="5,0,1,0" FontSize="15" Text="{Binding SelectionItem.DisplayTitle}" VerticalAlignment="Center" FontWeight="Bold"/>
                         <DockPanel Width="{Binding ElementName=PreviewViewScrollViewer, Path=ViewportWidth}" HorizontalAlignment="Left">
@@ -139,7 +139,6 @@
             </Grid>
         </Border>
 
-
         <!--검색 : 검색창-->
         <Grid Grid.Row="4" x:Name="SearchInputGrid">
             <Grid.ColumnDefinitions>
@@ -150,7 +149,7 @@
             <Border Grid.Column="0" BorderBrush="black" BorderThickness="1,1,0,1">
                 <TextBox x:Name="SearchTextBox" FontSize="15" Text="{Binding SearchText}" Padding="0"
                          PreviewKeyUp="EH_TextBoxKeyUp"
-                         
+                         VerticalContentAlignment="Center"
                          GotFocus="EH_TextBoxGotFocus"
                          PreviewMouseDown="EH_TextBoxClick"
                          PreviewMouseDoubleClick="EH_TextBoxDoubleClick">
