@@ -16,9 +16,9 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="32"/>
             <RowDefinition Height="4"/>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="4"/>
             <RowDefinition Height="70*"/>
+            <RowDefinition Height="4"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="4"/>
             <RowDefinition Height="43"/>
         </Grid.RowDefinitions>
@@ -52,8 +52,96 @@
             </ContentControl.Style>
         </ContentControl>
 
+        <!--검색 : 미리보기-->
+        <Border Grid.Row="2" BorderBrush="Black" BorderThickness="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Border Grid.Row="0" BorderBrush="Gray" BorderThickness="0,0,0,2">
+                    <Grid>
+                        <TextBlock Margin="5,0,1,0" FontSize="15" Text="{Binding SelectionItem.DisplayTitle}" VerticalAlignment="Center" FontWeight="Bold"/>
+                        <DockPanel Width="{Binding ElementName=PreviewViewScrollViewer, Path=ViewportWidth}" HorizontalAlignment="Left">
+                            <Button Margin="3,3"
+                                    DockPanel.Dock="Right"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top"
+                                    Width="50"
+                                    Content="➕"
+                                    FontSize="14"
+                                    FontWeight="Bold"
+                                    BorderThickness="2"
+                                    Click="EH_Add_Button_Click">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Background" Value="#22C5F76E"/>
+                                        <Setter Property="Foreground" Value="#22005504"/>
+                                        <Setter Property="BorderBrush" Value="#22005504"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#FFC5F76E"/>
+                                                <Setter Property="Foreground" Value="#FF005504"/>
+                                                <Setter Property="BorderBrush" Value="#FF005504"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            <Button Margin="3,3"
+                                    DockPanel.Dock="Right"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top"
+                                    Width="50"
+                                    Content="✏️"
+                                    FontFamily="Malgun Gothic"
+                                    FontSize="14"
+                                    FontWeight="Bold"
+                                    BorderThickness="2"
+                                    Click="EH_Edit_Button_Click"
+                                    Visibility="{Binding CanOpenEditor, Converter={StaticResource VisibilityConverter}}">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Background" Value="#22F7BF6E"/>
+                                        <Setter Property="Foreground" Value="#22553600"/>
+                                        <Setter Property="BorderBrush" Value="#22633600"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#FFF7BF6E"/>
+                                                <Setter Property="Foreground" Value="#FF553600"/>
+                                                <Setter Property="BorderBrush" Value="#FF633600"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </DockPanel>
+                    </Grid>
+                </Border>
+                <Grid Grid.Row="1"
+                      Name="PreviewArea"
+                      Background="#00000000">
+                    <ScrollViewer Name="PreviewViewScrollViewer">
+                        <ScrollViewer.Style>
+                            <Style TargetType="ScrollViewer">
+                                <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+                                <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectionItem.Type}" Value="{x:Static rootns:ShowContentType.Bible}">
+                                        <Setter Property="HorizontalScrollBarVisibility" Value="Disabled"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ScrollViewer.Style>
+                        <TextBlock FontSize="15" Margin="3" Text="{Binding SelectionItem.PreviewContent}" TextWrapping="Wrap"/>
+                    </ScrollViewer>
+                </Grid>
+            </Grid>
+        </Border>
+
+
         <!--검색 : 검색창-->
-        <Grid Grid.Row="2" x:Name="SearchInputGrid">
+        <Grid Grid.Row="4" x:Name="SearchInputGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="179*"/>
                 <ColumnDefinition Width="42*"/>
@@ -110,102 +198,7 @@
                 검 색
             </Button>
         </Grid>
-
-        <!--검색 : 미리보기-->
-        <Border Grid.Row="4" BorderBrush="Black" BorderThickness="1">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Border Grid.Row="0" BorderBrush="Gray" BorderThickness="0,0,0,2">
-                    <TextBlock Margin="5,0,1,0" FontSize="15" Text="{Binding SelectionItem.DisplayTitle}" VerticalAlignment="Center" FontWeight="Bold">
-                    </TextBlock>
-                </Border>
-                <Grid Grid.Row="1"
-                      Name="PreviewArea"
-                      Background="#00000000">
-                    <ScrollViewer Name="PreviewViewScrollViewer">
-                        <ScrollViewer.Style>
-                            <Style TargetType="ScrollViewer">
-                                <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
-                                <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding SelectionItem.Type}" Value="{x:Static rootns:ShowContentType.Bible}">
-                                        <Setter Property="HorizontalScrollBarVisibility" Value="Disabled"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </ScrollViewer.Style>
-                        <TextBlock FontSize="15" Margin="3" Text="{Binding SelectionItem.PreviewContent}" TextWrapping="Wrap"/>
-                    </ScrollViewer>
-                    <DockPanel Width="{Binding ElementName=PreviewViewScrollViewer, Path=ViewportWidth}" HorizontalAlignment="Left">
-                        <Button Margin="3,3"
-                                DockPanel.Dock="Right"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Top"
-                                Width="50"
-                                Content="➕"
-                                FontSize="14"
-                                FontWeight="Bold"
-                                BorderThickness="2"
-                                Click="EH_Add_Button_Click">
-                            <Button.Style>
-                                <Style TargetType="Button">
-                                    <Setter Property="Background" Value="#FFC5F76E"/>
-                                    <Setter Property="Foreground" Value="#FF005504"/>
-                                    <Setter Property="BorderBrush" Value="#FF005504"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding ElementName=PreviewArea, Path=IsMouseOver}" Value="true">
-                                            <Setter Property="Background" Value="#22C5F76E"/>
-                                            <Setter Property="Foreground" Value="#22005504"/>
-                                            <Setter Property="BorderBrush" Value="#22005504"/>
-                                        </DataTrigger>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Background" Value="#FFC5F76E"/>
-                                            <Setter Property="Foreground" Value="#FF005504"/>
-                                            <Setter Property="BorderBrush" Value="#FF005504"/>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                        </Button>
-                        <Button Margin="3,3"
-                                DockPanel.Dock="Right"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Top"
-                                Width="50"
-                                Content="✏️"
-                                FontSize="14"
-                                FontWeight="Bold"
-                                BorderThickness="2"
-                                Click="EH_Edit_Button_Click"
-                                Visibility="{Binding CanOpenEditor, Converter={StaticResource VisibilityConverter}}">
-                            <Button.Style>
-                                <Style TargetType="Button">
-                                    <Setter Property="Background" Value="#FFF7BF6E"/>
-                                    <Setter Property="Foreground" Value="#FF553600"/>
-                                    <Setter Property="BorderBrush" Value="#FF633600"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding ElementName=PreviewArea, Path=IsMouseOver}" Value="true">
-                                            <Setter Property="Background" Value="#22F7BF6E"/>
-                                            <Setter Property="Foreground" Value="#22553600"/>
-                                            <Setter Property="BorderBrush" Value="#22633600"/>
-                                        </DataTrigger>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Background" Value="#FFF7BF6E"/>
-                                            <Setter Property="Foreground" Value="#FF553600"/>
-                                            <Setter Property="BorderBrush" Value="#FF633600"/>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                        </Button>
-                    </DockPanel>
-                </Grid>
-            </Grid>
-        </Border>
-
+        
         <!--검색 : 후처리 버튼-->
         <Grid Grid.Row="6">
             <Grid.ColumnDefinitions>
