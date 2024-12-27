@@ -228,7 +228,9 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         public void newShowStart(module.Data.ShowData data)
         {
+            data.ItemRefreshedEvent -= refreshData;
             data.ItemRefreshedEvent += refreshData;
+            data.ItemDeletedEvent -= itemDeleted;
             data.ItemDeletedEvent += itemDeleted;
 
             dataSetter(data);
@@ -243,13 +245,19 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         public void refreshData(object sender, EventArgs e)
         {
+            if (currentData != sender)
+                return;
+
+            int lastPageIndex = CurrentPageIndex;
+
             dataSetter((module.Data.ShowData)sender);
-            if (CurrentPageIndex < 0)
-                MovePage(0);
-            else if (CurrentPageIndex >= Pages.Count)
-                MovePage(Pages.Count - 1);
-            else
-                MovePage(CurrentPageIndex);
+
+            if (lastPageIndex < 0)
+                lastPageIndex = 0;
+            else if (lastPageIndex >= Pages.Count)
+                lastPageIndex = Pages.Count - 1;
+
+            MovePage(lastPageIndex);
         }
 
         public void itemDeleted(object sender, EventArgs e)

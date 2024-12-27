@@ -1455,8 +1455,8 @@ namespace BibleProjector_WPF
                         SlideWindow = ppt.SlideShowSettings.Run();
                 }
                 SlideShowHideInTaskbar(SlideWindow.HWND);
-                //if (SlideWindow.View.CurrentShowPosition != 0)
-                    SlideWindow.View.GotoSlide(SlideWindow.View.CurrentShowPosition);
+                //if (SlideWindow.View.CurrentShowPosition != 0) // 애니메이션이 있는 슬라이드를 표시할 때 해당 값이 순간적으로 0으로 변경될 때가 있어 필요한 코드
+                //SlideWindow.View.GotoSlide(currentSlideNum); // 윈도우11에서는 필요없는 코드. 이 코드가 왜 필요한지 조사중.
 
                 pptState = PptSlideState.WindowShow;
                 TopMost();
