@@ -62,7 +62,7 @@
                 <Border Grid.Row="0" BorderBrush="LightGray" BorderThickness="0,0,0,1">
                     <Grid>
                         <TextBlock Margin="5,0,1,0" FontSize="15" Text="{Binding SelectionItem.DisplayTitle}" VerticalAlignment="Center" FontWeight="Bold"/>
-                        <DockPanel Width="{Binding ElementName=PreviewViewScrollViewer, Path=ViewportWidth}" HorizontalAlignment="Left">
+                        <DockPanel>
                             <Button Margin="3,3"
                                     DockPanel.Dock="Right"
                                     HorizontalAlignment="Right"
@@ -121,7 +121,7 @@
                 <Grid Grid.Row="1"
                       Name="PreviewArea"
                       Background="#00000000">
-                    <ScrollViewer Name="PreviewViewScrollViewer">
+                    <ScrollViewer>
                         <ScrollViewer.Style>
                             <Style TargetType="ScrollViewer">
                                 <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
@@ -135,6 +135,32 @@
                         </ScrollViewer.Style>
                         <TextBlock FontSize="15" Margin="3" Text="{Binding SelectionItem.PreviewContent}" TextWrapping="Wrap"/>
                     </ScrollViewer>
+                    <Border VerticalAlignment="Center" HorizontalAlignment="Center" Background="#BF898989">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Opacity" Value="0"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding NoneUse}" Value="true">
+                                        <DataTrigger.EnterActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity">
+                                                        <LinearDoubleKeyFrame KeyTime="0:0:0.2"
+                                                                              Value="1"/>
+                                                        <LinearDoubleKeyFrame KeyTime="0:0:0.8"
+                                                                              Value="1"/>
+                                                        <LinearDoubleKeyFrame KeyTime="0:0:1"
+                                                                              Value="0"/>
+                                                    </DoubleAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </DataTrigger.EnterActions>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <TextBlock Text="아직 사용할 수 없어요..! ㅜㅜ" FontSize="15" FontWeight="Bold" Foreground="Black" Margin="8,3"/>
+                    </Border>
                 </Grid>
             </Grid>
         </Border>

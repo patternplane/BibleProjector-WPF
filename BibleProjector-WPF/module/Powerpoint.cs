@@ -1455,6 +1455,7 @@ namespace BibleProjector_WPF
                         SlideWindow = ppt.SlideShowSettings.Run();
                 }
                 SlideShowHideInTaskbar(SlideWindow.HWND);
+                //if (SlideWindow.View.CurrentShowPosition != 0)
                     SlideWindow.View.GotoSlide(SlideWindow.View.CurrentShowPosition);
 
                 pptState = PptSlideState.WindowShow;

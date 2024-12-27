@@ -24,8 +24,12 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public ICommand CItemSelected { get; set; }
         public ICommand CStartShow { get; set; }
         public ICommand CReserveThis { get; set; }
+        public ICommand COpenEditor { get; set; }
+        public ICommand COpenAdder { get; set; }
 
         public bool CanOpenEditor { get; private set; } = false;
+
+        public bool NoneUse { get; set; } = false;
 
         // ========== Members ==========
 
@@ -44,6 +48,8 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             CItemSelected = new RelayCommand(obj => ItemSelected((VMSearchResult)obj));
             CStartShow = new RelayCommand((obj) => StartShow());
             CReserveThis = new RelayCommand((obj) => ReserveThis());
+            COpenEditor = new RelayCommand((obj) => OpenEditor());
+            COpenAdder = new RelayCommand((obj) => OpenAdder());
 
             this.searcher = searcher;
             this.reserveManager = reserveManager;
@@ -126,6 +132,22 @@ namespace BibleProjector_WPF.ViewModel.MainPage
                 return;
 
             reserveManager.AddReserveItem(this, SelectionItem.getData());
+        }
+
+        void OpenEditor()
+        {
+            NoneUse = true;
+            OnPropertyChanged(nameof(NoneUse));
+            NoneUse = false;
+            OnPropertyChanged(nameof(NoneUse));
+        }
+
+        void OpenAdder()
+        {
+            NoneUse = true;
+            OnPropertyChanged(nameof(NoneUse));
+            NoneUse = false;
+            OnPropertyChanged(nameof(NoneUse));
         }
     }
 }
