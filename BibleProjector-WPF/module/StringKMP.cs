@@ -29,6 +29,15 @@ namespace BibleProjector_WPF.module
             return (a == b);
         }
 
+        static public bool IgnoreCaseStringCompareFunc(char a, char b)
+        {
+            if (a >= 'A' && a <= 'Z')
+                a = (char)('a' + a - 'A');
+            if (b >= 'A' && b <= 'Z')
+                b = (char)('a' + b - 'A');
+            return (a == b);
+        }
+
         /// <summary>
         /// KMP - 전처리 테이블 제작 함수
         /// </summary>

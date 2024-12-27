@@ -440,10 +440,10 @@ namespace BibleProjector_WPF.ViewModel
             int[] findPos;
             for (int i = 0; i < LyricList.Count; i++)
             {
-                if (module.StringKMP.HasPattern(LyricList[i].songTitle, pattern, delegate (char a, char b) { return a == b; }, false))
+                if (module.StringKMP.HasPattern(LyricList[i].songTitle, pattern, module.StringKMP.IgnoreCaseStringCompareFunc, false))
                     searchList.Add(new searchPair() { display = LyricList[i].songTitle, lyric = LyricList[i] });
 
-                findPos = module.StringKMP.FindPattern(LyricList[i].songContent.getContentByVerse(0), pattern, delegate (char a, char b) { return a == b; }, false);
+                findPos = module.StringKMP.FindPattern(LyricList[i].songContent.getContentByVerse(0), pattern, module.StringKMP.IgnoreCaseStringCompareFunc, false);
                 if (findPos.Length > 0)
                     foreach (String s in module.StringKMP.makeResultPreview(findPos, LyricList[i].songContent.getContentByVerse(0), pattern.Length))
                         searchList.Add(new searchPair() { display = "(" + LyricList[i].songTitle + ") " + s, lyric = LyricList[i] });
@@ -456,10 +456,10 @@ namespace BibleProjector_WPF.ViewModel
         {
             List<searchPair> searchList = new List<searchPair>();
 
-            if (module.StringKMP.HasPattern(lyric.songTitle, pattern, delegate (char a, char b) { return a == b; }, false))
+            if (module.StringKMP.HasPattern(lyric.songTitle, pattern, module.StringKMP.IgnoreCaseStringCompareFunc, false))
                 searchList.Add(new searchPair() { display = lyric.songTitle, lyric = lyric });
 
-            int[] findPos = module.StringKMP.FindPattern(lyric.songContent.getContentByVerse(0), pattern, delegate (char a, char b) { return a == b; }, false);
+            int[] findPos = module.StringKMP.FindPattern(lyric.songContent.getContentByVerse(0), pattern, module.StringKMP.IgnoreCaseStringCompareFunc, false);
             if (findPos.Length > 0)
                 foreach (String s in module.StringKMP.makeResultPreview(findPos, lyric.songContent.getContentByVerse(0), pattern.Length))
                     searchList.Add(new searchPair() { display = "(" + lyric.songTitle + ") " + s, lyric = lyric });

@@ -22,25 +22,25 @@ namespace BibleProjector_WPF.module.Data
             int[] findPos;
             foreach (SongData song in songManager.CCMs)
             {
-                if (StringKMP.HasPattern(song.songTitle, phrase, delegate (char a, char b) { return a == b; }, false))
+                if (StringKMP.HasPattern(song.songTitle, phrase, StringKMP.IgnoreCaseStringCompareFunc, false))
                     searchList.Add(new SongSearchData(song, "(" + song.songTitle + ")", 0));
             }
             foreach (SongData song in songManager.Hymns)
             {
-                if (StringKMP.HasPattern(song.songTitle, phrase, delegate (char a, char b) { return a == b; }, false))
+                if (StringKMP.HasPattern(song.songTitle, phrase, StringKMP.IgnoreCaseStringCompareFunc, false))
                     searchList.Add(new SongSearchData(song, "(새찬송가 " + song.songTitle + "장)", 0));
             }
 
             foreach (SongData song in songManager.CCMs)
             {
-                findPos = StringKMP.FindPattern(song.songContent.getRawContent(), phrase, delegate (char a, char b) { return a == b; }, false);
+                findPos = StringKMP.FindPattern(song.songContent.getRawContent(), phrase, module.StringKMP.IgnoreCaseStringCompareFunc, false);
                 if (findPos.Length > 0)
                     foreach (string s in StringKMP.makeResultPreview(findPos, song.songContent.getRawContent(), phrase.Length))
                         searchList.Add(new SongSearchData(song, "(" + song.songTitle + ") " + s, 0));
             }
             foreach (SongData song in songManager.Hymns)
             {
-                findPos = StringKMP.FindPattern(song.songContent.getRawContent(), phrase, delegate (char a, char b) { return a == b; }, false);
+                findPos = StringKMP.FindPattern(song.songContent.getRawContent(), phrase, module.StringKMP.IgnoreCaseStringCompareFunc, false);
                 if (findPos.Length > 0)
                     foreach (string s in StringKMP.makeResultPreview(findPos, song.songContent.getRawContent(), phrase.Length))
                         searchList.Add(new SongSearchData(song, "(새찬송가 " + song.songTitle + "장) " + s, 0));

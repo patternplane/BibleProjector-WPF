@@ -20,7 +20,7 @@ namespace BibleProjector_WPF.module
             List<Data.ExternPPTSearchData> result = new List<Data.ExternPPTSearchData>(5);
 
             foreach (Data.ExternPPTData item in manager.getDataList())
-                if (StringKMP.HasPattern(item.fileName, phrase, delegate (char a, char b) { return a == b; }, false))
+                if (StringKMP.HasPattern(item.fileName, phrase, StringKMP.IgnoreCaseStringCompareFunc, false))
                     result.Add(new Data.ExternPPTSearchData(
                         item, 
                         0));
