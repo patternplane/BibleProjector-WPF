@@ -27,6 +27,7 @@ namespace BibleProjector_WPF.module.Data
                     break;
             CCMs.Insert(pos, data);
 
+            saveCCMData(false);
             return pos;
         }
 
@@ -36,6 +37,8 @@ namespace BibleProjector_WPF.module.Data
             {
                 item.deleteProcess();
                 CCMs.Remove(item);
+
+                saveCCMData(false);
             }
         }
 
@@ -86,7 +89,17 @@ namespace BibleProjector_WPF.module.Data
 
         // ============================================== 저장하기 ==============================================
 
-        public void saveData_Lyric(object sender, Event.SaveDataEventArgs e)
+        /// <summary>
+        /// 시스템 이벤트에 의한 저장메소드입니다. (일반적으로 사용하지 않음)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void saveData_Lyric(object sender, EventArgs e)
+        {
+            saveCCMData(true);
+        }
+
+        public void saveCCMData(bool isImmediate)
         {
             CCMs.Sort((a, b) => a.songTitle.CompareTo(b.songTitle));
 
@@ -99,10 +112,20 @@ namespace BibleProjector_WPF.module.Data
                 str.AppendLine(SEPARATOR);
             }
 
-            e.saveDataFunc(SaveDataTypeEnum.LyricData, str.ToString());
+            ProgramData.saveData(SaveDataTypeEnum.LyricData, str.ToString(), isImmediate);
         }
 
-        public void saveData_Hymn(object sender, Event.SaveDataEventArgs e)
+        /// <summary>
+        /// 시스템 이벤트에 의한 저장메소드입니다. (일반적으로 사용하지 않음)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void saveData_Hymn(object sender, EventArgs e)
+        {
+            saveHymnData(true);
+        }
+
+        public void saveHymnData(bool isImmediate)
         {
             StringBuilder str = new StringBuilder(50).Clear();
 
@@ -117,7 +140,7 @@ namespace BibleProjector_WPF.module.Data
                 str.Append(SEPARATOR);
             }
 
-            e.saveDataFunc(SaveDataTypeEnum.HymnData, str.ToString());
+            ProgramData.saveData(SaveDataTypeEnum.HymnData, str.ToString(), isImmediate);
         }
 
         // ============================================== 예약값 추출 지원 ==============================================

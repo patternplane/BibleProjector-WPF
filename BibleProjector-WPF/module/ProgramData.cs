@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using System.IO;
 using System.Diagnostics;
+using System.Threading;
 
 namespace BibleProjector_WPF.module
 {
@@ -67,14 +68,89 @@ namespace BibleProjector_WPF.module
 
         // =========================================== 프로그램 종료시 ===========================================
 
-        static public event Event.SaveDataEventHandler SaveDataEvent;
+        static public event EventHandler SaveDataEvent;
 
         static public void saveProgramData()
         {
-            SaveDataEvent?.Invoke(null, new Event.SaveDataEventArgs(saveData));
+            SaveDataEvent?.Invoke(null, null);
         }
 
-        static void saveData(SaveDataTypeEnum type, string data)
+        static public void saveData(SaveDataTypeEnum type, string data, bool isImmidiate)
+        {
+            if (fileAccessor == null)
+            {
+                fileAccessor = new Thread(fileAccess);
+                fileAccessor.IsBackground = true;
+                fileAccessor.Start();
+            }
+
+            if (isImmidiate)
+            {
+                saveImmidiatly(type, data);
+            }
+            else
+            {
+                reserveSaveItem(type, data);
+            }
+        }
+
+        // =========================================== 별도 스레드에 의한 저장 처리 =========================================== 
+
+        static readonly int SAVE_DELAY_TIMESPAN = 3;
+
+        static object fileSaveLockObject = new object();
+        static Thread fileAccessor = null;
+        static Dictionary<SaveDataTypeEnum, (string data, DateTime setTime)> saveList = new Dictionary<SaveDataTypeEnum, (string, DateTime)>();
+
+        /// <summary>
+        /// 지연된 저장을 별도 스레드로 처리하기 위한 스레드 함수
+        /// </summary>
+        static private void fileAccess()
+        {
+            while (true)
+            {
+                lock (fileSaveLockObject)
+                {
+                    List<SaveDataTypeEnum> doneKey = new List<SaveDataTypeEnum>();
+                    foreach (SaveDataTypeEnum type in saveList.Keys)
+                    {
+                        if ((DateTime.Now - saveList[type].setTime).Seconds >= SAVE_DELAY_TIMESPAN)
+                        {
+                            save(type, saveList[type].data);
+                            doneKey.Add(type);
+                        }
+                    }
+                    foreach(SaveDataTypeEnum type in doneKey)
+                        saveList.Remove(type);
+                }
+            }
+        }
+
+        static private void reserveSaveItem(SaveDataTypeEnum type, string data)
+        {
+            lock (fileSaveLockObject)
+            {
+                if (saveList.ContainsKey(type))
+                {
+                    saveList[type] = (data, DateTime.Now);
+                }
+                else
+                {
+                    saveList.Add(type, (data, DateTime.Now));
+                }
+            }
+        }
+
+        static private void saveImmidiatly(SaveDataTypeEnum type, string data)
+        {
+            lock (fileSaveLockObject)
+            {
+                saveList.Remove(type);
+                save(type, data);
+            }
+        }
+
+        static private void save(SaveDataTypeEnum type, string data)
         {
             string savePath = null;
 

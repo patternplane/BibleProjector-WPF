@@ -30,8 +30,12 @@ namespace BibleProjector_WPF.module
             getReserveData();
         }
 
+        private bool isLoading = false;
+
         void getReserveData()
         {
+            isLoading = true;
+
             string[] rawData = ProgramData.getReserveData()
                 .Split(new string[] { "§", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -53,10 +57,22 @@ namespace BibleProjector_WPF.module
                     data = null;
                 }
             }
+
+            isLoading = false;
         }
 
-        public void saveData(object sender, Event.SaveDataEventArgs e)
+        public void saveData(object sender, EventArgs e)
         {
+            saveData(true);
+        }
+
+        private void saveData(bool isImmidiate)
+        {
+            // 데이터 불러오는 중의 변경사항은 다시 저장할 필요 없으므로
+            // 저장과정 생략
+            if (isLoading)
+                return;
+
             StringBuilder str = new StringBuilder(50);
             int type;
             int saveData;
@@ -80,7 +96,7 @@ namespace BibleProjector_WPF.module
                     saveData = pptDataManager.getReserveInfoByItem(item);
                 }
 
-                if (type != -1) 
+                if (type != -1)
                 {
                     str.Append(type);
                     str.Append("§");
@@ -89,7 +105,7 @@ namespace BibleProjector_WPF.module
                 }
             }
 
-            e.saveDataFunc(SaveDataTypeEnum.ReserveData, str.ToString());
+            ProgramData.saveData(SaveDataTypeEnum.ReserveData, str.ToString(), isImmidiate);
         }
 
         // ======================= List Update Event =======================
@@ -103,6 +119,7 @@ namespace BibleProjector_WPF.module
             reserveList.Add(data);
 
             ListChangedEvent?.Invoke(sender, new Event.ReserveListChangedEventArgs(new Data.ShowData[] { data }));
+            saveData(false);
         }
 
         void deleteItems(int[] dataIdxs)
@@ -127,6 +144,7 @@ namespace BibleProjector_WPF.module
             deleteItems(dataIdxs);
 
             ListChangedEvent.Invoke(sender, new Event.ReserveListChangedEventArgs(Event.ReserveListUpdateType.Delete, dataIdxs));
+            saveData(false);
         }
 
         /// <summary>
@@ -153,6 +171,7 @@ namespace BibleProjector_WPF.module
                 reserveList.Insert(pos, moveitems[i]);
 
             ListChangedEvent.Invoke(sender, new Event.ReserveListChangedEventArgs(Event.ReserveListUpdateType.Move, dataIdxs, pos));
+            saveData(false);
         }
     }
 }

@@ -329,25 +329,50 @@ namespace BibleProjector_WPF.ViewModel
 
         public void RunCompleteModify()
         {
+            bool isUpdated = false;
+
             if (needCheckNewLine_title)
             {
                 currentLyricTitle = module.StringModifier.makeCorrectNewline(currentLyricTitle);
                 needCheckNewLine_title = false;
+                isUpdated = true;
             }
             if (needCheckNewLine_Content)
             {
                 currentLyricContent = module.StringModifier.makeCorrectNewline(currentLyricContent);
                 needCheckNewLine_Content = false;
+                isUpdated = true;
             }
-            
-            if (lastSearchPattern != null)
-                if (currentLyric != null)
+
+            if (currentLyric != null)
+            {
+                if (isUpdated)
+                {
+                    if (currentLyric.songType == module.Data.SongDataTypeEnum.CCM)
+                        songManager.saveCCMData(false);
+                    if (currentLyric.songType == module.Data.SongDataTypeEnum.HYMN)
+                        songManager.saveHymnData(false);
+                }
+
+                if (lastSearchPattern != null)
                     refreshSearchItem(currentLyric, lastSearchPattern);
+            }
         }
 
         public void RunApplyHymnModify()
         {
             VerseContent = module.StringModifier.makeCorrectNewline(VerseContent);
+
+            if (HymnSelection != null)
+            {
+                if (HymnSelection.songType == module.Data.SongDataTypeEnum.CCM)
+                {
+                    songManager.saveCCMData(false);
+                    module.ProgramData.writeErrorLog("찬송가 수정 메소드 내에서 ccm 데이터가 변경됨! (LyricViewModel.RunApplyHymnModify)");
+                }
+                if (HymnSelection.songType == module.Data.SongDataTypeEnum.HYMN)
+                    songManager.saveHymnData(false);
+            }
         }
 
         public void RunAddReserveFromSelection()

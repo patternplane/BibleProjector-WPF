@@ -27,17 +27,33 @@ namespace BibleProjector_WPF.module
 
         const string SEPARATOR = "∂";
 
+        private bool isLoading = false;
+
         void getSaveData()
         {
+            isLoading = true;
+
             string[] rawData = ProgramData.getExternPPTData().Split(new string[] { SEPARATOR }, StringSplitOptions.None);
 
             for (int i = 0; i < PPT_LIST_LENGTH && i < rawData.Length; i++)
                 if (CanAddPPT(rawData[i]) == 0)
                     AddPPT(rawData[i],i);
+
+            isLoading = false;
         }
 
-        public void saveData(object sender, Event.SaveDataEventArgs e)
+        public void saveData(object sender, EventArgs e)
         {
+            saveData(true);
+        }
+
+        private void saveData(bool isImmidiate)
+        {
+            // 데이터 불러오는 중의 변경사항은 다시 저장할 필요 없으므로
+            // 저장과정 생략
+            if (isLoading)
+                return;
+
             StringBuilder str = new StringBuilder(10);
 
             for (int i = 0; i < ExternPPTList.Length; i++)
@@ -48,7 +64,7 @@ namespace BibleProjector_WPF.module
                     str.Append(SEPARATOR);
             }
 
-            e.saveDataFunc(SaveDataTypeEnum.ExternPPTData, str.ToString());
+            ProgramData.saveData(SaveDataTypeEnum.ExternPPTData, str.ToString(), isImmidiate);
         }
 
         // ================================== 메서드 ===========================
@@ -111,6 +127,7 @@ namespace BibleProjector_WPF.module
         {
             ExternPPTData addedData = new ExternPPTData(pptFullPath);
             ExternPPTList[posId] = addedData;
+            saveData(false);
             return addedData;
         }
 
@@ -119,6 +136,7 @@ namespace BibleProjector_WPF.module
             ExternPPTList[posId].deleteProcess();
             ExternPPTList[posId].UnlinkPPT();
             ExternPPTList[posId] = null;
+            saveData(false);
         }
 
         public ExternPPTData getMyData(int idx)

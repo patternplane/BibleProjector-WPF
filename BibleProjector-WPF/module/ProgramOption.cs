@@ -57,22 +57,24 @@ namespace BibleProjector_WPF.module
 
         // ======================================= 옵션값 =======================================
 
-        static public int Bible_CharPerLine { get; set; } = 20;
-        static public int Bible_LinePerSlide { get; set; } = 5;
+        static private int _Bible_CharPerLine = 20;
+        static public int Bible_CharPerLine { get { return _Bible_CharPerLine; } set { _Bible_CharPerLine = value; saveData(false); } }
+        static private int _Bible_LinePerSlide = 5; 
+        static public int Bible_LinePerSlide { get { return _Bible_LinePerSlide; } set { _Bible_LinePerSlide = value; saveData(false); } }
 
-        static public int Song_LinePerSlide { get; set; } = 2;
+        static private int _Song_LinePerSlide = 2;
+        static public int Song_LinePerSlide { get { return _Song_LinePerSlide; } set { _Song_LinePerSlide = value; saveData(false); } }
 
-        static public string BibleFramePath { get; set; } = null;
-        static public string ReadingFramePath { get; set; } = null;
+        static public string _BibleFramePath = null;
+        static public string BibleFramePath { get { return _BibleFramePath; } set { _BibleFramePath = value; saveData(false); } }
+        static public string _ReadingFramePath = null;
+        static public string ReadingFramePath { get { return _ReadingFramePath; } set { _ReadingFramePath = value; saveData(false); } }
         static public BindingList<SongFrameFile> SongFrameFiles { get; set; } = new BindingList<SongFrameFile>();
 
-        static public void test(SongFrameFile f)
-        {
-            SongFrameFiles.Add(f);
-        }
-
-        static public SongFrameFile DefaultCCMFrame { get; set; } = null;
-        static public SongFrameFile DefaultHymnFrame { get; set; } = null;
+        static public SongFrameFile _DefaultCCMFrame = null;
+        static public SongFrameFile DefaultCCMFrame { get { return _DefaultCCMFrame; } set { _DefaultCCMFrame = value; saveData(false); } }
+        static public SongFrameFile _DefaultHymnFrame = null;
+        static public SongFrameFile DefaultHymnFrame { get { return _DefaultHymnFrame; } set { _DefaultHymnFrame = value; saveData(false); } }
 
         // ======================================= PPT 틀 관리 관련 =======================================
 
@@ -112,6 +114,8 @@ namespace BibleProjector_WPF.module
         {
             SongFrameFiles.Add(new SongFrameFile(newFilePath, isCCM, isHymn));
             Powerpoint.Song.setPresentation(newFilePath);
+
+            saveData(false);
         }
 
         static public void deleteSongFrameFiles(int[] itemIndexes_sorted)
@@ -122,6 +126,8 @@ namespace BibleProjector_WPF.module
                 Powerpoint.Song.closeSingle(SongFrameFiles[itemIndexes_sorted[i]].Path);
                 SongFrameFiles.RemoveAt(itemIndexes_sorted[i]);
             }
+
+            saveData(false);
         }
 
         // ======================================= 찬양PPT틀 사용 가능성 확인 =======================================
@@ -205,11 +211,15 @@ namespace BibleProjector_WPF.module
         const int IS_CCM_FRAME = 1;
         const int IS_HYMN_FRAME = 2;
 
+        static private bool isLoading = false;
+
         static void loadSavedData()
         {
             string[] items = ProgramData.getOptionData().Split(new string[] { SEPARATOR }, StringSplitOptions.None);
             if (items.Length == 1)
                 return;
+
+            isLoading = true;
             
             if (items[0].CompareTo("") != 0)
                 Bible_CharPerLine = int.Parse(items[0]);
@@ -262,10 +272,21 @@ namespace BibleProjector_WPF.module
                 }
             }
 
+            isLoading = false;
         }
 
-        static public void saveData(object sender, Event.SaveDataEventArgs e)
+        static public void saveData(object sender, EventArgs e)
         {
+            saveData(true);
+        }
+
+        static private void saveData(bool isImmidiate)
+        {
+            // 데이터 로드중이면 저장값을 즉시 읽어오고 변동은 없는 상태이므로
+            // 이 저장과정은 불필요하다.(생략)
+            if (isLoading)
+                return;
+
             StringBuilder str = new StringBuilder(10);
             
             str.Append(Bible_CharPerLine.ToString());
@@ -284,7 +305,7 @@ namespace BibleProjector_WPF.module
                 str.Append(f.Path);
             }
 
-            e.saveDataFunc(SaveDataTypeEnum.OptionData, str.ToString());
+            ProgramData.saveData(SaveDataTypeEnum.OptionData, str.ToString(), isImmidiate);
         }
     }
 }
