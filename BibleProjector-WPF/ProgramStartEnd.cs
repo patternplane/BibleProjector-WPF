@@ -176,16 +176,23 @@ namespace BibleProjector_WPF
         public void doPostProcess_byNonError()
         {
             Console.WriteLine("프로그램 정상 종료");
+
+            postProcess();
         }
 
         public void doPostProcess_byError()
         {
             Console.WriteLine("프로그램 에러 종료");
 
-            module.ProgramData.saveProgramData();
-            Powerpoint.FinallProcess();
+            postProcess();
 
             System.Windows.MessageBox.Show("프로그램을 종료합니다.");
+        }
+
+        private void postProcess()
+        {
+            module.ProgramData.saveProgramData();
+            Powerpoint.FinallProcess();
         }
     }
 }

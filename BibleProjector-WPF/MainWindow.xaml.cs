@@ -217,18 +217,5 @@ namespace BibleProjector_WPF
         {
             windowActivateChangedEventManager.invoke(false);
         }
-
-        // =================================================== 프로그램 종료 처리 ======================================================
-
-        ~MainWindow()
-        {
-            programOut();
-        }
-
-        public void programOut()
-        {
-            module.ProgramData.saveProgramData();
-            Powerpoint.FinallProcess();
-        }
     }
 }
