@@ -1319,6 +1319,7 @@ namespace BibleProjector_WPF
                 {
                     bi = new System.Windows.Media.Imaging.BitmapImage();
                     bi.BeginInit();
+                    bi.CreateOptions = System.Windows.Media.Imaging.BitmapCreateOptions.IgnoreImageCache;
                     bi.UriSource = new Uri(f.FullName, UriKind.Absolute);
                     bi.CacheOption = System.Windows.Media.Imaging.BitmapCacheOption.OnLoad;
                     bi.EndInit();
