@@ -26,8 +26,8 @@ namespace BibleProjector_WPF.module
             get { return _isCCMFrame; }
             set
             {
-                ProgramOption.setThisFrameToCCM(this,value);
                 _isCCMFrame = value;
+                ProgramOption.setThisFrameToCCM(this,value);
                 OnPropertyChanged("isCCMFrame");
             }
         }
@@ -37,8 +37,8 @@ namespace BibleProjector_WPF.module
             get { return _isHymnFrame; }
             set
             {
-                ProgramOption.setThisFrameToHymn(this,value);
                 _isHymnFrame = value;
+                ProgramOption.setThisFrameToHymn(this,value);
                 OnPropertyChanged("isHymnFrame");
             }
         }
