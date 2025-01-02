@@ -150,6 +150,8 @@ namespace BibleProjector_WPF.module
             }
         }
 
+        // =========================================== 파일 쓰기 =========================================== 
+
         static private void save(SaveDataTypeEnum type, string data)
         {
             string savePath = null;
@@ -173,9 +175,33 @@ namespace BibleProjector_WPF.module
             file.Close();
         }
 
-        // =========================================== 파일 쓰기 =========================================== 
+        static private string makeErrorLog(string data, Exception exc)
+        {
+            StringBuilder log = new StringBuilder();
 
-        static public void writeErrorLog(string data)
+            if (data != null)
+                log.Append(data).Append("\r\n\r\n");
+
+            if (exc != null)
+            {
+                log.AppendLine("예외 메세지 : ");
+                log.Append(exc.Message).AppendLine().AppendLine();
+                log.AppendLine("Evironment 스택 추적 : ");
+                log.Append(Environment.StackTrace).AppendLine().AppendLine();
+                log.AppendLine("Error 스택 추적 : ");
+                log.Append(exc.StackTrace);
+            }
+
+            return log.ToString();
+        }
+
+        /// <summary>
+        /// 에러 로그를 작성합니다.
+        /// <br/>[<paramref name="data"/>+줄바꿈x2]를 가장 먼저 표시하며, 만약 <paramref name="exc"/>가 존재하면 에러 정보도 함께 표시합니다.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="exc"></param>
+        static public void writeErrorLog(string data, Exception exc = null)
         {
             string time = (new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds()).ToString();
             string fileName = ERROR_LOG_OUTPUT + "\\" + time + ".txt";
@@ -187,7 +213,7 @@ namespace BibleProjector_WPF.module
             StreamWriter file = new StreamWriter(
                 fileName,
                 false);
-            file.Write(data);
+            file.Write(makeErrorLog(data, exc));
             file.Close();
         }
 
