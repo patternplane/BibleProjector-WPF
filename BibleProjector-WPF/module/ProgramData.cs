@@ -24,6 +24,7 @@ namespace BibleProjector_WPF.module
         const string OPTION_DATA = PROGRAM_DATA_PATH + "\\Option";
         const string RESERVE_DATA = PROGRAM_DATA_PATH + "\\ReserveData";
         const string EXTERN_PPT_DATA = PROGRAM_DATA_PATH + "\\ExternPPTpaths";
+        const string MANUAL_DATA = PROGRAM_DATA_PATH + "\\Manuals";
 
         // 에러 로그 출력 폴더
         const string ERROR_LOG_OUTPUT = PROGRAM_DATA_PATH + "\\errorLog";
@@ -224,7 +225,7 @@ namespace BibleProjector_WPF.module
         /// </summary>
         /// <param name="filePath">파일 경로</param>
         /// <returns>파일의 내용</returns>
-        static string getDataFromFile(string filePath)
+        private static string getDataFromFile(string filePath)
         {
             DirectoryInfo di = new DirectoryInfo(Path.GetDirectoryName(filePath));
             if (!di.Exists)
@@ -276,6 +277,11 @@ namespace BibleProjector_WPF.module
         public static string getExternPPTData()
         {
             return getDataFromFile(EXTERN_PPT_DATA);
+        }
+
+        public static string getManualData()
+        {
+            return getDataFromFile(MANUAL_DATA);
         }
 
         // 더 이상 추가 지원하지 않을 기능들
