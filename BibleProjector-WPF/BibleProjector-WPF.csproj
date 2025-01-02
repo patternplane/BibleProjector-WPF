@@ -46,6 +46,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System.Text.Json, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -65,161 +68,182 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="BibleModifyWindow.xaml.cs">
+    <Compile Include="Event\FrameDeleted.cs" />
+    <Compile Include="Event\ShowStart.cs" />
+    <Compile Include="Event\WindowActivateChangedEventManager.cs" />
+    <Compile Include="module\BibleDataManager.cs" />
+    <Compile Include="module\Data\BibleData.cs" />
+    <Compile Include="module\Data\BibleSearchData.cs" />
+    <Compile Include="module\Data\ExternPPTData.cs" />
+    <Compile Include="module\Data\ExternPPTSearchData.cs" />
+    <Compile Include="module\Data\MultiSearcher.cs" />
+    <Compile Include="module\Data\ShowContentData.cs" />
+    <Compile Include="module\Data\ShowData.cs" />
+    <Compile Include="module\Data\ShowExcuteErrorEnum.cs" />
+    <Compile Include="module\Data\SongDataTypeEnum.cs" />
+    <Compile Include="module\Data\SongManager.cs" />
+    <Compile Include="module\Data\SongSearchData.cs" />
+    <Compile Include="module\Data\SongSearcher.cs" />
+    <Compile Include="module\ExternPPTManager.cs" />
+    <Compile Include="module\ExternPPTSearcher.cs" />
+    <Compile Include="module\ISourceOfReserve.cs" />
+    <Compile Include="module\SaveDataTypeEnum.cs" />
+    <Compile Include="module\SearchData.cs" />
+    <Compile Include="module\Data\SongData.cs" />
+    <Compile Include="module\Data\SongContent.cs" />
+    <Compile Include="module\ISearcher.cs" />
+    <Compile Include="module\ReserveDataManager.cs" />
+    <Compile Include="ProgramStartEnd.cs" />
+    <Compile Include="RelayCommand.cs" />
+    <Compile Include="ReserveType.cs" />
+    <Compile Include="ReserveViewType.cs" />
+    <Compile Include="ShowContentType.cs" />
+    <Compile Include="Event\BibleSelectionEventManager.cs" />
+    <Compile Include="Event\KeyInputEventManager.cs" />
+    <Compile Include="ViewModel\MainPage\VMBibleSeletion.cs" />
+    <Compile Include="ViewModel\MainPage\VMExternPPTEditButton.cs" />
+    <Compile Include="ViewModel\MainPage\VMReserveData.cs" />
+    <Compile Include="ViewModel\MainPage\VMReserveList.cs" />
+    <Compile Include="ViewModel\MainPage\VMSearchResult.cs" />
+    <Compile Include="ViewModel\MainPage\VMControlPage.cs" />
+    <Compile Include="ViewModel\MainPage\VMOptionBar.cs" />
+    <Compile Include="ViewModel\MainPage\VMSearchControl.cs" />
+    <Compile Include="ViewModel\MainPage\VMShowControler.cs" />
+    <Compile Include="ViewModel\MainPage\VMMain.cs" />
+    <Compile Include="ViewModel\MainPage\VMShowItem.cs" />
+    <Compile Include="ViewModel\ViewModel.cs" />
+    <Compile Include="ViewModel\VMMainWindow.cs" />
+    <Compile Include="View\BibleModifyWindow.xaml.cs">
       <DependentUpon>BibleModifyWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CloseButtonDisabler.cs" />
     <Compile Include="Event\ReserveListChanged.cs" />
-    <Compile Include="ExternPPT.xaml.cs">
-      <DependentUpon>ExternPPT.xaml</DependentUpon>
+    <Compile Include="View\MainPage\AdditionalContentButton.xaml.cs">
+      <DependentUpon>AdditionalContentButton.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ManualTab.xaml.cs">
+    <Compile Include="View\MainPage\BibleSelectionView.xaml.cs">
+      <DependentUpon>BibleSelectionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainPage\ControlView.xaml.cs">
+      <DependentUpon>ControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainPage\ExternPPTFileDialog.cs" />
+    <Compile Include="View\MainPage\ExternPPTSetter.xaml.cs">
+      <DependentUpon>ExternPPTSetter.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainPage\MainOption.xaml.cs">
+      <DependentUpon>MainOption.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainPage\MainView.xaml.cs">
+      <DependentUpon>MainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainPage\ReserveItem.xaml.cs">
+      <DependentUpon>ReserveItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainPage\ReserveItemTemplateSelector.cs" />
+    <Compile Include="View\MainPage\ReserverListView.xaml.cs">
+      <DependentUpon>ReserverListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainPage\SearchView.xaml.cs">
+      <DependentUpon>SearchView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainPage\ShowControler.xaml.cs">
+      <DependentUpon>ShowControler.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainPage\ShowControllerBrush2Converter.cs" />
+    <Compile Include="View\MainPage\ShowControllerBrushConverter.cs" />
+    <Compile Include="View\MainPage\ShowItemColor.cs" />
+    <Compile Include="View\MainPage\VisibilityConverter.cs" />
+    <Compile Include="View\ManualTab.xaml.cs">
       <DependentUpon>ManualTab.xaml</DependentUpon>
     </Compile>
-    <Compile Include="module\ControlWindowManager.cs" />
-    <Compile Include="module\ExternPPTManager.cs" />
-    <Compile Include="module\LayoutInfo.cs" />
+    <Compile Include="module\BibleSearcher.cs" />
+    <Compile Include="module\KorString.cs" />
+    <Compile Include="module\LevenshteinDistance.cs" />
     <Compile Include="module\ManualData.cs" />
     <Compile Include="module\ProgramOption.cs" />
-    <Compile Include="module\ReserveDataUnits.cs" />
     <Compile Include="module\ShowStarter.cs" />
-    <Compile Include="Option.xaml.cs">
+    <Compile Include="module\CharCompare.cs" />
+    <Compile Include="View\Option.xaml.cs">
       <DependentUpon>Option.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ExternPPTControl.xaml.cs">
-      <DependentUpon>ExternPPTControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ProgramStartLoading.xaml.cs">
+    <Compile Include="View\ProgramStartLoading.xaml.cs">
       <DependentUpon>ProgramStartLoading.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ReserveManagerWindow.xaml.cs">
-      <DependentUpon>ReserveManagerWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ReserveOptionViews\Bible.xaml.cs">
-      <DependentUpon>Bible.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ReserveOptionViews\ExternPPT.xaml.cs">
-      <DependentUpon>ExternPPT.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ReserveOptionViews\Null.xaml.cs">
-      <DependentUpon>Null.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ReserveOptionViews\Reading.xaml.cs">
-      <DependentUpon>Reading.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ReserveOptionViews\Song.xaml.cs">
-      <DependentUpon>Song.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ReserveUnitBox.xaml.cs">
-      <DependentUpon>ReserveUnitBox.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SongControl.xaml.cs">
-      <DependentUpon>SongControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ReadingControl.xaml.cs">
-      <DependentUpon>ReadingControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="BibleControl.xaml.cs">
-      <DependentUpon>BibleControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="LyricControl.xaml.cs">
+    <Compile Include="View\LyricControl.xaml.cs">
       <DependentUpon>LyricControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="module\ProgramData.cs" />
     <Compile Include="module\StringModifier.cs" />
     <Compile Include="module\StringKMP.cs" />
-    <Compile Include="ManualContent.xaml.cs">
+    <Compile Include="View\ManualContent.xaml.cs">
       <DependentUpon>ManualContent.xaml</DependentUpon>
     </Compile>
     <Compile Include="UnitTester\Tester.cs" />
     <Compile Include="ViewModel\BibleModifyViewModel.cs" />
-    <Compile Include="ViewModel\ExternPPTViewModel.cs" />
     <Compile Include="ViewModel\ManualTabViewModel.cs" />
     <Compile Include="ViewModel\OptionViewModel.cs" />
-    <Compile Include="ViewModel\ExternPPTControlViewModel.cs" />
-    <Compile Include="ViewModel\ReserveDataManager.cs" />
-    <Compile Include="ViewModel\ReserveManagerViewModel.cs" />
-    <Compile Include="ViewModel\ReserveOptionViewModels\Bible.cs" />
-    <Compile Include="ViewModel\ReserveOptionViewModels\ExternPPT.cs" />
-    <Compile Include="ViewModel\ReserveOptionViewModels\Null.cs" />
-    <Compile Include="ViewModel\ReserveOptionViewModels\Reading.cs" />
-    <Compile Include="ViewModel\ReserveOptionViewModels\IReserveOptionViewModel.cs" />
-    <Compile Include="ViewModel\ReserveOptionViewModels\Song.cs" />
-    <Compile Include="ViewModel\SongControlViewModel.cs" />
-    <Compile Include="ViewModel\ReadingControlViewModel.cs" />
-    <Compile Include="ViewModel\BibleControlViewModel.cs" />
-    <Compile Include="ViewModel\BibleCurrentSelectingData.cs" />
-    <Compile Include="ViewModel\BibleReserveData.cs" />
-    <Compile Include="ViewModel\BibleSelectData.cs" />
     <Compile Include="ViewModel\LyricViewModel.cs" />
-    <Compile Include="ExternPPTLoading.xaml.cs">
-      <DependentUpon>ExternPPTLoading.xaml</DependentUpon>
-    </Compile>
-    <Page Include="BibleModifyWindow.xaml">
+    <Page Include="ViewMapDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ExternPPT.xaml">
+    <Page Include="View\BibleModifyWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ManualTab.xaml">
+    <Page Include="View\MainPage\AdditionalContentButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Option.xaml">
+    <Page Include="View\MainPage\BibleSelectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ExternPPTControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="ProgramStartLoading.xaml">
+    <Page Include="View\MainPage\ControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ReserveManagerWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="ReserveOptionViews\Bible.xaml">
+    <Page Include="View\MainPage\ExternPPTSetter.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ReserveOptionViews\ExternPPT.xaml">
+    <Page Include="View\MainPage\MainOption.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ReserveOptionViews\Null.xaml">
+    <Page Include="View\MainPage\MainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ReserveOptionViews\Reading.xaml">
+    <Page Include="View\MainPage\ReserveItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ReserveOptionViews\Song.xaml">
+    <Page Include="View\MainPage\ReserverListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ReserveUnitBox.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="SongControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="ReadingControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="BibleControl.xaml">
+    <Page Include="View\MainPage\SearchView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="LyricControl.xaml">
+    <Page Include="View\MainPage\ShowControler.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ManualTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Option.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ProgramStartLoading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\LyricControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -231,17 +255,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="module\BibleButtonData.cs" />
     <Compile Include="module\Database.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="ExternPPTLoading.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ManualContent.xaml">
+    <Page Include="View\ManualContent.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -286,11 +305,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="아이콘2.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="1.1.1.0 아이콘.ico" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

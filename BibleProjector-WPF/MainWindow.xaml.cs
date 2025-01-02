@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -14,8 +14,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using System.ComponentModel;
-using BibleProjector_WPF.ViewModel;
-using System.Collections.ObjectModel;
 
 namespace BibleProjector_WPF
 {
@@ -24,563 +22,200 @@ namespace BibleProjector_WPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        // 교독문
-
-        // 교독문 리스트
-        BindingList<String> ReadingList;
-
-        // 성경
-
-        // 신구약 버튼들
-        BindingList<BibleTitleData> OldTestButtons;
-        BindingList<BibleTitleData> NewTestButtons;
-        // 장 번호 리스트
-        BindingList<int> ChapterNumberList;
-        // 절 번호 리스트
-        BindingList<int> VerseNumberList;
-
-
-        // 현재 선택된 데이터
-        ViewModel.BibleSelectData VM_BibleSelectData;
-        ViewModel.BibleCurrentSelectingData VM_BibleCurrentSelectingData;
-        // 예약 정보
-        ViewModel.BibleReserveData VM_BibleReserveData;
-
-
-        // 설정 창
-        BibleModifyWindow SubWindow_BibleModify = null;
-
-        // 예약 창
-        ReserveManagerWindow Window_Reserve = null;
-
-        public static MainWindow ProgramMainWindow = null;
-
-        // =================================================== 윈도우 레이아웃 변경 ======================================================
-
-        public void ResetLayout()
-        {
-            this.Width = 1053.488;
-            this.Height = 612.79;
-        }
-
-        void changeSize(object sender, SizeChangedEventArgs e)
-        {
-            module.LayoutInfo.Layout_MainWindow.Width = this.ActualWidth;
-            module.LayoutInfo.Layout_MainWindow.Height = this.ActualHeight;
-            module.LayoutInfo.Layout_MainWindow.x = this.Left;
-            module.LayoutInfo.Layout_MainWindow.y = this.Top;
-        }
-
-        void changeLocate(object sender, EventArgs e)
-        {
-            module.LayoutInfo.Layout_MainWindow.Width = this.ActualWidth;
-            module.LayoutInfo.Layout_MainWindow.Height = this.ActualHeight;
-            module.LayoutInfo.Layout_MainWindow.x = this.Left;
-            module.LayoutInfo.Layout_MainWindow.y = this.Top;
-        }
 
         // =================================================== 프로그램 시작 처리 ======================================================
 
-        public MainWindow()
+        private Thread monitorDetector = null;
+
+        public MainWindow(object VM_MainWindow)
         {
-            // 프로그램 로딩 창
-            ProgramStartLoading startLodingWindow = new ProgramStartLoading();
-            startLodingWindow.Show();
-
-            ProgramMainWindow = this;
-
-            Database.DatabaseInitailize();
-            module.ProgramOption.Initialize();
-            module.LayoutInfo.Initialize();
-
-            string error = Powerpoint.Initialize();
-            if (error.CompareTo("") != 0)
-                MessageBox.Show("다음을 확인해주세요 : \r\n" + error, "ppt틀 등록되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
-            
             InitializeComponent();
+            this.DataContext = VM_MainWindow;
 
-            BibleInitialize();
-            ReadingInitialize();
-            ReserveInitialize();
+            this.SetBinding(keyInputEventManagerProperty, new Binding("keyInputEventManager"));
+            this.SetBinding(windowActivateChangedEventManagerProperty, new Binding("windowActivateChangedEventManager"));
 
-            setLayout();
+            setMinSize();
+            setInnerContentSize();
 
-            // 프로그램 로딩 창 종료
-            startLodingWindow.Close();
+            monitorDetector = new Thread(monitorSizeDetector) { IsBackground = true };
+            monitorDetector.Start();
         }
 
-        void BibleInitialize()
+        // =================================================== 윈도우 리사이징 처리 ======================================================
+
+        private const double DEFALT_W = 1475.0;
+        private const double DEFALT_H = 830.0;
+
+        private void monitorSizeDetector()
         {
-            SetBibleButtons();
-            SetBibleChapterVerse();
-            SetBibleReserveButtons();
+            double monitorHeight = SystemParameters.PrimaryScreenHeight;
+            double monitorWidth = SystemParameters.PrimaryScreenWidth;
 
-            VM_BibleCurrentSelectingData = new ViewModel.BibleCurrentSelectingData();
+            Action task = new Action(this.setMinSize);
 
-            Bible_CurrentDisplayTextBoxies_Grid.DataContext = VM_BibleSelectData = new ViewModel.BibleSelectData();
-
-            BibleReserveListBox.DataContext = VM_BibleReserveData = new ViewModel.BibleReserveData();
+            while (true)
+                if (monitorHeight != SystemParameters.PrimaryScreenHeight
+                    || monitorWidth != SystemParameters.PrimaryScreenWidth) {
+                    this.Dispatcher.BeginInvoke(task);
+                    monitorHeight = SystemParameters.PrimaryScreenHeight;
+                    monitorWidth = SystemParameters.PrimaryScreenWidth;
+                }
         }
 
-        void ReadingInitialize()
+        private void setMinSize()
         {
-            SetReadingList();
-        }
+            double ratio = 0.8;
 
-        void ReserveInitialize()
-        {
-            Window_Reserve = new ReserveManagerWindow();
-            Window_Reserve.Show();
-        }
-
-        void setLayout()
-        {
-            if (module.LayoutInfo.Layout_MainWindow.Width == -1)
-                return;
-
-            this.Width = module.LayoutInfo.Layout_MainWindow.Width;
-            this.Height = module.LayoutInfo.Layout_MainWindow.Height;
-            this.Left = module.LayoutInfo.Layout_MainWindow.x;
-            this.Top = module.LayoutInfo.Layout_MainWindow.y;
-        }
-
-        // =================================================== 프로그램 종료 처리 ======================================================
-
-        ~MainWindow()
-        {
-            programOut();
-        }
-
-        public void programOut()
-        {
-            module.ProgramData.saveProgramData();
-            Powerpoint.FinallProcess();
-        }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            new module.ControlWindowManager().ForceClose();
-
-            if (SubWindow_BibleModify != null)
-                SubWindow_BibleModify.ForceClose();
-            if (Window_Reserve != null)
-                Window_Reserve.ForceClose();
-
-            base.OnClosing(e);
-        }
-
-        // ========================================= 교독문 ============================================
-
-        // ======================================== 세팅
-
-        void SetReadingList()
-        {
-            ReadingList = new BindingList<string>(Database.getReadingTitles());
-            ReadingListBox.ItemsSource = ReadingList;
-        }
-
-        // ========================================= 성경 ============================================
-
-        // ======================================== 세팅
-
-        void SetBibleButtons()
-        {
-            OldTestButtons = new BindingList<BibleTitleData>();
-            Bible_OldTestButtons_ItemsControl.ItemsSource = OldTestButtons;
-
-            NewTestButtons = new BindingList<BibleTitleData>();
-            Bible_NewTestButtons_ItemsControl.ItemsSource = NewTestButtons;
-
-            BibleTitleData[] titleData = Database.getBibleTitlesData();
-
-            for (int i = 0; i < 39; i++)
-                OldTestButtons.Add(titleData[i]);
-            for (int i = 39; i < 66; i++)
-                NewTestButtons.Add(titleData[i]);
-        }
-
-        void SetBibleChapterVerse()
-        {
-            ChapterNumberList = new BindingList<int>();
-            VerseNumberList = new BindingList<int>();
-
-            Bible_Chapter_ListBox.ItemsSource = ChapterNumberList;
-            Bible_Verse_ListBox.ItemsSource = VerseNumberList;
-
-            Bible_Chapter_ListBox.SelectionChanged += ChapterListBox_SelectedChanged;
-            Bible_Chapter_ListBox.GotFocus += ChapterListBox_GotFocus;
-            Bible_Verse_ListBox.SelectionChanged += VerseListBox_SelectedChanged;
-            Bible_Verse_ListBox.GotFocus += VerseListBox_GotFocus;
-        }
-
-        void SetBibleReserveButtons()
-        {
-            BibleReserveAddButton.Click += BibleReserveAddButton_Click;
-            BibleReserveDeleteButton.Click += BibleReserveDeleteButton_Click;
-            BibleReserveItemUpButton.Click += BibleReserveItemUpButton_Click;
-            BibleReserveItemDownButton.Click += BibleReserveItemDownButton_Click;
-
-            BibleReserveListBox.GotFocus += BibleReserveListBox_GotFocus;
-            BibleReserveListBox.SelectionChanged += BibleReserveListBox_SelectionChanged;
-            BibleReserveListBox.KeyDown += BibleReserveListBox_KeyDown;
-        }
-
-        // ======================================== 성경 선택 처리
-
-        // 성경선택버튼 조작
-        void BibleButton_Click(object sender, RoutedEventArgs e)
-        {
-            string BibleNumber = ((Button)sender).Tag.ToString().PadLeft(2, '0');
-
-            if (BibleNumber.CompareTo(VM_BibleCurrentSelectingData.Book) != 0)
+            if (DEFALT_H / DEFALT_W > SystemParameters.PrimaryScreenHeight / SystemParameters.PrimaryScreenWidth)
             {
-                ChapterNumberList.Clear();
-                for (int i = 1, chapterCount = Database.getChapterCount(BibleNumber); i <= chapterCount; i++)
-                    ChapterNumberList.Add(i);
-                VerseNumberList.Clear();
-
-                VM_BibleSelectData.Book = VM_BibleCurrentSelectingData.Book = BibleNumber;
-                VM_BibleSelectData.Chapter = VM_BibleCurrentSelectingData.Chapter = "";
-                VM_BibleSelectData.Verse = VM_BibleCurrentSelectingData.Verse = "";
+                double h = SystemParameters.PrimaryScreenHeight * ratio;
+                WindowContent.MinHeight = h;
+                WindowContent.MinWidth = h * DEFALT_W / DEFALT_H;
             }
             else
             {
-                VM_BibleSelectData.Book = VM_BibleCurrentSelectingData.Book;
-                VM_BibleSelectData.Chapter = VM_BibleCurrentSelectingData.Chapter;
-                VM_BibleSelectData.Verse = VM_BibleCurrentSelectingData.Verse;
+                double w = SystemParameters.PrimaryScreenWidth * ratio;
+                WindowContent.MinHeight = w * DEFALT_H / DEFALT_W;
+                WindowContent.MinWidth = w;
             }
+
+            this.MinHeight = WindowContent.MinHeight + (this.ActualHeight - WindoeInnerGrid.ActualHeight);
+            this.MinWidth = WindowContent.MinWidth + (this.ActualWidth - WindoeInnerGrid.ActualWidth);
         }
 
-        // 성경 장 선택 조작
-        void ChapterListBox_SelectedChanged(object sender, SelectionChangedEventArgs e)
+        private void setInnerContentSize()
         {
-            ListBox chapterListbox = (ListBox)sender;
-            if (chapterListbox.SelectedIndex != -1)
-            {
-                string chapterNumber = (chapterListbox.SelectedIndex + 1).ToString("000");
-                VM_BibleSelectData.Book = VM_BibleCurrentSelectingData.Book;
-                VM_BibleSelectData.Chapter = VM_BibleCurrentSelectingData.Chapter = chapterNumber;
-                VM_BibleSelectData.Verse = VM_BibleCurrentSelectingData.Verse = "";
+            double h = WindowContent.ActualHeight;
+            double w = WindowContent.ActualWidth;
 
-                VerseNumberList.Clear();
-                for (int i = 1, verseCount = Database.getVerseCount(VM_BibleSelectData.Book + chapterNumber); i <= verseCount; i++)
-                    VerseNumberList.Add(i);
-            }
-        }
-        void ChapterListBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            ListBox chapterListbox = (ListBox)sender;
-            if (chapterListbox.SelectedIndex != -1)
-            {
-                string chapterNumber = (chapterListbox.SelectedIndex + 1).ToString("000");
+            if (h == 0 || w == 0)
+                return;
 
-                if (chapterNumber.CompareTo(VM_BibleCurrentSelectingData.Chapter) != 0)
+            foreach (FrameworkElement f in RatioSizeElements)
+            {
+                if (h / w > DEFALT_H / DEFALT_W)
                 {
-                    VM_BibleSelectData.Book = VM_BibleCurrentSelectingData.Book;
-                    VM_BibleSelectData.Chapter = VM_BibleCurrentSelectingData.Chapter = chapterNumber;
-                    VM_BibleSelectData.Verse = VM_BibleCurrentSelectingData.Verse = "";
-
-                    VerseNumberList.Clear();
-                    for (int i = 1, verseCount = Database.getVerseCount(VM_BibleSelectData.Book + chapterNumber); i <= verseCount; i++)
-                        VerseNumberList.Add(i);
+                    f.Height = h / w * DEFALT_W;
+                    f.Width = DEFALT_W;
                 }
                 else
                 {
-                    VM_BibleSelectData.Book = VM_BibleCurrentSelectingData.Book;
-                    VM_BibleSelectData.Chapter = VM_BibleCurrentSelectingData.Chapter;
-                    VM_BibleSelectData.Verse = VM_BibleCurrentSelectingData.Verse;
+                    f.Height = DEFALT_H;
+                    f.Width = w / h * DEFALT_H;
                 }
             }
         }
 
-        // 성경 절 선택 조작
-        void VerseListBox_SelectedChanged(object sender, SelectionChangedEventArgs e)
+        private void EH_WindowSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            ListBox verseListbox = (ListBox)sender;
-            if (verseListbox.SelectedIndex != -1)
+            setMinSize();
+            setInnerContentSize();
+        }
+
+        public static readonly DependencyProperty RatioSizeProperty =
+            DependencyProperty.RegisterAttached(
+              "RatioSize",
+              typeof(bool),
+              typeof(MainWindow),
+              new PropertyMetadata(false, RatioSizeCallback)
+            );
+
+        public static bool GetRatioSize(UIElement target) => 
+            (bool)target.GetValue(RatioSizeProperty);
+
+        public static void SetRatioSize(UIElement target, bool value) =>
+            target.SetValue(RatioSizeProperty, value);
+
+        private static void RatioSizeCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is FrameworkElement && (bool)e.NewValue && !RatioSizeElements.Contains(d))
             {
-                string verseNumber = (verseListbox.SelectedIndex + 1).ToString("000");
-                VM_BibleSelectData.Book = VM_BibleCurrentSelectingData.Book;
-                VM_BibleSelectData.Chapter = VM_BibleCurrentSelectingData.Chapter;
-                VM_BibleSelectData.Verse = VM_BibleCurrentSelectingData.Verse = verseNumber;
+                RatioSizeElements.Add((FrameworkElement)d);
             }
-        }
-        void VerseListBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            ListBox verseListbox = (ListBox)sender;
-            if (verseListbox.SelectedIndex != -1)
+            else if (d is FrameworkElement && !(bool)e.NewValue && RatioSizeElements.Contains(d))
             {
-                string verseNumber = (verseListbox.SelectedIndex + 1).ToString("000");
-                VM_BibleSelectData.Book = VM_BibleCurrentSelectingData.Book;
-                VM_BibleSelectData.Chapter = VM_BibleCurrentSelectingData.Chapter;
-                VM_BibleSelectData.Verse = VM_BibleCurrentSelectingData.Verse = verseNumber;
-            }
-        }
-
-        // ======================================== 성경 예약 처리
-
-        Collection<ReserveCollectionUnit> getSortedSelection(ItemCollection items, System.Collections.IList rawSelection)
-        {
-            List<int> itemindex = new List<int>(rawSelection.Count);
-
-            for (int i = 0; i < rawSelection.Count; i++)
-                itemindex.Add(items.IndexOf(rawSelection[i]));
-            itemindex.Sort();
-
-            Collection<ReserveCollectionUnit> sortedItems = new Collection<ReserveCollectionUnit>();
-            foreach (int i in itemindex)
-                sortedItems.Add((ReserveCollectionUnit)items[i]);
-
-            return sortedItems;
-        }
-
-        void BibleReserveAddButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (VM_BibleCurrentSelectingData.isBibleSelected())
-            {
-                //VM_BibleReserveData.BibleReserveList.Add(new ViewModel.BibleReserveData.BibleReserveContent(VM_BibleCurrentSelectingData.Book, VM_BibleCurrentSelectingData.Chapter, VM_BibleCurrentSelectingData.Verse));
-
-                // 예약창에 적용하는 데이터
-                ViewModel.ReserveManagerViewModel.instance.ReserveDataManager.addReserve(
-                    new module.BibleReserveDataUnit(VM_BibleCurrentSelectingData.Book, VM_BibleCurrentSelectingData.Chapter, VM_BibleCurrentSelectingData.Verse));
+                RatioSizeElements.Remove((FrameworkElement)d);
             }
         }
 
-        void BibleReserveDeleteButton_Click(object sender, RoutedEventArgs e)
+        private static List<FrameworkElement> RatioSizeElements = new List<FrameworkElement>();
+
+        // =================================================== 키 상태 광역 전달 ======================================================
+
+        public static readonly DependencyProperty keyInputEventManagerProperty =
+        DependencyProperty.Register(
+            name: "keyInputEventManager",
+            propertyType: typeof(Event.KeyInputEventManager),
+            ownerType: typeof(MainWindow));
+
+        public Event.KeyInputEventManager keyInputEventManager
         {
-            BibleReserveDelete();
+            get => (Event.KeyInputEventManager)GetValue(keyInputEventManagerProperty);
+            set => SetValue(keyInputEventManagerProperty, value);
         }
 
-        void BibleReserveListBox_KeyDown(object sender, KeyEventArgs e)
+        private void EH_PreKeyDownCheck(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Delete)
-                BibleReserveDelete();
-            if (e.Key == Key.Enter)
-                BibleOutPut();
+            foreach (TrackedKey k in TrackedKeys)
+                if (k.key == e.Key)
+                    k.state = true;
+
+            if (!e.IsRepeat)
+                keyInputEventManager.invokeKeyInput(e.Key, true);
         }
 
-        void BibleReserveDelete()
+        private void EH_KeyUpCheck(object sender, KeyEventArgs e)
         {
-            if (BibleReserveListBox.SelectedItems.Count == 0)
-                return;
-            if (MessageBox.Show("선택된 예약구절을 삭제하시겠습니까?","성경 예약 삭제",MessageBoxButton.OKCancel,MessageBoxImage.Question) != MessageBoxResult.OK)
-                return;
+            foreach (TrackedKey k in TrackedKeys)
+                if (k.key == e.Key)
+                    k.state = false;
 
-            ViewModel.ReserveDataManager.instance.deleteItems(
-                getSortedSelection(BibleReserveListBox.Items, BibleReserveListBox.SelectedItems));
-
-            /*List<int> itemindex = new List<int>(10);
-            foreach (object item in BibleReserveListBox.SelectedItems)
-                itemindex.Add(BibleReserveListBox.Items.IndexOf(item));
-            itemindex.Sort();*/
-            
-            /*for (int i = itemindex.Count - 1; i >= 0; i--)
-                VM_BibleReserveData.BibleReserveList.Remove(VM_BibleReserveData.BibleReserveList[itemindex[i]]);*/
+            if (!e.IsRepeat)
+                keyInputEventManager.invokeKeyInput(e.Key, false);
         }
 
-        void BibleReserveItemUpButton_Click(object sender, RoutedEventArgs e)
+        private class TrackedKey
         {
-            if (BibleReserveListBox.SelectedItems.Count == 0)
-                return;
-
-            ViewModel.ReserveDataManager.instance.moveUpInCategory(
-                getSortedSelection(BibleReserveListBox.Items, BibleReserveListBox.SelectedItems));
-
-            /*List<int> itemindex = new List<int>(10);
-            foreach (object item in BibleReserveListBox.SelectedItems)
-                itemindex.Add(BibleReserveListBox.Items.IndexOf(item));
-            itemindex.Sort();
-
-            if (itemindex[0] == 0)
-                return;
-
-            int i = 0;
-            int moveItem;
-            int desIndex;
-            while ( i < itemindex.Count)
-            {
-                moveItem = itemindex[i] - 1;
-                desIndex = itemindex[i];
-                for (;i < itemindex.Count && desIndex == itemindex[i]; i++, desIndex++);
-
-                *//*VM_BibleReserveData.BibleReserveList.Insert(desIndex, VM_BibleReserveData.BibleReserveList[moveItem]);
-                VM_BibleReserveData.BibleReserveList.RemoveAt(moveItem);*//*
-            }*/
+            public Key key;
+            public bool state;
         }
 
-        void BibleReserveItemDownButton_Click(object sender, RoutedEventArgs e)
+        private TrackedKey[] TrackedKeys =
         {
-            if (BibleReserveListBox.SelectedItems.Count == 0)
-                return;
+            new TrackedKey() { key = Key.LeftShift, state = false},
+            new TrackedKey() { key = Key.RightShift, state = false},
+            new TrackedKey() { key = Key.LeftCtrl, state = false},
+            new TrackedKey() { key = Key.RightCtrl, state = false},
+            new TrackedKey() { key = Key.CapsLock, state = false}
+        };
 
-            ViewModel.ReserveDataManager.instance.moveDownInCategory(
-                getSortedSelection(BibleReserveListBox.Items, BibleReserveListBox.SelectedItems));
+        // =================================================== 윈도우 활성화 상태 처리 ======================================================
 
-            /*List<int> itemindex = new List<int>(10);
-            foreach (object item in BibleReserveListBox.SelectedItems)
-                itemindex.Add(BibleReserveListBox.Items.IndexOf(item));
-            itemindex.Sort();
+        public static readonly DependencyProperty windowActivateChangedEventManagerProperty =
+        DependencyProperty.Register(
+            name: "windowActivateChangedEventManager",
+            propertyType: typeof(Event.WindowActivateChangedEventManager),
+            ownerType: typeof(MainWindow));
 
-            *//*if (itemindex.Last() == VM_BibleReserveData.BibleReserveList.Count -1 )
-                return;*//*
-
-            int i = itemindex.Count-1;
-            int moveItem;
-            int desIndex;
-            while (i >= 0)
-            {
-                moveItem = itemindex[i] + 1;
-                desIndex = itemindex[i];
-                for (i--; i >= 0 && desIndex == itemindex[i]; i--, desIndex--);
-
-                *//*VM_BibleReserveData.BibleReserveList.Insert(desIndex, VM_BibleReserveData.BibleReserveList[moveItem]);
-                VM_BibleReserveData.BibleReserveList.RemoveAt(moveItem + 1);*//*
-            }*/
+        public Event.WindowActivateChangedEventManager windowActivateChangedEventManager
+        {
+            get => (Event.WindowActivateChangedEventManager)GetValue(windowActivateChangedEventManagerProperty);
+            set => SetValue(windowActivateChangedEventManagerProperty, value);
         }
 
-        void BibleReserveListBox_GotFocus(object sender, RoutedEventArgs e)
+        private void EH_Window_Activated(object sender, EventArgs e)
         {
-            if (((ListBox)sender).SelectedIndex == -1)
-            {/*
-                VM_BibleSelectData.Book = "";
-                VM_BibleSelectData.Chapter = "";
-                VM_BibleSelectData.Verse = "";
-            */
-            }
-            else
-            {
-                module.BibleReserveDataUnit item = (module.BibleReserveDataUnit)(((ViewModel.ReserveCollectionUnit)(((ListBox)sender).SelectedItem)).reserveData);
-                VM_BibleSelectData.Book = item.Book;
-                VM_BibleSelectData.Chapter = item.Chapter;
-                VM_BibleSelectData.Verse = item.Verse;
+            foreach (TrackedKey k in TrackedKeys) 
+                if (Keyboard.IsKeyDown(k.key) != k.state)
+                    keyInputEventManager.invokeKeyInput(k.key, Keyboard.IsKeyDown(k.key));
 
-                applyBibleMoving(item.Book,item.Chapter,item.Verse);
-            }
+            windowActivateChangedEventManager.invoke(true);
         }
 
-        void BibleReserveListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void EH_Window_Deactivated(object sender, EventArgs e)
         {
-            if (((ListBox)sender).SelectedIndex == -1)
-            {/*
-                VM_BibleSelectData.Book = "";
-                VM_BibleSelectData.Chapter = "";
-                VM_BibleSelectData.Verse = "";
-            */
-            }
-            else
-            {
-                module.BibleReserveDataUnit item = (module.BibleReserveDataUnit)(((ViewModel.ReserveCollectionUnit)(((ListBox)sender).SelectedItem)).reserveData);
-                VM_BibleSelectData.Book = item.Book;
-                VM_BibleSelectData.Chapter = item.Chapter;
-                VM_BibleSelectData.Verse = item.Verse;
-
-                applyBibleMoving(item.Book, item.Chapter, item.Verse);
-            }
+            windowActivateChangedEventManager.invoke(false);
         }
-
-        // ======================================== 성경 이동 반영 처리
-
-        public void applyBibleMoving(string book, string chapter, string verse)
-        {
-            ChapterNumberList.Clear();
-            for (int i = 1, chapterCount = Database.getChapterCount(book); i <= chapterCount; i++)
-                ChapterNumberList.Add(i);
-            VerseNumberList.Clear();
-
-            VM_BibleSelectData.Book = VM_BibleCurrentSelectingData.Book = book;
-            VM_BibleSelectData.Chapter = VM_BibleCurrentSelectingData.Chapter = "";
-            VM_BibleSelectData.Verse = VM_BibleCurrentSelectingData.Verse = "";
-
-            Bible_Chapter_ListBox.SelectedIndex = int.Parse(chapter) - 1;
-            Bible_Verse_ListBox.SelectedIndex = int.Parse(verse) - 1;
-        }
-
-        // ======================================== 성경 수정 처리
-
-        void BibleModifyButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (VM_BibleSelectData.Verse.CompareTo("") == 0)
-                MessageBox.Show("수정할 성경구절을 선택해주세요!", "성경 선택되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
-            else
-            {
-                if (SubWindow_BibleModify == null)
-                {
-                    SubWindow_BibleModify = new BibleModifyWindow(VM_BibleSelectData.Book + VM_BibleSelectData.Chapter + VM_BibleSelectData.Verse);
-                    SubWindow_BibleModify.Owner = this;
-                }
-                else
-                    SubWindow_BibleModify.setData(VM_BibleSelectData.Book + VM_BibleSelectData.Chapter + VM_BibleSelectData.Verse);
-                SubWindow_BibleModify.ShowDialog();
-            }
-        }
-
-        // ======================================== 성경 출력 처리
-
-        void Bible_Verse_ListBox_DoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            BibleOutPut();
-        }
-
-        void BibleReserveListBox_DoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            BibleOutPut();
-        }
-
-        void BibleOutputButton_Click(object sender, RoutedEventArgs e)
-        {
-            BibleOutPut();
-        }
-
-        void BibleOutPut()
-        {
-            if (module.ProgramOption.BibleFramePath == null)
-                MessageBox.Show("성경 출력 틀ppt를 등록해주세요!", "ppt틀 등록되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
-            else if (VM_BibleSelectData.Verse.CompareTo("") == 0)
-                MessageBox.Show("출력할 성경구절을 선택해주세요!", "성경 선택되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
-            else
-                new module.ShowStarter().BibleShowStart(VM_BibleSelectData.Book + VM_BibleSelectData.Chapter + VM_BibleSelectData.Verse);
-        }
-
-        // ======================================== 교독문 처리
-
-        void ReadingListBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-                ReadingOutput();
-        }
-
-        void ReadingListBox_DoubleClick(object sender, RoutedEventArgs e)
-        {
-            ReadingOutput();
-        }
-
-        void ReadingOutputButton_Click(object sender, RoutedEventArgs e)
-        {
-            ReadingOutput();
-        }
-
-        void ReadingOutput()
-        {
-            if (module.ProgramOption.ReadingFramePath == null)
-                MessageBox.Show("교독문 출력 틀ppt를 등록해주세요!", "ppt틀 등록되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
-            else if (ReadingListBox.SelectedIndex == -1)
-                MessageBox.Show("출력할 교독문을 선택해주세요!", "교독문 선택되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
-            else
-                new module.ShowStarter().ReadingShowStart(ReadingListBox.SelectedIndex);
-        }
-
-        // ======================================== 교독문 예약처리
-        void ReadingReserveButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (ReadingListBox.SelectedIndex == -1)
-                MessageBox.Show("출력할 교독문을 선택해주세요!", "교독문 선택되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
-            else
-            {
-                // 예약창에 보내는 데이터
-                ViewModel.ReserveManagerViewModel.instance.ReserveDataManager.addReserve(
-                    new module.ReadingReserveDataUnit(ReadingListBox.SelectedIndex));
-            }
-        }
-
     }
 }

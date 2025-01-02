@@ -7,15 +7,12 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using System.IO;
 using System.Diagnostics;
+using System.Threading;
 
 namespace BibleProjector_WPF.module
 {
     class ProgramData
     {
-        // 데이터를 가진 객체에 접근하기 위한 참조변수들
-        static ViewModel.LyricViewModel VM_LyricViewModel;
-        static ViewModel.ReserveManagerViewModel VM_ReserveManager;
-
         // =========================================== 파일 경로 =========================================== 
 
         // 파일 경로들
@@ -23,73 +20,212 @@ namespace BibleProjector_WPF.module
 
         const string LYRIC_DATA = PROGRAM_DATA_PATH + "\\Lyrics";
         const string HYMN_DATA = PROGRAM_DATA_PATH + "\\Hymns";
+        const string HYMN_SUB_DATA = PROGRAM_DATA_PATH + "\\HymnSubData";
         const string OPTION_DATA = PROGRAM_DATA_PATH + "\\Option";
-        const string LAYOUT_DATA = PROGRAM_DATA_PATH + "\\LayoutData";
         const string RESERVE_DATA = PROGRAM_DATA_PATH + "\\ReserveData";
+        const string EXTERN_PPT_DATA = PROGRAM_DATA_PATH + "\\ExternPPTpaths";
+        const string MANUAL_DATA = PROGRAM_DATA_PATH + "\\Manuals";
+
+        // 에러 로그 출력 폴더
+        const string ERROR_LOG_OUTPUT = PROGRAM_DATA_PATH + "\\errorLog";
 
         // 이전 버전의 프로그램 저장값을 지원하기 위한 장치
         // 더 이상 추가 지원하지 않을 기능들
+        const string LAYOUT_DATA = PROGRAM_DATA_PATH + "\\LayoutData";
         const string LYRIC_RESERVE_DATA = PROGRAM_DATA_PATH + "\\LyricReserve";
         const string BIBLE_RESERVE_DATA = PROGRAM_DATA_PATH + "\\BibleReserve";
-        const string EXTERN_PPT_DATA = PROGRAM_DATA_PATH + "\\ExternPPTpaths";
+
+        // 필수 확인 경로들
+        static string[] fileList = { HYMN_DATA, HYMN_SUB_DATA };
+        static string[] directoryList = { ERROR_LOG_OUTPUT };
+
+        static public void Initialize()
+        {
+            foreach (string DirectoryPath in directoryList)
+            {
+                DirectoryInfo di = new DirectoryInfo(DirectoryPath);
+                if (!di.Exists)
+                    di.Create();
+            }
+
+                StringBuilder warningPhrase = new StringBuilder("프로그램 실행에 필요한 다음의 파일들이 없습니다!\n");
+            bool isFileMissing = false;
+            foreach(string FilePath in fileList)
+            {
+                DirectoryInfo di = new DirectoryInfo(Path.GetDirectoryName(FilePath));
+                if (!di.Exists)
+                    di.Create();
+
+                if (!new FileInfo(FilePath).Exists)
+                {
+                    warningPhrase.Append(Path.GetFileName(FilePath)).Append('\n');
+                    isFileMissing = true;
+                }
+            }
+
+            if (isFileMissing)
+                throw new Exception(warningPhrase.ToString());
+        }
 
         // =========================================== 프로그램 종료시 ===========================================
 
+        static public event EventHandler SaveDataEvent;
+
         static public void saveProgramData()
         {
-            saveLyricData();
-            saveOptionData();
-            saveLayoutData();
-            saveReserveData();
+            SaveDataEvent?.Invoke(null, null);
         }
 
-        static void saveLyricData()
+        static public void saveData(SaveDataTypeEnum type, string data, bool isImmidiate)
         {
-            StreamWriter file = new StreamWriter(LYRIC_DATA, false);
-            file.Write(VM_LyricViewModel.getSaveData_Lyric());
-            file.Close();
-
-            file = new StreamWriter(HYMN_DATA, false);
-            file.Write(VM_LyricViewModel.getSaveData_Hymn());
-            file.Close();
-
-            /*
-            catch (Exception e)
+            if (fileAccessor == null)
             {
-                MessageBox.Show("가사 저장 실패!\n오류 : " + e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                fileAccessor = new Thread(fileAccess);
+                fileAccessor.IsBackground = true;
+                fileAccessor.Start();
             }
-            */
+
+            if (isImmidiate)
+            {
+                saveImmidiatly(type, data);
+            }
+            else
+            {
+                reserveSaveItem(type, data);
+            }
         }
 
-        static void saveOptionData()
+        // =========================================== 별도 스레드에 의한 저장 처리 =========================================== 
+
+        static readonly int SAVE_DELAY_TIMESPAN = 3;
+
+        static object fileSaveLockObject = new object();
+        static Thread fileAccessor = null;
+        static Dictionary<SaveDataTypeEnum, (string data, DateTime setTime)> saveList = new Dictionary<SaveDataTypeEnum, (string, DateTime)>();
+
+        /// <summary>
+        /// 지연된 저장을 별도 스레드로 처리하기 위한 스레드 함수
+        /// </summary>
+        static private void fileAccess()
         {
-            StreamWriter file = new StreamWriter(OPTION_DATA, false);
-            file.Write(module.ProgramOption.getSaveData());
+            while (true)
+            {
+                lock (fileSaveLockObject)
+                {
+                    List<SaveDataTypeEnum> doneKey = new List<SaveDataTypeEnum>();
+                    foreach (SaveDataTypeEnum type in saveList.Keys)
+                    {
+                        if ((DateTime.Now - saveList[type].setTime).Seconds >= SAVE_DELAY_TIMESPAN)
+                        {
+                            save(type, saveList[type].data);
+                            doneKey.Add(type);
+                        }
+                    }
+                    foreach(SaveDataTypeEnum type in doneKey)
+                        saveList.Remove(type);
+                }
+            }
+        }
+
+        static private void reserveSaveItem(SaveDataTypeEnum type, string data)
+        {
+            lock (fileSaveLockObject)
+            {
+                if (saveList.ContainsKey(type))
+                {
+                    saveList[type] = (data, DateTime.Now);
+                }
+                else
+                {
+                    saveList.Add(type, (data, DateTime.Now));
+                }
+            }
+        }
+
+        static private void saveImmidiatly(SaveDataTypeEnum type, string data)
+        {
+            lock (fileSaveLockObject)
+            {
+                saveList.Remove(type);
+                save(type, data);
+            }
+        }
+
+        // =========================================== 파일 쓰기 =========================================== 
+
+        static private void save(SaveDataTypeEnum type, string data)
+        {
+            string savePath = null;
+
+            if (type == SaveDataTypeEnum.LyricData)
+                savePath = LYRIC_DATA;
+            else if (type == SaveDataTypeEnum.HymnData)
+                savePath = HYMN_DATA;
+            else if (type == SaveDataTypeEnum.ExternPPTData)
+                savePath = EXTERN_PPT_DATA;
+            else if (type == SaveDataTypeEnum.ReserveData)
+                savePath = RESERVE_DATA;
+            else if (type == SaveDataTypeEnum.OptionData)
+                savePath = OPTION_DATA;
+
+            if (savePath == null)
+                return;
+
+            StreamWriter file = new StreamWriter(savePath, false);
+            file.Write(data);
             file.Close();
         }
 
-        static void saveLayoutData()
+        static private string makeErrorLog(string data, Exception exc)
         {
-            StreamWriter file = new StreamWriter(LAYOUT_DATA, false);
-            file.Write(module.LayoutInfo.getSaveData());
+            StringBuilder log = new StringBuilder();
+
+            if (data != null)
+                log.Append(data).Append("\r\n\r\n");
+
+            if (exc != null)
+            {
+                log.AppendLine("예외 메세지 : ");
+                log.Append(exc.Message).AppendLine().AppendLine();
+                log.AppendLine("Evironment 스택 추적 : ");
+                log.Append(Environment.StackTrace).AppendLine().AppendLine();
+                log.AppendLine("Error 스택 추적 : ");
+                log.Append(exc.StackTrace);
+            }
+
+            return log.ToString();
+        }
+
+        /// <summary>
+        /// 에러 로그를 작성합니다.
+        /// <br/>[<paramref name="data"/>+줄바꿈x2]를 가장 먼저 표시하며, 만약 <paramref name="exc"/>가 존재하면 에러 정보도 함께 표시합니다.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="exc"></param>
+        static public void writeErrorLog(string data, Exception exc = null)
+        {
+            string time = (new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds()).ToString();
+            string fileName = ERROR_LOG_OUTPUT + "\\" + time + ".txt";
+            if (new FileInfo(fileName).Exists) {
+                long i = new DirectoryInfo(ERROR_LOG_OUTPUT).GetFiles(time + "*.txt").Length;
+                fileName = ERROR_LOG_OUTPUT + "\\" + time + "_" + i + ".txt";
+            }
+            
+            StreamWriter file = new StreamWriter(
+                fileName,
+                false);
+            file.Write(makeErrorLog(data, exc));
             file.Close();
         }
 
-        static void saveReserveData()
-        {
-            StreamWriter file = new StreamWriter(RESERVE_DATA, false);
-            file.Write(VM_ReserveManager.getSaveData());
-            file.Close();
-        }
-
-        // =========================================== 별도 메소드 =========================================== 
+        // =========================================== 파일 읽기 =========================================== 
 
         /// <summary>
         /// 특정 파일의 정보를 문자열로 읽어옵니다.
         /// </summary>
         /// <param name="filePath">파일 경로</param>
         /// <returns>파일의 내용</returns>
-        static string getDataFromFile(string filePath)
+        private static string getDataFromFile(string filePath)
         {
             DirectoryInfo di = new DirectoryInfo(Path.GetDirectoryName(filePath));
             if (!di.Exists)
@@ -108,15 +244,19 @@ namespace BibleProjector_WPF.module
             return fileContent.ToString();
         }
 
-        public static string getLyricData(ViewModel.LyricViewModel lyricViewModel)
+        public static string getLyricData()
         {
-            VM_LyricViewModel = lyricViewModel;
             return getDataFromFile(LYRIC_DATA);
         }
 
         public static string getHymnData()
         {
             return getDataFromFile(HYMN_DATA);
+        }
+
+        public static string getHymnSubData()
+        {
+            return getDataFromFile(HYMN_SUB_DATA);
         }
 
         public static string getOptionData()
@@ -129,10 +269,19 @@ namespace BibleProjector_WPF.module
             return getDataFromFile(LAYOUT_DATA);
         }
 
-        public static string getReserveData(ViewModel.ReserveManagerViewModel ReserveManagerViewModel)
+        public static string getReserveData()
         {
-            VM_ReserveManager = ReserveManagerViewModel;
             return getDataFromFile(RESERVE_DATA);
+        }
+
+        public static string getExternPPTData()
+        {
+            return getDataFromFile(EXTERN_PPT_DATA);
+        }
+
+        public static string getManualData()
+        {
+            return getDataFromFile(MANUAL_DATA);
         }
 
         // 더 이상 추가 지원하지 않을 기능들
@@ -148,13 +297,6 @@ namespace BibleProjector_WPF.module
         {
             string data = getDataFromFile(BIBLE_RESERVE_DATA);
             File.Delete(BIBLE_RESERVE_DATA);
-            return data;
-        }
-
-        public static string getExternPPTData()
-        {
-            string data = getDataFromFile(EXTERN_PPT_DATA);
-            File.Delete(EXTERN_PPT_DATA);
             return data;
         }
     }

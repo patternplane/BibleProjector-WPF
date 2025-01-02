@@ -8,7 +8,7 @@ using System.ComponentModel;
 
 namespace BibleProjector_WPF.ViewModel
 {
-    class OptionViewModel : INotifyPropertyChanged
+    public class OptionViewModel : ViewModel
     {
 
         // ========================================== View 연결 속성들 ========================================== 
@@ -25,7 +25,7 @@ namespace BibleProjector_WPF.ViewModel
                     module.ProgramOption.Bible_LinePerSlide = 0;
                 else
                     module.ProgramOption.Bible_LinePerSlide = int.Parse(res);
-                NotifyPropertyChanged();
+                OnPropertyChanged();
             }
         }
         public string CharPerLine_Text
@@ -41,42 +41,49 @@ namespace BibleProjector_WPF.ViewModel
                     module.ProgramOption.Bible_CharPerLine = 0;
                 else
                     module.ProgramOption.Bible_CharPerLine = int.Parse(res);
-                NotifyPropertyChanged();
+                OnPropertyChanged();
             }
         }
 
-        public string BibleFramePath_Text
+        public string SongLinePerSlide_Text
         {
             get
             {
-                return module.ProgramOption.BibleFramePath;
+                return module.ProgramOption.Song_LinePerSlide.ToString();
             }
             set
             {
-                module.ProgramOption.BibleFramePath = value;
-                NotifyPropertyChanged();
+                string res = module.StringModifier.makeOnlyNum(value);
+                if (res.Length == 0)
+                    module.ProgramOption.Song_LinePerSlide = 0;
+                else
+                    module.ProgramOption.Song_LinePerSlide = int.Parse(res);
+                OnPropertyChanged();
             }
         }
-        public string ReadingFramePath_Text
+
+        public string BibleFramePath_Display
         {
             get
             {
-                return module.ProgramOption.ReadingFramePath;
+                if (module.ProgramOption.BibleFramePath == null)
+                    return null;
+                else
+                    return System.IO.Path.GetFileName(module.ProgramOption.BibleFramePath) + " [" + module.ProgramOption.BibleFramePath + "]";
             }
-            set
+        }
+        public string ReadingFramePath_Display
+        {
+            get
             {
-                module.ProgramOption.ReadingFramePath = value;
-                NotifyPropertyChanged();
+                if (module.ProgramOption.ReadingFramePath == null)
+                    return null;
+                else
+                    return System.IO.Path.GetFileName(module.ProgramOption.ReadingFramePath) + " [" + module.ProgramOption.ReadingFramePath + "]";
             }
         }
         public BindingList<module.SongFrameFile> SongFramePaths_List { get { return module.ProgramOption.SongFrameFiles; } set{}
      }
-
-        // ========================================== 일반 속성들 ========================================== 
-
-        System.Windows.Forms.OpenFileDialog FD_BibleFrame;
-        System.Windows.Forms.OpenFileDialog FD_ReadingFrame;
-        System.Windows.Forms.OpenFileDialog FD_SongFrame;
 
         // ========================================== 프로그램 세팅 ========================================== 
 
@@ -84,6 +91,10 @@ namespace BibleProjector_WPF.ViewModel
         {
             SetFileDialogs();
         }
+
+        System.Windows.Forms.OpenFileDialog FD_BibleFrame;
+        System.Windows.Forms.OpenFileDialog FD_ReadingFrame;
+        System.Windows.Forms.OpenFileDialog FD_SongFrame;
 
         void SetFileDialogs()
         {
@@ -101,25 +112,11 @@ namespace BibleProjector_WPF.ViewModel
 
         // ========================================== 메서드 ========================================== 
 
-        bool isValidFrameFile(string path)
-        {
-            string fileName = System.IO.Path.GetFileName(path);
-            if (BibleFramePath_Text != null && System.IO.Path.GetFileName(BibleFramePath_Text).CompareTo(fileName) == 0)
-                return false;
-            if (ReadingFramePath_Text != null && System.IO.Path.GetFileName(ReadingFramePath_Text).CompareTo(fileName) == 0)
-                return false;
-            foreach (module.SongFrameFile f in SongFramePaths_List)
-                if (f.FileName.CompareTo(fileName) == 0)
-                    return false;
-
-            return true;
-        }
-
         public void setBibleFrame()
         {
             if (FD_BibleFrame.ShowDialog() == System.Windows.Forms.DialogResult.Cancel)
                 return;
-            while (!isValidFrameFile(FD_BibleFrame.FileName))
+            while (!module.ProgramOption.isValidFrameFile(FD_BibleFrame.FileName))
             {
                 System.Windows.MessageBox.Show("이미 사용중인 ppt 틀입니다.","중복된 파일 등록",System.Windows.MessageBoxButton.OK,System.Windows.MessageBoxImage.Error);
                 if (FD_BibleFrame.ShowDialog() == System.Windows.Forms.DialogResult.Cancel)
@@ -127,37 +124,29 @@ namespace BibleProjector_WPF.ViewModel
             }
             FD_BibleFrame.InitialDirectory = System.IO.Path.GetDirectoryName(FD_BibleFrame.FileName) + "\\";
 
-            if (BibleFramePath_Text == null)
-            {
-                BibleFramePath_Text = FD_BibleFrame.FileName;
-                Powerpoint.Bible.setPresentation(BibleFramePath_Text);
-            }
-            else
-            {
-                BibleFramePath_Text = FD_BibleFrame.FileName;
-                Powerpoint.Bible.refreshPresentation(BibleFramePath_Text);
-            }
+            module.ProgramOption.setBibleFrameFile(FD_BibleFrame.FileName);
+            OnPropertyChanged("BibleFramePath_Display");
         }
 
         public void refreshBibleFrame()
         {
-            if (BibleFramePath_Text == null)
+            if (module.ProgramOption.BibleFramePath == null)
                 return;
 
-            if (!new System.IO.FileInfo(BibleFramePath_Text).Exists)
+            if (!new System.IO.FileInfo(module.ProgramOption.BibleFramePath).Exists)
             {
-                System.Windows.MessageBox.Show("해당 틀 파일이 존재하지 않습니다!\r\n" + BibleFramePath_Text, "틀 파일 없음", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
-                BibleFramePath_Text = null;
+                System.Windows.MessageBox.Show("해당 틀 파일이 존재하지 않습니다!\r\n" + module.ProgramOption.BibleFramePath, "틀 파일 없음", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                module.ProgramOption.BibleFramePath = null;
             }
             else
-                Powerpoint.Bible.refreshPresentation(BibleFramePath_Text);
+                Powerpoint.Bible.refreshPresentation(module.ProgramOption.BibleFramePath);
         }
 
         public void setReadingFrame()
         {
             if (FD_ReadingFrame.ShowDialog() == System.Windows.Forms.DialogResult.Cancel)
                 return;
-            while (!isValidFrameFile(FD_ReadingFrame.FileName))
+            while (!module.ProgramOption.isValidFrameFile(FD_ReadingFrame.FileName))
             {
                 System.Windows.MessageBox.Show("이미 사용중인 ppt 틀입니다.", "중복된 파일 등록", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
                 if (FD_ReadingFrame.ShowDialog() == System.Windows.Forms.DialogResult.Cancel)
@@ -165,30 +154,22 @@ namespace BibleProjector_WPF.ViewModel
             }
             FD_ReadingFrame.InitialDirectory = System.IO.Path.GetDirectoryName(FD_ReadingFrame.FileName) + "\\";
 
-            if (ReadingFramePath_Text == null)
-            {
-                ReadingFramePath_Text = FD_ReadingFrame.FileName;
-                Powerpoint.Reading.setPresentation(ReadingFramePath_Text);
-            }
-            else
-            {
-                ReadingFramePath_Text = FD_ReadingFrame.FileName;
-                Powerpoint.Reading.refreshPresentation(ReadingFramePath_Text);
-            }
+            module.ProgramOption.setReadingFrameFile(FD_ReadingFrame.FileName);
+            OnPropertyChanged("ReadingFramePath_Display");
         }
 
         public void refreshReadingFrame()
         {
-            if (ReadingFramePath_Text == null)
+            if (module.ProgramOption.ReadingFramePath == null)
                 return;
 
-            if (!new System.IO.FileInfo(ReadingFramePath_Text).Exists)
+            if (!new System.IO.FileInfo(module.ProgramOption.ReadingFramePath).Exists)
             {
-                System.Windows.MessageBox.Show("해당 틀 파일이 존재하지 않습니다!\r\n" + ReadingFramePath_Text, "틀 파일 없음", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
-                ReadingFramePath_Text = null;
+                System.Windows.MessageBox.Show("해당 틀 파일이 존재하지 않습니다!\r\n" + module.ProgramOption.ReadingFramePath, "틀 파일 없음", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                module.ProgramOption.ReadingFramePath = null;
             }
             else
-                Powerpoint.Reading.refreshPresentation(ReadingFramePath_Text);
+                Powerpoint.Reading.refreshPresentation(module.ProgramOption.ReadingFramePath);
         }
 
         public void setSongFrame()
@@ -201,11 +182,8 @@ namespace BibleProjector_WPF.ViewModel
             StringBuilder overlappedFile = new StringBuilder();
             foreach (string newFilePath in FD_SongFrame.FileNames)
             {
-                if (isValidFrameFile(newFilePath)) 
-                { 
-                    SongFramePaths_List.Add(new module.SongFrameFile() { Path = newFilePath, FileName = System.IO.Path.GetFileName(newFilePath) });
-                    Powerpoint.Song.setPresentation(newFilePath);
-                }
+                if (module.ProgramOption.isValidFrameFile(newFilePath))
+                    module.ProgramOption.setSongFrameFile(newFilePath);
                 else
                 {
                     overlappedFile.Append(newFilePath);
@@ -238,30 +216,7 @@ namespace BibleProjector_WPF.ViewModel
 
         public void deleteSongFrame(int[] itemIndex)
         {
-            for (int i = itemIndex.Length - 1; i >= 0; i--)
-            {
-                if (SongControl.SongControlAccess != null)
-                    SongControl.SongControlAccess.DeletingCheckAndClose(System.IO.Path.GetFileName(SongFramePaths_List[itemIndex[i]].Path));
-                Powerpoint.Song.closeSingle(SongFramePaths_List[itemIndex[i]].Path);
-
-                // 너무 난잡한 구조다!
-                // 한창 MVVM 공부하며 시간에 쫒겨 개발할 시절에 짠 코드라
-                // 찬양곡 관련 부분들이 매우 개선 필요
-                module.ProgramOption.process_deleteSongFrame(SongFramePaths_List[itemIndex[i]]);
-
-                SongFramePaths_List.RemoveAt(itemIndex[i]);
-            }
-        }
-
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged(string propertyName = "")
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            module.ProgramOption.deleteSongFrameFiles(itemIndex);
         }
     }
 }

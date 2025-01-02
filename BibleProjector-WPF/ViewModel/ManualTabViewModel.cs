@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BibleProjector_WPF.ViewModel
 {
-    internal class ManualTabViewModel : INotifyPropertyChanged
+    internal class ManualTabViewModel : ViewModel
     {
         public module.Manual[] ManualList { get; set; }
 
@@ -15,17 +15,6 @@ namespace BibleProjector_WPF.ViewModel
         {
             ManualList = new module.ManualData().GetManuals();
             OnPropertyChanged(nameof(ManualList));
-        }
-
-        // INotifyPropertyChanged 인터페이스 관련
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
         }
     }
 }

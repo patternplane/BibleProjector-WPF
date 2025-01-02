@@ -1,0 +1,114 @@
+﻿<UserControl x:Class="BibleProjector_WPF.View.MainPage.ReserverListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BibleProjector_WPF.View.MainPage"
+             mc:Ignorable="d" 
+             Height="auto" Width="370"
+             Loaded="EH_UserControl_Loaded">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border BorderBrush="Black" BorderThickness="1,1,1,0">
+            <Label Background="LightGray" Padding="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                   FontSize="17"
+                   Content="예   약   목   록"
+                   FontWeight="Bold"/>
+        </Border>
+        <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1">
+            <ScrollViewer
+                x:Name="ReserveScrollViewer"
+                ScrollViewer.CanContentScroll="False"
+                HorizontalScrollBarVisibility="Auto"
+                VerticalScrollBarVisibility="Visible"
+                VerticalContentAlignment="Stretch"
+                HorizontalContentAlignment="Stretch"
+                PreviewMouseUp="EH_ReserveListBox_Focus_PreviewMouseUp">
+                <ScrollViewer.Resources>
+                    <local:ReserveItemTemplateSelector x:Key="reserveItemTemplateSelector"/>
+                </ScrollViewer.Resources>
+
+                <ListBox
+                    x:Name="ReserveListBox"
+                    SelectionMode="Extended"
+                    Padding="5,0"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                    AllowDrop="true"
+                    PreviewMouseUp="EH_ReserveListBox_Focus_PreviewMouseUp"
+                    
+                    PreviewMouseWheel="EH_ScrollByWheel"
+                    
+                    PreviewMouseDown="EH_ReserveListBox_PreviewMouseDown"
+                    MouseUp="EH_ConfirmSelection"
+                    SelectionChanged="EH_ReserveListBox_SelectionChanged"
+                    DragEnter="EH_DragEnterCheck"
+                    DragOver="EH_OnDragOver"
+                    Drop="EH_DragEnd"
+                    
+                    ItemsSource="{Binding ReserveContents}"
+                    ItemTemplateSelector="{StaticResource ResourceKey=reserveItemTemplateSelector}"
+                    xmlns:rtype="clr-namespace:BibleProjector_WPF">
+                    <ListBox.Resources>
+                        <DataTemplate x:Key="NormalItem">
+                            <local:ReserveItem/>
+                        </DataTemplate>
+                        <!--드래그 항목 표시-->
+                        <DataTemplate x:Key="DragPreview">
+                            <local:ReserveItem/>
+                        </DataTemplate>
+                        <!--드래그 드롭 위치 표시-->
+                        <DataTemplate x:Key="DropPreview">
+                            <Border Margin="0" Height="13" BorderBrush="Black" BorderThickness="0,0,0,1" VerticalAlignment="Center">
+                                <Border Margin="2,0,0,1" Padding="0" Background="#FFFFC094" BorderBrush="Gray" BorderThickness="1,1,0,0">
+                                </Border>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.Resources>
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Margin" Value="0,0,0,2"/>
+                            <Setter Property="Padding" Value="0"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <EventSetter Event="MouseMove" Handler="EH_GetMouseMove"/>
+                            <EventSetter Event="MouseDoubleClick" Handler="EH_ItemDoubleClick"/>
+                            <EventSetter Event="PreviewKeyDown" Handler="EH_ListBoxItem_PreviewKeyDown"/>
+                            <EventSetter Event="PreviewKeyUp" Handler="EH_ListBoxItem_PreviewKeyUp"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ViewType}" Value="{x:Static rtype:ReserveViewType.DragPreview}">
+                                    <Setter Property="Panel.ZIndex" Value="1"/>
+                                    <Setter Property="Margin" Value="0,-22,0,0"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ContentType}" Value="{x:Static rtype:ShowContentType.Bible}">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <SolidColorBrush Color="{x:Static local:ShowItemColor.BibleBackgroundColor}"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ContentType}" Value="{x:Static rtype:ShowContentType.Song}">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <SolidColorBrush Color="{x:Static local:ShowItemColor.SongBackgroundColor}"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ContentType}" Value="{x:Static rtype:ShowContentType.PPT}">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <SolidColorBrush Color="{x:Static local:ShowItemColor.PPTBackgroundColor}"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                </ListBox>
+            </ScrollViewer>
+        </Border>
+    </Grid>
+</UserControl>

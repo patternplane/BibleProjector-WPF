@@ -2,14 +2,17 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:BibleProjector_WPF"
-             xmlns:test="clr-namespace:BibleProjector_WPF.UnitTester"
+             
              Exit="ProgramExit"
              DispatcherUnhandledException="ExitFromError"
              
-             StartupUri="MainWindow.xaml>
-    <!--Startup="Startup_test"-->
+             Startup="ProgramStart"
+             >
+    <!--테스트 진입 Startup="Startup_test"-->
+    <!--프로그램 세팅 후 진입 Startup="ProgramStart"-->
+    
     <Application.Resources>
-         
+        <ResourceDictionary Source="ViewMapDictionary.xaml"/>
     </Application.Resources>
 </Application>
     
