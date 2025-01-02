@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 // ppt
 using Microsoft.Office.Interop.PowerPoint;
-using Microsoft.Office;
 
 
 
@@ -14,7 +13,6 @@ namespace BibleProjector_WPF
 {
     partial class Powerpoint
     {
-
         [System.Runtime.InteropServices.DllImport("user32")]
         static extern int ShowWindow(int hwnd, int nCmdShow);
         const int SW_HIDE = 0;
@@ -28,6 +26,30 @@ namespace BibleProjector_WPF
         const int SWP_NOMOVE = 0x0002;
         const int SWP_NOSIZE = 0x0001;
         const int SWP_NOACTIVATE = 0x0010;
+
+        [System.Runtime.InteropServices.DllImport("user32")]
+        public static extern Int32 SetWindowLong(int hWnd, Int32 nIndex, Int32 dwNewLong);
+
+        [System.Runtime.InteropServices.DllImport("user32")]
+        public static extern Int32 GetWindowLong(int hWnd, Int32 nIndex);
+        const Int32 GWL_STYLE = -16;
+        const Int32 WS_VISIBLE = 0x10000000;
+        const Int32 WS_EX_TOOLWINDOW = 0x00000080;
+        const Int32 WS_EX_APPWINDOW = 0x00040000;
+        const Int32 WS_EX_NOACTIVATE = 0x08000000;
+
+        protected static void SlideShowHideInTaskbar(int windowHWND)
+        {
+            Int32 style = GetWindowLong(windowHWND, GWL_STYLE);
+
+            style |= WS_VISIBLE;
+            style &= ~(WS_EX_APPWINDOW);
+            style |= WS_EX_TOOLWINDOW;
+            style |= WS_EX_NOACTIVATE;
+
+            ShowWindow(windowHWND, SW_HIDE);
+            SetWindowLong(windowHWND, GWL_STYLE, style);
+        }
 
         enum PptSlideState
         {
@@ -50,33 +72,34 @@ namespace BibleProjector_WPF
         public const string EXTERN_TEMP_DIRECTORY = ".\\programData\\ExternPPT\\";
         public const string EXTERN_THUMBNAIL_DIRECTORY = ".\\programData\\Thumbnails\\";
 
-        static public string Initialize()
+        static public void Initialize()
         {
             app = new Application();
 
+            closePPTFiles(System.IO.Path.GetDirectoryName(System.IO.Path.GetFullPath(FRAME_TEMP_DIRECTORY))); // Notice : if last has \\, use GetDirectoryName!!
             if (System.IO.Directory.Exists(FRAME_TEMP_DIRECTORY))
                 System.IO.Directory.Delete(FRAME_TEMP_DIRECTORY, true);
             System.IO.Directory.CreateDirectory(FRAME_TEMP_DIRECTORY);
 
-            StringBuilder pptFrameError = new StringBuilder(10);
+            closePPTFiles(System.IO.Path.GetDirectoryName(System.IO.Path.GetFullPath(EXTERN_TEMP_DIRECTORY))); // Notice : if last has \\, use GetDirectoryName!!
+            if (System.IO.Directory.Exists(EXTERN_TEMP_DIRECTORY))
+                System.IO.Directory.Delete(EXTERN_TEMP_DIRECTORY, true);
+            System.IO.Directory.CreateDirectory(EXTERN_TEMP_DIRECTORY);
 
-            if (module.ProgramOption.BibleFramePath == null)
-                pptFrameError.Append("성경 ppt틀\r\n");
-            else
-                Powerpoint.Bible.setPresentation(module.ProgramOption.BibleFramePath);
+            if (System.IO.Directory.Exists(EXTERN_THUMBNAIL_DIRECTORY))
+                System.IO.Directory.Delete(EXTERN_THUMBNAIL_DIRECTORY, true);
+            System.IO.Directory.CreateDirectory(EXTERN_THUMBNAIL_DIRECTORY);
+        }
 
-            if (module.ProgramOption.ReadingFramePath == null)
-                pptFrameError.Append("교독문 ppt틀\r\n");
-            else
-                Powerpoint.Reading.setPresentation(module.ProgramOption.ReadingFramePath);
+        static private void closePPTFiles(string dirFullPath)
+        {
+            List<Presentation> ppts = new List<Presentation>();
+            foreach (Presentation p in app.Presentations)
+                if (System.IO.Path.GetDirectoryName(p.FullName).CompareTo(dirFullPath) == 0)
+                    ppts.Add(p);
 
-            if (module.ProgramOption.SongFrameFiles.Count == 0)
-                pptFrameError.Append("찬양 ppt틀\r\n");
-            else
-                foreach (module.SongFrameFile f in module.ProgramOption.SongFrameFiles)
-                    Powerpoint.Song.setPresentation(f.Path);
-
-            return pptFrameError.ToString();
+            foreach (Presentation p in ppts)
+                p.Close();
         }
 
         static public void FinallProcess()
@@ -88,6 +111,108 @@ namespace BibleProjector_WPF
         }
 
         // ========================================== 제공하는 기능 =======================================
+
+        static public void setPageData(module.Data.ShowData Data, int PageIndex)
+        {
+            if (Data.getDataType() == ShowContentType.Bible)
+            {
+                module.Data.BibleData data = (module.Data.BibleData)Data;
+                Bible.ChangeContent(
+                    data.getBibleTitle(),
+                    data.chapter.ToString(),
+                    data.verse.ToString(),
+                    (string)data.getContents()[PageIndex].Content,
+                    PageIndex == 0);
+            }
+            else if (Data.getDataType() == ShowContentType.Song)
+            {
+                Song.SetPageData(((module.Data.SongData)Data).pptFrameFullPath, (string[][])Data.getContents()[PageIndex].Content);
+            }
+            else if (Data.getDataType() == ShowContentType.PPT)
+            {
+                ExternPPTs.goToSlide(((module.Data.ExternPPTData)Data).fileFullPath, PageIndex + 1);
+            }
+        }
+
+        static public void SlideShowRun(module.Data.ShowData Data)
+        {
+            if (Data.getDataType() == ShowContentType.Bible)
+            {
+                Bible.SlideShowRun();
+            }
+            else if (Data.getDataType() == ShowContentType.Song)
+            {
+                Song.SlideShowRun(((module.Data.SongData)Data).pptFrameFullPath);
+            }
+            else if (Data.getDataType() == ShowContentType.PPT)
+            {
+                ExternPPTs.SlideShowRun(((module.Data.ExternPPTData)Data).fileFullPath);
+            }
+        }
+
+        static public void SlideShowHide(module.Data.ShowData Data)
+        {
+            if (Data.getDataType() == ShowContentType.Bible)
+            {
+                Bible.SlideShowHide();
+            }
+            else if (Data.getDataType() == ShowContentType.Song)
+            {
+                Song.SlideShowHide(((module.Data.SongData)Data).pptFrameFullPath);
+            }
+            else if (Data.getDataType() == ShowContentType.PPT)
+            {
+                ExternPPTs.SlideShowHide(((module.Data.ExternPPTData)Data).fileFullPath);
+            }
+        }
+
+        static public void ShowText(module.Data.ShowData Data)
+        {
+            if (Data.getDataType() == ShowContentType.Bible)
+            {
+                Bible.ShowText();
+            }
+            else if (Data.getDataType() == ShowContentType.Song)
+            {
+                Song.ShowText(((module.Data.SongData)Data).pptFrameFullPath);
+            }
+            else if (Data.getDataType() == ShowContentType.PPT)
+            {
+                return;
+            }
+        }
+
+        static public void HideText(module.Data.ShowData Data)
+        {
+            if (Data.getDataType() == ShowContentType.Bible)
+            {
+                Bible.HideText();
+            }
+            else if (Data.getDataType() == ShowContentType.Song)
+            {
+                Song.HideText(((module.Data.SongData)Data).pptFrameFullPath);
+            }
+            else if (Data.getDataType() == ShowContentType.PPT)
+            {
+                return;
+            }
+        }
+        
+        static public void TopMost(module.Data.ShowData Data)
+        {
+            if (Data.getDataType() == ShowContentType.Bible)
+            {
+                Bible.TopMost();
+            }
+            else if (Data.getDataType() == ShowContentType.Song)
+            {
+                Song.TopMost(((module.Data.SongData)Data).pptFrameFullPath);
+            }
+            else if (Data.getDataType() == ShowContentType.PPT)
+            {
+                ExternPPTs.TopMost(((module.Data.ExternPPTData)Data).fileFullPath);
+            }
+        }
 
         static public int getSlideCountFromFile(string path)
         {
@@ -238,7 +363,8 @@ namespace BibleProjector_WPF
                             || module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "{ch}", module.StringKMP.DefaultStringCompaerFunc)
                             || module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "{v}", module.StringKMP.DefaultStringCompaerFunc)
                             || module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "{va}", module.StringKMP.DefaultStringCompaerFunc)
-                            || module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "{c}", module.StringKMP.DefaultStringCompaerFunc))
+                            || module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "{c}", module.StringKMP.DefaultStringCompaerFunc)
+                            || module.StringKMP.HasPattern(s.TextFrame.TextRange.Text, "{cm}", module.StringKMP.DefaultStringCompaerFunc))
                 {
                     TextShapes.Add(s);
                     Format.Add(s.TextFrame.TextRange.Text);
@@ -281,6 +407,8 @@ namespace BibleProjector_WPF
 
             static public void SlideShowRun()
             {
+                int currentSlide = 1;
+
                 // 슬라이드쇼 점검하는부분 좀 더 개선
                 // 슬라이드쇼 끄면 ppt도 꺼지기 때문
                 if (SlideWindow == null)
@@ -291,14 +419,20 @@ namespace BibleProjector_WPF
                         ppt.Slides[1].MoveTo(2);
                         SlideWindow = ppt.SlideShowSettings.Run();
                         ppt.Slides[2].MoveTo(1);
+                        currentSlide = 2;
                     }
                     else
                         SlideWindow = ppt.SlideShowSettings.Run();
                 }
-                else
-                    ShowWindow(SlideWindow.HWND, SW_SHOW);
+                SlideShowHideInTaskbar(SlideWindow.HWND);
+
+                // Taskbar에서 powerpoint 앱을 숨기는 window api를 사용하면
+                // powerpoint show 화면이 꺼졌다 켜질 때 종종 검정화면으로 돌아가는 문제가 있어
+                // 아래 코드가 필요합니다.
+                SlideWindow.View.GotoSlide(currentSlide);
 
                 pptState = PptSlideState.WindowShow;
+                TopMost();
             }
 
             static public void SlideShowHide()
@@ -310,19 +444,13 @@ namespace BibleProjector_WPF
                 }
             }
 
-            static public void Change_VerseContent(string verse, string content,bool FirstPage)
-            {
-                currentVerse = verse;
-                currentContent = content;
-                isFirstPage = FirstPage;
-
-                Change();
-            }
-
-            static public void Change_BibleChapter(string bible, string chapter)
+            static public void ChangeContent(string bible, string chapter, string verse, string content,bool FirstPage)
             {
                 currentBible = bible;
                 currentChapter = chapter;
+                currentVerse = verse;
+                currentContent = content;
+                isFirstPage = FirstPage;
 
                 Change();
             }
@@ -331,22 +459,14 @@ namespace BibleProjector_WPF
             {
                 for (int i = 0; i < TextShapes.Count; i++)
                 {
-                    if (isFirstPage)
-                        TextShapes[i].TextFrame.TextRange.Text =
-                        Format[i]
+                    TextShapes[i].TextFrame.TextRange.Text =
+                       Format[i]
                             .Replace("{b}", currentBible)
                             .Replace("{ch}", currentChapter)
                             .Replace("{va}", currentVerse)
                             .Replace("{c}", currentContent)
-                            .Replace("{v}", currentVerse);
-                    else
-                        TextShapes[i].TextFrame.TextRange.Text =
-                            Format[i]
-                            .Replace("{b}", currentBible)
-                            .Replace("{ch}", currentChapter)
-                            .Replace("{va}", currentVerse)
-                            .Replace("{c}", currentContent)
-                            .Replace("{v}", "");
+                            .Replace("{v}", (isFirstPage ? currentVerse :""))
+                            .Replace("{cm}", ((currentBible.CompareTo("시편")==0)?"편":"장")); // 굳이 시편 코드를 직접 기입해야 하나. Bible 관리 객체 어디갔냐.
                 }
             }
 
@@ -540,6 +660,8 @@ namespace BibleProjector_WPF
 
             static public void SlideShowRun()
             {
+                int currentSlide = 1;
+
                 // 슬라이드쇼 점검하는부분 좀 더 개선
                 // 슬라이드쇼 끄면 ppt도 꺼지기 때문
                 if (SlideWindow == null)
@@ -550,14 +672,20 @@ namespace BibleProjector_WPF
                         ppt.Slides[1].MoveTo(2);
                         SlideWindow = ppt.SlideShowSettings.Run();
                         ppt.Slides[2].MoveTo(1);
+                        currentSlide = 2;
                     }
                     else
                         SlideWindow = ppt.SlideShowSettings.Run();
                 }
-                else
-                    ShowWindow(SlideWindow.HWND, SW_SHOW);
+                SlideShowHideInTaskbar(SlideWindow.HWND);
+
+                // Taskbar에서 powerpoint 앱을 숨기는 window api를 사용하면
+                // powerpoint show 화면이 꺼졌다 켜질 때 종종 검정화면으로 돌아가는 문제가 있어
+                // 아래 코드가 필요합니다.
+                SlideWindow.View.GotoSlide(currentSlide);
 
                 pptState = PptSlideState.WindowShow;
+                TopMost();
             }
 
             static public void SlideShowHide()
@@ -662,28 +790,28 @@ namespace BibleProjector_WPF
                 return -1;
             }
 
-            static public void SetSongData(string FramePPTName, string[][][] songData)
+            static private int pptFinder_fullPath(string fullPath)
             {
-                int index;
-                if ((index = pptFinder(FramePPTName)) != -1)
-                {
-                    ppt[index].SetSongData( songData);
-                }
+                for (int i = 0; i < ppt.Count; i++)
+                    if (ppt[i].FrameOriginFullPath.CompareTo(fullPath) == 0)
+                        return i;
+
+                return -1;
             }
 
-            static public void TopMost(string FramePPTName)
+            static public void TopMost(string FrameFileFullPath)
             {
                 int index;
-                if ((index = pptFinder(FramePPTName)) != -1)
+                if ((index = pptFinder_fullPath(FrameFileFullPath)) != -1)
                 {
                     ppt[index].TopMost();
                 }
             }
 
-            static public void SlideShowRun(string FramePPTName)
+            static public void SlideShowRun(string FrameFileFullPath)
             {
                 int index;
-                if ((index = pptFinder(FramePPTName)) != -1)
+                if ((index = pptFinder_fullPath(FrameFileFullPath)) != -1)
                 {
                     ppt[index].SlideShowRun();
                     for (int i = 0; i < ppt.Count; i++)
@@ -692,37 +820,37 @@ namespace BibleProjector_WPF
                 }
             }
 
-            static public void SlideShowHide(string FramePPTName)
+            static public void SlideShowHide(string FrameFileFullPath)
             {
                 int index;
-                if ((index = pptFinder(FramePPTName)) != -1)
+                if ((index = pptFinder_fullPath(FrameFileFullPath)) != -1)
                 {
                     ppt[index].SlideShowHide();
                 }
             }
 
-            static public void ChangePage(string FramePPTName, int Page)
+            static public void SetPageData(string FrameFileFullPath, string[][] PageData)
             {
                 int index;
-                if ((index = pptFinder(FramePPTName)) != -1)
+                if ((index = pptFinder_fullPath(FrameFileFullPath)) != -1)
                 {
-                    ppt[index].ChangeApply(Page);
+                    ppt[index].ChangeApply(PageData);
                 }
             }
 
-            static public void HideText(string FramePPTName)
+            static public void HideText(string FrameFileFullPath)
             {
                 int index;
-                if ((index = pptFinder(FramePPTName)) != -1)
+                if ((index = pptFinder_fullPath(FrameFileFullPath)) != -1)
                 {
                     ppt[index].HideText();
                 }
             }
 
-            static public void ShowText(string FramePPTName)
+            static public void ShowText(string FrameFileFullPath)
             {
                 int index;
-                if ((index = pptFinder(FramePPTName)) != -1)
+                if ((index = pptFinder_fullPath(FrameFileFullPath)) != -1)
                 {
                     ppt[index].ShowText();
                 }
@@ -734,6 +862,8 @@ namespace BibleProjector_WPF
             // ============================================ 필요 변수 ============================================ 
 
             public string FramePPTName;
+            public string FrameFullPath;
+            public string FrameOriginFullPath;
 
             Presentation ppt;
             class TextShape
@@ -742,8 +872,7 @@ namespace BibleProjector_WPF
                 public Shape shape;
             }
             List<TextShape> textShapes;
-            string[][][] SongData;
-            int currentPage = -1;
+            string[][] currentData;
             SlideShowWindow SlideWindow = null;
 
             PptSlideState pptState = PptSlideState.NotRunning;
@@ -758,14 +887,16 @@ namespace BibleProjector_WPF
 
             public void setPresentation(string path)
             {
-                string tempPath = FRAME_TEMP_DIRECTORY + System.IO.Path.GetFileName(path);
-                System.IO.File.Copy(path, tempPath, true);
-                path = System.IO.Path.GetFullPath(tempPath);
+                string newPath = FRAME_TEMP_DIRECTORY + System.IO.Path.GetFileName(path);
+                System.IO.File.Copy(path, newPath, true);
+                newPath = System.IO.Path.GetFullPath(newPath);
 
-                this.FramePPTName = System.IO.Path.GetFileName(path);
+                this.FramePPTName = System.IO.Path.GetFileName(newPath);
+                this.FrameFullPath = newPath;
+                this.FrameOriginFullPath = path;
                 textShapes = new List<TextShape>(5);
 
-                ppt = app.Presentations.Open(path, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
+                ppt = app.Presentations.Open(newPath, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
                 checkValidPPT();
                 getCommand();
             }
@@ -799,7 +930,7 @@ namespace BibleProjector_WPF
                     checkAndClose(lastppt);
 
                     setPresentation(path);
-                    ChangeApply(currentPage);
+                    ChangeApply(currentData);
                     if (pptTextState == PptTextShow.Show)
                         ShowText();
                     else if (pptTextState == PptTextShow.Hide)
@@ -813,7 +944,7 @@ namespace BibleProjector_WPF
                     ppt = app.Presentations.Open(path, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
                     checkValidPPT();
                     getCommand();
-                    ChangeApply(currentPage);
+                    ChangeApply(currentData);
                     if (pptTextState == PptTextShow.Show)
                         ShowText();
                     else if (pptTextState == PptTextShow.Hide)
@@ -828,7 +959,7 @@ namespace BibleProjector_WPF
                     SlideWindow = null;
 
                     setPresentation(path);
-                    ChangeApply(currentPage);
+                    ChangeApply(currentData);
                     if (pptTextState == PptTextShow.Show)
                         ShowText();
                     else if (pptTextState == PptTextShow.Hide)
@@ -941,13 +1072,10 @@ namespace BibleProjector_WPF
                 return -1;
             }
 
-            public void SetSongData(string[][][] songData)
-            {
-                this.SongData = songData;
-            }
-
             public void SlideShowRun()
             {
+                int currentSlide = 1;
+
                 // 슬라이드쇼 점검하는부분 좀 더 개선
                 // 슬라이드쇼 끄면 ppt도 꺼지기 때문
                 if (SlideWindow == null)
@@ -958,14 +1086,20 @@ namespace BibleProjector_WPF
                         ppt.Slides[1].MoveTo(2);
                         SlideWindow = ppt.SlideShowSettings.Run();
                         ppt.Slides[2].MoveTo(1);
+                        currentSlide = 2;
                     }
                     else
                         SlideWindow = ppt.SlideShowSettings.Run();
                 }
-                else
-                    ShowWindow(SlideWindow.HWND, SW_SHOW);
+                SlideShowHideInTaskbar(SlideWindow.HWND);
+
+                // Taskbar에서 powerpoint 앱을 숨기는 window api를 사용하면
+                // powerpoint show 화면이 꺼졌다 켜질 때 종종 검정화면으로 돌아가는 문제가 있어
+                // 아래 코드가 필요합니다.
+                SlideWindow.View.GotoSlide(currentSlide);
 
                 pptState = PptSlideState.WindowShow;
+                TopMost();
             }
 
             public void SlideShowHide()
@@ -977,9 +1111,8 @@ namespace BibleProjector_WPF
                 }
             }
 
-            public void ChangeApply(int Page)
+            public void ChangeApply(string[][] SongData)
             {
-                currentPage = Page;
                 int index;
                 StringBuilder str = new StringBuilder(50);
                 for (int i = 0; i < textShapes.Count; i++)
@@ -989,10 +1122,10 @@ namespace BibleProjector_WPF
                     {
                         if (s[0] == '{')
                         {
-                            if ((index = findChangeTableIndex(s, SongData[Page])) == -1)
+                            if ((index = findChangeTableIndex(s, SongData)) == -1)
                                 str.Append("");
                             else
-                                str.Append(SongData[Page][index][1]);
+                                str.Append(SongData[index][1]);
                         }
                         else
                             str.Append(s);
@@ -1033,26 +1166,8 @@ namespace BibleProjector_WPF
 
             // ============================================ 세팅 및 종료 ============================================ 
 
-            static bool isSetup = false;
-            static void Initialize()
-            {
-                if (isSetup)
-                    return;
-                else
-                    isSetup = true;
-
-                if (System.IO.Directory.Exists(EXTERN_TEMP_DIRECTORY))
-                    System.IO.Directory.Delete(EXTERN_TEMP_DIRECTORY, true);
-                System.IO.Directory.CreateDirectory(EXTERN_TEMP_DIRECTORY);
-
-                if (System.IO.Directory.Exists(EXTERN_THUMBNAIL_DIRECTORY))
-                    System.IO.Directory.Delete(EXTERN_THUMBNAIL_DIRECTORY, true);
-                System.IO.Directory.CreateDirectory(EXTERN_THUMBNAIL_DIRECTORY);
-            }
-
             static public void setPresentation(string path)
             {
-                Initialize();
                 ppt.Add(new ExternPPT(path));
             }
 
@@ -1089,31 +1204,39 @@ namespace BibleProjector_WPF
                 return -1;
             }
 
-            static public string getThumbnailPathWithGenerator(string PPTName)
+            static private int pptFinder_fullPath(string fullPath)
+            {
+                for (int i = 0; i < ppt.Count; i++)
+                    if (ppt[i].OriginalFullPath.CompareTo(fullPath) == 0)
+                        return i;
+
+                return -1;
+            }
+
+            static public System.Windows.Media.Imaging.BitmapImage[] getThumbnailImages(string fullPath)
             {
                 int index;
-                if ((index = pptFinder(PPTName)) != -1)
+                if ((index = pptFinder_fullPath(fullPath)) != -1)
                 {
-                    ppt[index].ThumbnailGenerator();
-                    return ppt[index].getThumbnailPath();
+                    return ppt[index].getThumbnailImages();
                 }
 
                 return null;
             }
 
-            static public void TopMost(string PPTName)
+            static public void TopMost(string fullPath)
             {
                 int index;
-                if ((index = pptFinder(PPTName)) != -1)
+                if ((index = pptFinder_fullPath(fullPath)) != -1)
                 {
                     ppt[index].TopMost();
                 }
             }
 
-            static public void SlideShowRun(string PPTName)
+            static public void SlideShowRun(string fullPath)
             {
                 int index;
-                if ((index = pptFinder(PPTName)) != -1)
+                if ((index = pptFinder_fullPath(fullPath)) != -1)
                 {
                     ppt[index].SlideShowRun();
                     for (int i = 0; i < ppt.Count; i++)
@@ -1122,43 +1245,19 @@ namespace BibleProjector_WPF
                 }
             }
 
-            static public int goToSlide(string PPTName, int slideIndex)
+            static public void goToSlide(string fullPath, int slideIndex)
             {
                 int index;
-                if ((index = pptFinder(PPTName)) != -1)
+                if ((index = pptFinder_fullPath(fullPath)) != -1)
                 {
-                    return ppt[index].goToSlide(slideIndex);
+                    ppt[index].goToSlide(slideIndex);
                 }
-
-                return -1;
             }
 
-            static public int goNextSlide(string PPTName)
+            static public void SlideShowHide(string fullPath)
             {
                 int index;
-                if ((index = pptFinder(PPTName)) != -1)
-                {
-                    return ppt[index].goNextSlide();
-                }
-
-                return -1;
-            }
-
-            static public int goPreviousSlide(string PPTName)
-            {
-                int index;
-                if ((index = pptFinder(PPTName)) != -1)
-                {
-                    return ppt[index].goPreviousSlide();
-                }
-
-                return -1;
-            }
-
-            static public void SlideShowHide(string PPTName)
-            {
-                int index;
-                if ((index = pptFinder(PPTName)) != -1)
+                if ((index = pptFinder_fullPath(fullPath)) != -1)
                 {
                     ppt[index].SlideShowHide();
                 }
@@ -1169,10 +1268,13 @@ namespace BibleProjector_WPF
         {
             // ============================================ 필요 변수 ============================================ 
 
+            public string FullPath;
+            public string OriginalFullPath;
             public string PPTName;
 
             Presentation ppt;
             SlideShowWindow SlideWindow = null;
+            System.Windows.Media.Imaging.BitmapImage[] thumbnails;
             int currentSlideNum = 1;
 
             bool isNeedMakeThumbnail = true;
@@ -1189,13 +1291,45 @@ namespace BibleProjector_WPF
             public void setPresentation(string path)
             {
                 string tempPath = EXTERN_TEMP_DIRECTORY + System.IO.Path.GetFileName(path);
-                System.IO.File.Copy(path, tempPath, true);
-                path = System.IO.Path.GetFullPath(tempPath);
+                string newPath = System.IO.Path.GetFullPath(tempPath);
+                string originalPath = path;
+                System.IO.File.Copy(originalPath, newPath, true);
 
-                this.PPTName = System.IO.Path.GetFileName(path);
+                this.FullPath = System.IO.Path.GetFullPath(newPath);
+                this.OriginalFullPath = originalPath;
+                this.PPTName = System.IO.Path.GetFileName(newPath);
 
-                ppt = app.Presentations.Open(path, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
+                ppt = app.Presentations.Open(newPath, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
                 checkValidPPT();
+
+                SetThumbNailImages(newPath);
+            }
+
+            void SetThumbNailImages(string fullPath)
+            {
+                this.ThumbnailGenerator();
+
+                System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(this.getThumbnailPath());
+                System.IO.FileInfo[] imageFiles = di.GetFiles();
+                System.Windows.Media.Imaging.BitmapImage[] imageData = new System.Windows.Media.Imaging.BitmapImage[imageFiles.Length];
+
+                System.Windows.Media.Imaging.BitmapImage bi;
+                int idx;
+                foreach (System.IO.FileInfo f in di.GetFiles())
+                {
+                    bi = new System.Windows.Media.Imaging.BitmapImage();
+                    bi.BeginInit();
+                    bi.CreateOptions = System.Windows.Media.Imaging.BitmapCreateOptions.IgnoreImageCache;
+                    bi.UriSource = new Uri(f.FullName, UriKind.Absolute);
+                    bi.CacheOption = System.Windows.Media.Imaging.BitmapCacheOption.OnLoad;
+                    bi.EndInit();
+                    bi.Freeze();
+
+                    idx = int.Parse(module.StringModifier.makeOnlyNum(f.Name)) - 1;
+                    imageData[idx] = bi;
+                }
+
+                this.thumbnails = imageData;
             }
 
             void checkAndClose(Presentation ppt)
@@ -1289,7 +1423,7 @@ namespace BibleProjector_WPF
             void makeThumbNail()
             {
                 deleteThumbNail();
-                ppt.SaveAs(getThumbnailPath(), PpSaveAsFileType.ppSaveAsJPG);
+                ppt.SaveAs(System.IO.Path.GetFullPath(EXTERN_THUMBNAIL_DIRECTORY+ppt.Name), PpSaveAsFileType.ppSaveAsJPG);
             }
 
             // ============================================ 메소드 ============================================
@@ -1309,6 +1443,11 @@ namespace BibleProjector_WPF
                     EXTERN_THUMBNAIL_DIRECTORY 
                     + System.IO.Path.GetFileNameWithoutExtension(ppt.Name)
                     );
+            }
+
+            public System.Windows.Media.Imaging.BitmapImage[] getThumbnailImages()
+            {
+                return thumbnails;
             }
 
             public void TopMost()
@@ -1337,18 +1476,20 @@ namespace BibleProjector_WPF
                     else
                         SlideWindow = ppt.SlideShowSettings.Run();
                 }
-                else
-                    ShowWindow(SlideWindow.HWND, SW_SHOW);
+                SlideShowHideInTaskbar(SlideWindow.HWND);
+
+                // Taskbar에서 powerpoint 앱을 숨기는 window api를 사용하면
+                // powerpoint show 화면이 꺼졌다 켜질 때 종종 검정화면으로 돌아가는 문제가 있어
+                // 아래 코드가 필요합니다.
+                SlideWindow.View.GotoSlide(currentSlideNum);
 
                 pptState = PptSlideState.WindowShow;
+                TopMost();
             }
 
-            /// <summary>
-            /// 이동한 슬라이드 위치를 반환
-            /// </summary>
-            /// <param name="slideIndex"></param>
-            /// <returns></returns>
-            public int goToSlide(int slideIndex)
+            System.Threading.Mutex slideControlMutex = new System.Threading.Mutex();
+
+            public void goToSlide(int slideIndex)
             {
                 if (slideIndex < 1)
                     currentSlideNum = 1;
@@ -1357,20 +1498,19 @@ namespace BibleProjector_WPF
                 else
                     currentSlideNum = slideIndex;
 
-                if (SlideWindow != null)
-                    SlideWindow.View.GotoSlide(currentSlideNum);
-
-                return currentSlideNum;
+                new System.Threading.Thread(threadedSlideMover)
+                    .Start(currentSlideNum);
             }
 
-            public int goNextSlide()
+            private void threadedSlideMover(object slideIndex)
             {
-                return goToSlide(currentSlideNum + 1);
-            }
+                slideControlMutex.WaitOne();
+                
+                if (currentSlideNum == (int)slideIndex)
+                    if (SlideWindow != null)
+                        SlideWindow.View.GotoSlide((int)slideIndex);
 
-            public int goPreviousSlide()
-            {
-                return goToSlide(currentSlideNum - 1);
+                slideControlMutex.ReleaseMutex();
             }
 
             public void SlideShowHide()

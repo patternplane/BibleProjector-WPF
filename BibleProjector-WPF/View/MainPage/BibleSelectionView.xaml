@@ -1,0 +1,191 @@
+﻿<UserControl x:Class="BibleProjector_WPF.View.MainPage.BibleSelectionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BibleProjector_WPF.View.MainPage"
+             mc:Ignorable="d" 
+             d:DesignHeight="297.436" d:DesignWidth="314.103">
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="37"/>
+            <RowDefinition Height="35"/>
+            <RowDefinition/>
+            <RowDefinition Height="43"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="70"/>
+            <ColumnDefinition Width="70"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Row="0" Grid.ColumnSpan="3" Background="#FFF7F7F7" CornerRadius="8" Margin="1,1,1,5" BorderBrush="Black" BorderThickness="1">
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" FontWeight="Bold">
+                            성경 찾기
+            </TextBlock>
+        </Border>
+
+        <TextBox Grid.Row="1" Grid.Column="0" Margin="2" IsReadOnly="True"
+                 HorizontalContentAlignment="Center"
+                 VerticalContentAlignment="Center"
+                 FontSize="15"
+                 Text="{Binding BookDisplay, Mode=OneWay}"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Margin="2" IsReadOnly="True"
+                 HorizontalContentAlignment="Center"
+                 VerticalContentAlignment="Center"
+                 FontSize="15"
+                 Text="{Binding ChapterDisplay, Mode=OneWay}"/>
+        <TextBox Grid.Row="1" Grid.Column="2" Margin="2" IsReadOnly="True"
+                 HorizontalContentAlignment="Center"
+                 VerticalContentAlignment="Center"
+                 FontSize="15"
+                 Text="{Binding VerseDisplay, Mode=OneWay}"/>
+
+        <TabControl Grid.Row="2" Grid.Column="0" Margin="2">
+            <TabItem Header="구약" x:Name="UE_OldBookTab">
+                <ListBox ScrollViewer.VerticalScrollBarVisibility="Visible" FontSize="15" VerticalAlignment="Stretch" Height="auto"
+                         ScrollViewer.CanContentScroll="False"
+                         SelectionChanged="EH_BookSelectionChanged"
+                         x:Name="UE_OldBookList"
+                         ItemsSource="{Binding OldBookList}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Padding="3,1,0,1">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="True">
+                                                <Setter Property="Background" Value="Orange"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <ContentPresenter Content="{Binding}"/>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Background">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="#E7FFEE"/>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Margin" Value="2,1"/>
+                            <Setter Property="Padding" Value="0"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                </ListBox>
+            </TabItem>
+            <TabItem Header="신약" x:Name="UE_NewBookTab">
+                <ListBox ScrollViewer.VerticalScrollBarVisibility="Visible" FontSize="15" VerticalAlignment="Stretch" Height="auto"
+                         ScrollViewer.CanContentScroll="False"
+                         SelectionChanged="EH_BookSelectionChanged"
+                         x:Name="UE_NewBookList"
+                         ItemsSource="{Binding NewBookList}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Padding="3,1,0,1">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="True">
+                                                <Setter Property="Background" Value="Orange"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <ContentPresenter Content="{Binding}"/>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Background">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="#FFEAE7"/>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Margin" Value="2,1"/>
+                            <Setter Property="Padding" Value="0"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                </ListBox>
+            </TabItem>
+        </TabControl>
+        <ListBox Grid.Row="2" Grid.Column="1" Margin="2" ScrollViewer.VerticalScrollBarVisibility="Visible" FontSize="15"
+                 ScrollViewer.CanContentScroll="False"
+                 SelectionChanged="EH_ChapterSelectionChanged"
+                 x:Name="UE_ChapterList"
+                 ItemsSource="{Binding ChapterList}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border Padding="3,1,0,1">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="True">
+                                        <Setter Property="Background" Value="Orange"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <ContentPresenter Content="{Binding}"/>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Padding" Value="0"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+        </ListBox>
+        <ListBox Grid.Row="2" Grid.Column="2" Margin="2" ScrollViewer.VerticalScrollBarVisibility="Visible" FontSize="15"
+                 ScrollViewer.CanContentScroll="False"
+                 SelectionChanged="EH_VerseSelectionChanged"
+                 x:Name="UE_VerseList"
+                 ItemsSource="{Binding VerseList}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border Padding="3,1,0,1">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="True">
+                                        <Setter Property="Background" Value="Orange"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <ContentPresenter Content="{Binding}"/>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Padding" Value="0"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                    <EventSetter Event="MouseDoubleClick" Handler="EH_BibleOpenDoubleClick"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+        </ListBox>
+
+        <Button Grid.Row="3" Grid.Column="0"
+                Margin="2,0,2,0" Background="#FF72E172"
+                FontSize="17"
+                Content="출   력"
+                Click="EH_ShowBibleButtonClick"/>
+        <Button Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"
+                Margin="2,0,2,0" Background="#FF02AAAA"
+                FontSize="17"
+                Content="예   약"
+                Click="EH_ReserveBibleButtonClick"/>
+    </Grid>
+</UserControl>

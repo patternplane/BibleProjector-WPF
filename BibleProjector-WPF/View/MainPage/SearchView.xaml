@@ -1,0 +1,242 @@
+﻿<UserControl x:Class="BibleProjector_WPF.View.MainPage.SearchView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BibleProjector_WPF.View.MainPage"
+             xmlns:rootns ="clr-namespace:BibleProjector_WPF"
+             mc:Ignorable="d" 
+             Height="auto" Width="360">
+    <UserControl.Resources>
+        <local:VisibilityConverter x:Key="VisibilityConverter"/>
+    </UserControl.Resources>
+
+    <!--검색-->
+    <Grid Margin="1,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="6"/>
+            <RowDefinition Height="70*"/>
+            <RowDefinition Height="6"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="4"/>
+            <RowDefinition Height="43"/>
+        </Grid.RowDefinitions>
+
+        <!--검색 : 제목표시-->
+        <ContentControl Grid.Row="0" FontSize="17" Content="통   합   검   색" FontWeight="Bold">
+            <ContentControl.Style>
+                <Style TargetType="ContentControl">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ContentControl">
+                                <Grid>
+                                    <Path Stretch="Fill" Fill="LightYellow" Stroke="Black" StrokeThickness="1">
+                                        <Path.Data>
+                                            <CombinedGeometry>
+                                                <CombinedGeometry.Geometry1>
+                                                    <RectangleGeometry Rect="0,0,200,18" RadiusX="9" RadiusY="9"></RectangleGeometry>
+                                                </CombinedGeometry.Geometry1>
+                                                <CombinedGeometry.Geometry2>
+                                                    <RectangleGeometry Rect="0,9,200,9"></RectangleGeometry>
+                                                </CombinedGeometry.Geometry2>
+                                            </CombinedGeometry>
+                                        </Path.Data>
+                                    </Path>
+                                    <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
+
+        <!--검색 : 미리보기-->
+        <Border Grid.Row="2" BorderBrush="Black" BorderThickness="2">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Border Grid.Row="0" BorderBrush="LightGray" BorderThickness="0,0,0,1">
+                    <Grid>
+                        <TextBlock Margin="5,0,1,0" FontSize="15" Text="{Binding SelectionItem.DisplayTitle}" VerticalAlignment="Center" FontWeight="Bold"/>
+                        <DockPanel>
+                            <Button Margin="3,3"
+                                    DockPanel.Dock="Right"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top"
+                                    Width="50"
+                                    Content="➕"
+                                    FontSize="14"
+                                    FontWeight="Bold"
+                                    BorderThickness="2"
+                                    Click="EH_Add_Button_Click">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Background" Value="#22C5F76E"/>
+                                        <Setter Property="Foreground" Value="#22005504"/>
+                                        <Setter Property="BorderBrush" Value="#22005504"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#FFC5F76E"/>
+                                                <Setter Property="Foreground" Value="#FF005504"/>
+                                                <Setter Property="BorderBrush" Value="#FF005504"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            <Button Margin="3,3"
+                                    DockPanel.Dock="Right"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top"
+                                    Width="50"
+                                    Content="✏️"
+                                    FontFamily="Malgun Gothic"
+                                    FontSize="14"
+                                    FontWeight="Bold"
+                                    BorderThickness="2"
+                                    Click="EH_Edit_Button_Click"
+                                    Visibility="{Binding CanOpenEditor, Converter={StaticResource VisibilityConverter}}">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Background" Value="#22F7BF6E"/>
+                                        <Setter Property="Foreground" Value="#22553600"/>
+                                        <Setter Property="BorderBrush" Value="#22633600"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#FFF7BF6E"/>
+                                                <Setter Property="Foreground" Value="#FF553600"/>
+                                                <Setter Property="BorderBrush" Value="#FF633600"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </DockPanel>
+                    </Grid>
+                </Border>
+                <Grid Grid.Row="1"
+                      Name="PreviewArea"
+                      Background="#00000000">
+                    <ScrollViewer>
+                        <ScrollViewer.Style>
+                            <Style TargetType="ScrollViewer">
+                                <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+                                <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectionItem.Type}" Value="{x:Static rootns:ShowContentType.Bible}">
+                                        <Setter Property="HorizontalScrollBarVisibility" Value="Disabled"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ScrollViewer.Style>
+                        <TextBlock FontSize="15" Margin="3" Text="{Binding SelectionItem.PreviewContent}" TextWrapping="Wrap"/>
+                    </ScrollViewer>
+                    <Border VerticalAlignment="Center" HorizontalAlignment="Center" Background="#BF898989">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Opacity" Value="0"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding NoneUse}" Value="true">
+                                        <DataTrigger.EnterActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity">
+                                                        <LinearDoubleKeyFrame KeyTime="0:0:0.2"
+                                                                              Value="1"/>
+                                                        <LinearDoubleKeyFrame KeyTime="0:0:0.8"
+                                                                              Value="1"/>
+                                                        <LinearDoubleKeyFrame KeyTime="0:0:1"
+                                                                              Value="0"/>
+                                                    </DoubleAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </DataTrigger.EnterActions>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <TextBlock Text="아직 사용할 수 없어요..! ㅜㅜ" FontSize="15" FontWeight="Bold" Foreground="Black" Margin="8,3"/>
+                    </Border>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <!--검색 : 검색창-->
+        <Grid Grid.Row="4" x:Name="SearchInputGrid">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="179*"/>
+                <ColumnDefinition Width="42*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" BorderBrush="black" BorderThickness="1,1,0,1">
+                <TextBox x:Name="SearchTextBox" FontSize="15" Text="{Binding SearchText}" Padding="0"
+                         PreviewKeyUp="EH_TextBoxKeyUp"
+                         VerticalContentAlignment="Center"
+                         GotFocus="EH_TextBoxGotFocus"
+                         PreviewMouseDown="EH_TextBoxClick"
+                         PreviewMouseDoubleClick="EH_TextBoxDoubleClick">
+                </TextBox>
+            </Border>
+            <Popup Grid.ColumnSpan="2"
+                   StaysOpen="False" IsOpen="{Binding ResultPopupOpen}"
+                   PopupAnimation="Scroll" AllowsTransparency="true"
+                   Width="{Binding ElementName=SearchInputGrid, Path=ActualWidth}">
+                <Border
+                    BorderBrush="LightGray"
+                    BorderThickness="1">
+                    <ListBox
+                        x:Name="ResultListBox"
+                        MaxHeight="210"
+                        ItemsSource="{Binding SearchResultList, Mode=TwoWay}"
+                        SelectionChanged="EH_SearchItemSelectionChanged"
+                        PreviewKeyUp="EH_ListBoxKeyUp"
+                        PreviewKeyDown="EH_ListBoxKeyDown"
+                        Background="#FFF5FFF4"
+                        BorderThickness="0"
+                        ScrollViewer.CanContentScroll="False">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Content="{Binding DisplayTitle}" FontSize="15"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <EventSetter Event="PreviewMouseUp" Handler="ListBoxItem_MouseClick"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
+                </Border>
+            </Popup>
+            <Button Grid.Column="1" FontSize="16" BorderBrush="Black" Background="#FF0272AA"
+                    PreviewMouseUp="EH_SearchButtonClick">
+                검 색
+            </Button>
+        </Grid>
+        
+        <!--검색 : 후처리 버튼-->
+        <Grid Grid.Row="6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0" Margin="0,0,2,0" Background="#FF72E172" Command="{Binding CStartShow}"
+                    FontSize="17"
+                    Content="출   력"/>
+            <Button Grid.Column="1" Margin="2,0,0,0" Background="#FF02AAAA" Command="{Binding CReserveThis}"
+                    FontSize="17"
+                    Content="예   약"/>
+        </Grid>
+    </Grid>
+</UserControl>

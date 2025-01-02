@@ -1,0 +1,269 @@
+﻿<UserControl x:Class="BibleProjector_WPF.View.MainPage.ExternPPTSetter"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BibleProjector_WPF.View.MainPage"
+             mc:Ignorable="d" 
+             Height="51" Width="188">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="22*"/>
+            <ColumnDefinition Width="8*"/>
+        </Grid.ColumnDefinitions>
+
+        <Button Grid.Column="0"
+                FontSize="15"
+                Content="{Binding MainTitle}"
+                Click="EH_MainButtonClick">
+            <Button.Template>
+                <ControlTemplate TargetType="ContentControl">
+                    <Grid>
+                        <Path x:Name="MainButton" Stretch="Fill" StrokeThickness="0.5">
+                            <Path.Data>
+                                <CombinedGeometry>
+                                    <CombinedGeometry.Geometry1>
+                                        <RectangleGeometry Rect="0,0,140,54" RadiusX="8" RadiusY="8"></RectangleGeometry>
+                                    </CombinedGeometry.Geometry1>
+                                    <CombinedGeometry.Geometry2>
+                                        <RectangleGeometry Rect="50,0,90,54"></RectangleGeometry>
+                                    </CombinedGeometry.Geometry2>
+                                </CombinedGeometry>
+                            </Path.Data>
+                        </Path>
+                        <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+                            <ContentPresenter.ContentTemplate>
+                                <DataTemplate>
+                                    <Border Margin="2,0" x:Name="TextViewBox">
+                                        <Viewbox Stretch="Uniform">
+                                            <TextBlock 
+                                                Text="{Binding}"
+                                                Width="{Binding ElementName=TextViewBox, Path=ActualWidth}"
+                                                MaxHeight="{Binding ElementName=TextViewBox, Path=ActualHeight}"
+                                                TextAlignment="Center"
+                                                TextWrapping="Wrap" 
+                                                TextTrimming="CharacterEllipsis"/>
+                                        </Viewbox>
+                                    </Border>
+                                </DataTemplate>
+                            </ContentPresenter.ContentTemplate>
+                        </ContentPresenter>
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter TargetName="MainButton" Property="Fill" Value="#FFB9ECF7"/>
+                            <Setter TargetName="MainButton" Property="Stroke" Value="#FF0C43FF"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="false">
+                            <Setter TargetName="MainButton" Property="Fill" Value="#FFFFFFD1"/>
+                            <Setter TargetName="MainButton" Property="Stroke" Value="black"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Button Grid.Row="0" FontSize="11"
+                    Click="EH_FirstButtonClick">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasItem}" Value="false">
+                                <Setter Property="Content" Value="등 록"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding HasItem}" Value="true">
+                                <Setter Property="Content" Value="새로고침"/>
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding OnShift}" Value="False">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Grid>
+                                                <Path x:Name="SetButton" Stretch="Fill" StrokeThickness="0.5">
+                                                    <Path.Data>
+                                                        <CombinedGeometry>
+                                                            <CombinedGeometry.Geometry1>
+                                                                <CombinedGeometry>
+                                                                    <CombinedGeometry.Geometry1>
+                                                                        <RectangleGeometry Rect="0,0,37,18" RadiusX="5" RadiusY="5"></RectangleGeometry>
+                                                                    </CombinedGeometry.Geometry1>
+                                                                    <CombinedGeometry.Geometry2>
+                                                                        <RectangleGeometry Rect="0,0,20,18"></RectangleGeometry>
+                                                                    </CombinedGeometry.Geometry2>
+                                                                </CombinedGeometry>
+                                                            </CombinedGeometry.Geometry1>
+                                                            <CombinedGeometry.Geometry2>
+                                                                <RectangleGeometry Rect="0,10,37,10"></RectangleGeometry>
+                                                            </CombinedGeometry.Geometry2>
+                                                        </CombinedGeometry>
+                                                    </Path.Data>
+                                                </Path>
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"></ContentPresenter>
+                                            </Grid>
+
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="true">
+                                                    <Setter TargetName="SetButton" Property="Fill" Value="#FFB9ECF7"/>
+                                                    <Setter TargetName="SetButton" Property="Stroke" Value="#FF0C43FF"/>
+                                                </Trigger>
+                                                <Trigger Property="IsMouseOver" Value="false">
+                                                    <Setter TargetName="SetButton" Property="Fill" Value="#FFF7B251"/>
+                                                    <Setter TargetName="SetButton" Property="Stroke" Value="black"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding OnShift}" Value="True">
+                                <Setter Property="Content" Value="삭 제"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Grid>
+                                                <Path x:Name="SetButton" Stretch="Fill" StrokeThickness="0.5">
+                                                    <Path.Data>
+                                                        <CombinedGeometry>
+                                                            <CombinedGeometry.Geometry1>
+                                                                <CombinedGeometry>
+                                                                    <CombinedGeometry.Geometry1>
+                                                                        <RectangleGeometry Rect="0,0,37,18" RadiusX="5" RadiusY="5"></RectangleGeometry>
+                                                                    </CombinedGeometry.Geometry1>
+                                                                    <CombinedGeometry.Geometry2>
+                                                                        <RectangleGeometry Rect="0,0,20,18"></RectangleGeometry>
+                                                                    </CombinedGeometry.Geometry2>
+                                                                </CombinedGeometry>
+                                                            </CombinedGeometry.Geometry1>
+                                                            <CombinedGeometry.Geometry2>
+                                                                <RectangleGeometry Rect="0,10,37,10"></RectangleGeometry>
+                                                            </CombinedGeometry.Geometry2>
+                                                        </CombinedGeometry>
+                                                    </Path.Data>
+                                                </Path>
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Grid>
+
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="true">
+                                                    <Setter TargetName="SetButton" Property="Fill" Value="#FFB9ECF7"/>
+                                                    <Setter TargetName="SetButton" Property="Stroke" Value="#FF0C43FF"/>
+                                                </Trigger>
+                                                <Trigger Property="IsMouseOver" Value="false">
+                                                    <Setter TargetName="SetButton" Property="Fill" Value="#FFFF7575"/>
+                                                    <Setter TargetName="SetButton" Property="Stroke" Value="black"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            
+            <Button Grid.Row="1" FontSize="11"
+                    Click="EH_SecondButtonClick">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding OnShift}" Value="False">
+                                <Setter Property="Content" Value="편 집"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Grid>
+                                                <Path x:Name="EditButton" Stretch="Fill" StrokeThickness="0.5">
+                                                    <Path.Data>
+                                                        <CombinedGeometry>
+                                                            <CombinedGeometry.Geometry1>
+                                                                <CombinedGeometry>
+                                                                    <CombinedGeometry.Geometry1>
+                                                                        <RectangleGeometry Rect="0,0,37,18" RadiusX="5" RadiusY="5"></RectangleGeometry>
+                                                                    </CombinedGeometry.Geometry1>
+                                                                    <CombinedGeometry.Geometry2>
+                                                                        <RectangleGeometry Rect="0,0,20,18"></RectangleGeometry>
+                                                                    </CombinedGeometry.Geometry2>
+                                                                </CombinedGeometry>
+                                                            </CombinedGeometry.Geometry1>
+                                                            <CombinedGeometry.Geometry2>
+                                                                <RectangleGeometry Rect="0,0,37,10"></RectangleGeometry>
+                                                            </CombinedGeometry.Geometry2>
+                                                        </CombinedGeometry>
+                                                    </Path.Data>
+                                                </Path>
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"></ContentPresenter>
+                                            </Grid>
+
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="true">
+                                                    <Setter TargetName="EditButton" Property="Fill" Value="#FFB9ECF7"/>
+                                                    <Setter TargetName="EditButton" Property="Stroke" Value="#FF0C43FF"/>
+                                                </Trigger>
+                                                <Trigger Property="IsMouseOver" Value="false">
+                                                    <Setter TargetName="EditButton" Property="Fill" Value="#FF008787"/>
+                                                    <Setter TargetName="EditButton" Property="Stroke" Value="black"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding OnShift}" Value="True">
+                                <Setter Property="Content" Value="예 약"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Grid>
+                                                <Path x:Name="EditButton" Stretch="Fill" StrokeThickness="0.5">
+                                                    <Path.Data>
+                                                        <CombinedGeometry>
+                                                            <CombinedGeometry.Geometry1>
+                                                                <CombinedGeometry>
+                                                                    <CombinedGeometry.Geometry1>
+                                                                        <RectangleGeometry Rect="0,0,37,18" RadiusX="5" RadiusY="5"></RectangleGeometry>
+                                                                    </CombinedGeometry.Geometry1>
+                                                                    <CombinedGeometry.Geometry2>
+                                                                        <RectangleGeometry Rect="0,0,20,18"></RectangleGeometry>
+                                                                    </CombinedGeometry.Geometry2>
+                                                                </CombinedGeometry>
+                                                            </CombinedGeometry.Geometry1>
+                                                            <CombinedGeometry.Geometry2>
+                                                                <RectangleGeometry Rect="0,0,37,10"></RectangleGeometry>
+                                                            </CombinedGeometry.Geometry2>
+                                                        </CombinedGeometry>
+                                                    </Path.Data>
+                                                </Path>
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Grid>
+
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="true">
+                                                    <Setter TargetName="EditButton" Property="Fill" Value="#FFB9ECF7"/>
+                                                    <Setter TargetName="EditButton" Property="Stroke" Value="#FF0C43FF"/>
+                                                </Trigger>
+                                                <Trigger Property="IsMouseOver" Value="false">
+                                                    <Setter TargetName="EditButton" Property="Fill" Value="#FF02AAAA"/>
+                                                    <Setter TargetName="EditButton" Property="Stroke" Value="black"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Grid>
+    </Grid>
+</UserControl>

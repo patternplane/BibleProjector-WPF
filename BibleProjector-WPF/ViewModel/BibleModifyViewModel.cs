@@ -8,14 +8,14 @@ using System.ComponentModel;
 
 namespace BibleProjector_WPF.ViewModel
 {
-    class BibleModifyViewModel : INotifyPropertyChanged
+    class BibleModifyViewModel : ViewModel
     {
         // =============================== 속성 =============================
 
         private string OriginContent_in;
-        public string OriginContent { get { return OriginContent_in; } set { OriginContent_in = value; NotifyPropertyChanged(); } }
+        public string OriginContent { get { return OriginContent_in; } set { OriginContent_in = value; OnPropertyChanged(); } }
         private string UserModifyContent_in;
-        public string UserModifyContent { get { return UserModifyContent_in; } set { UserModifyContent_in = value; NotifyPropertyChanged(); } }
+        public string UserModifyContent { get { return UserModifyContent_in; } set { UserModifyContent_in = value; OnPropertyChanged(); } }
 
         // =============================== 세팅 =============================
 
@@ -50,19 +50,6 @@ namespace BibleProjector_WPF.ViewModel
                 return;
 
             UserModifyContent = Database.getBible(currentKjjeul);
-        }
-
-
-
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged(string propertyName = "")
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
         }
     }
 }
