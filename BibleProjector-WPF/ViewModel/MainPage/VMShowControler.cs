@@ -30,17 +30,17 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         public ObservableCollection<VMShowItem> Pages { get; set; }
         int _CurrentPageIndex;
-        public int CurrentPageIndex 
-        { 
-            get 
-            { 
-                return _CurrentPageIndex; 
-            } 
-            set 
+        public int CurrentPageIndex
+        {
+            get
+            {
+                return _CurrentPageIndex;
+            }
+            set
             {
                 if (_CurrentPageIndex != value)
                     MovePage(value);
-            } 
+            }
         }
 
         public bool DisplayButtonState { get; set; } = false;
@@ -149,7 +149,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         {
             if (deleteAll)
                 setMoveNumber(0);
-            else if (moveNumber != 0) 
+            else if (moveNumber != 0)
             {
                 if (moveNumber / 10 == 0)
                     setMoveNumber(0);
@@ -158,9 +158,9 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             }
         }
 
-        // =================================
+        // ============ 일반 키 입력 ============
 
-        int KeyToNum(Key key)
+        private int KeyToNum(Key key)
         {
             if (key >= Key.D0 && key <= Key.D9)
                 return (key - Key.D0);
@@ -170,61 +170,66 @@ namespace BibleProjector_WPF.ViewModel.MainPage
                 return -1;
         }
 
-        public void keyInputed(Key inputKey, bool isDown)
+        public void keyInputed(Key inputKey, bool isDown, bool isRepeat)
         {
-            if (inputKey == Key.LeftCtrl
-                || inputKey == Key.RightCtrl)
+            if (!isRepeat)
             {
-                if (isDown)
+                if (inputKey == Key.LeftCtrl
+                    || inputKey == Key.RightCtrl)
                 {
-                    doFastPass = true;
+                    doFastPass = isDown;
                     OnPropertyChanged(nameof(doFastPass));
-                }
-                else
-                {
-                    doFastPass = false;
-                    OnPropertyChanged(nameof(doFastPass));
+                    return;
                 }
             }
 
             if (hasFocus && isDown)
             {
+                if (inputKey == Key.Up || inputKey == Key.Right)
+                {
+                    GoNextPage(doFastPass);
+                    return;
+                }
+
+                if (inputKey == Key.Down || inputKey == Key.Left)
+                {
+                    GoPreviousPage(doFastPass);
+                    return;
+                }
+            }
+
+            if (hasFocus && isDown && !isRepeat)
+            {
                 if (inputKey >= Key.D0 && inputKey <= Key.D9
-                    || inputKey >= Key.NumPad0 && inputKey <= Key.NumPad9) 
+                    || inputKey >= Key.NumPad0 && inputKey <= Key.NumPad9)
                 {
                     addMoveNumber(KeyToNum(inputKey));
+                    return;
                 }
-                else
+
+                if (inputKey == Key.Delete
+                    || inputKey == Key.Back)
                 {
-                    switch (inputKey)
+                    removeMoveNumber(true);
+                    return;
+                }
+
+                if (inputKey == Key.Enter) 
+                {
+                    if (Pages != null
+                        && 1 <= moveNumber && moveNumber <= Pages.Count)
                     {
-                        case Key.Enter:
-                            if (moveNumber != 0
-                                && Pages != null
-                                && 1 <= moveNumber && moveNumber <= Pages.Count)
-                            {
-                                MovePage(moveNumber - 1);
-                                removeMoveNumber(true);
-                            }
-                            else
-                                GoNextPage(doFastPass);
-                            break;
-                        case Key.Up:
-                        case Key.Right:
-                            GoNextPage(doFastPass);
-                            break;
-                        case Key.Down:
-                        case Key.Left:
-                            GoPreviousPage(doFastPass);
-                            break;
-                        case Key.Delete:
-                        case Key.Back:
-                            removeMoveNumber(true);
-                            break;
+                        MovePage(moveNumber - 1);
+                        removeMoveNumber(true);
                     }
+                    else
+                        GoNextPage(doFastPass);
+                    return;
                 }
             }
         }
+
+        // ==================================
 
         public void newShowStart(module.Data.ShowData data)
         {

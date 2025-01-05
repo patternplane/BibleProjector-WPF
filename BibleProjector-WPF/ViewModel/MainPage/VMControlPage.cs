@@ -43,7 +43,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             this.VM_ReserveList = reserveList;
             this.ExternPPTEditButtons = externPPTEditButtonVMs;
 
-            keyInputEventManager.KeyDown += KeyInputTask;
+            keyInputEventManager.KeyDownWithRepeat += KeyInputTask;
 
             showStarter.ShowStartEvent += WhenShowStarted;
         }
@@ -60,14 +60,15 @@ namespace BibleProjector_WPF.ViewModel.MainPage
                 changeBottomShowController(1);
         }
 
-        void KeyInputTask(System.Windows.Input.Key key, bool isDown)
+        void KeyInputTask(System.Windows.Input.Key key, bool isDown, bool isRepeat)
         {
             if (IsLoaded(null)) {
                 foreach (VMShowControler vm in ShowController)
-                    vm.keyInputed(key, isDown);
+                    vm.keyInputed(key, isDown, isRepeat);
 
                 if (key == System.Windows.Input.Key.CapsLock
-                    && isDown)
+                    && isDown
+                    && !isRepeat)
                 {
                     if (VM_ShowControler_bottom == ShowController[0])
                         changeBottomShowController(1);

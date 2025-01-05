@@ -161,8 +161,7 @@ namespace BibleProjector_WPF
                 if (k.key == e.Key)
                     k.state = true;
 
-            if (!e.IsRepeat)
-                keyInputEventManager.invokeKeyInput(e.Key, true);
+            keyInputEventManager.invokeKeyInput(e.Key, true, e.IsRepeat);
         }
 
         private void EH_KeyUpCheck(object sender, KeyEventArgs e)
@@ -171,8 +170,7 @@ namespace BibleProjector_WPF
                 if (k.key == e.Key)
                     k.state = false;
 
-            if (!e.IsRepeat)
-                keyInputEventManager.invokeKeyInput(e.Key, false);
+            keyInputEventManager.invokeKeyInput(e.Key, false, e.IsRepeat);
         }
 
         private class TrackedKey
@@ -208,7 +206,7 @@ namespace BibleProjector_WPF
         {
             foreach (TrackedKey k in TrackedKeys) 
                 if (Keyboard.IsKeyDown(k.key) != k.state)
-                    keyInputEventManager.invokeKeyInput(k.key, Keyboard.IsKeyDown(k.key));
+                    keyInputEventManager.invokeKeyInput(k.key, Keyboard.IsKeyDown(k.key), false);
 
             windowActivateChangedEventManager.invoke(true);
         }
