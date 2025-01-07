@@ -21,7 +21,9 @@
 
         <TabControl Grid.Row="1" Grid.Column="1">
             <!--통합 조작 페이지-->
-            <TabItem Header="통합검색 및 예약" Content="{Binding VM_MainControl}"/>
+            <TabItem Header="통합검색 및 예약">
+                <ContentControl Content="{Binding VM_MainControl}"/>
+            </TabItem>
 
             <!--자료 수정 페이지-->
             <TabItem Header="자료 수정">
