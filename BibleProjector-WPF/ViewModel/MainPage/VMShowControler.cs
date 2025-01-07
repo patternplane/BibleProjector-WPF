@@ -55,6 +55,8 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         private bool activation;
         public bool isActive { get { return hasFocus && activation; } }
 
+        public bool isShowing { get; private set; } = false;
+
         public bool doFastPass { get; private set; } = false;
 
         // 애니메이션 효과
@@ -100,9 +102,9 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         public void doViewModelChanged()
         {
-            DoAnimation = true;
-            OnPropertyChanged("DoAnimation");
             DoAnimation = false;
+            OnPropertyChanged("DoAnimation");
+            DoAnimation = true;
             OnPropertyChanged("DoAnimation");
 
             hasFocus = true;
@@ -116,6 +118,18 @@ namespace BibleProjector_WPF.ViewModel.MainPage
                 activation = isActive;
                 OnPropertyChanged(nameof(isActive));
             }
+        }
+
+        public void show()
+        {
+            this.isShowing = true;
+            OnPropertyChanged(nameof(this.isShowing));
+        }
+
+        public void hide()
+        {
+            this.isShowing = false;
+            OnPropertyChanged(nameof(this.isShowing));
         }
 
         // =========== 숫자 이동 입력 ===========
