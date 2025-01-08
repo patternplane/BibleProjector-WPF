@@ -396,14 +396,21 @@ namespace BibleProjector_WPF.View.MainPage
 
         private void EH_ReserveListBox_Focus_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
-            if (ReserveListBox.SelectedIndex == -1 && ReserveListBox.Items.Count > 0) 
-            {
-                ReserveListBox.Focus();
-                ((ListBoxItem)ReserveListBox.ItemContainerGenerator.ContainerFromIndex(0)).Focus();
-            }
-            else if (ReserveListBox.SelectedIndex >= 0)
+            if (ReserveListBox.SelectedItem != null
+                && getViewTypeProperty(ReserveListBox.SelectedItem) == ReserveViewType.NormalItem) 
             {
                 ((ListBoxItem)ReserveListBox.ItemContainerGenerator.ContainerFromIndex(ReserveListBox.SelectedIndex)).Focus();
+            }
+            else
+            {
+                for (int i = 0; i < ReserveListBox.Items.Count; i++)
+                {
+                    if (getViewTypeProperty(ReserveListBox.Items[i]) == ReserveViewType.NormalItem)
+                    {
+                        ((ListBoxItem)ReserveListBox.ItemContainerGenerator.ContainerFromIndex(i)).Focus();
+                        break;
+                    }
+                }
             }
         }
     }

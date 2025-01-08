@@ -39,7 +39,6 @@
                     Padding="5,0"
                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                     AllowDrop="true"
-                    PreviewMouseUp="EH_ReserveListBox_Focus_PreviewMouseUp"
                     
                     PreviewMouseWheel="EH_ScrollByWheel"
                     
