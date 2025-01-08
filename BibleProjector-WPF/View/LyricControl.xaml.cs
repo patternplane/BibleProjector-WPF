@@ -52,16 +52,6 @@ namespace BibleProjector_WPF
             VM_LyricViewModel.RunDelete();
         }
 
-        void TitleTextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            VM_LyricViewModel.RunCompleteModify();
-        }
-
-        void ContentTextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            VM_LyricViewModel.RunCompleteModify();
-        }
-
         // =========================== 곡 추가 탭
 
         void AddButton_Click(object sender, RoutedEventArgs e)

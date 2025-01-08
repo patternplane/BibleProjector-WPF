@@ -32,33 +32,17 @@ namespace BibleProjector_WPF.ViewModel
         // ============================================ 속성 ==============================================
 
         // 가사 선택값
+        /// <summary>
+        /// 변경시 <see cref="setCurrentLyric"/>을 사용할 것
+        /// </summary>
         private module.Data.SongData currentLyric_in;
+        /// <summary>
+        /// 변경시 <see cref="setCurrentLyric"/>을 사용할 것
+        /// </summary>
         public module.Data.SongData currentLyric
         {
-            get
-            {
-                return currentLyric_in;
-            }
-            set
-            {
-                currentLyric_in = value;
-                SelectedLyric = currentLyric_in;
-                isChangingLyric_title = true;
-                isChangingLyric_content = true;
-                if (currentLyric_in == null)
-                {
-                    isDeleteButtonEnable = false;
-                    currentLyricTitle = "";
-                    currentLyricContent = "";
-                }
-                else
-                {
-                    isDeleteButtonEnable = true;
-                    currentLyricTitle = currentLyric_in.songTitle;
-                    currentLyricContent = currentLyric_in.songContent.getRawContent();
-                }
-                OnPropertyChanged();
-            }
+            get { return currentLyric_in; }
+            set { setCurrentLyric(value, true); }
         }
 
         // =================================== 공용
@@ -98,42 +82,29 @@ namespace BibleProjector_WPF.ViewModel
         public bool isAddButtonEnable { get { return isAddButtonEnable_in; } set { isAddButtonEnable_in = value; OnPropertyChanged(); } }
 
         // 가사의 제목과 내용
-        private bool needCheckNewLine_title = false;
-        private bool isChangingLyric_title = false;
+        /// <summary>
+        /// 변경시 <see cref="setCurrentTitle"/>을 사용할 것
+        /// </summary>
         private string currentLyricTitle_in;
-        public string currentLyricTitle { get { return currentLyricTitle_in; } set {
-                currentLyricTitle_in = value;
-                if (!isChangingLyric_title)
-                {
-                    needCheckNewLine_title = true;
-                    if (currentLyric != null)
-                        currentLyric.songTitle = currentLyricTitle_in;
-                }
-                else
-                    needCheckNewLine_title = false;
-                isChangingLyric_title = false;
-                OnPropertyChanged();
-            } }
-        private bool needCheckNewLine_Content = false;
-        private bool isChangingLyric_content = false;
+        /// <summary>
+        /// 변경시 <see cref="setCurrentTitle"/>을 사용할 것
+        /// </summary>
+        public string currentLyricTitle
+        { 
+            get { return currentLyricTitle_in; } 
+            set { setCurrentTitle(value, true); }
+        }
+        /// <summary>
+        /// 변경시 <see cref="setCurrentContent"/>을 사용할 것
+        /// </summary>
         private string currentLyricContent_in;
+        /// <summary>
+        /// 변경시 <see cref="setCurrentContent"/>을 사용할 것
+        /// </summary>
         public string currentLyricContent
         {
             get { return currentLyricContent_in; }
-            set
-            {
-                currentLyricContent_in = value;
-                if (!isChangingLyric_content)
-                {
-                    needCheckNewLine_Content = true;
-                    if (currentLyric != null)
-                        currentLyric.songContent.setContent(currentLyricContent_in, 0);
-                }
-                else
-                    needCheckNewLine_Content = false;
-                isChangingLyric_content = false;
-                OnPropertyChanged();
-            }
+            set { setCurrentContent(value, true); }
         }
 
         // 가사 리스트
@@ -296,7 +267,7 @@ namespace BibleProjector_WPF.ViewModel
                     refreshSearchItem(newLyric, lastSearchPattern);
                     SearchText = lastSearchPattern;
                 }
-                currentLyric = newLyric;
+                setCurrentLyric(newLyric);
             }
         }
 
@@ -318,45 +289,13 @@ namespace BibleProjector_WPF.ViewModel
                 SearchText = lastSearchPattern;
             }
 
-            currentLyric = null;
+            setCurrentLyric(null);
         }
 
         public void RunSetFromSearchValue()
         {
             if (currentSearchData != null && currentLyric != currentSearchData.lyric)
-                currentLyric = currentSearchData.lyric;
-        }
-
-        public void RunCompleteModify()
-        {
-            bool isUpdated = false;
-
-            if (needCheckNewLine_title)
-            {
-                currentLyricTitle = module.StringModifier.makeCorrectNewline(currentLyricTitle);
-                needCheckNewLine_title = false;
-                isUpdated = true;
-            }
-            if (needCheckNewLine_Content)
-            {
-                currentLyricContent = module.StringModifier.makeCorrectNewline(currentLyricContent);
-                needCheckNewLine_Content = false;
-                isUpdated = true;
-            }
-
-            if (currentLyric != null)
-            {
-                if (isUpdated)
-                {
-                    if (currentLyric.songType == module.Data.SongDataTypeEnum.CCM)
-                        songManager.saveCCMData(false);
-                    if (currentLyric.songType == module.Data.SongDataTypeEnum.HYMN)
-                        songManager.saveHymnData(false);
-                }
-
-                if (lastSearchPattern != null)
-                    refreshSearchItem(currentLyric, lastSearchPattern);
-            }
+                setCurrentLyric(currentSearchData.lyric);
         }
 
         public void RunApplyHymnModify()
@@ -382,6 +321,98 @@ namespace BibleProjector_WPF.ViewModel
         }
 
         // ============================================ 메소드 ==============================================
+
+        /// <summary>
+        /// 현재 표시중인 가사를 설정합니다.
+        /// <br/><paramref name="byBinding"/>이 <see langword="true"/>이면 UI에 의한 입력의 처리를 함께 진행합니다.
+        /// </summary>
+        /// <param name="lyric"></param>
+        /// <param name="byBinding"></param>
+        private void setCurrentLyric(module.Data.SongData lyric, bool byBinding = false)
+        {
+            currentLyric_in = lyric;
+            if (!byBinding)
+            {
+                OnPropertyChanged(nameof(currentLyric));
+            }
+
+            SelectedLyric = currentLyric_in;
+
+            if (currentLyric_in == null)
+            {
+                isDeleteButtonEnable = false;
+                setCurrentTitle("");
+                setCurrentContent("");
+            }
+            else
+            {
+                isDeleteButtonEnable = true;
+                setCurrentTitle(currentLyric_in.songTitle);
+                setCurrentContent(currentLyric_in.songContent.getRawContent());
+            }
+        }
+
+        /// <summary>
+        /// 현재 표시중인 곡의 제목을 설정합니다.
+        /// <br/><paramref name="byBinding"/>이 <see langword="true"/>이면 UI에 의한 입력의 처리를 함께 진행합니다.
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="byBinding"></param>
+        private void setCurrentTitle(string title, bool byBinding = false)
+        {
+            if (byBinding)
+            {
+                currentLyricTitle_in = module.StringModifier.makeCorrectNewline(title);
+                if (currentLyric != null)
+                {
+                    currentLyric.songTitle = currentLyricTitle_in;
+
+                    if (currentLyric.songType == module.Data.SongDataTypeEnum.CCM)
+                        songManager.saveCCMData(false);
+                    if (currentLyric.songType == module.Data.SongDataTypeEnum.HYMN)
+                        songManager.saveHymnData(false);
+
+                    if (lastSearchPattern != null)
+                        refreshSearchItem(currentLyric, lastSearchPattern);
+                }
+            }
+            else
+            {
+                currentLyricTitle_in = title;
+                OnPropertyChanged(nameof(currentLyricTitle));
+            }
+        }
+
+        /// <summary>
+        /// 현재 표시중인 곡의 가사를 설정합니다.
+        /// <br/><paramref name="byBinding"/>이 <see langword="true"/>이면 UI에 의한 입력의 처리를 함께 진행합니다.
+        /// </summary>
+        /// <param name="content"></param>
+        /// <param name="byBinding"></param>
+        private void setCurrentContent(string content, bool byBinding = false)
+        {
+            if (byBinding)
+            {
+                currentLyricContent_in = module.StringModifier.makeCorrectNewline(content);
+                if (currentLyric != null)
+                {
+                    currentLyric.songContent.setContent(currentLyricContent_in, 0);
+
+                    if (currentLyric.songType == module.Data.SongDataTypeEnum.CCM)
+                        songManager.saveCCMData(false);
+                    if (currentLyric.songType == module.Data.SongDataTypeEnum.HYMN)
+                        songManager.saveHymnData(false);
+
+                    if (lastSearchPattern != null)
+                        refreshSearchItem(currentLyric, lastSearchPattern);
+                }
+            }
+            else
+            {
+                currentLyricContent_in = content;
+                OnPropertyChanged(nameof(currentLyricContent));
+            }
+        }
 
         void ShowLyric(module.Data.SongData lyric, module.SongFrameFile FrameFile, int linePerSlide)
         {

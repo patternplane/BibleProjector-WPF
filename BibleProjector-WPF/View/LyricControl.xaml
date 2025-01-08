@@ -65,16 +65,14 @@
                                 <ColumnDefinition Width="70*"/>
                             </Grid.ColumnDefinitions>
                             <ComboBox Grid.Column="0" ItemsSource="{Binding LyricList}" DisplayMemberPath="songTitle"
-                                  SelectedItem="{Binding currentLyric}"
-                                  x:Name="LyricComboBox">
+                                  SelectedItem="{Binding currentLyric}">
                             </ComboBox>
                             <Button Grid.Column="2" Content="곡 삭제" IsEnabled="{Binding isDeleteButtonEnable}"
                             Click="DeleteButton_Click"/>
                         </Grid>
 
                         <TextBox Grid.Row="5" Grid.Column="1" HorizontalScrollBarVisibility="auto"
-                             Text="{Binding currentLyricTitle, UpdateSourceTrigger=PropertyChanged}" 
-                             LostFocus="TitleTextBox_LostFocus">
+                             Text="{Binding currentLyricTitle, UpdateSourceTrigger=LostFocus}">
                         </TextBox>
 
                         <TextBox 
@@ -83,8 +81,7 @@
                         AcceptsReturn="True" 
                         HorizontalScrollBarVisibility="Auto" 
                         VerticalScrollBarVisibility="auto" 
-                        Text="{Binding currentLyricContent, UpdateSourceTrigger=PropertyChanged}"
-                        LostFocus="ContentTextBox_LostFocus">
+                        Text="{Binding currentLyricContent, UpdateSourceTrigger=LostFocus}">
                         </TextBox>
                     </Grid>
                 </TabItem>
