@@ -9,6 +9,34 @@ namespace BibleProjector_WPF.module
     class StringModifier
     {
         /// <summary>
+        /// 불필요한 줄바꿈을 지웁니다.
+        /// <br/><paramref name="input"/>은 윈도우 표준 개행방식으로 처리된 문자열이어야 합니다!
+        /// </summary>
+        /// <param name="input">입력 문자열</param>
+        /// <returns>출력 문자열</returns>
+        static public string RemoveMultiLinefeeds(string windowsLineBreakString)
+        {
+            StringBuilder output = new StringBuilder("");
+            int startIndex = 0;
+            int count;
+
+            while (true)
+            {
+                while ((startIndex != windowsLineBreakString.Length) && (char.IsWhiteSpace(windowsLineBreakString[startIndex])))
+                    startIndex++;
+                if (startIndex == windowsLineBreakString.Length)
+                    break;
+                count = 1;
+                while ((startIndex + count != windowsLineBreakString.Length) && (windowsLineBreakString[startIndex + count - 1] != '\n'))
+                    count++;
+                output.Append(windowsLineBreakString.Substring(startIndex, count));
+                startIndex += count;
+            }
+
+            return output.ToString();
+        }
+
+        /// <summary>
         /// 잘못된 개행문자를 윈도우 표준에 맞게 바꿔줍니다.
         /// </summary>
         /// <param name="original">

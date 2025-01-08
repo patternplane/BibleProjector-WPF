@@ -81,6 +81,9 @@ namespace BibleProjector_WPF.ViewModel
         private bool isAddButtonEnable_in = true;
         public bool isAddButtonEnable { get { return isAddButtonEnable_in; } set { isAddButtonEnable_in = value; OnPropertyChanged(); } }
 
+        // 가사의 중복엔터 삭제 버튼 보이기
+        public bool isMultiLineDeleteButtonEnable { get; set; } = false;
+
         // 가사의 제목과 내용
         /// <summary>
         /// 변경시 <see cref="setCurrentTitle"/>을 사용할 것
@@ -104,7 +107,16 @@ namespace BibleProjector_WPF.ViewModel
         public string currentLyricContent
         {
             get { return currentLyricContent_in; }
-            set { setCurrentContent(value, true); }
+            set { setCurrentContent(module.StringModifier.makeCorrectNewline(value)); currentLyricContent_isUpdated = true; }
+        }
+        private bool currentLyricContent_isUpdated = false;
+        public void submitModifyingCurrentContent()
+        {
+            if (currentLyricContent_isUpdated)
+            {
+                setCurrentContent(module.StringModifier.makeCorrectNewline(currentLyricContent_in), true);
+                currentLyricContent_isUpdated = false;
+            }
         }
 
         // 가사 리스트
@@ -320,6 +332,15 @@ namespace BibleProjector_WPF.ViewModel
                 reserveDataManager.AddReserveItem(this, SelectedLyric);
         }
 
+        public void RunRemoveDoubleEnter()
+        {
+            if (MessageBox.Show("중복 개행을 삭제합니다!", "중복 개행 삭제", MessageBoxButton.OKCancel, MessageBoxImage.Warning)
+                == MessageBoxResult.OK)
+            {
+                setCurrentContent(module.StringModifier.RemoveMultiLinefeeds(currentLyricContent).Trim(), true);
+            }
+        }
+
         // ============================================ 메소드 ==============================================
 
         /// <summary>
@@ -354,13 +375,13 @@ namespace BibleProjector_WPF.ViewModel
 
         /// <summary>
         /// 현재 표시중인 곡의 제목을 설정합니다.
-        /// <br/><paramref name="byBinding"/>이 <see langword="true"/>이면 UI에 의한 입력의 처리를 함께 진행합니다.
+        /// <br/><paramref name="applyChange"/>이 <see langword="true"/>이면 변경을 반영하는 처리를 함께 진행합니다.
         /// </summary>
         /// <param name="title"></param>
-        /// <param name="byBinding"></param>
-        private void setCurrentTitle(string title, bool byBinding = false)
+        /// <param name="applyChange"></param>
+        private void setCurrentTitle(string title, bool applyChange = false)
         {
-            if (byBinding)
+            if (applyChange)
             {
                 currentLyricTitle_in = module.StringModifier.makeCorrectNewline(title);
                 if (currentLyric != null)
@@ -379,19 +400,19 @@ namespace BibleProjector_WPF.ViewModel
             else
             {
                 currentLyricTitle_in = title;
-                OnPropertyChanged(nameof(currentLyricTitle));
             }
+            OnPropertyChanged(nameof(currentLyricTitle));
         }
 
         /// <summary>
         /// 현재 표시중인 곡의 가사를 설정합니다.
-        /// <br/><paramref name="byBinding"/>이 <see langword="true"/>이면 UI에 의한 입력의 처리를 함께 진행합니다.
+        /// <br/><paramref name="applyChange"/>이 <see langword="true"/>이면 변경을 반영하는 처리를 함께 진행합니다.
         /// </summary>
         /// <param name="content"></param>
-        /// <param name="byBinding"></param>
-        private void setCurrentContent(string content, bool byBinding = false)
+        /// <param name="applyChange"></param>
+        private void setCurrentContent(string content, bool applyChange = false)
         {
-            if (byBinding)
+            if (applyChange)
             {
                 currentLyricContent_in = module.StringModifier.makeCorrectNewline(content);
                 if (currentLyric != null)
@@ -410,8 +431,11 @@ namespace BibleProjector_WPF.ViewModel
             else
             {
                 currentLyricContent_in = content;
-                OnPropertyChanged(nameof(currentLyricContent));
             }
+            OnPropertyChanged(nameof(currentLyricContent));
+
+            isMultiLineDeleteButtonEnable = currentLyricContent_in.Contains("\r\n\r\n");
+            OnPropertyChanged(nameof(isMultiLineDeleteButtonEnable));
         }
 
         void ShowLyric(module.Data.SongData lyric, module.SongFrameFile FrameFile, int linePerSlide)

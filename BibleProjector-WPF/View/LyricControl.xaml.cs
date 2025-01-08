@@ -52,6 +52,16 @@ namespace BibleProjector_WPF
             VM_LyricViewModel.RunDelete();
         }
 
+        private void LyricContentTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            VM_LyricViewModel.submitModifyingCurrentContent();
+        }
+
+        private void RemoveEnterButton_Click(object sender, RoutedEventArgs e)
+        {
+            VM_LyricViewModel.RunRemoveDoubleEnter();
+        }
+
         // =========================== 곡 추가 탭
 
         void AddButton_Click(object sender, RoutedEventArgs e)

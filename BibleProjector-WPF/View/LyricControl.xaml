@@ -75,14 +75,59 @@
                              Text="{Binding currentLyricTitle, UpdateSourceTrigger=LostFocus}">
                         </TextBox>
 
-                        <TextBox 
-                        Grid.Row="7" 
-                        Grid.Column="1" 
-                        AcceptsReturn="True" 
-                        HorizontalScrollBarVisibility="Auto" 
-                        VerticalScrollBarVisibility="auto" 
-                        Text="{Binding currentLyricContent, UpdateSourceTrigger=LostFocus}">
-                        </TextBox>
+                        <Border
+                            Grid.Row="7" 
+                            Grid.Column="1"
+                            BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+                            BorderThickness="1">
+                            <Grid>
+                                <ScrollViewer
+                                    HorizontalScrollBarVisibility="Auto" 
+                                    VerticalScrollBarVisibility="Auto"
+                                    x:Name="ContentScrollViewer">
+                                    <TextBox 
+                                        BorderThickness="0"
+                                        AcceptsReturn="True" 
+                                        Text="{Binding currentLyricContent, UpdateSourceTrigger=PropertyChanged}"
+                                        LostFocus="LyricContentTextBox_LostFocus"/>
+                                </ScrollViewer>
+                                <Border Width="{Binding ElementName=ContentScrollViewer, Path=ViewportWidth}"
+                                        HorizontalAlignment="Left">
+                                    <Button
+                                        Content="엔터 지우기"
+                                        FontSize="10"
+                                        FontWeight="Bold"
+                                        Padding="3,4"
+                                        Margin="0,5,5,0"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Top"
+                                        Click="RemoveEnterButton_Click">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding isMultiLineDeleteButtonEnable}" Value="true">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding isMultiLineDeleteButtonEnable}" Value="false">
+                                                        <Setter Property="Visibility" Value="Hidden"/>
+                                                    </DataTrigger>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="#FFF06B2C"/>
+                                                        <Setter Property="Foreground" Value="Black"/>
+                                                        <Setter Property="BorderBrush" Value="Black"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsMouseOver" Value="False">
+                                                        <Setter Property="Background" Value="#3FF06B2C"/>
+                                                        <Setter Property="Foreground" Value="#7F000000"/>
+                                                        <Setter Property="BorderBrush" Value="#3F000000"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                </Border>
+                            </Grid>
+                        </Border>
                     </Grid>
                 </TabItem>
 
