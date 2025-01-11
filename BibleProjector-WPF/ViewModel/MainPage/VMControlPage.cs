@@ -47,7 +47,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
             keyInputEventManager.KeyDownWithRepeat += KeyInputTask;
 
-            showStarter.ShowStartEvent += WhenShowStarted;
+            showStarter.ShowStartPreparing += WhenShowStarted;
         }
 
         // ========== Show Controller Changing ===========

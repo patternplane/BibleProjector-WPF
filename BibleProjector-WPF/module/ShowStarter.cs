@@ -9,6 +9,7 @@ namespace BibleProjector_WPF.module
 {
     public class ShowStarter
     {
+        public event Event.ShowStartEventHandler ShowStartPreparing;
         public event Event.ShowStartEventHandler ShowStartEvent;
         public event EventHandler ShowStartTaskDone;
 
@@ -24,6 +25,7 @@ namespace BibleProjector_WPF.module
                     throw new Exception("슬라이드 쇼를 실행할 수 없는 항목을 표시하려 했습니다. " + showData.canExcuteShow().ToString());
                 else
                 {
+                    ShowStartPreparing.Invoke(this, new Event.ShowStartEventArgs(showData));
                     ShowStartEvent.Invoke(this, new Event.ShowStartEventArgs(showData));
                     ShowStartTaskDone.Invoke(this, null);
                 }
