@@ -74,7 +74,8 @@
                             <Setter Property="Padding" Value="0"/>
                             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                             <EventSetter Event="MouseMove" Handler="EH_GetMouseMove"/>
-                            <EventSetter Event="MouseDoubleClick" Handler="EH_ItemDoubleClick"/>
+                            <EventSetter Event="PreviewMouseDown" Handler="EH_ItemDoubleClick_Trigger"/>
+                            <EventSetter Event="PreviewMouseUp" Handler="EH_ItemDoubleClick_Performer"/>
                             <EventSetter Event="PreviewKeyDown" Handler="EH_ListBoxItem_PreviewKeyDown"/>
                             <EventSetter Event="PreviewKeyUp" Handler="EH_ListBoxItem_PreviewKeyUp"/>
                             <Style.Triggers>
