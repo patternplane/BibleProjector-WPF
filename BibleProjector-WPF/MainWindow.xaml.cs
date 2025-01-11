@@ -34,6 +34,7 @@ namespace BibleProjector_WPF
 
             this.SetBinding(keyInputEventManagerProperty, new Binding("keyInputEventManager"));
             this.SetBinding(windowActivateChangedEventManagerProperty, new Binding("windowActivateChangedEventManager"));
+            this.SetBinding(activeSetterProperty, new Binding("activeSetter") { Mode = BindingMode.OneWay });
 
             setMinSize();
             setInnerContentSize();
@@ -200,6 +201,30 @@ namespace BibleProjector_WPF
         {
             get => (Event.WindowActivateChangedEventManager)GetValue(windowActivateChangedEventManagerProperty);
             set => SetValue(windowActivateChangedEventManagerProperty, value);
+        }
+
+        public static readonly DependencyProperty activeSetterProperty =
+        DependencyProperty.Register(
+            name: "activeSetter",
+            propertyType: typeof(bool),
+            ownerType: typeof(MainWindow),
+            typeMetadata: new PropertyMetadata(
+                (d, e) =>
+                {
+                    if ((bool)e.NewValue)
+                    {
+                        ((MainWindow)d).Topmost = true;
+                        ((MainWindow)d).Topmost = false;
+                        ((MainWindow)d).Activate();
+                    }
+                }
+                )
+            );
+
+        public bool activeSetter
+        {
+            get => (bool)GetValue(activeSetterProperty);
+            set => SetValue(activeSetterProperty, value);
         }
 
         private void EH_Window_Activated(object sender, EventArgs e)
