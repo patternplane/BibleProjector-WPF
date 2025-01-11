@@ -387,6 +387,8 @@ namespace BibleProjector_WPF.View.MainPage
             ReserveListBox.UpdateLayout();
             foreach (object item in selections)
                 ((ListBoxItem)ReserveListBox.ItemContainerGenerator.ContainerFromItem(item)).IsSelected = true;
+            if (selections.Count > 0)
+                ((ListBoxItem)ReserveListBox.ItemContainerGenerator.ContainerFromItem(selections[0])).Focus();
 
             DragPreviewItem.Visibility = Visibility.Hidden;
             DropPreviewItem.Visibility = Visibility.Collapsed;
