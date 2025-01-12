@@ -1506,23 +1506,32 @@ namespace BibleProjector_WPF
             // 따라서 비동기 로직으로 구성하기 위해, 실제 슬라이드의 이동은 스레딩을 통해 처리함.
 
             System.Threading.Mutex slideControlMutex = new System.Threading.Mutex();
-            private (bool isRequested, int slideIndex) slideMoveRequest = (false, -1);
+            private (bool isRequested, int slideIndex) slideMoveRequest = NULL_REQUEST;
             private System.Threading.Thread slideControlThread = null;
+
+            private static readonly (bool, int) NULL_REQUEST = (false, -1);
 
             private void slideMoveThreadFunc()
             {
+                (bool isRequested, int slideIndex) readData;
                 while (true)
                 {
+                    readData = NULL_REQUEST;
                     slideControlMutex.WaitOne();
 
                     if (slideMoveRequest.isRequested
                         && SlideWindow != null)
                     {
-                        SlideWindow.View.GotoSlide(slideMoveRequest.slideIndex);
-                        slideMoveRequest = (false, -1);
+                        readData = slideMoveRequest;
+                        slideMoveRequest = NULL_REQUEST;
                     }
 
                     slideControlMutex.ReleaseMutex();
+
+                    if (readData.isRequested) { 
+                        SlideWindow.View.GotoSlide(readData.slideIndex);
+                        readData = NULL_REQUEST;
+                    }
                 }
             }
 
