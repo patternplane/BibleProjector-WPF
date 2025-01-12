@@ -166,7 +166,7 @@ namespace BibleProjector_WPF.ViewModel
             set 
             { 
                 _AddLyricContent = value;
-                isMultiLineDeleteButtonEnable_AddLyric = _AddLyricContent.Contains("\r\n\r\n");
+                isMultiLineDeleteButtonEnable_AddLyric = module.StringModifier.hasMultiLinefeeds(_AddLyricContent);
                 OnPropertyChanged(nameof(isMultiLineDeleteButtonEnable_AddLyric));
             } 
         }
@@ -279,7 +279,7 @@ namespace BibleProjector_WPF.ViewModel
             }
             OnPropertyChanged(nameof(VerseContent));
 
-            isMultiLineDeleteButtonEnable_Hymn = VerseContent_in.Contains("\r\n\r\n");
+            isMultiLineDeleteButtonEnable_Hymn = module.StringModifier.hasMultiLinefeeds(VerseContent_in);
             OnPropertyChanged(nameof(isMultiLineDeleteButtonEnable_Hymn));
         }
 
@@ -511,7 +511,7 @@ namespace BibleProjector_WPF.ViewModel
             }
             OnPropertyChanged(nameof(currentLyricContent));
 
-            isMultiLineDeleteButtonEnable = currentLyricContent_in.Contains("\r\n\r\n");
+            isMultiLineDeleteButtonEnable = module.StringModifier.hasMultiLinefeeds(currentLyricContent_in);
             OnPropertyChanged(nameof(isMultiLineDeleteButtonEnable));
         }
 
