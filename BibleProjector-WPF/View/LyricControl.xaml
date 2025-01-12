@@ -17,7 +17,7 @@
             <ColumnDefinition Width="76*"/>
         </Grid.ColumnDefinitions>
         <Grid Grid.Row="0">
-            <TabControl>
+            <TabControl SelectedIndex="{Binding TabSelectionIndex}">
                 <!--곡 선택-->
                 <TabItem Header="곡 선택">
                     <Grid>

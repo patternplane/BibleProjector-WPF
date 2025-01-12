@@ -47,6 +47,9 @@ namespace BibleProjector_WPF.ViewModel
 
         // =================================== 공용
 
+        // 탭 표시 인덱스
+        public int TabSelectionIndex { get; set; }
+
         // 출력 곡 선택값
         private module.Data.SongData SelectedLyric_in;
         public module.Data.SongData SelectedLyric
@@ -336,6 +339,13 @@ namespace BibleProjector_WPF.ViewModel
                     SearchText = lastSearchPattern;
                 }
                 setCurrentLyric(newLyric);
+
+                AddLyricTitle = "";
+                OnPropertyChanged(nameof(AddLyricTitle));
+                AddLyricContent = "";
+                OnPropertyChanged(nameof(AddLyricContent));
+                TabSelectionIndex = 0;
+                OnPropertyChanged(nameof(TabSelectionIndex));
             }
         }
 
