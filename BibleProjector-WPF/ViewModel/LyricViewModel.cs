@@ -332,6 +332,7 @@ namespace BibleProjector_WPF.ViewModel
             if (newLyric != null)
             {
                 songManager.AddSongInOrder(newLyric);
+                LyricList.ResetBindings(); // BindingList 내부의 각 항목들에 대한 갱신은 다시 명시적으로 처리해야 함.
 
                 if (lastSearchPattern != null)
                 {
@@ -359,6 +360,7 @@ namespace BibleProjector_WPF.ViewModel
                 return;
 
             songManager.DeleteSongItem(deleteItem);
+            LyricList.ResetBindings(); // BindingList 내부의 각 항목들에 대한 갱신은 다시 명시적으로 처리해야 함.
 
             if (lastSearchPattern != null)
             {
@@ -482,6 +484,24 @@ namespace BibleProjector_WPF.ViewModel
 
                     if (lastSearchPattern != null)
                         refreshSearchItem(currentLyric, lastSearchPattern);
+
+                    LyricList.ResetBindings(); // BindingList 내부의 각 항목들에 대한 갱신은 다시 명시적으로 처리해야 함.
+                    // 표시되는 현재 선택값도 갱신이 필요하므로 진행.
+                    // Nested Property 형태의 바인딩이므로 내부 속성에 대한 onPropertyChanged 이벤트가 필요하나
+                    // 과거 설계상 이를 생략해둔 상태이므로
+                    // 대신하여 객체 자체에 대해 UI를 갱신함.
+                    module.Data.SongData updatedLyric = currentLyric;
+                    currentLyric_in = null;
+                    OnPropertyChanged(nameof(currentLyric));
+                    currentLyric_in = updatedLyric;
+                    OnPropertyChanged(nameof(currentLyric));
+                    if (SelectedLyric == updatedLyric)
+                    {
+                        SelectedLyric_in = null;
+                        OnPropertyChanged(nameof(SelectedLyric));
+                        SelectedLyric_in = updatedLyric;
+                        OnPropertyChanged(nameof(SelectedLyric));
+                    }
                 }
             }
             else
