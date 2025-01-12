@@ -156,7 +156,23 @@ namespace BibleProjector_WPF.ViewModel
         public string AddLyricTitle { get; set; } = "";
 
         // 곡 추가 가사
-        public string AddLyricContent { get; set; } = "";
+        private string _AddLyricContent = "";
+        public string AddLyricContent 
+        { 
+            get 
+            { 
+                return _AddLyricContent; 
+            } 
+            set 
+            { 
+                _AddLyricContent = value;
+                isMultiLineDeleteButtonEnable_AddLyric = _AddLyricContent.Contains("\r\n\r\n");
+                OnPropertyChanged(nameof(isMultiLineDeleteButtonEnable_AddLyric));
+            } 
+        }
+
+        // 가사의 중복엔터 삭제 버튼 보이기
+        public bool isMultiLineDeleteButtonEnable_AddLyric { get; set; } = false;
 
         // =================================== 찬송가 탭
 
@@ -198,7 +214,7 @@ namespace BibleProjector_WPF.ViewModel
 
                 CurrentHymnPosition_Text = HymnSelection.songTitle + "장 " + VerseNumSelection_in.ToString() + "절";
 
-                VerseContent = HymnSelection.songContent.getContentByVerse(VerseNumSelection_in - 1);
+                setHymnContent(HymnSelection.songContent.getContentByVerse(VerseNumSelection_in - 1));
             }
         }
 
@@ -215,16 +231,56 @@ namespace BibleProjector_WPF.ViewModel
 
         // 절 내용
         private string VerseContent_in = "";
-        public string VerseContent
+        public string VerseContent 
+        { 
+            get { return VerseContent_in; } 
+            set { setHymnContent(value); isUpdatedHymn = true; } 
+        }
+        private bool isUpdatedHymn = false;
+        public void RunApplyHymnModify()
         {
-            get { return VerseContent_in; }
-            set
+            if (isUpdatedHymn)
             {
-                VerseContent_in = value;
-                if (HymnSelection != null && HymnSelection.songContent.getContentByVerse(VerseNumSelection - 1).CompareTo(VerseContent_in) != 0)
-                    HymnSelection.songContent.setContent(VerseContent_in, VerseNumSelection - 1);
-                OnPropertyChanged();
+                setHymnContent(VerseContent_in, true);
+                isUpdatedHymn = false;
             }
+        }
+
+        // 가사의 중복엔터 삭제 버튼 보이기
+        public bool isMultiLineDeleteButtonEnable_Hymn { get; set; } = false;
+
+        /// <summary>
+        /// 현재 표시중인 찬송가의 가사를 설정합니다.
+        /// <br/><paramref name="applyChange"/>이 <see langword="true"/>이면 변경을 반영하는 처리를 함께 진행합니다.
+        /// </summary>
+        /// <param name="content"></param>
+        /// <param name="applyChange"></param>
+        private void setHymnContent(string content, bool applyChange = false)
+        {
+            if (applyChange)
+            {
+                VerseContent_in = module.StringModifier.makeCorrectNewline(content);
+                if (HymnSelection != null)
+                {
+                    HymnSelection.songContent.setContent(VerseContent_in, VerseNumSelection - 1);
+
+                    if (HymnSelection.songType == module.Data.SongDataTypeEnum.CCM)
+                    {
+                        songManager.saveCCMData(false);
+                        module.ProgramData.writeErrorLog("찬송가 수정 메소드 내에서 ccm 데이터가 변경됨! (LyricViewModel.RunApplyHymnModify)");
+                    }
+                    if (HymnSelection.songType == module.Data.SongDataTypeEnum.HYMN)
+                        songManager.saveHymnData(false);
+                }
+            }
+            else
+            {
+                VerseContent_in = content;
+            }
+            OnPropertyChanged(nameof(VerseContent));
+
+            isMultiLineDeleteButtonEnable_Hymn = VerseContent_in.Contains("\r\n\r\n");
+            OnPropertyChanged(nameof(isMultiLineDeleteButtonEnable_Hymn));
         }
 
         // =================================== 출력란
@@ -310,34 +366,55 @@ namespace BibleProjector_WPF.ViewModel
                 setCurrentLyric(currentSearchData.lyric);
         }
 
-        public void RunApplyHymnModify()
-        {
-            VerseContent = module.StringModifier.makeCorrectNewline(VerseContent);
-
-            if (HymnSelection != null)
-            {
-                if (HymnSelection.songType == module.Data.SongDataTypeEnum.CCM)
-                {
-                    songManager.saveCCMData(false);
-                    module.ProgramData.writeErrorLog("찬송가 수정 메소드 내에서 ccm 데이터가 변경됨! (LyricViewModel.RunApplyHymnModify)");
-                }
-                if (HymnSelection.songType == module.Data.SongDataTypeEnum.HYMN)
-                    songManager.saveHymnData(false);
-            }
-        }
-
         public void RunAddReserveFromSelection()
         {
             if (SelectedLyric != null)
                 reserveDataManager.AddReserveItem(this, SelectedLyric);
         }
 
+        private enum LinefeedRemoveRequestContext
+        {
+            ADD_LYRIC,
+            COMMON_LYRIC,
+            HYMN
+        }
+
         public void RunRemoveDoubleEnter()
         {
+            runRemoveDoubleEnter(LinefeedRemoveRequestContext.COMMON_LYRIC);
+        }
+
+        public void RunRemoveDoubleEnter_AddLyric()
+        {
+            runRemoveDoubleEnter(LinefeedRemoveRequestContext.ADD_LYRIC);
+        }
+
+        public void RunRemoveDoubleEnter_Hymn()
+        {
+            runRemoveDoubleEnter(LinefeedRemoveRequestContext.HYMN);
+        }
+
+        private void runRemoveDoubleEnter(LinefeedRemoveRequestContext context)
+        {
             if (MessageBox.Show("중복 개행을 삭제합니다!", "중복 개행 삭제", MessageBoxButton.OKCancel, MessageBoxImage.Warning)
-                == MessageBoxResult.OK)
+                != MessageBoxResult.OK)
+                return;
+
+            if (context == LinefeedRemoveRequestContext.ADD_LYRIC)
+            {
+                AddLyricContent = module.StringModifier.RemoveMultiLinefeeds(AddLyricContent).Trim();
+                OnPropertyChanged(nameof(AddLyricContent));
+                return;
+            }
+            if (context == LinefeedRemoveRequestContext.COMMON_LYRIC)
             {
                 setCurrentContent(module.StringModifier.RemoveMultiLinefeeds(currentLyricContent).Trim(), true);
+                return;
+            }
+            if (context == LinefeedRemoveRequestContext.HYMN)
+            {
+                setHymnContent(module.StringModifier.RemoveMultiLinefeeds(VerseContent).Trim(), true);
+                return;
             }
         }
 
