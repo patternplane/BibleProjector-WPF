@@ -32,36 +32,23 @@ namespace BibleProjector_WPF.ViewModel
         // ============================================ 속성 ==============================================
 
         // 가사 선택값
+        /// <summary>
+        /// 변경시 <see cref="setCurrentLyric"/>을 사용할 것
+        /// </summary>
         private module.Data.SongData currentLyric_in;
+        /// <summary>
+        /// 변경시 <see cref="setCurrentLyric"/>을 사용할 것
+        /// </summary>
         public module.Data.SongData currentLyric
         {
-            get
-            {
-                return currentLyric_in;
-            }
-            set
-            {
-                currentLyric_in = value;
-                SelectedLyric = currentLyric_in;
-                isChangingLyric_title = true;
-                isChangingLyric_content = true;
-                if (currentLyric_in == null)
-                {
-                    isDeleteButtonEnable = false;
-                    currentLyricTitle = "";
-                    currentLyricContent = "";
-                }
-                else
-                {
-                    isDeleteButtonEnable = true;
-                    currentLyricTitle = currentLyric_in.songTitle;
-                    currentLyricContent = currentLyric_in.songContent.getRawContent();
-                }
-                OnPropertyChanged();
-            }
+            get { return currentLyric_in; }
+            set { setCurrentLyric(value, true); }
         }
 
         // =================================== 공용
+
+        // 탭 표시 인덱스
+        public int TabSelectionIndex { get; set; }
 
         // 출력 곡 선택값
         private module.Data.SongData SelectedLyric_in;
@@ -97,42 +84,41 @@ namespace BibleProjector_WPF.ViewModel
         private bool isAddButtonEnable_in = true;
         public bool isAddButtonEnable { get { return isAddButtonEnable_in; } set { isAddButtonEnable_in = value; OnPropertyChanged(); } }
 
+        // 가사의 중복엔터 삭제 버튼 보이기
+        public bool isMultiLineDeleteButtonEnable { get; set; } = false;
+
         // 가사의 제목과 내용
-        private bool needCheckNewLine_title = false;
-        private bool isChangingLyric_title = false;
+        /// <summary>
+        /// 변경시 <see cref="setCurrentTitle"/>을 사용할 것
+        /// </summary>
         private string currentLyricTitle_in;
-        public string currentLyricTitle { get { return currentLyricTitle_in; } set {
-                currentLyricTitle_in = value;
-                if (!isChangingLyric_title)
-                {
-                    needCheckNewLine_title = true;
-                    if (currentLyric != null)
-                        currentLyric.songTitle = currentLyricTitle_in;
-                }
-                else
-                    needCheckNewLine_title = false;
-                isChangingLyric_title = false;
-                OnPropertyChanged();
-            } }
-        private bool needCheckNewLine_Content = false;
-        private bool isChangingLyric_content = false;
+        /// <summary>
+        /// 변경시 <see cref="setCurrentTitle"/>을 사용할 것
+        /// </summary>
+        public string currentLyricTitle
+        { 
+            get { return currentLyricTitle_in; } 
+            set { setCurrentTitle(value, true); }
+        }
+        /// <summary>
+        /// 변경시 <see cref="setCurrentContent"/>을 사용할 것
+        /// </summary>
         private string currentLyricContent_in;
+        /// <summary>
+        /// 변경시 <see cref="setCurrentContent"/>을 사용할 것
+        /// </summary>
         public string currentLyricContent
         {
             get { return currentLyricContent_in; }
-            set
+            set { setCurrentContent(module.StringModifier.makeCorrectNewline(value)); currentLyricContent_isUpdated = true; }
+        }
+        private bool currentLyricContent_isUpdated = false;
+        public void submitModifyingCurrentContent()
+        {
+            if (currentLyricContent_isUpdated)
             {
-                currentLyricContent_in = value;
-                if (!isChangingLyric_content)
-                {
-                    needCheckNewLine_Content = true;
-                    if (currentLyric != null)
-                        currentLyric.songContent.setContent(currentLyricContent_in, 0);
-                }
-                else
-                    needCheckNewLine_Content = false;
-                isChangingLyric_content = false;
-                OnPropertyChanged();
+                setCurrentContent(module.StringModifier.makeCorrectNewline(currentLyricContent_in), true);
+                currentLyricContent_isUpdated = false;
             }
         }
 
@@ -173,7 +159,23 @@ namespace BibleProjector_WPF.ViewModel
         public string AddLyricTitle { get; set; } = "";
 
         // 곡 추가 가사
-        public string AddLyricContent { get; set; } = "";
+        private string _AddLyricContent = "";
+        public string AddLyricContent 
+        { 
+            get 
+            { 
+                return _AddLyricContent; 
+            } 
+            set 
+            { 
+                _AddLyricContent = value;
+                isMultiLineDeleteButtonEnable_AddLyric = module.StringModifier.hasMultiLinefeeds(_AddLyricContent);
+                OnPropertyChanged(nameof(isMultiLineDeleteButtonEnable_AddLyric));
+            } 
+        }
+
+        // 가사의 중복엔터 삭제 버튼 보이기
+        public bool isMultiLineDeleteButtonEnable_AddLyric { get; set; } = false;
 
         // =================================== 찬송가 탭
 
@@ -215,7 +217,7 @@ namespace BibleProjector_WPF.ViewModel
 
                 CurrentHymnPosition_Text = HymnSelection.songTitle + "장 " + VerseNumSelection_in.ToString() + "절";
 
-                VerseContent = HymnSelection.songContent.getContentByVerse(VerseNumSelection_in - 1);
+                setHymnContent(HymnSelection.songContent.getContentByVerse(VerseNumSelection_in - 1));
             }
         }
 
@@ -232,16 +234,56 @@ namespace BibleProjector_WPF.ViewModel
 
         // 절 내용
         private string VerseContent_in = "";
-        public string VerseContent
+        public string VerseContent 
+        { 
+            get { return VerseContent_in; } 
+            set { setHymnContent(value); isUpdatedHymn = true; } 
+        }
+        private bool isUpdatedHymn = false;
+        public void RunApplyHymnModify()
         {
-            get { return VerseContent_in; }
-            set
+            if (isUpdatedHymn)
             {
-                VerseContent_in = value;
-                if (HymnSelection != null && HymnSelection.songContent.getContentByVerse(VerseNumSelection - 1).CompareTo(VerseContent_in) != 0)
-                    HymnSelection.songContent.setContent(VerseContent_in, VerseNumSelection - 1);
-                OnPropertyChanged();
+                setHymnContent(VerseContent_in, true);
+                isUpdatedHymn = false;
             }
+        }
+
+        // 가사의 중복엔터 삭제 버튼 보이기
+        public bool isMultiLineDeleteButtonEnable_Hymn { get; set; } = false;
+
+        /// <summary>
+        /// 현재 표시중인 찬송가의 가사를 설정합니다.
+        /// <br/><paramref name="applyChange"/>이 <see langword="true"/>이면 변경을 반영하는 처리를 함께 진행합니다.
+        /// </summary>
+        /// <param name="content"></param>
+        /// <param name="applyChange"></param>
+        private void setHymnContent(string content, bool applyChange = false)
+        {
+            if (applyChange)
+            {
+                VerseContent_in = module.StringModifier.makeCorrectNewline(content);
+                if (HymnSelection != null)
+                {
+                    HymnSelection.songContent.setContent(VerseContent_in, VerseNumSelection - 1);
+
+                    if (HymnSelection.songType == module.Data.SongDataTypeEnum.CCM)
+                    {
+                        songManager.saveCCMData(false);
+                        module.ProgramData.writeErrorLog("찬송가 수정 메소드 내에서 ccm 데이터가 변경됨! (LyricViewModel.RunApplyHymnModify)");
+                    }
+                    if (HymnSelection.songType == module.Data.SongDataTypeEnum.HYMN)
+                        songManager.saveHymnData(false);
+                }
+            }
+            else
+            {
+                VerseContent_in = content;
+            }
+            OnPropertyChanged(nameof(VerseContent));
+
+            isMultiLineDeleteButtonEnable_Hymn = module.StringModifier.hasMultiLinefeeds(VerseContent_in);
+            OnPropertyChanged(nameof(isMultiLineDeleteButtonEnable_Hymn));
         }
 
         // =================================== 출력란
@@ -290,13 +332,21 @@ namespace BibleProjector_WPF.ViewModel
             if (newLyric != null)
             {
                 songManager.AddSongInOrder(newLyric);
+                LyricList.ResetBindings(); // BindingList 내부의 각 항목들에 대한 갱신은 다시 명시적으로 처리해야 함.
 
                 if (lastSearchPattern != null)
                 {
                     refreshSearchItem(newLyric, lastSearchPattern);
                     SearchText = lastSearchPattern;
                 }
-                currentLyric = newLyric;
+                setCurrentLyric(newLyric);
+
+                AddLyricTitle = "";
+                OnPropertyChanged(nameof(AddLyricTitle));
+                AddLyricContent = "";
+                OnPropertyChanged(nameof(AddLyricContent));
+                TabSelectionIndex = 0;
+                OnPropertyChanged(nameof(TabSelectionIndex));
             }
         }
 
@@ -310,6 +360,7 @@ namespace BibleProjector_WPF.ViewModel
                 return;
 
             songManager.DeleteSongItem(deleteItem);
+            LyricList.ResetBindings(); // BindingList 내부의 각 항목들에 대한 갱신은 다시 명시적으로 처리해야 함.
 
             if (lastSearchPattern != null)
             {
@@ -318,61 +369,13 @@ namespace BibleProjector_WPF.ViewModel
                 SearchText = lastSearchPattern;
             }
 
-            currentLyric = null;
+            setCurrentLyric(null);
         }
 
         public void RunSetFromSearchValue()
         {
             if (currentSearchData != null && currentLyric != currentSearchData.lyric)
-                currentLyric = currentSearchData.lyric;
-        }
-
-        public void RunCompleteModify()
-        {
-            bool isUpdated = false;
-
-            if (needCheckNewLine_title)
-            {
-                currentLyricTitle = module.StringModifier.makeCorrectNewline(currentLyricTitle);
-                needCheckNewLine_title = false;
-                isUpdated = true;
-            }
-            if (needCheckNewLine_Content)
-            {
-                currentLyricContent = module.StringModifier.makeCorrectNewline(currentLyricContent);
-                needCheckNewLine_Content = false;
-                isUpdated = true;
-            }
-
-            if (currentLyric != null)
-            {
-                if (isUpdated)
-                {
-                    if (currentLyric.songType == module.Data.SongDataTypeEnum.CCM)
-                        songManager.saveCCMData(false);
-                    if (currentLyric.songType == module.Data.SongDataTypeEnum.HYMN)
-                        songManager.saveHymnData(false);
-                }
-
-                if (lastSearchPattern != null)
-                    refreshSearchItem(currentLyric, lastSearchPattern);
-            }
-        }
-
-        public void RunApplyHymnModify()
-        {
-            VerseContent = module.StringModifier.makeCorrectNewline(VerseContent);
-
-            if (HymnSelection != null)
-            {
-                if (HymnSelection.songType == module.Data.SongDataTypeEnum.CCM)
-                {
-                    songManager.saveCCMData(false);
-                    module.ProgramData.writeErrorLog("찬송가 수정 메소드 내에서 ccm 데이터가 변경됨! (LyricViewModel.RunApplyHymnModify)");
-                }
-                if (HymnSelection.songType == module.Data.SongDataTypeEnum.HYMN)
-                    songManager.saveHymnData(false);
-            }
+                setCurrentLyric(currentSearchData.lyric);
         }
 
         public void RunAddReserveFromSelection()
@@ -381,7 +384,166 @@ namespace BibleProjector_WPF.ViewModel
                 reserveDataManager.AddReserveItem(this, SelectedLyric);
         }
 
+        private enum LinefeedRemoveRequestContext
+        {
+            ADD_LYRIC,
+            COMMON_LYRIC,
+            HYMN
+        }
+
+        public void RunRemoveDoubleEnter()
+        {
+            runRemoveDoubleEnter(LinefeedRemoveRequestContext.COMMON_LYRIC);
+        }
+
+        public void RunRemoveDoubleEnter_AddLyric()
+        {
+            runRemoveDoubleEnter(LinefeedRemoveRequestContext.ADD_LYRIC);
+        }
+
+        public void RunRemoveDoubleEnter_Hymn()
+        {
+            runRemoveDoubleEnter(LinefeedRemoveRequestContext.HYMN);
+        }
+
+        private void runRemoveDoubleEnter(LinefeedRemoveRequestContext context)
+        {
+            if (MessageBox.Show("중복 개행을 삭제합니다!", "중복 개행 삭제", MessageBoxButton.OKCancel, MessageBoxImage.Warning)
+                != MessageBoxResult.OK)
+                return;
+
+            if (context == LinefeedRemoveRequestContext.ADD_LYRIC)
+            {
+                AddLyricContent = module.StringModifier.RemoveMultiLinefeeds(AddLyricContent).Trim();
+                OnPropertyChanged(nameof(AddLyricContent));
+                return;
+            }
+            if (context == LinefeedRemoveRequestContext.COMMON_LYRIC)
+            {
+                setCurrentContent(module.StringModifier.RemoveMultiLinefeeds(currentLyricContent).Trim(), true);
+                return;
+            }
+            if (context == LinefeedRemoveRequestContext.HYMN)
+            {
+                setHymnContent(module.StringModifier.RemoveMultiLinefeeds(VerseContent).Trim(), true);
+                return;
+            }
+        }
+
         // ============================================ 메소드 ==============================================
+
+        /// <summary>
+        /// 현재 표시중인 가사를 설정합니다.
+        /// <br/><paramref name="byBinding"/>이 <see langword="true"/>이면 UI에 의한 입력의 처리를 함께 진행합니다.
+        /// </summary>
+        /// <param name="lyric"></param>
+        /// <param name="byBinding"></param>
+        private void setCurrentLyric(module.Data.SongData lyric, bool byBinding = false)
+        {
+            currentLyric_in = lyric;
+            if (!byBinding)
+            {
+                OnPropertyChanged(nameof(currentLyric));
+            }
+
+            SelectedLyric = currentLyric_in;
+
+            if (currentLyric_in == null)
+            {
+                isDeleteButtonEnable = false;
+                setCurrentTitle("");
+                setCurrentContent("");
+            }
+            else
+            {
+                isDeleteButtonEnable = true;
+                setCurrentTitle(currentLyric_in.songTitle);
+                setCurrentContent(currentLyric_in.songContent.getRawContent());
+            }
+        }
+
+        /// <summary>
+        /// 현재 표시중인 곡의 제목을 설정합니다.
+        /// <br/><paramref name="applyChange"/>이 <see langword="true"/>이면 변경을 반영하는 처리를 함께 진행합니다.
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="applyChange"></param>
+        private void setCurrentTitle(string title, bool applyChange = false)
+        {
+            if (applyChange)
+            {
+                currentLyricTitle_in = module.StringModifier.makeCorrectNewline(title);
+                if (currentLyric != null)
+                {
+                    currentLyric.songTitle = currentLyricTitle_in;
+
+                    if (currentLyric.songType == module.Data.SongDataTypeEnum.CCM)
+                        songManager.saveCCMData(false);
+                    if (currentLyric.songType == module.Data.SongDataTypeEnum.HYMN)
+                        songManager.saveHymnData(false);
+
+                    if (lastSearchPattern != null)
+                        refreshSearchItem(currentLyric, lastSearchPattern);
+
+                    LyricList.ResetBindings(); // BindingList 내부의 각 항목들에 대한 갱신은 다시 명시적으로 처리해야 함.
+                    // 표시되는 현재 선택값도 갱신이 필요하므로 진행.
+                    // Nested Property 형태의 바인딩이므로 내부 속성에 대한 onPropertyChanged 이벤트가 필요하나
+                    // 과거 설계상 이를 생략해둔 상태이므로
+                    // 대신하여 객체 자체에 대해 UI를 갱신함.
+                    module.Data.SongData updatedLyric = currentLyric;
+                    currentLyric_in = null;
+                    OnPropertyChanged(nameof(currentLyric));
+                    currentLyric_in = updatedLyric;
+                    OnPropertyChanged(nameof(currentLyric));
+                    if (SelectedLyric == updatedLyric)
+                    {
+                        SelectedLyric_in = null;
+                        OnPropertyChanged(nameof(SelectedLyric));
+                        SelectedLyric_in = updatedLyric;
+                        OnPropertyChanged(nameof(SelectedLyric));
+                    }
+                }
+            }
+            else
+            {
+                currentLyricTitle_in = title;
+            }
+            OnPropertyChanged(nameof(currentLyricTitle));
+        }
+
+        /// <summary>
+        /// 현재 표시중인 곡의 가사를 설정합니다.
+        /// <br/><paramref name="applyChange"/>이 <see langword="true"/>이면 변경을 반영하는 처리를 함께 진행합니다.
+        /// </summary>
+        /// <param name="content"></param>
+        /// <param name="applyChange"></param>
+        private void setCurrentContent(string content, bool applyChange = false)
+        {
+            if (applyChange)
+            {
+                currentLyricContent_in = module.StringModifier.makeCorrectNewline(content);
+                if (currentLyric != null)
+                {
+                    currentLyric.songContent.setContent(currentLyricContent_in, 0);
+
+                    if (currentLyric.songType == module.Data.SongDataTypeEnum.CCM)
+                        songManager.saveCCMData(false);
+                    if (currentLyric.songType == module.Data.SongDataTypeEnum.HYMN)
+                        songManager.saveHymnData(false);
+
+                    if (lastSearchPattern != null)
+                        refreshSearchItem(currentLyric, lastSearchPattern);
+                }
+            }
+            else
+            {
+                currentLyricContent_in = content;
+            }
+            OnPropertyChanged(nameof(currentLyricContent));
+
+            isMultiLineDeleteButtonEnable = module.StringModifier.hasMultiLinefeeds(currentLyricContent_in);
+            OnPropertyChanged(nameof(isMultiLineDeleteButtonEnable));
+        }
 
         void ShowLyric(module.Data.SongData lyric, module.SongFrameFile FrameFile, int linePerSlide)
         {

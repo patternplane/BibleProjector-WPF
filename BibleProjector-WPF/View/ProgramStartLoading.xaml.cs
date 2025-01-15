@@ -28,7 +28,16 @@ namespace BibleProjector_WPF
         public string loadingText { get; private set; } = "";
         private const double MAX_PROGRESS_BAR_LENGTH = 94.0;
         public double loadingBarLength { get; private set; } = 0;
-        public string Version { get; } = "v25.1.1";
+        public string Version { get; } = getProgramVersion();
+
+        private static string getProgramVersion()
+        {
+            System.Reflection.Assembly assembly = 
+                System.Reflection.Assembly
+                .GetExecutingAssembly();
+            return System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location)
+                .ProductVersion;
+        }
 
         public ProgramStartLoading()
         {

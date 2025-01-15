@@ -250,12 +250,37 @@ namespace BibleProjector_WPF.View.MainPage
          *                 Item DoubleClick
          =======================================================*/
 
-        private void EH_ItemDoubleClick(object sender, MouseButtonEventArgs e)
+        // 변수 도입 사유 :
+        //   더블클릭시 새 자막을 표시하면서 ShowControler에 포커싱되어야 하므로
+        //   더블클릭의 MouseUp 이벤트에 의한 예약 UI의 포커싱 처리는 무시되어야 함.
+        //
+        //   그러나 DoubleClick 이벤트의 발생 시점 상,
+        //   예약 UI의 포커싱 요청이 모두 끝나기 전에 처리가 되므로
+        //   다른 UI에서 거는 포커싱 요청이 무시됨.
+        //
+        //   따라서 MouseUp 시점에서 최종 더블클릭 처리를 진행하여,
+        //   외부와의 간섭을 최소화 하도록 구성함.
+        //   이 과정에서 내부 포커싱 로직을 무시하고 더블클릭 상태를 위임할 수 있도록
+        //   두 변수를 도입하게 됨.
+        private bool ignoreFocusing = false;
+        private bool doDoubleClick = false;
+
+        private void EH_ItemDoubleClick_Trigger(object sender, MouseButtonEventArgs e)
         {
-            Keyboard.ClearFocus();
-            FocusManager.SetFocusedElement(FocusManager.GetFocusScope((DependencyObject)sender), null);
-            ItemShowStartCommand.Execute(((ListBoxItem)sender).DataContext);
-            e.Handled = true;
+            if (e.ClickCount > 1)
+            {
+                ignoreFocusing = true;
+                doDoubleClick = true;
+            }
+        }
+
+        private void EH_ItemDoubleClick_Performer(object sender, MouseButtonEventArgs e)
+        {
+            if (doDoubleClick)
+            {
+                doDoubleClick = false;
+                ItemShowStartCommand.Execute(((ListBoxItem)sender).DataContext);
+            }
         }
 
         /*=======================================================
@@ -387,6 +412,8 @@ namespace BibleProjector_WPF.View.MainPage
             ReserveListBox.UpdateLayout();
             foreach (object item in selections)
                 ((ListBoxItem)ReserveListBox.ItemContainerGenerator.ContainerFromItem(item)).IsSelected = true;
+            if (selections.Count > 0)
+                ((ListBoxItem)ReserveListBox.ItemContainerGenerator.ContainerFromItem(selections[0])).Focus();
 
             DragPreviewItem.Visibility = Visibility.Hidden;
             DropPreviewItem.Visibility = Visibility.Collapsed;
@@ -396,15 +423,37 @@ namespace BibleProjector_WPF.View.MainPage
 
         private void EH_ReserveListBox_Focus_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
-            if (ReserveListBox.SelectedIndex == -1 && ReserveListBox.Items.Count > 0) 
+            if (ignoreFocusing)
             {
-                ReserveListBox.Focus();
-                ((ListBoxItem)ReserveListBox.ItemContainerGenerator.ContainerFromIndex(0)).Focus();
+                ignoreFocusing = false;
+                return;
             }
-            else if (ReserveListBox.SelectedIndex >= 0)
+
+            ListBoxItem mustFocusedItem = null;
+
+            foreach (object item in ReserveListBox.SelectedItems)
             {
-                ((ListBoxItem)ReserveListBox.ItemContainerGenerator.ContainerFromIndex(ReserveListBox.SelectedIndex)).Focus();
+                if (getViewTypeProperty(item) == ReserveViewType.NormalItem)
+                {
+                    mustFocusedItem = (ListBoxItem)ReserveListBox.ItemContainerGenerator.ContainerFromItem(item);
+                    break;
+                }
             }
+
+            if (mustFocusedItem == null)
+            {
+                foreach (object item in ReserveListBox.Items)
+                {
+                    if (getViewTypeProperty(item) == ReserveViewType.NormalItem)
+                    {
+                        mustFocusedItem = (ListBoxItem)ReserveListBox.ItemContainerGenerator.ContainerFromItem(item);
+                        break;
+                    }
+                }
+            }
+
+            if (mustFocusedItem != null)
+                mustFocusedItem.Focus();
         }
     }
 }

@@ -13,7 +13,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         ViewModel[] ShowController;
         public ViewModel VM_ShowControler_top { get; }
-        public ViewModel VM_ShowControler_bottom { get; private set; }
+        public ObservableCollection<ViewModel> VM_ShowControler_bottoms { get; private set; }
         public ViewModel VM_BibleSeletion { get; }
         public ViewModel VM_SearchControl { get; }
         public ViewModel VM_ReserveList { get; }
@@ -37,58 +37,73 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         {
             this.ShowController = ShowControlers;
             this.VM_ShowControler_top = ShowControlers[2];
-            this.VM_ShowControler_bottom = ShowControlers[0];
+            this.VM_ShowControler_bottoms = new ObservableCollection<ViewModel>() { ShowControlers[0], ShowControlers[1] };
             this.VM_BibleSeletion = bibleSelection;
             this.VM_SearchControl = searchControl;
             this.VM_ReserveList = reserveList;
             this.ExternPPTEditButtons = externPPTEditButtonVMs;
 
-            keyInputEventManager.KeyDown += KeyInputTask;
+            setBottomShowController(0, false);
 
-            showStarter.ShowStartEvent += WhenShowStarted;
+            keyInputEventManager.KeyDownWithRepeat += KeyInputTask;
+
+            showStarter.ShowStartPreparing += WhenShowStarted;
         }
 
         // ========== Show Controller Changing ===========
 
         void WhenShowStarted(object sender, Event.ShowStartEventArgs e)
         {
-            if (e.showData.getDataType() == ShowContentType.Bible
-                && VM_ShowControler_bottom != ShowController[0])
-                changeBottomShowController(0);
-            else if (e.showData.getDataType() == ShowContentType.Song
-                && VM_ShowControler_bottom != ShowController[1])
-                changeBottomShowController(1);
+            if (e.showData.getDataType() == ShowContentType.Bible)
+                setBottomShowController(0, false); // Bible 컨트롤러가 0에 연결되는 것은 너무 변경에 취약함 (개선 필요)
+            else if (e.showData.getDataType() == ShowContentType.Song)
+                setBottomShowController(1, false); // Song 컨트롤러가 1에 연결되는 것은 너무 변경에 취약함 (개선 필요)
         }
 
-        void KeyInputTask(System.Windows.Input.Key key, bool isDown)
+        void KeyInputTask(System.Windows.Input.Key key, bool isDown, bool isRepeat)
         {
             if (IsLoaded(null)) {
                 foreach (VMShowControler vm in ShowController)
-                    vm.keyInputed(key, isDown);
+                    vm.keyInputed(key, isDown, isRepeat);
 
                 if (key == System.Windows.Input.Key.CapsLock
-                    && isDown)
+                    && isDown
+                    && !isRepeat)
                 {
-                    if (VM_ShowControler_bottom == ShowController[0])
-                        changeBottomShowController(1);
-                    else
-                        changeBottomShowController(0);
+                    setNextBottomShowController(true);
                 }
             }
         }
 
-        void changeBottomShowController(int index)
+        private int currentSelection = -1;
+
+        private void setNextBottomShowController(bool invokeViewModelChanged)
+        {
+            setBottomShowController(
+                (currentSelection + 1) % VM_ShowControler_bottoms.Count,
+                invokeViewModelChanged);
+        }
+ 
+        private void setBottomShowController(int index, bool invokeViewModelChanged)
         {
             if (index < 0 || index >= ShowController.Length)
                 throw new Exception("잘못된 쇼 컨트롤러 인덱스 : " + index + "번 컨트롤러는 없습니다! / " + ShowController.Length);
 
-            if (VM_ShowControler_bottom != ShowController[index])
+            if (currentSelection != index)
             {
-                ((VMShowControler)VM_ShowControler_bottom).hasFocus = false;
-                VM_ShowControler_bottom = ShowController[index];
+                if (0 <= currentSelection && currentSelection < VM_ShowControler_bottoms.Count)
+                {
+                    ((VMShowControler)VM_ShowControler_bottoms[currentSelection]).hasFocus = false;
+                    ((VMShowControler)VM_ShowControler_bottoms[currentSelection]).hide();
+                }
+                ((VMShowControler)VM_ShowControler_bottoms[index]).show();
+                currentSelection = index;
             }
-            OnPropertyChanged("VM_ShowControler_bottom");
-            ((VMShowControler)VM_ShowControler_bottom).doViewModelChanged();
+
+            if (invokeViewModelChanged)
+            {
+                ((VMShowControler)VM_ShowControler_bottoms[index]).doViewModelChanged();
+            }
         }
     }
 }

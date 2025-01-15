@@ -1487,8 +1487,6 @@ namespace BibleProjector_WPF
                 TopMost();
             }
 
-            System.Threading.Mutex slideControlMutex = new System.Threading.Mutex();
-
             public void goToSlide(int slideIndex)
             {
                 if (slideIndex < 1)
@@ -1498,20 +1496,59 @@ namespace BibleProjector_WPF
                 else
                     currentSlideNum = slideIndex;
 
-                new System.Threading.Thread(threadedSlideMover)
-                    .Start(currentSlideNum);
+                requestMovingSlide(currentSlideNum);
             }
 
-            private void threadedSlideMover(object slideIndex)
-            {
-                slideControlMutex.WaitOne();
-                
-                if (currentSlideNum == (int)slideIndex)
-                    if (SlideWindow != null)
-                        SlideWindow.View.GotoSlide((int)slideIndex);
+            // ========================== Threaded Slide Moving ==========================
 
+            // 애니메이션이 포함된 슬라이드 이동시 UI가 잠시 멈추게 되는데 (UI는 동기(sync) 상태)
+            // 이때, 빠르게 UI를 조작하면 이상한 번호로 슬라이드가 이동되는 문제가 발생함.
+            // 따라서 비동기 로직으로 구성하기 위해, 실제 슬라이드의 이동은 스레딩을 통해 처리함.
+
+            System.Threading.Mutex slideControlMutex = new System.Threading.Mutex();
+            private (bool isRequested, int slideIndex) slideMoveRequest = NULL_REQUEST;
+            private System.Threading.Thread slideControlThread = null;
+
+            private static readonly (bool, int) NULL_REQUEST = (false, -1);
+
+            private void slideMoveThreadFunc()
+            {
+                (bool isRequested, int slideIndex) readData;
+                while (true)
+                {
+                    readData = NULL_REQUEST;
+                    slideControlMutex.WaitOne();
+
+                    if (slideMoveRequest.isRequested
+                        && SlideWindow != null)
+                    {
+                        readData = slideMoveRequest;
+                        slideMoveRequest = NULL_REQUEST;
+                    }
+
+                    slideControlMutex.ReleaseMutex();
+
+                    if (readData.isRequested) { 
+                        SlideWindow.View.GotoSlide(readData.slideIndex);
+                        readData = NULL_REQUEST;
+                    }
+                }
+            }
+
+            private void requestMovingSlide(int slideIdx)
+            {
+                if (slideControlThread == null)
+                {
+                    slideControlThread = new System.Threading.Thread(slideMoveThreadFunc) { IsBackground = true };
+                    slideControlThread.Start();
+                }
+
+                slideControlMutex.WaitOne();
+                slideMoveRequest = (true, slideIdx);
                 slideControlMutex.ReleaseMutex();
             }
+
+            // ===========================================================================
 
             public void SlideShowHide()
             {

@@ -17,7 +17,7 @@
             <ColumnDefinition Width="76*"/>
         </Grid.ColumnDefinitions>
         <Grid Grid.Row="0">
-            <TabControl>
+            <TabControl SelectedIndex="{Binding TabSelectionIndex}">
                 <!--곡 선택-->
                 <TabItem Header="곡 선택">
                     <Grid>
@@ -65,27 +65,69 @@
                                 <ColumnDefinition Width="70*"/>
                             </Grid.ColumnDefinitions>
                             <ComboBox Grid.Column="0" ItemsSource="{Binding LyricList}" DisplayMemberPath="songTitle"
-                                  SelectedItem="{Binding currentLyric}"
-                                  x:Name="LyricComboBox">
+                                  SelectedItem="{Binding currentLyric}">
                             </ComboBox>
                             <Button Grid.Column="2" Content="곡 삭제" IsEnabled="{Binding isDeleteButtonEnable}"
                             Click="DeleteButton_Click"/>
                         </Grid>
 
                         <TextBox Grid.Row="5" Grid.Column="1" HorizontalScrollBarVisibility="auto"
-                             Text="{Binding currentLyricTitle, UpdateSourceTrigger=PropertyChanged}" 
-                             LostFocus="TitleTextBox_LostFocus">
+                             Text="{Binding currentLyricTitle, UpdateSourceTrigger=LostFocus}">
                         </TextBox>
 
-                        <TextBox 
-                        Grid.Row="7" 
-                        Grid.Column="1" 
-                        AcceptsReturn="True" 
-                        HorizontalScrollBarVisibility="Auto" 
-                        VerticalScrollBarVisibility="auto" 
-                        Text="{Binding currentLyricContent, UpdateSourceTrigger=PropertyChanged}"
-                        LostFocus="ContentTextBox_LostFocus">
-                        </TextBox>
+                        <Border
+                            Grid.Row="7" 
+                            Grid.Column="1"
+                            BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+                            BorderThickness="1">
+                            <Grid>
+                                <ScrollViewer
+                                    HorizontalScrollBarVisibility="Auto" 
+                                    VerticalScrollBarVisibility="Auto"
+                                    x:Name="ContentScrollViewer">
+                                    <TextBox 
+                                        BorderThickness="0"
+                                        AcceptsReturn="True" 
+                                        Text="{Binding currentLyricContent, UpdateSourceTrigger=PropertyChanged}"
+                                        LostFocus="LyricContentTextBox_LostFocus"/>
+                                </ScrollViewer>
+                                <Border Width="{Binding ElementName=ContentScrollViewer, Path=ViewportWidth}"
+                                        HorizontalAlignment="Left">
+                                    <Button
+                                        Content="엔터 지우기"
+                                        FontSize="10"
+                                        FontWeight="Bold"
+                                        Padding="3,4"
+                                        Margin="0,5,5,0"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Top"
+                                        Click="RemoveEnterButton_Click">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding isMultiLineDeleteButtonEnable}" Value="true">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding isMultiLineDeleteButtonEnable}" Value="false">
+                                                        <Setter Property="Visibility" Value="Hidden"/>
+                                                    </DataTrigger>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="#FFF06B2C"/>
+                                                        <Setter Property="Foreground" Value="Black"/>
+                                                        <Setter Property="BorderBrush" Value="Black"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsMouseOver" Value="False">
+                                                        <Setter Property="Background" Value="#3FF06B2C"/>
+                                                        <Setter Property="Foreground" Value="#7F000000"/>
+                                                        <Setter Property="BorderBrush" Value="#3F000000"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                </Border>
+                            </Grid>
+                        </Border>
                     </Grid>
                 </TabItem>
 
@@ -112,13 +154,58 @@
 
                         <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding AddLyricTitle}"/>
 
-                        <TextBox 
-                        Grid.Row="5" 
-                        Grid.Column="1" 
-                        AcceptsReturn="True" 
-                        HorizontalScrollBarVisibility="Auto" 
-                        VerticalScrollBarVisibility="auto"
-                        Text="{Binding AddLyricContent}"/>
+                        <Border
+                            Grid.Row="5" 
+                            Grid.Column="1"
+                            BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+                            BorderThickness="1">
+                            <Grid>
+                                <ScrollViewer
+                                    HorizontalScrollBarVisibility="Auto" 
+                                    VerticalScrollBarVisibility="Auto"
+                                    x:Name="ContentScrollViewer_AddLyric">
+                                    <TextBox 
+                                        BorderThickness="0"
+                                        AcceptsReturn="True" 
+                                        Text="{Binding AddLyricContent, UpdateSourceTrigger=PropertyChanged}"/>
+                                </ScrollViewer>
+                                <Border Width="{Binding ElementName=ContentScrollViewer_AddLyric, Path=ViewportWidth}"
+                                        HorizontalAlignment="Left">
+                                    <Button
+                                        Content="엔터 지우기"
+                                        FontSize="10"
+                                        FontWeight="Bold"
+                                        Padding="3,4"
+                                        Margin="0,5,5,0"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Top"
+                                        Click="RemoveEnterButton_AddLyric_Click">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding isMultiLineDeleteButtonEnable_AddLyric}" Value="true">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding isMultiLineDeleteButtonEnable_AddLyric}" Value="false">
+                                                        <Setter Property="Visibility" Value="Hidden"/>
+                                                    </DataTrigger>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="#FFF06B2C"/>
+                                                        <Setter Property="Foreground" Value="Black"/>
+                                                        <Setter Property="BorderBrush" Value="Black"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsMouseOver" Value="False">
+                                                        <Setter Property="Background" Value="#3FF06B2C"/>
+                                                        <Setter Property="Foreground" Value="#7F000000"/>
+                                                        <Setter Property="BorderBrush" Value="#3F000000"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                </Border>
+                            </Grid>
+                        </Border>
                     </Grid>
                 </TabItem>
 
@@ -159,10 +246,59 @@
                         </Grid>
                         <TextBox Grid.Row="3" Grid.Column="1"
                                  Text="{Binding CurrentHymnPosition_Text}"></TextBox>
-                        <TextBox Grid.Row="5" Grid.Column="1"
-                                 AcceptsReturn="True"
-                                 Text="{Binding VerseContent, UpdateSourceTrigger=PropertyChanged}"
-                                 LostFocus="HymnContentTextBox_LostFocus"></TextBox>
+                        <Border
+                            Grid.Row="5" 
+                            Grid.Column="1"
+                            BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+                            BorderThickness="1">
+                            <Grid>
+                                <ScrollViewer
+                                    HorizontalScrollBarVisibility="Auto" 
+                                    VerticalScrollBarVisibility="Auto"
+                                    x:Name="ContentScrollViewer_Hymn">
+                                    <TextBox 
+                                        BorderThickness="0"
+                                        AcceptsReturn="True" 
+                                        Text="{Binding VerseContent, UpdateSourceTrigger=PropertyChanged}"
+                                        LostFocus="HymnContentTextBox_LostFocus"/>
+                                </ScrollViewer>
+                                <Border Width="{Binding ElementName=ContentScrollViewer_Hymn, Path=ViewportWidth}"
+                                        HorizontalAlignment="Left">
+                                    <Button
+                                        Content="엔터 지우기"
+                                        FontSize="10"
+                                        FontWeight="Bold"
+                                        Padding="3,4"
+                                        Margin="0,5,5,0"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Top"
+                                        Click="RemoveEnterButton_Hymn_Click">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding isMultiLineDeleteButtonEnable_Hymn}" Value="true">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding isMultiLineDeleteButtonEnable_Hymn}" Value="false">
+                                                        <Setter Property="Visibility" Value="Hidden"/>
+                                                    </DataTrigger>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="#FFF06B2C"/>
+                                                        <Setter Property="Foreground" Value="Black"/>
+                                                        <Setter Property="BorderBrush" Value="Black"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsMouseOver" Value="False">
+                                                        <Setter Property="Background" Value="#3FF06B2C"/>
+                                                        <Setter Property="Foreground" Value="#7F000000"/>
+                                                        <Setter Property="BorderBrush" Value="#3F000000"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                </Border>
+                            </Grid>
+                        </Border>
                     </Grid>
                 </TabItem>
             </TabControl>

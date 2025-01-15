@@ -34,6 +34,7 @@ namespace BibleProjector_WPF
 
             this.SetBinding(keyInputEventManagerProperty, new Binding("keyInputEventManager"));
             this.SetBinding(windowActivateChangedEventManagerProperty, new Binding("windowActivateChangedEventManager"));
+            this.SetBinding(activeSetterProperty, new Binding("activeSetter") { Mode = BindingMode.OneWay });
 
             setMinSize();
             setInnerContentSize();
@@ -161,8 +162,7 @@ namespace BibleProjector_WPF
                 if (k.key == e.Key)
                     k.state = true;
 
-            if (!e.IsRepeat)
-                keyInputEventManager.invokeKeyInput(e.Key, true);
+            keyInputEventManager.invokeKeyInput(e.Key, true, e.IsRepeat);
         }
 
         private void EH_KeyUpCheck(object sender, KeyEventArgs e)
@@ -171,8 +171,7 @@ namespace BibleProjector_WPF
                 if (k.key == e.Key)
                     k.state = false;
 
-            if (!e.IsRepeat)
-                keyInputEventManager.invokeKeyInput(e.Key, false);
+            keyInputEventManager.invokeKeyInput(e.Key, false, e.IsRepeat);
         }
 
         private class TrackedKey
@@ -204,11 +203,35 @@ namespace BibleProjector_WPF
             set => SetValue(windowActivateChangedEventManagerProperty, value);
         }
 
+        public static readonly DependencyProperty activeSetterProperty =
+        DependencyProperty.Register(
+            name: "activeSetter",
+            propertyType: typeof(bool),
+            ownerType: typeof(MainWindow),
+            typeMetadata: new PropertyMetadata(
+                (d, e) =>
+                {
+                    if ((bool)e.NewValue)
+                    {
+                        ((MainWindow)d).Topmost = true;
+                        ((MainWindow)d).Topmost = false;
+                        ((MainWindow)d).Activate();
+                    }
+                }
+                )
+            );
+
+        public bool activeSetter
+        {
+            get => (bool)GetValue(activeSetterProperty);
+            set => SetValue(activeSetterProperty, value);
+        }
+
         private void EH_Window_Activated(object sender, EventArgs e)
         {
             foreach (TrackedKey k in TrackedKeys) 
                 if (Keyboard.IsKeyDown(k.key) != k.state)
-                    keyInputEventManager.invokeKeyInput(k.key, Keyboard.IsKeyDown(k.key));
+                    keyInputEventManager.invokeKeyInput(k.key, Keyboard.IsKeyDown(k.key), false);
 
             windowActivateChangedEventManager.invoke(true);
         }

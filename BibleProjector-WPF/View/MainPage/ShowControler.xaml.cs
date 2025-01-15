@@ -171,6 +171,22 @@ namespace BibleProjector_WPF.View.MainPage
 
         private void EH_OffUnusedKeyInput(object sender, KeyEventArgs e)
         {
+            // <이 코드가 맡는 역할 명세>
+            //
+            // ● 역할
+            //   이 코드는 화살표 키로 이동시 2중 이동하는 문제를 다룹니다.
+            //
+            // ● 원인 분석
+            //   1. 키 조작에 대한 처리는 메인에서 진행함.
+            //   2. 키 입력 이벤트는 [상위 뷰 -> 하위 뷰] 순서로 진행됨.
+            //   3. 만약 이 뷰에서 키 입력을 받아들이면,
+            //        1) 메인 뷰의 키 입력으로 이미 페이지를 이동한 상태에서
+            //        2) ListBox도 키 입력을 받아 항목을 이동하면서
+            //      2중 이동이 발생함
+            //
+            // ● 처리
+            //   이 뷰의 화살표 키 입력은 무시함으로써 ListBox의 화살표 키 인식을 막도록 함.
+
             if (e.Key == Key.Left
                 || e.Key == Key.Down
                 || e.Key == Key.Right

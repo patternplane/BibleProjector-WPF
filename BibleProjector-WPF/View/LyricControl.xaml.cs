@@ -52,14 +52,14 @@ namespace BibleProjector_WPF
             VM_LyricViewModel.RunDelete();
         }
 
-        void TitleTextBox_LostFocus(object sender, RoutedEventArgs e)
+        private void LyricContentTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            VM_LyricViewModel.RunCompleteModify();
+            VM_LyricViewModel.submitModifyingCurrentContent();
         }
 
-        void ContentTextBox_LostFocus(object sender, RoutedEventArgs e)
+        private void RemoveEnterButton_Click(object sender, RoutedEventArgs e)
         {
-            VM_LyricViewModel.RunCompleteModify();
+            VM_LyricViewModel.RunRemoveDoubleEnter();
         }
 
         // =========================== 곡 추가 탭
@@ -69,11 +69,21 @@ namespace BibleProjector_WPF
             VM_LyricViewModel.RunAdd();
         }
 
+        private void RemoveEnterButton_AddLyric_Click(object sender, RoutedEventArgs e)
+        {
+            VM_LyricViewModel.RunRemoveDoubleEnter_AddLyric();
+        }
+
         // =========================== 찬송가 탭
 
         void HymnContentTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             VM_LyricViewModel.RunApplyHymnModify();
+        }
+
+        private void RemoveEnterButton_Hymn_Click(object sender, RoutedEventArgs e)
+        {
+            VM_LyricViewModel.RunRemoveDoubleEnter_Hymn();
         }
 
         // ======================================================= 출력 처리 ======================================================

@@ -155,7 +155,8 @@ namespace BibleProjector_WPF
                         new ViewModel.MainPage.VMOptionBar(),
                         new ViewModel.LyricViewModel(showStarter, songMan, reserveDataManager)),
                     keyInputEventManager,
-                    WACEventManager);
+                    WACEventManager,
+                    showStarter);
 
             loadingWindow.Dispatcher.BeginInvoke(
                 new Action<ViewModel.VMMainWindow>(loadingWindow.InitializeDone),
