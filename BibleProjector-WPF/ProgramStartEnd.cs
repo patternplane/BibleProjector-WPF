@@ -146,7 +146,7 @@ namespace BibleProjector_WPF
                         new ViewModel.MainPage.VMControlPage(
                             showControlers,
                             new ViewModel.MainPage.VMBibleSeletion(reserveDataManager, showStarter, bibleSelectionEventManager),
-                            new ViewModel.MainPage.VMSearchControl(searcher, reserveDataManager, showStarter, bibleSelectionEventManager),
+                            new ViewModel.MainPage.VMSearchControl(searcher, reserveDataManager, showStarter, bibleSelectionEventManager, songMan),
                             new ViewModel.MainPage.VMReserveList(reserveDataManager, showStarter, bibleSelectionEventManager),
                             buttonVMs,
                             keyInputEventManager,

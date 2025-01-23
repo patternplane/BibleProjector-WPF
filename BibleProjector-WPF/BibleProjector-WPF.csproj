@@ -102,6 +102,7 @@
     <Compile Include="Event\KeyInputEventManager.cs" />
     <Compile Include="ViewModel\MainPage\VMBibleSeletion.cs" />
     <Compile Include="ViewModel\MainPage\VMExternPPTEditButton.cs" />
+    <Compile Include="ViewModel\MainPage\VMModify.cs" />
     <Compile Include="ViewModel\MainPage\VMReserveData.cs" />
     <Compile Include="ViewModel\MainPage\VMReserveList.cs" />
     <Compile Include="ViewModel\MainPage\VMSearchResult.cs" />
@@ -135,6 +136,9 @@
     </Compile>
     <Compile Include="View\MainPage\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainPage\ModifyView.xaml.cs">
+      <DependentUpon>ModifyView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\MainPage\ReserveItem.xaml.cs">
       <DependentUpon>ReserveItem.xaml</DependentUpon>
@@ -212,6 +216,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\MainPage\MainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MainPage\ModifyView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

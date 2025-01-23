@@ -27,7 +27,9 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public ICommand COpenEditor { get; set; }
         public ICommand COpenAdder { get; set; }
 
+        public VMModify VM_Modify { get; private set; }
         public bool CanOpenEditor { get; private set; } = false;
+        public bool ShowModifyView { get; private set; } = false;
 
         public bool NoneUse { get; set; } = false;
 
@@ -40,7 +42,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         // ========== Gen ==========
 
-        public VMSearchControl(module.ISearcher searcher, module.ReserveDataManager reserveManager, module.ShowStarter showStarter, Event.BibleSelectionEventManager bibleSelectionEventManager)
+        public VMSearchControl(module.ISearcher searcher, module.ReserveDataManager reserveManager, module.ShowStarter showStarter, Event.BibleSelectionEventManager bibleSelectionEventManager, module.Data.SongManager songManager)
         {
             CSearchStart = new RelayCommand(obj => SearchStart());
             CPopupHide = new RelayCommand(obj => PopupHide());
@@ -55,6 +57,9 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             this.reserveManager = reserveManager;
             this.showStarter = showStarter;
             this.bibleSelectionEventManager = bibleSelectionEventManager;
+
+            this.VM_Modify = new VMModify(songManager);
+            VM_Modify.CloseEventHandler += (sender, e) => displayModifyView(false);
         }
 
         // ========== Command ==========
@@ -134,12 +139,16 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             reserveManager.AddReserveItem(this, SelectionItem.getData());
         }
 
-        void OpenEditor()
+        private void OpenEditor()
         {
-            NoneUse = true;
-            OnPropertyChanged(nameof(NoneUse));
-            NoneUse = false;
-            OnPropertyChanged(nameof(NoneUse));
+            VM_Modify.setupData(SelectionItem.getData());
+            displayModifyView(true);
+        }
+
+        private void displayModifyView(bool visible)
+        {
+            ShowModifyView = visible;
+            OnPropertyChanged(nameof(ShowModifyView));
         }
 
         void OpenAdder()
