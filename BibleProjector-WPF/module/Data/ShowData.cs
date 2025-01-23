@@ -19,6 +19,7 @@ namespace BibleProjector_WPF.module.Data
             OnItemDeleted();
         }
         abstract public bool isSameData(ShowData data);
+        public virtual void preprocessBeforeShow() { }
         abstract public ShowExcuteErrorEnum canExcuteShow();
         abstract public bool isAvailData();
 

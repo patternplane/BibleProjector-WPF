@@ -1218,6 +1218,18 @@ namespace BibleProjector_WPF
                 return null;
             }
 
+            /// <summary>
+            /// 기존 파일이 변경되었는지를 검사해, 자동으로 새로고침합니다.
+            /// </summary>
+            static public void fetchUpdateFile(string fullPath)
+            {
+                int index;
+                if ((index = pptFinder_fullPath(fullPath)) != -1)
+                {
+                    ppt[index].fetchUpdateFile();
+                }
+            }
+
             static public void TopMost(string fullPath)
             {
                 int index;
@@ -1281,6 +1293,49 @@ namespace BibleProjector_WPF
                 setPresentation(path);
             }
 
+            // ============ File Checker ============
+
+            private static System.Security.Cryptography.MD5CryptoServiceProvider fileHasher = new System.Security.Cryptography.MD5CryptoServiceProvider();
+            private byte[] fileHash = null;
+
+            private void assignFileHash()
+            {
+                fileHash = getFileHash();
+            }
+
+            private byte[] getFileHash()
+            {
+                return fileHasher.ComputeHash(new System.IO.FileStream(OriginalFullPath, System.IO.FileMode.Open, System.IO.FileAccess.Read));
+            }
+
+            /// <summary>
+            /// 파일을 해싱해 변경되었는지를 검사합니다.
+            /// <br/> 파일이 없을 경우 예외가 발생합니다.
+            /// </summary>
+            /// <returns></returns>
+            private bool hasFileChanged()
+            {
+                byte[] newHash = getFileHash();
+
+                if (newHash.Length == fileHash.Length)
+                {
+                    int i = 0;
+                    while ((i < newHash.Length) && (newHash[i] == fileHash[i]))
+                    {
+                        i += 1;
+                    }
+                    if (i == newHash.Length)
+                    {
+                        // equal hash
+                        return false;
+                    }
+                }
+                // not equal hash
+                return true;
+            }
+
+            // ======================================
+
             public void setPresentation(string path)
             {
                 this.OriginalFullPath = path;
@@ -1288,6 +1343,7 @@ namespace BibleProjector_WPF
 
                 ppt = app.Presentations.Open(path, Untitled: Microsoft.Office.Core.MsoTriState.msoTrue, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
                 checkValidPPT();
+                assignFileHash();
 
                 SetThumbNailImages();
             }
@@ -1423,6 +1479,18 @@ namespace BibleProjector_WPF
             public System.Windows.Media.Imaging.BitmapImage[] getThumbnailImages()
             {
                 return thumbnails;
+            }
+
+            /// <summary>
+            /// 기존 파일이 변경되었는지를 검사해, 자동으로 새로고침합니다.
+            /// </summary>
+            public void fetchUpdateFile()
+            {
+                if (new System.IO.FileInfo(OriginalFullPath).Exists
+                    && hasFileChanged())
+                {
+                    refreshPresentation(OriginalFullPath);
+                }
             }
 
             private void orderBeforeWindow(SlideShowWindow newShowWin, SlideShowWindow lastShowWin)
