@@ -1358,7 +1358,7 @@ namespace BibleProjector_WPF
 
                     setPresentation(path);
                     goToSlide(currentSlideNum);
-                    SlideShowRun();
+                    SlideShowRun(false, lastShowWindow);
 
                     lastShowWindow.View.Exit();
                     checkAndClose(lastppt);
@@ -1425,6 +1425,11 @@ namespace BibleProjector_WPF
                 return thumbnails;
             }
 
+            private void orderBeforeWindow(SlideShowWindow newShowWin, SlideShowWindow lastShowWin)
+            {
+                SetWindowPos(newShowWin.HWND, lastShowWin.HWND, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
+            }
+
             public void TopMost()
             {
                 if (SlideWindow != null && pptState == PptSlideState.WindowShow)
@@ -1435,7 +1440,7 @@ namespace BibleProjector_WPF
                 }
             }
 
-            public void SlideShowRun()
+            public void SlideShowRun(bool setTop = true, SlideShowWindow front = null)
             {
                 // 슬라이드쇼 점검하는부분 좀 더 개선
                 // 슬라이드쇼 끄면 ppt도 꺼지기 때문
@@ -1446,10 +1451,16 @@ namespace BibleProjector_WPF
                     {
                         ppt.Slides[currentSlideNum].MoveTo(1);
                         SlideWindow = ppt.SlideShowSettings.Run();
+                        if (front != null)
+                            orderBeforeWindow(SlideWindow, front);
                         ppt.Slides[1].MoveTo(currentSlideNum);
                     }
                     else
+                    {
                         SlideWindow = ppt.SlideShowSettings.Run();
+                        if (front != null)
+                            orderBeforeWindow(SlideWindow, front);
+                    }
                 }
                 SlideShowHideInTaskbar(SlideWindow.HWND);
 
@@ -1459,7 +1470,8 @@ namespace BibleProjector_WPF
                 SlideWindow.View.GotoSlide(currentSlideNum);
 
                 pptState = PptSlideState.WindowShow;
-                TopMost();
+                if (setTop)
+                    TopMost();
             }
 
             public void goToSlide(int slideIndex)
