@@ -69,7 +69,6 @@ namespace BibleProjector_WPF
         // ============================================ 프로그램 시작 / 종료 세팅 ========================================================
 
         public const string FRAME_TEMP_DIRECTORY = ".\\programData\\FrameTemp\\";
-        public const string EXTERN_TEMP_DIRECTORY = ".\\programData\\ExternPPT\\";
         public const string EXTERN_THUMBNAIL_DIRECTORY = ".\\programData\\Thumbnails\\";
 
         static public void Initialize()
@@ -80,11 +79,6 @@ namespace BibleProjector_WPF
             if (System.IO.Directory.Exists(FRAME_TEMP_DIRECTORY))
                 System.IO.Directory.Delete(FRAME_TEMP_DIRECTORY, true);
             System.IO.Directory.CreateDirectory(FRAME_TEMP_DIRECTORY);
-
-            closePPTFiles(System.IO.Path.GetDirectoryName(System.IO.Path.GetFullPath(EXTERN_TEMP_DIRECTORY))); // Notice : if last has \\, use GetDirectoryName!!
-            if (System.IO.Directory.Exists(EXTERN_TEMP_DIRECTORY))
-                System.IO.Directory.Delete(EXTERN_TEMP_DIRECTORY, true);
-            System.IO.Directory.CreateDirectory(EXTERN_TEMP_DIRECTORY);
 
             if (System.IO.Directory.Exists(EXTERN_THUMBNAIL_DIRECTORY))
                 System.IO.Directory.Delete(EXTERN_THUMBNAIL_DIRECTORY, true);
@@ -1268,7 +1262,6 @@ namespace BibleProjector_WPF
         {
             // ============================================ 필요 변수 ============================================ 
 
-            public string FullPath;
             public string OriginalFullPath;
             public string PPTName;
 
@@ -1290,22 +1283,16 @@ namespace BibleProjector_WPF
 
             public void setPresentation(string path)
             {
-                string tempPath = EXTERN_TEMP_DIRECTORY + System.IO.Path.GetFileName(path);
-                string newPath = System.IO.Path.GetFullPath(tempPath);
-                string originalPath = path;
-                System.IO.File.Copy(originalPath, newPath, true);
+                this.OriginalFullPath = path;
+                this.PPTName = System.IO.Path.GetFileName(path);
 
-                this.FullPath = System.IO.Path.GetFullPath(newPath);
-                this.OriginalFullPath = originalPath;
-                this.PPTName = System.IO.Path.GetFileName(newPath);
-
-                ppt = app.Presentations.Open(newPath, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
+                ppt = app.Presentations.Open(path, Untitled: Microsoft.Office.Core.MsoTriState.msoTrue, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
                 checkValidPPT();
 
-                SetThumbNailImages(newPath);
+                SetThumbNailImages();
             }
 
-            void SetThumbNailImages(string fullPath)
+            void SetThumbNailImages()
             {
                 this.ThumbnailGenerator();
 
@@ -1369,18 +1356,6 @@ namespace BibleProjector_WPF
                     SlideShowWindow lastShowWindow = SlideWindow;
                     SlideWindow = null;
 
-                    ppt = app.Presentations.Open(path, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
-                    checkValidPPT();
-                    goToSlide(currentSlideNum);
-                    SlideShowRun();
-
-                    lastShowWindow.View.Exit();
-                    checkAndClose(lastppt);
-
-                    lastppt = ppt;
-                    lastShowWindow = SlideWindow;
-                    SlideWindow = null;
-
                     setPresentation(path);
                     goToSlide(currentSlideNum);
                     SlideShowRun();
@@ -1423,7 +1398,7 @@ namespace BibleProjector_WPF
             void makeThumbNail()
             {
                 deleteThumbNail();
-                ppt.SaveAs(System.IO.Path.GetFullPath(EXTERN_THUMBNAIL_DIRECTORY+ppt.Name), PpSaveAsFileType.ppSaveAsJPG);
+                ppt.SaveAs(System.IO.Path.GetFullPath(EXTERN_THUMBNAIL_DIRECTORY + this.PPTName), PpSaveAsFileType.ppSaveAsJPG);
             }
 
             // ============================================ 메소드 ============================================
@@ -1441,7 +1416,7 @@ namespace BibleProjector_WPF
             {
                 return System.IO.Path.GetFullPath(
                     EXTERN_THUMBNAIL_DIRECTORY 
-                    + System.IO.Path.GetFileNameWithoutExtension(ppt.Name)
+                    + System.IO.Path.GetFileNameWithoutExtension(this.PPTName)
                     );
             }
 
