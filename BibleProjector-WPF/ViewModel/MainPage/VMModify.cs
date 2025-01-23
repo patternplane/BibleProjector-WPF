@@ -13,6 +13,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         // ============ Events ============
 
         public event EventHandler CloseEventHandler;
+        public event EventHandler ItemModified;
 
         // ============ Binding Properties ============
 
@@ -181,6 +182,8 @@ namespace BibleProjector_WPF.ViewModel.MainPage
                 ((module.Data.SongData)currentData).songTitle = title;
                 songManager.saveCCMData(false);
             }
+
+            ItemModified?.Invoke(this, null);
         }
 
         private void updateContent(string content)
@@ -206,6 +209,8 @@ namespace BibleProjector_WPF.ViewModel.MainPage
                 string address = typedData.book.ToString("D2") + typedData.chapter.ToString("D3") + typedData.verse.ToString("D3");
                 Database.updateBible(address, content);
             }
+
+            ItemModified?.Invoke(this, null);
         }
 
         private void removeLinefeedsInContent()

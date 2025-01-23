@@ -8,10 +8,16 @@ namespace BibleProjector_WPF.module
 {
     public abstract class SearchData : IComparable
     {
-        public string displayName { get; protected set; }
-        public string previewContent { get; protected set; }
+        protected bool isModified = false;
+        public abstract string getdisplayName();
+        public abstract string getPreviewContent();
         public int searchDistance { get; protected set; }
         public Data.ShowData data { get; protected set; }
+
+        public void update()
+        {
+            isModified = true;
+        }
 
         public int CompareTo(object obj)
         {

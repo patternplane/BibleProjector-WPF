@@ -40,6 +40,8 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         module.ShowStarter showStarter;
         Event.BibleSelectionEventManager bibleSelectionEventManager;
 
+        private VMSearchResult editingData;
+
         // ========== Gen ==========
 
         public VMSearchControl(module.ISearcher searcher, module.ReserveDataManager reserveManager, module.ShowStarter showStarter, Event.BibleSelectionEventManager bibleSelectionEventManager, module.Data.SongManager songManager)
@@ -60,6 +62,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
             this.VM_Modify = new VMModify(songManager);
             VM_Modify.CloseEventHandler += (sender, e) => displayModifyView(false);
+            VM_Modify.ItemModified += (sender, e) => updateSelectedItem();
         }
 
         // ========== Command ==========
@@ -141,8 +144,14 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         private void OpenEditor()
         {
+            editingData = SelectionItem;
             VM_Modify.setupData(SelectionItem.getData());
             displayModifyView(true);
+        }
+
+        private void updateSelectedItem()
+        {
+            editingData.update();
         }
 
         private void displayModifyView(bool visible)
