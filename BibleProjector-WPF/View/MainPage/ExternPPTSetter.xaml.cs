@@ -198,7 +198,7 @@ namespace BibleProjector_WPF.View.MainPage
                 if (errorCode == 1)
                     MessageBox.Show("너무 큰 용량의 PPT를 등록하려 했습니다.\r\n한 PPT에 허용되는 최대 슬라이드 수는 " + getMaxSlideSizeProperty(this.DataContext) + "개 입니다.", "너무 큰 파일 등록", MessageBoxButton.OK, MessageBoxImage.Error);
                 else if (errorCode == 3)
-                    MessageBox.Show("이미 등록된 파일입니다.", "중복 등록", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("이미 이름이 같은 PPT가 있습니다.", "중복 등록", MessageBoxButton.OK, MessageBoxImage.Error);
                 else
                     MessageBox.Show("알 수 없는 오류 : " + errorCode, "알 수 없는 오류", MessageBoxButton.OK, MessageBoxImage.Error);
             }

@@ -81,7 +81,7 @@ namespace BibleProjector_WPF.module
             {
                 foreach (ExternPPTData item in ExternPPTList)
                     if (item != null
-                        && item.fileFullPath.CompareTo(pptFullPath) == 0)
+                        && item.fileName.CompareTo(Path.GetFileNameWithoutExtension(pptFullPath)) == 0)
                         return 3;
             }
 
