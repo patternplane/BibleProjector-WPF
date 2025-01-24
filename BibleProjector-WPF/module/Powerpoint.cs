@@ -51,6 +51,13 @@ namespace BibleProjector_WPF
             SetWindowLong(windowHWND, GWL_STYLE, style);
         }
 
+        protected static void SetTopMost(int windowHWND)
+        {
+            SetWindowPos(windowHWND, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
+            SetWindowPos(windowHWND, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
+            //SetWindowPos(SlideWindow.HWND, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+        }
+
         enum PptSlideState
         {
             NotRunning,
@@ -219,7 +226,9 @@ namespace BibleProjector_WPF
 
         static public void justOpen(string path)
         {
-            app.Presentations.Open(path);
+            Presentation openedPpt = app.Presentations.Open(path);
+            if (openedPpt.Windows.Count > 0)
+                SetTopMost(openedPpt.Windows[1].HWND);
         }
     }
 
@@ -393,9 +402,7 @@ namespace BibleProjector_WPF
             {
                 if (SlideWindow != null && pptState == PptSlideState.WindowShow)
                 {
-                    SetWindowPos(SlideWindow.HWND, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
-                    SetWindowPos(SlideWindow.HWND, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
-                    //SetWindowPos(SlideWindow.HWND, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+                    SetTopMost(SlideWindow.HWND);
                 }
             }
 
@@ -651,9 +658,7 @@ namespace BibleProjector_WPF
             {
                 if (SlideWindow != null && pptState == PptSlideState.WindowShow)
                 {
-                    SetWindowPos(SlideWindow.HWND, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
-                    SetWindowPos(SlideWindow.HWND, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
-                    //SetWindowPos(SlideWindow.HWND, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+                    SetTopMost(SlideWindow.HWND);
                 }
             }
 
@@ -1061,9 +1066,7 @@ namespace BibleProjector_WPF
             {
                 if (SlideWindow != null && pptState == PptSlideState.WindowShow)
                 {
-                    SetWindowPos(SlideWindow.HWND, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
-                    SetWindowPos(SlideWindow.HWND, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
-                    //SetWindowPos(SlideWindow.HWND, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+                    SetTopMost(SlideWindow.HWND);
                 }
             }
 
@@ -1517,9 +1520,7 @@ namespace BibleProjector_WPF
             {
                 if (SlideWindow != null && pptState == PptSlideState.WindowShow)
                 {
-                    SetWindowPos(SlideWindow.HWND, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
-                    SetWindowPos(SlideWindow.HWND, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
-                    //SetWindowPos(SlideWindow.HWND, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+                    SetTopMost(SlideWindow.HWND);
                 }
             }
 
