@@ -401,10 +401,12 @@ namespace BibleProjector_WPF
 
             static public void SlideShowRun()
             {
-                int currentSlide = 1;
+                int currentSlide = -1;
 
                 // 슬라이드쇼 점검하는부분 좀 더 개선
                 // 슬라이드쇼 끄면 ppt도 꺼지기 때문
+                if (SlideWindow != null)
+                    currentSlide = SlideWindow.View.CurrentShowPosition;
                 if (SlideWindow == null)
                 {
                     ppt.SlideShowSettings.ShowType = PpSlideShowType.ppShowTypeKiosk;
@@ -416,7 +418,10 @@ namespace BibleProjector_WPF
                         currentSlide = 2;
                     }
                     else
+                    {
                         SlideWindow = ppt.SlideShowSettings.Run();
+                        currentSlide = 1;
+                    }
                 }
                 SlideShowHideInTaskbar(SlideWindow.HWND);
 
@@ -654,10 +659,12 @@ namespace BibleProjector_WPF
 
             static public void SlideShowRun()
             {
-                int currentSlide = 1;
+                int currentSlide = -1;
 
                 // 슬라이드쇼 점검하는부분 좀 더 개선
                 // 슬라이드쇼 끄면 ppt도 꺼지기 때문
+                if (SlideWindow != null)
+                    currentSlide = SlideWindow.View.CurrentShowPosition;
                 if (SlideWindow == null)
                 {
                     ppt.SlideShowSettings.ShowType = PpSlideShowType.ppShowTypeKiosk;
@@ -669,7 +676,10 @@ namespace BibleProjector_WPF
                         currentSlide = 2;
                     }
                     else
+                    {
                         SlideWindow = ppt.SlideShowSettings.Run();
+                        currentSlide = 1;
+                    }
                 }
                 SlideShowHideInTaskbar(SlideWindow.HWND);
 
@@ -1068,10 +1078,12 @@ namespace BibleProjector_WPF
 
             public void SlideShowRun()
             {
-                int currentSlide = 1;
+                int currentSlide = -1;
 
                 // 슬라이드쇼 점검하는부분 좀 더 개선
                 // 슬라이드쇼 끄면 ppt도 꺼지기 때문
+                if (SlideWindow != null)
+                    currentSlide = SlideWindow.View.CurrentShowPosition;
                 if (SlideWindow == null)
                 {
                     ppt.SlideShowSettings.ShowType = PpSlideShowType.ppShowTypeKiosk;
@@ -1083,7 +1095,10 @@ namespace BibleProjector_WPF
                         currentSlide = 2;
                     }
                     else
+                    {
                         SlideWindow = ppt.SlideShowSettings.Run();
+                        currentSlide = 1;
+                    }
                 }
                 SlideShowHideInTaskbar(SlideWindow.HWND);
 
