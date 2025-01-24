@@ -51,10 +51,16 @@ namespace BibleProjector_WPF
             SetWindowLong(windowHWND, GWL_STYLE, style);
         }
 
-        protected static void SetTopMost(int windowHWND)
+        protected static void SetTopMost(int windowHWND, bool doSetActive = false)
         {
-            SetWindowPos(windowHWND, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
-            SetWindowPos(windowHWND, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
+            int wFlags = 0;
+            if (doSetActive)
+                wFlags = SWP_NOSIZE | SWP_NOMOVE;
+            else
+                wFlags = SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE;
+
+            SetWindowPos(windowHWND, HWND_TOPMOST, 0, 0, 0, 0, wFlags);
+            SetWindowPos(windowHWND, HWND_NOTOPMOST, 0, 0, 0, 0, wFlags);
             //SetWindowPos(SlideWindow.HWND, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
         }
 
@@ -255,7 +261,12 @@ namespace BibleProjector_WPF
                 {
                     Presentation openedPpt = app.Presentations.Open(path);
                     if (openedPpt.Windows.Count > 0)
-                        SetTopMost(openedPpt.Windows[1].HWND);
+                    {
+                        // 현재 office 2016에서 presentation 창이 application 창과 뭔가 꼬여있는 모습이 보임.
+                        // 추가 연구 필요.
+                        SetTopMost(app.HWND, true);
+                        SetTopMost(openedPpt.Windows[1].HWND, true);
+                    }
                     
                     path = null;
                 }
