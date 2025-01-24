@@ -9,6 +9,14 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 {
     public class VMReserveData : ViewModel
     {
+        /// <summary>
+        /// test
+        /// </summary>
+        ~VMReserveData()
+        {
+            Console.WriteLine("예약 VM 삭제");
+        }
+
         public string DisplayTitle { get; set; } = null;
         int _MyIdx;
         public int MyIdx 

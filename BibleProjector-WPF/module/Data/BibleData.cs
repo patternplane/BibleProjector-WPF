@@ -8,15 +8,35 @@ namespace BibleProjector_WPF.module.Data
 {
     public class BibleData : ShowData
     {
-        public int book { get; set; } = -1;
-        public int chapter { get; set; } = -1;
-        public int verse { get; set; } = -1;
+        public int book { get; private set; } = -1;
+        public int chapter { get; private set; } = -1;
+        public int verse { get; private set; } = -1;
 
         string bibleTitle = null;
         string bibleTitle_abr = null;
         ShowContentData[] currentContents = null;
 
+        // 메모리 누수의 문제 있음
+        private static event Action<string> BibleUpdated;
+
+        private void OnBibleUpdated()
+        {
+            BibleUpdated?.Invoke(getAddress());
+        }
+
+        private void bibleUpdatedHandler(string address)
+        {
+            if (getAddress().Equals(address))
+                OnItemUpdated();
+        }
+
         public BibleData(int book, int chapter, int verse)
+        {
+            BibleUpdated += bibleUpdatedHandler;
+            setData(book, chapter, verse);
+        }
+
+        public void setData(int book, int chapter, int verse)
         {
             this.book = -1;
             this.chapter = -1;
@@ -27,13 +47,15 @@ namespace BibleProjector_WPF.module.Data
             if (book >= 1 && book <= 66)
             {
                 this.book = book;
-                if (chapter >= 1 && chapter <= Database.getChapterCount(book.ToString("D2")))
+                if (chapter >= 1 && chapter <= Database.getChapterCount(getAddress(1)))
                 {
                     this.chapter = chapter;
-                    if (verse >= 1 && verse <= Database.getVerseCount(book.ToString("D2") + chapter.ToString("D3")))
+                    if (verse >= 1 && verse <= Database.getVerseCount(getAddress(2)))
                         this.verse = verse;
                 }
             }
+
+            OnItemUpdated();
         }
 
         public string getBibleTitle()
@@ -41,7 +63,7 @@ namespace BibleProjector_WPF.module.Data
             if (bibleTitle == null)
                 bibleTitle = (book == -1
                 ? null
-                : Database.getTitle(book.ToString("D2")));
+                : Database.getTitle(getAddress(1)));
             return bibleTitle;
         }
 
@@ -50,15 +72,48 @@ namespace BibleProjector_WPF.module.Data
             if (bibleTitle_abr == null)
                 bibleTitle_abr = (book == -1
                 ? null
-                : Database.getAbrTitle(book.ToString("D2")));
+                : Database.getAbrTitle(getAddress(1)));
             return bibleTitle_abr;
         }
 
+        /// <summary>
+        /// 현재 절의 내용을 반환합니다.
+        /// </summary>
+        /// <returns></returns>
         public string getBibleContent()
         {
             if (verse != -1)
-                return Database.getBible(book.ToString("D2") + chapter.ToString("D3") + verse.ToString("D3"));
+                return Database.getBible(getAddress());
             return null;
+        }
+
+        /// <summary>
+        /// 성경구절을 수정합니다.
+        /// </summary>
+        public void modifyContent(string content)
+        {
+            Database.updateBible(getAddress(), content);
+            OnBibleUpdated();
+            OnItemUpdated();
+        }
+
+        /// <summary>
+        /// DB 검색 주소를 반환합니다.
+        /// <br/> <paramref name="step"/>은 주소 범위 수준을 나타냅니다. (1:책, 2:책/장, 3:책/장/절)
+        /// </summary>
+        /// <param name="step"></param>
+        private string getAddress(int step = 3)
+        {
+            if (step < 1 || step > 3)
+                step = 3;
+
+            string address = book.ToString("D2");
+            if (step > 1)
+                address += chapter.ToString("D3");
+            if (step > 2)
+                address += verse.ToString("D3");
+
+            return address;
         }
 
         // ================ ShowData 메소드 ================
@@ -90,7 +145,7 @@ namespace BibleProjector_WPF.module.Data
 
         public override ShowData getNextShowData()
         {
-            string Kjjeul = Database.getBibleIndex_Next(book.ToString("D2") + chapter.ToString("D3") + verse.ToString("D3"));
+            string Kjjeul = Database.getBibleIndex_Next(getAddress());
             return
                 new BibleData(
                     int.Parse(Kjjeul.Substring(0, 2)),
@@ -101,7 +156,7 @@ namespace BibleProjector_WPF.module.Data
         public override ShowData getPrevShowData()
         {
 
-            string Kjjeul = Database.getBibleIndex_Previous(book.ToString("D2") + chapter.ToString("D3") + verse.ToString("D3"));
+            string Kjjeul = Database.getBibleIndex_Previous(getAddress());
             return
                 new BibleData(
                     int.Parse(Kjjeul.Substring(0, 2)),

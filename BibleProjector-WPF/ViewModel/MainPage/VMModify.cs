@@ -206,8 +206,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             if (currentData.getDataType() == ShowContentType.Bible)
             {
                 module.Data.BibleData typedData = (module.Data.BibleData)currentData;
-                string address = typedData.book.ToString("D2") + typedData.chapter.ToString("D3") + typedData.verse.ToString("D3");
-                Database.updateBible(address, content);
+                typedData.modifyContent(content);
             }
 
             ItemModified?.Invoke(this, null);
