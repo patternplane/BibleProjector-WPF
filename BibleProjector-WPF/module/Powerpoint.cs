@@ -224,11 +224,42 @@ namespace BibleProjector_WPF
             return slideCount;
         }
 
+        private static System.Threading.Thread openEditPptThread = null;
+        private static string editPptPath = null;
+        private static System.Threading.Mutex openEditPptLock = new System.Threading.Mutex();
+
         static public void justOpen(string path)
         {
-            Presentation openedPpt = app.Presentations.Open(path);
-            if (openedPpt.Windows.Count > 0)
-                SetTopMost(openedPpt.Windows[1].HWND);
+            if (openEditPptThread == null)
+            {
+                openEditPptThread = new System.Threading.Thread(openEditPptThreadFunc) { IsBackground = true };
+                openEditPptThread.Start();
+            }
+
+            openEditPptLock.WaitOne();
+            editPptPath = path;
+            openEditPptLock.ReleaseMutex();
+        }
+
+        static private void openEditPptThreadFunc()
+        {
+            string path = null;
+            while (true)
+            {
+                openEditPptLock.WaitOne();
+                path = editPptPath;
+                editPptPath = null;
+                openEditPptLock.ReleaseMutex();
+
+                if (path != null)
+                {
+                    Presentation openedPpt = app.Presentations.Open(path);
+                    if (openedPpt.Windows.Count > 0)
+                        SetTopMost(openedPpt.Windows[1].HWND);
+                    
+                    path = null;
+                }
+            }
         }
     }
 
