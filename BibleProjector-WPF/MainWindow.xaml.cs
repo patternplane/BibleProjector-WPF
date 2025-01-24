@@ -56,12 +56,17 @@ namespace BibleProjector_WPF
             Action task = new Action(this.setMinSize);
 
             while (true)
+            {
                 if (monitorHeight != SystemParameters.PrimaryScreenHeight
-                    || monitorWidth != SystemParameters.PrimaryScreenWidth) {
+                    || monitorWidth != SystemParameters.PrimaryScreenWidth)
+                {
                     this.Dispatcher.BeginInvoke(task);
                     monitorHeight = SystemParameters.PrimaryScreenHeight;
                     monitorWidth = SystemParameters.PrimaryScreenWidth;
                 }
+
+                Thread.Sleep(10);
+            }
         }
 
         private void setMinSize()

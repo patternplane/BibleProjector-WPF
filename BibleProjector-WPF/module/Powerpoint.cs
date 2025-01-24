@@ -1602,6 +1602,8 @@ namespace BibleProjector_WPF
                         SlideWindow.View.GotoSlide(readData.slideIndex);
                         readData = NULL_REQUEST;
                     }
+
+                    System.Threading.Thread.Sleep(10);
                 }
             }
 
