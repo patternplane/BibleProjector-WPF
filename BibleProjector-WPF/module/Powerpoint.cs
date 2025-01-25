@@ -1575,24 +1575,24 @@ namespace BibleProjector_WPF
             // 이때, 빠르게 UI를 조작하면 이상한 번호로 슬라이드가 이동되는 문제가 발생함.
             // 따라서 비동기 로직으로 구성하기 위해, 실제 슬라이드의 이동은 스레딩을 통해 처리함.
 
-            System.Threading.Mutex slideControlMutex = new System.Threading.Mutex();
-            private (bool isRequested, int slideIndex) slideMoveRequest = NULL_REQUEST;
-            private System.Threading.Thread slideControlThread = null;
+            private static System.Threading.Mutex slideControlMutex = new System.Threading.Mutex();
+            private static (bool isRequested, ExternPPT requester, int slideIndex) slideMoveRequest = NULL_REQUEST;
+            private static System.Threading.Thread slideControlThread = null;
 
-            private static readonly (bool, int) NULL_REQUEST = (false, -1);
+            private static readonly (bool, ExternPPT requester, int) NULL_REQUEST = (false, null, -1);
 
-            private void slideMoveThreadFunc()
+            private static void slideMoveThreadFunc()
             {
-                (bool isRequested, int slideIndex) readData;
+                (bool isRequested, ExternPPT requester, int slideIndex) readData;
                 while (true)
                 {
                     readData = NULL_REQUEST;
                     slideControlMutex.WaitOne();
 
-                    if (slideMoveRequest.isRequested
-                        && SlideWindow != null)
+                    if (slideMoveRequest.isRequested)
                     {
-                        readData = slideMoveRequest;
+                        if (slideMoveRequest.requester.SlideWindow != null)
+                            readData = slideMoveRequest;
                         slideMoveRequest = NULL_REQUEST;
                     }
 
@@ -1601,7 +1601,7 @@ namespace BibleProjector_WPF
                     if (readData.isRequested) {
                         try
                         {
-                            SlideWindow.View.GotoSlide(readData.slideIndex);
+                            readData.requester.SlideWindow.View.GotoSlide(readData.slideIndex);
                         }
                         catch (Exception e)
                         {
@@ -1628,7 +1628,7 @@ namespace BibleProjector_WPF
                 }
 
                 slideControlMutex.WaitOne();
-                slideMoveRequest = (true, slideIdx);
+                slideMoveRequest = (true, this, slideIdx);
                 slideControlMutex.ReleaseMutex();
             }
 
