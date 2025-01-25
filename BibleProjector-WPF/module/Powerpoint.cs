@@ -1598,8 +1598,20 @@ namespace BibleProjector_WPF
 
                     slideControlMutex.ReleaseMutex();
 
-                    if (readData.isRequested) { 
-                        SlideWindow.View.GotoSlide(readData.slideIndex);
+                    if (readData.isRequested) {
+                        try
+                        {
+                            SlideWindow.View.GotoSlide(readData.slideIndex);
+                        }
+                        catch (Exception e)
+                        {
+                            slideControlMutex.WaitOne();
+
+                            if (!slideMoveRequest.isRequested)
+                                slideMoveRequest = readData;
+
+                            slideControlMutex.ReleaseMutex();
+                        }
                         readData = NULL_REQUEST;
                     }
 
