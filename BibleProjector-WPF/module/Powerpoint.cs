@@ -38,6 +38,11 @@ namespace BibleProjector_WPF
         const Int32 WS_EX_APPWINDOW = 0x00040000;
         const Int32 WS_EX_NOACTIVATE = 0x08000000;
 
+        [System.Runtime.InteropServices.DllImport("user32")]
+        public static extern int GetWindow(int hWnd, uint uCmd);
+        const uint GW_HWNDNEXT = 2;
+        const uint GW_HWNDPREV = 3;
+
         protected static void SlideShowHideInTaskbar(int windowHWND)
         {
             Int32 style = GetWindowLong(windowHWND, GWL_STYLE);
@@ -1512,7 +1517,7 @@ namespace BibleProjector_WPF
 
             private void orderBeforeWindow(SlideShowWindow newShowWin, SlideShowWindow lastShowWin)
             {
-                SetWindowPos(newShowWin.HWND, lastShowWin.HWND, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
+                SetWindowPos(newShowWin.HWND, GetWindow(lastShowWin.HWND, GW_HWNDPREV), 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
             }
 
             public void TopMost()
