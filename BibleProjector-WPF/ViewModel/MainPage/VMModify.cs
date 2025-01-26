@@ -134,6 +134,8 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
             if (data.getDataType() == ShowContentType.Bible)
             {
+                IsHymn = false;
+                OnPropertyChanged(nameof(IsHymn));
                 module.Data.BibleData typedData = (module.Data.BibleData)data;
                 string title = string.Format("{0} {1}장 {2}절", typedData.getBibleTitle(), typedData.chapter, typedData.verse);
                 initalizeTitle(title, true);
