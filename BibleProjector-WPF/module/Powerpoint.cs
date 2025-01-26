@@ -980,6 +980,7 @@ namespace BibleProjector_WPF
                 try
                 {
                     SlideWindow.View.Exit();
+                    SlideWindow = null;
                 }
                 catch { }
                 try
@@ -1443,6 +1444,7 @@ namespace BibleProjector_WPF
                 try
                 {
                     SlideWindow.View.Exit();
+                    SlideWindow = null;
                 }
                 catch { }
                 try
