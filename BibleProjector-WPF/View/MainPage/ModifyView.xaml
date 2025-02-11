@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:BibleProjector_WPF.View.MainPage"
              mc:Ignorable="d" 
              d:DesignHeight="268.5" d:DesignWidth="341" BorderBrush="Orange" BorderThickness="2">
-    <Grid PreviewKeyUp="EH_PreviewKeyUp">
+    <Grid PreviewKeyUp="EH_PreviewKeyUp"
+          KeyboardNavigation.TabNavigation="Local">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition/>
@@ -42,7 +43,8 @@
                     VerticalAlignment="Center"
                     FontWeight="Bold"
                     FontSize="15"
-                    Text="{Binding TitleText, UpdateSourceTrigger=LostFocus}">
+                    Text="{Binding TitleText, UpdateSourceTrigger=LostFocus}"
+                    KeyboardNavigation.TabIndex="0">
                     <TextBox.Style>
                         <Style TargetType="TextBox">
                             <Setter Property="Visibility" Value="Visible"/>
@@ -54,15 +56,17 @@
                         </Style>
                     </TextBox.Style>
                 </TextBox>
-                <TextBlock
+                <Button
                     Margin="0,0,5,0"
+                    Background="#00000000"
+                    BorderThickness="0"
                     FontSize="15"
                     FontWeight="Bold"
                     Foreground="Red"
-                    Text="❌"
+                    Content="❌"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Right"
-                    MouseDown="EH_CloseButton_Click"/>
+                    Click="EH_CloseButton_Click"/>
             </Grid>
         </Border>
         <Grid Grid.Row="1"
@@ -88,7 +92,8 @@
                     TextWrapping="Wrap"
                     Margin="3"
                     Text="{Binding ContentText, UpdateSourceTrigger=PropertyChanged}"
-                    LostFocus="EH_ContentTextFocusLost"/>
+                    LostFocus="EH_ContentTextFocusLost"
+                    KeyboardNavigation.TabIndex="1"/>
             </ScrollViewer>
             <Border Width="{Binding ElementName=ContentScrollViewer, Path=ViewportWidth}"
                     HorizontalAlignment="Left">

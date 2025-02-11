@@ -69,7 +69,7 @@ namespace BibleProjector_WPF.View.MainPage
 
         // ================== Event Handlers ==================
 
-        private void EH_CloseButton_Click(object sender, MouseButtonEventArgs e)
+        private void EH_CloseButton_Click(object sender, RoutedEventArgs e)
         {
             CloseCommand.Execute(null);
         }
