@@ -69,15 +69,30 @@
                         </Style>
                     </ContentControl.Style>
                 </ContentControl>
+                <ContentControl Content="{Binding VM_LyricAdd}">
+                    <ContentControl.Style>
+                        <Style TargetType="ContentControl">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ShowAddView}" Value="true">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ShowAddView}" Value="false">
+                                    <Setter Property="Visibility" Value="Hidden"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                </ContentControl>
                 <Grid>
                     <Grid.Style>
                         <Style TargetType="Grid">
+                            <Setter Property="Visibility" Value="Visible"/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding ShowModifyView}" Value="true">
                                     <Setter Property="Visibility" Value="Hidden"/>
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding ShowModifyView}" Value="false">
-                                    <Setter Property="Visibility" Value="Visible"/>
+                                <DataTrigger Binding="{Binding ShowAddView}" Value="true">
+                                    <Setter Property="Visibility" Value="Hidden"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -162,32 +177,6 @@
                             </ScrollViewer.Style>
                             <TextBlock FontSize="15" Margin="3" Text="{Binding SelectionItem.PreviewContent}" TextWrapping="Wrap"/>
                         </ScrollViewer>
-                        <Border VerticalAlignment="Center" HorizontalAlignment="Center" Background="#BF898989">
-                            <Border.Style>
-                                <Style TargetType="Border">
-                                    <Setter Property="Opacity" Value="0"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding NoneUse}" Value="true">
-                                            <DataTrigger.EnterActions>
-                                                <BeginStoryboard>
-                                                    <Storyboard>
-                                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity">
-                                                            <LinearDoubleKeyFrame KeyTime="0:0:0.2"
-                                                                              Value="1"/>
-                                                            <LinearDoubleKeyFrame KeyTime="0:0:0.8"
-                                                                              Value="1"/>
-                                                            <LinearDoubleKeyFrame KeyTime="0:0:1"
-                                                                              Value="0"/>
-                                                        </DoubleAnimationUsingKeyFrames>
-                                                    </Storyboard>
-                                                </BeginStoryboard>
-                                            </DataTrigger.EnterActions>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Border.Style>
-                            <TextBlock Text="아직 사용할 수 없어요..! ㅜㅜ" FontSize="15" FontWeight="Bold" Foreground="Black" Margin="8,3"/>
-                        </Border>
                     </Grid>
                 </Grid>
             </Grid>
