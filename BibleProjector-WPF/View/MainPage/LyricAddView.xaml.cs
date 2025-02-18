@@ -16,26 +16,38 @@ using System.Windows.Shapes;
 namespace BibleProjector_WPF.View.MainPage
 {
     /// <summary>
-    /// ModifyView.xaml에 대한 상호 작용 논리
+    /// AddLyricView.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class ModifyView : UserControl
+    public partial class LyricAddView : UserControl
     {
-        public ModifyView()
+        public LyricAddView()
         {
             InitializeComponent();
 
+            SetBinding(AddNewLyricCommandProperty, new Binding("CAddNewLyric") { Mode = BindingMode.OneWay });
             SetBinding(CloseCommandProperty, new Binding("CClose") { Mode = BindingMode.OneWay });
-            SetBinding(ContentUpdatedCommandProperty, new Binding("CContentUpdated") { Mode = BindingMode.OneWay });
             SetBinding(RemoveLinefeedsCommandProperty, new Binding("CRemoveLinefeed") { Mode = BindingMode.OneWay });
         }
 
         // ================== Binding Properties ==================
 
+        public static readonly DependencyProperty AddNewLyricCommandProperty =
+        DependencyProperty.Register(
+            name: "AddNewLyricCommand",
+            propertyType: typeof(ICommand),
+            ownerType: typeof(LyricAddView));
+
+        public ICommand AddNewLyricCommand
+        {
+            get => (ICommand)GetValue(AddNewLyricCommandProperty);
+            set => SetValue(AddNewLyricCommandProperty, value);
+        }
+
         public static readonly DependencyProperty CloseCommandProperty =
         DependencyProperty.Register(
             name: "CloseCommand",
             propertyType: typeof(ICommand),
-            ownerType: typeof(ModifyView));
+            ownerType: typeof(LyricAddView));
 
         public ICommand CloseCommand
         {
@@ -43,23 +55,11 @@ namespace BibleProjector_WPF.View.MainPage
             set => SetValue(CloseCommandProperty, value);
         }
 
-        public static readonly DependencyProperty ContentUpdatedCommandProperty =
-        DependencyProperty.Register(
-            name: "ContentUpdatedCommand",
-            propertyType: typeof(ICommand),
-            ownerType: typeof(ModifyView));
-
-        public ICommand ContentUpdatedCommand
-        {
-            get => (ICommand)GetValue(ContentUpdatedCommandProperty);
-            set => SetValue(ContentUpdatedCommandProperty, value);
-        }
-
         public static readonly DependencyProperty RemoveLinefeedsCommandProperty =
         DependencyProperty.Register(
             name: "RemoveLinefeedsCommand",
             propertyType: typeof(ICommand),
-            ownerType: typeof(ModifyView));
+            ownerType: typeof(LyricAddView));
 
         public ICommand RemoveLinefeedsCommand
         {
@@ -68,6 +68,15 @@ namespace BibleProjector_WPF.View.MainPage
         }
 
         // ================== Event Handlers ==================
+
+        private void EH_AddButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (AddNewLyricCommand.CanExecute(null))
+            {
+                AddNewLyricCommand.Execute(null);
+                CloseCommand.Execute(null);
+            }
+        }
 
         private void EH_CloseButton_Click(object sender, RoutedEventArgs e)
         {
@@ -84,11 +93,6 @@ namespace BibleProjector_WPF.View.MainPage
         {
             if ((bool)e.NewValue)
                 ((UIElement)sender).Focus();
-        }
-
-        private void EH_ContentTextFocusLost(object sender, RoutedEventArgs e)
-        {
-            ContentUpdatedCommand.Execute(null);
         }
 
         private void EH_RemoveEnterButton_Click(object sender, RoutedEventArgs e)

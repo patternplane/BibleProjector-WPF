@@ -28,10 +28,10 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public ICommand COpenAdder { get; set; }
 
         public VMModify VM_Modify { get; private set; }
+        public VMLyricAdd VM_LyricAdd { get; private set; }
         public bool CanOpenEditor { get; private set; } = false;
         public bool ShowModifyView { get; private set; } = false;
-
-        public bool NoneUse { get; set; } = false;
+        public bool ShowAddView { get; private set; } = false;
 
         // ========== Members ==========
 
@@ -44,7 +44,12 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         // ========== Gen ==========
 
-        public VMSearchControl(module.ISearcher searcher, module.ReserveDataManager reserveManager, module.ShowStarter showStarter, Event.BibleSelectionEventManager bibleSelectionEventManager, module.Data.SongManager songManager)
+        public VMSearchControl(
+            module.ISearcher searcher,
+            module.ReserveDataManager reserveManager, 
+            module.ShowStarter showStarter,
+            Event.BibleSelectionEventManager bibleSelectionEventManager,
+            module.Data.SongManager songManager)
         {
             CSearchStart = new RelayCommand(obj => SearchStart());
             CPopupHide = new RelayCommand(obj => PopupHide());
@@ -63,6 +68,10 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             this.VM_Modify = new VMModify(songManager);
             VM_Modify.CloseEventHandler += (sender, e) => displayModifyView(false);
             VM_Modify.ItemModified += (sender, e) => updateSelectedItem();
+
+            this.VM_LyricAdd = new VMLyricAdd(songManager);
+            VM_LyricAdd.CloseEventHandler += (sender, e) => displayAddView(false);
+            VM_LyricAdd.NewItemAddedEventHandler += (sender, newSong) => changeSelectionToNewSong(newSong);
         }
 
         // ========== Command ==========
@@ -160,12 +169,33 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             OnPropertyChanged(nameof(ShowModifyView));
         }
 
-        void OpenAdder()
+        private void OpenAdder()
         {
-            NoneUse = true;
-            OnPropertyChanged(nameof(NoneUse));
-            NoneUse = false;
-            OnPropertyChanged(nameof(NoneUse));
+            displayAddView(true);
+        }
+
+        private void changeSelectionToNewSong(module.Data.SongData newSong)
+        {
+            if (newSong == null)
+                return;
+
+            // ● 추후 리팩토링 요구됨 :
+            //   미리보기 화면이 검색결과 항목만 받도록 되어있어
+            //   불필요하게 검색 결과로 Wrapping하는 과정이 발생하고 있음.
+            ItemSelected(
+                new VMSearchResult(
+                    new module.Data.SongSearchData(
+                        newSong,
+                        "(추가됨) " + newSong.songTitle, 
+                        0)
+                    )
+                );
+        }
+
+        private void displayAddView(bool visible)
+        {
+            ShowAddView = visible;
+            OnPropertyChanged(nameof(ShowAddView));
         }
     }
 }

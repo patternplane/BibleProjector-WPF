@@ -102,6 +102,7 @@
     <Compile Include="Event\KeyInputEventManager.cs" />
     <Compile Include="ViewModel\MainPage\VMBibleSeletion.cs" />
     <Compile Include="ViewModel\MainPage\VMExternPPTEditButton.cs" />
+    <Compile Include="ViewModel\MainPage\VMLyricAdd.cs" />
     <Compile Include="ViewModel\MainPage\VMModify.cs" />
     <Compile Include="ViewModel\MainPage\VMReserveData.cs" />
     <Compile Include="ViewModel\MainPage\VMReserveList.cs" />
@@ -120,6 +121,9 @@
     <Compile Include="Event\ReserveListChanged.cs" />
     <Compile Include="View\MainPage\AdditionalContentButton.xaml.cs">
       <DependentUpon>AdditionalContentButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainPage\LyricAddView.xaml.cs">
+      <DependentUpon>LyricAddView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\MainPage\BibleSelectionView.xaml.cs">
       <DependentUpon>BibleSelectionView.xaml</DependentUpon>
@@ -196,6 +200,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\MainPage\AdditionalContentButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MainPage\LyricAddView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
