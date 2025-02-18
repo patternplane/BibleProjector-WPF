@@ -99,7 +99,10 @@ namespace BibleProjector_WPF.module.Data
 
         public override void preprocessBeforeShow()
         {
-            Powerpoint.ExternPPTs.fetchUpdateFile(fileFullPath);
+            if (Powerpoint.ExternPPTs.hasFileUpdated(fileFullPath))
+            {
+                Powerpoint.ExternPPTs.refreshPresentation(fileFullPath, true, true);
+            }
         }
 
         public override ShowExcuteErrorEnum canExcuteShow()
