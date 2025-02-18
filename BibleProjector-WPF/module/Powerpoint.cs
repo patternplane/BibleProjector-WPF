@@ -1419,7 +1419,9 @@ namespace BibleProjector_WPF
                     }
             }
 
-            public void refreshPresentation(string path)
+            // 추후 file refresh와 display 기능을 역할 분리해야 할 것임.
+            // file refresh에서 slide show까지 함께 처리하는 것은 복잡성을 높임.
+            public void refreshPresentation(string path, bool setTopMost = false, bool setFirstSlide = false)
             {
                 isNeedMakeThumbnail = true;
                 Presentation lastppt = ppt;
@@ -1447,8 +1449,8 @@ namespace BibleProjector_WPF
                     SlideWindow = null;
 
                     setPresentation(path);
-                    goToSlide(currentSlideNum);
-                    SlideShowRun(lastShowWindow);
+                    goToSlide((setFirstSlide ? 1 : currentSlideNum));
+                    SlideShowRun((setTopMost ? null : lastShowWindow));
 
                     lastShowWindow.View.Exit();
                     checkAndClose(lastppt);
