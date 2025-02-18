@@ -124,7 +124,7 @@ namespace BibleProjector_WPF
 
         // ========================================== 제공하는 기능 =======================================
 
-        static public void setPageData(module.Data.ShowData Data, int PageIndex)
+        static public void setPageData(module.Data.ShowData Data, int PageIndex, bool setSilentTransition = false)
         {
             if (Data.getDataType() == ShowContentType.Bible)
             {
@@ -142,7 +142,7 @@ namespace BibleProjector_WPF
             }
             else if (Data.getDataType() == ShowContentType.PPT)
             {
-                ExternPPTs.goToSlide(((module.Data.ExternPPTData)Data).fileFullPath, PageIndex + 1);
+                ExternPPTs.goToSlide(((module.Data.ExternPPTData)Data).fileFullPath, PageIndex + 1, setSilentTransition);
             }
         }
 
@@ -1286,12 +1286,12 @@ namespace BibleProjector_WPF
                 }
             }
 
-            static public void goToSlide(string fullPath, int slideIndex)
+            static public void goToSlide(string fullPath, int slideIndex, bool doIgnoreTransition)
             {
                 int index;
                 if ((index = pptFinder_fullPath(fullPath)) != -1)
                 {
-                    ppt[index].goToSlide(slideIndex);
+                    ppt[index].goToSlide(slideIndex, doIgnoreTransition);
                 }
             }
 
@@ -1590,7 +1590,7 @@ namespace BibleProjector_WPF
                     TopMost();
             }
 
-            public void goToSlide(int slideIndex)
+            public void goToSlide(int slideIndex, bool doIgnoreTransition = false)
             {
                 if (slideIndex == currentSlideNum)
                     return;
@@ -1601,6 +1601,9 @@ namespace BibleProjector_WPF
                     currentSlideNum = ppt.Slides.Count;
                 else
                     currentSlideNum = slideIndex;
+
+                if (doIgnoreTransition)
+                    turnOffTransition(currentSlideNum, true, true);
 
                 requestMovingSlide(currentSlideNum);
             }
