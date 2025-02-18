@@ -1588,6 +1588,9 @@ namespace BibleProjector_WPF
 
             public void goToSlide(int slideIndex)
             {
+                if (slideIndex == currentSlideNum)
+                    return;
+
                 if (slideIndex < 1)
                     currentSlideNum = 1;
                 else if (slideIndex > ppt.Slides.Count)
