@@ -1199,11 +1199,11 @@ namespace BibleProjector_WPF
                 ppt.Add(new ExternPPT(path));
             }
 
-            static public void refreshPresentation(string path)
+            static public void refreshPresentation(string path, bool maintainTopMost = false, bool setFirstSlide = false)
             {
                 ExternPPT findedExternPPT = ppt.Find(x => x.PPTName.CompareTo(System.IO.Path.GetFileName(path)) == 0);
                 if (findedExternPPT != null)
-                    findedExternPPT.refreshPresentation(path);
+                    findedExternPPT.refreshPresentation(path, maintainTopMost, setFirstSlide);
             }
 
             static public void closeSingle(string path)
@@ -1253,15 +1253,16 @@ namespace BibleProjector_WPF
             }
 
             /// <summary>
-            /// 기존 파일이 변경되었는지를 검사해, 자동으로 새로고침합니다.
+            /// 기존 파일이 변경되었는지를 검사해 결과를 반환합니다.
             /// </summary>
-            static public void fetchUpdateFile(string fullPath)
+            static public bool hasFileUpdated(string fullPath)
             {
                 int index;
                 if ((index = pptFinder_fullPath(fullPath)) != -1)
                 {
-                    ppt[index].fetchUpdateFile();
+                    return ppt[index].hasFileUpdated();
                 }
+                return false;
             }
 
             static public void TopMost(string fullPath)
@@ -1519,15 +1520,15 @@ namespace BibleProjector_WPF
             }
 
             /// <summary>
-            /// 기존 파일이 변경되었는지를 검사해, 자동으로 새로고침합니다.
+            /// 기존 파일이 변경되었는지를 검사해 결과를 반환합니다.
             /// </summary>
-            public void fetchUpdateFile()
+            public bool hasFileUpdated()
             {
-                if (new System.IO.FileInfo(OriginalFullPath).Exists
-                    && hasFileChanged())
+                if (new System.IO.FileInfo(OriginalFullPath).Exists)
                 {
-                    refreshPresentation(OriginalFullPath);
+                    return hasFileChanged();
                 }
+                return false;
             }
 
             public void TopMost()
