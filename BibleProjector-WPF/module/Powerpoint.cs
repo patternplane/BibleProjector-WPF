@@ -1317,6 +1317,8 @@ namespace BibleProjector_WPF
             System.Windows.Media.Imaging.BitmapImage[] thumbnails;
             int currentSlideNum = 1;
 
+            private Dictionary<int, (bool ignoreInSlideMove, float duration)> excludedTrasitions = new Dictionary<int, (bool, float)>();
+
             bool isNeedMakeThumbnail = true;
 
             PptSlideState pptState = PptSlideState.NotRunning;
@@ -1549,6 +1551,8 @@ namespace BibleProjector_WPF
             /// <param name="front"></param>
             public void SlideShowRun(SlideShowWindow front = null)
             {
+                turnOffTransition(currentSlideNum, false, false);
+
                 // 슬라이드쇼 점검하는부분 좀 더 개선
                 // 슬라이드쇼 끄면 ppt도 꺼지기 때문
                 if (SlideWindow == null)
@@ -1601,6 +1605,52 @@ namespace BibleProjector_WPF
                 requestMovingSlide(currentSlideNum);
             }
 
+            private static System.Threading.Mutex transitonControlMutex = new System.Threading.Mutex();
+
+            /// <summary>
+            /// 전환 애니메이션을 제거합니다.
+            /// <br/>- <paramref name="ignoreInSlideMove"/>는 제거된 애니메이션을 다음 슬라이드 이동시에도 무시할지를 결정합니다.
+            /// <br/>- <paramref name="doOverwrite"/>는 기존 <paramref name="slideIdx"/>의 전환 애니메이션 제거 요청을 새로 덮어쓸지를 결정합니다.
+            /// </summary>
+            /// <param name="slideIdx"></param>
+            /// <param name="ignoreInSlideMove"></param>
+            /// <param name="doOverwrite"></param>
+            public void turnOffTransition(int slideIdx, bool ignoreInSlideMove, bool doOverwrite)
+            {
+                transitonControlMutex.WaitOne();
+
+                if (!excludedTrasitions.ContainsKey(slideIdx))
+                    excludedTrasitions.Add(slideIdx, (ignoreInSlideMove, ppt.Slides[slideIdx].SlideShowTransition.Duration));
+                else if (doOverwrite)
+                    excludedTrasitions[slideIdx] = (ignoreInSlideMove, excludedTrasitions[slideIdx].duration);
+                ppt.Slides[slideIdx].SlideShowTransition.Duration = 0.0f;
+
+                transitonControlMutex.ReleaseMutex();
+            }
+
+            /// <summary>
+            /// 전환 애니메이션을 복구합니다.
+            /// <br/>제거 요청에 ignoreInSlideMove가 <see langword="true"/>로 설정되어 있으면 복구 요청은 1회 무시됩니다.
+            /// </summary>
+            /// <param name="slideIdx"></param>
+            public void turnOnTransition(int slideIdx)
+            {
+                transitonControlMutex.WaitOne();
+
+                if (excludedTrasitions.ContainsKey(slideIdx))
+                {
+                    if (excludedTrasitions[slideIdx].ignoreInSlideMove)
+                        excludedTrasitions[slideIdx] = (false, excludedTrasitions[slideIdx].duration);
+                    else
+                    {
+                        ppt.Slides[slideIdx].SlideShowTransition.Duration = excludedTrasitions[slideIdx].duration;
+                        excludedTrasitions.Remove(slideIdx);
+                    }
+                }
+
+                transitonControlMutex.ReleaseMutex();
+            }
+
             // ========================== Threaded Slide Moving ==========================
 
             // 애니메이션이 포함된 슬라이드 이동시 UI가 잠시 멈추게 되는데 (UI는 동기(sync) 상태)
@@ -1633,6 +1683,7 @@ namespace BibleProjector_WPF
                     if (readData.isRequested) {
                         try
                         {
+                            readData.requester.turnOnTransition(readData.slideIndex);
                             readData.requester.SlideWindow.View.GotoSlide(readData.slideIndex);
                         }
                         catch (Exception e)
