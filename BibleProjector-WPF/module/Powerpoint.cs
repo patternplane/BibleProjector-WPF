@@ -46,7 +46,7 @@ namespace BibleProjector_WPF
         protected static void SlideShowHideInTaskbar(int windowHWND)
         {
             Int32 style = GetWindowLong(windowHWND, GWL_STYLE);
-
+            
             style |= WS_VISIBLE;
             style &= ~(WS_EX_APPWINDOW);
             style |= WS_EX_TOOLWINDOW;
@@ -1435,7 +1435,7 @@ namespace BibleProjector_WPF
 
                     setPresentation(path);
                     goToSlide(currentSlideNum);
-                    SlideShowRun(false, lastShowWindow);
+                    SlideShowRun(lastShowWindow);
 
                     lastShowWindow.View.Exit();
                     checkAndClose(lastppt);
@@ -1530,7 +1530,13 @@ namespace BibleProjector_WPF
                 }
             }
 
-            public void SlideShowRun(bool setTop = true, SlideShowWindow front = null)
+            /// <summary>
+            /// 슬라이드 쇼를 표시합니다.
+            /// <br/>- <paramref name="front"/>가 제시되면 <paramref name="front"/> 창의 바로 앞에 표시합니다.
+            /// <br/>- <paramref name="front"/>가 제시되지 않으면 가장 앞 화면에 표시합니다.
+            /// </summary>
+            /// <param name="front"></param>
+            public void SlideShowRun(SlideShowWindow front = null)
             {
                 // 슬라이드쇼 점검하는부분 좀 더 개선
                 // 슬라이드쇼 끄면 ppt도 꺼지기 때문
@@ -1560,7 +1566,7 @@ namespace BibleProjector_WPF
                 SlideWindow.View.GotoSlide(currentSlideNum);
 
                 pptState = PptSlideState.WindowShow;
-                if (setTop)
+                if (front == null)
                     TopMost();
             }
 
