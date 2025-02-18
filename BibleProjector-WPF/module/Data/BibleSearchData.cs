@@ -8,22 +8,39 @@ namespace BibleProjector_WPF.module.Data
 {
     public class BibleSearchData : SearchData
     {
+        private bool isShort;
+
         public BibleSearchData(BibleData data, bool isShort, int searchDistance)
         {
             this.data = data;
+            this.isShort = isShort;
             this.searchDistance = searchDistance;
+        }
+
+        public override string getdisplayName()
+        {
+            string displayName;
+            BibleData typedData = (BibleData)data;
 
             if (isShort)
-                displayName = $"({data.getBibleTitle_Abr()}) {data.getBibleTitle()}";
+                displayName = $"({typedData.getBibleTitle_Abr()}) {typedData.getBibleTitle()}";
             else
-                displayName = data.getBibleTitle();
+                displayName = typedData.getBibleTitle();
 
-            if (data.chapter != -1)
-                displayName += $" {data.chapter}장 ";
-            if (data.verse != -1)
-                displayName += $"{data.verse}절";
+            if (typedData.chapter != -1)
+                displayName += $" {typedData.chapter}장 ";
+            if (typedData.verse != -1)
+                displayName += $"{typedData.verse}절";
 
-            previewContent = data.getBibleContent();
+            if (isModified)
+                return "[수정됨] " + displayName;
+            else
+                return displayName;
+        }
+
+        public override string getPreviewContent()
+        {
+            return ((BibleData)data).getBibleContent();
         }
     }
 }

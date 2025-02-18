@@ -11,9 +11,17 @@ namespace BibleProjector_WPF.module.Data
         public ExternPPTSearchData(ExternPPTData data, int searchDistance)
         {
             this.data = data;
-            this.displayName = " (외부자료) " + data.fileName;
-            this.previewContent = "";
             this.searchDistance = searchDistance;
+        }
+
+        public override string getdisplayName()
+        {
+            return " (외부자료) " + ((ExternPPTData)data).fileName;
+        }
+
+        public override string getPreviewContent()
+        {
+            return "";
         }
     }
 }

@@ -55,15 +55,42 @@
         <!--검색 : 미리보기-->
         <Border Grid.Row="2" BorderBrush="Black" BorderThickness="2">
             <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Border Grid.Row="0" BorderBrush="LightGray" BorderThickness="0,0,0,1">
-                    <Grid>
-                        <TextBlock Margin="5,0,1,0" FontSize="15" Text="{Binding SelectionItem.DisplayTitle}" VerticalAlignment="Center" FontWeight="Bold"/>
-                        <DockPanel>
-                            <Button Margin="3,3"
+                <ContentControl Content="{Binding VM_Modify}">
+                    <ContentControl.Style>
+                        <Style TargetType="ContentControl">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ShowModifyView}" Value="true">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ShowModifyView}" Value="false">
+                                    <Setter Property="Visibility" Value="Hidden"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                </ContentControl>
+                <Grid>
+                    <Grid.Style>
+                        <Style TargetType="Grid">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ShowModifyView}" Value="true">
+                                    <Setter Property="Visibility" Value="Hidden"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ShowModifyView}" Value="false">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" BorderBrush="LightGray" BorderThickness="0,0,0,1">
+                        <Grid>
+                            <TextBlock Margin="5,0,1,0" FontSize="15" Text="{Binding SelectionItem.DisplayTitle}" VerticalAlignment="Center" FontWeight="Bold"/>
+                            <DockPanel>
+                                <Button Margin="3,3"
                                     DockPanel.Dock="Right"
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Top"
@@ -73,22 +100,22 @@
                                     FontWeight="Bold"
                                     BorderThickness="2"
                                     Click="EH_Add_Button_Click">
-                                <Button.Style>
-                                    <Style TargetType="Button">
-                                        <Setter Property="Background" Value="#22C5F76E"/>
-                                        <Setter Property="Foreground" Value="#22005504"/>
-                                        <Setter Property="BorderBrush" Value="#22005504"/>
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Background" Value="#FFC5F76E"/>
-                                                <Setter Property="Foreground" Value="#FF005504"/>
-                                                <Setter Property="BorderBrush" Value="#FF005504"/>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                            </Button>
-                            <Button Margin="3,3"
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Background" Value="#22C5F76E"/>
+                                            <Setter Property="Foreground" Value="#22005504"/>
+                                            <Setter Property="BorderBrush" Value="#22005504"/>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#FFC5F76E"/>
+                                                    <Setter Property="Foreground" Value="#FF005504"/>
+                                                    <Setter Property="BorderBrush" Value="#FF005504"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                                <Button Margin="3,3"
                                     DockPanel.Dock="Right"
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Top"
@@ -100,67 +127,68 @@
                                     BorderThickness="2"
                                     Click="EH_Edit_Button_Click"
                                     Visibility="{Binding CanOpenEditor, Converter={StaticResource VisibilityConverter}}">
-                                <Button.Style>
-                                    <Style TargetType="Button">
-                                        <Setter Property="Background" Value="#22F7BF6E"/>
-                                        <Setter Property="Foreground" Value="#22553600"/>
-                                        <Setter Property="BorderBrush" Value="#22633600"/>
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Background" Value="#FFF7BF6E"/>
-                                                <Setter Property="Foreground" Value="#FF553600"/>
-                                                <Setter Property="BorderBrush" Value="#FF633600"/>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                            </Button>
-                        </DockPanel>
-                    </Grid>
-                </Border>
-                <Grid Grid.Row="1"
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Background" Value="#22F7BF6E"/>
+                                            <Setter Property="Foreground" Value="#22553600"/>
+                                            <Setter Property="BorderBrush" Value="#22633600"/>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#FFF7BF6E"/>
+                                                    <Setter Property="Foreground" Value="#FF553600"/>
+                                                    <Setter Property="BorderBrush" Value="#FF633600"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                            </DockPanel>
+                        </Grid>
+                    </Border>
+                    <Grid Grid.Row="1"
                       Name="PreviewArea"
                       Background="#00000000">
-                    <ScrollViewer>
-                        <ScrollViewer.Style>
-                            <Style TargetType="ScrollViewer">
-                                <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
-                                <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding SelectionItem.Type}" Value="{x:Static rootns:ShowContentType.Bible}">
-                                        <Setter Property="HorizontalScrollBarVisibility" Value="Disabled"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </ScrollViewer.Style>
-                        <TextBlock FontSize="15" Margin="3" Text="{Binding SelectionItem.PreviewContent}" TextWrapping="Wrap"/>
-                    </ScrollViewer>
-                    <Border VerticalAlignment="Center" HorizontalAlignment="Center" Background="#BF898989">
-                        <Border.Style>
-                            <Style TargetType="Border">
-                                <Setter Property="Opacity" Value="0"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding NoneUse}" Value="true">
-                                        <DataTrigger.EnterActions>
-                                            <BeginStoryboard>
-                                                <Storyboard>
-                                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity">
-                                                        <LinearDoubleKeyFrame KeyTime="0:0:0.2"
+                        <ScrollViewer>
+                            <ScrollViewer.Style>
+                                <Style TargetType="ScrollViewer">
+                                    <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+                                    <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SelectionItem.Type}" Value="{x:Static rootns:ShowContentType.Bible}">
+                                            <Setter Property="HorizontalScrollBarVisibility" Value="Disabled"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ScrollViewer.Style>
+                            <TextBlock FontSize="15" Margin="3" Text="{Binding SelectionItem.PreviewContent}" TextWrapping="Wrap"/>
+                        </ScrollViewer>
+                        <Border VerticalAlignment="Center" HorizontalAlignment="Center" Background="#BF898989">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Opacity" Value="0"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding NoneUse}" Value="true">
+                                            <DataTrigger.EnterActions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity">
+                                                            <LinearDoubleKeyFrame KeyTime="0:0:0.2"
                                                                               Value="1"/>
-                                                        <LinearDoubleKeyFrame KeyTime="0:0:0.8"
+                                                            <LinearDoubleKeyFrame KeyTime="0:0:0.8"
                                                                               Value="1"/>
-                                                        <LinearDoubleKeyFrame KeyTime="0:0:1"
+                                                            <LinearDoubleKeyFrame KeyTime="0:0:1"
                                                                               Value="0"/>
-                                                    </DoubleAnimationUsingKeyFrames>
-                                                </Storyboard>
-                                            </BeginStoryboard>
-                                        </DataTrigger.EnterActions>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Border.Style>
-                        <TextBlock Text="아직 사용할 수 없어요..! ㅜㅜ" FontSize="15" FontWeight="Bold" Foreground="Black" Margin="8,3"/>
-                    </Border>
+                                                        </DoubleAnimationUsingKeyFrames>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </DataTrigger.EnterActions>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <TextBlock Text="아직 사용할 수 없어요..! ㅜㅜ" FontSize="15" FontWeight="Bold" Foreground="Black" Margin="8,3"/>
+                        </Border>
+                    </Grid>
                 </Grid>
             </Grid>
         </Border>

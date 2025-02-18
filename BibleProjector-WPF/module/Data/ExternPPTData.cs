@@ -47,7 +47,7 @@ namespace BibleProjector_WPF.module.Data
 
         public void UnlinkPPT()
         {
-            Powerpoint.ExternPPTs.closeSingle(Powerpoint.EXTERN_TEMP_DIRECTORY + System.IO.Path.GetFileName(fileFullPath));
+            Powerpoint.ExternPPTs.closeSingle(fileFullPath);
         }
 
         // ================ ShowData 메소드 ================
@@ -95,6 +95,11 @@ namespace BibleProjector_WPF.module.Data
                 if (this.fileFullPath.CompareTo(((ExternPPTData)data).fileFullPath) == 0)
                     return true;
             return false;
+        }
+
+        public override void preprocessBeforeShow()
+        {
+            Powerpoint.ExternPPTs.fetchUpdateFile(fileFullPath);
         }
 
         public override ShowExcuteErrorEnum canExcuteShow()

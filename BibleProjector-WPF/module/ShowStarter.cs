@@ -25,6 +25,7 @@ namespace BibleProjector_WPF.module
                     throw new Exception("슬라이드 쇼를 실행할 수 없는 항목을 표시하려 했습니다. " + showData.canExcuteShow().ToString());
                 else
                 {
+                    showData.preprocessBeforeShow();
                     ShowStartPreparing.Invoke(this, new Event.ShowStartEventArgs(showData));
                     ShowStartEvent.Invoke(this, new Event.ShowStartEventArgs(showData));
                     ShowStartTaskDone.Invoke(this, null);

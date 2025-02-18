@@ -14,7 +14,6 @@ namespace BibleProjector_WPF.module.Data
 
         string bibleTitle = null;
         string bibleTitle_abr = null;
-        string bibleContent = null;
         ShowContentData[] currentContents = null;
 
         public BibleData(int book, int chapter, int verse)
@@ -24,7 +23,6 @@ namespace BibleProjector_WPF.module.Data
             this.verse = -1;
             this.bibleTitle = null;
             this.bibleTitle_abr = null;
-            this.bibleContent = null;
             this.currentContents = null;
             if (book >= 1 && book <= 66)
             {
@@ -58,10 +56,9 @@ namespace BibleProjector_WPF.module.Data
 
         public string getBibleContent()
         {
-            if (verse != -1
-                && bibleContent == null)
-                bibleContent = Database.getBible(book.ToString("D2") + chapter.ToString("D3") + verse.ToString("D3"));
-            return bibleContent;
+            if (verse != -1)
+                return Database.getBible(book.ToString("D2") + chapter.ToString("D3") + verse.ToString("D3"));
+            return null;
         }
 
         // ================ ShowData 메소드 ================
@@ -78,18 +75,15 @@ namespace BibleProjector_WPF.module.Data
 
         public override ShowContentData[] getContents()
         {
-            if (currentContents == null)
-            {
-                string[] contents = StringModifier.makeStringPage(
-                    getBibleContent()
-                    , ProgramOption.Bible_CharPerLine
-                    , ProgramOption.Bible_LinePerSlide);
+            string[] contents = StringModifier.makeStringPage(
+                getBibleContent()
+                , ProgramOption.Bible_CharPerLine
+                , ProgramOption.Bible_LinePerSlide);
 
-                currentContents = new ShowContentData[contents.Length];
-                int i = 0;
-                foreach (string item in contents)
-                    currentContents[i++] = new ShowContentData(item, item, false);
-            }
+            currentContents = new ShowContentData[contents.Length];
+            int i = 0;
+            foreach (string item in contents)
+                currentContents[i++] = new ShowContentData(item, item, false);
 
             return currentContents;
         }

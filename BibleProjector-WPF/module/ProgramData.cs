@@ -124,6 +124,8 @@ namespace BibleProjector_WPF.module
                     foreach(SaveDataTypeEnum type in doneKey)
                         saveList.Remove(type);
                 }
+
+                Thread.Sleep(10);
             }
         }
 

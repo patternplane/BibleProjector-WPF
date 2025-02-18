@@ -247,11 +247,6 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         public void newShowStart(module.Data.ShowData data)
         {
-            data.ItemRefreshedEvent -= refreshData;
-            data.ItemRefreshedEvent += refreshData;
-            data.ItemDeletedEvent -= itemDeleted;
-            data.ItemDeletedEvent += itemDeleted;
-
             dataSetter(data);
             MovePage(0);
             TextVisibility(true);
@@ -292,6 +287,17 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         {
             if (ContentType == ShowContentType.Bible)
                 bibleSelectionEventManager.InvokeBibleSelection(((module.Data.BibleData)data).book, ((module.Data.BibleData)data).chapter, ((module.Data.BibleData)data).verse);
+
+            if (this.currentData != null)
+            {
+                this.currentData.ItemRefreshedEvent -= refreshData;
+                this.currentData.ItemDeletedEvent -= itemDeleted;
+            }
+            if (data != null)
+            {
+                data.ItemRefreshedEvent += refreshData;
+                data.ItemDeletedEvent += itemDeleted;
+            }
 
             this.currentData = data;
 

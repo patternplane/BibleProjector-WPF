@@ -38,6 +38,11 @@ namespace BibleProjector_WPF
         const Int32 WS_EX_APPWINDOW = 0x00040000;
         const Int32 WS_EX_NOACTIVATE = 0x08000000;
 
+        [System.Runtime.InteropServices.DllImport("user32")]
+        public static extern int GetWindow(int hWnd, uint uCmd);
+        const uint GW_HWNDNEXT = 2;
+        const uint GW_HWNDPREV = 3;
+
         protected static void SlideShowHideInTaskbar(int windowHWND)
         {
             Int32 style = GetWindowLong(windowHWND, GWL_STYLE);
@@ -69,7 +74,6 @@ namespace BibleProjector_WPF
         // ============================================ 프로그램 시작 / 종료 세팅 ========================================================
 
         public const string FRAME_TEMP_DIRECTORY = ".\\programData\\FrameTemp\\";
-        public const string EXTERN_TEMP_DIRECTORY = ".\\programData\\ExternPPT\\";
         public const string EXTERN_THUMBNAIL_DIRECTORY = ".\\programData\\Thumbnails\\";
 
         static public void Initialize()
@@ -80,11 +84,6 @@ namespace BibleProjector_WPF
             if (System.IO.Directory.Exists(FRAME_TEMP_DIRECTORY))
                 System.IO.Directory.Delete(FRAME_TEMP_DIRECTORY, true);
             System.IO.Directory.CreateDirectory(FRAME_TEMP_DIRECTORY);
-
-            closePPTFiles(System.IO.Path.GetDirectoryName(System.IO.Path.GetFullPath(EXTERN_TEMP_DIRECTORY))); // Notice : if last has \\, use GetDirectoryName!!
-            if (System.IO.Directory.Exists(EXTERN_TEMP_DIRECTORY))
-                System.IO.Directory.Delete(EXTERN_TEMP_DIRECTORY, true);
-            System.IO.Directory.CreateDirectory(EXTERN_TEMP_DIRECTORY);
 
             if (System.IO.Directory.Exists(EXTERN_THUMBNAIL_DIRECTORY))
                 System.IO.Directory.Delete(EXTERN_THUMBNAIL_DIRECTORY, true);
@@ -407,10 +406,12 @@ namespace BibleProjector_WPF
 
             static public void SlideShowRun()
             {
-                int currentSlide = 1;
+                int currentSlide = -1;
 
                 // 슬라이드쇼 점검하는부분 좀 더 개선
                 // 슬라이드쇼 끄면 ppt도 꺼지기 때문
+                if (SlideWindow != null)
+                    currentSlide = SlideWindow.View.CurrentShowPosition;
                 if (SlideWindow == null)
                 {
                     ppt.SlideShowSettings.ShowType = PpSlideShowType.ppShowTypeKiosk;
@@ -422,7 +423,10 @@ namespace BibleProjector_WPF
                         currentSlide = 2;
                     }
                     else
+                    {
                         SlideWindow = ppt.SlideShowSettings.Run();
+                        currentSlide = 1;
+                    }
                 }
                 SlideShowHideInTaskbar(SlideWindow.HWND);
 
@@ -660,10 +664,12 @@ namespace BibleProjector_WPF
 
             static public void SlideShowRun()
             {
-                int currentSlide = 1;
+                int currentSlide = -1;
 
                 // 슬라이드쇼 점검하는부분 좀 더 개선
                 // 슬라이드쇼 끄면 ppt도 꺼지기 때문
+                if (SlideWindow != null)
+                    currentSlide = SlideWindow.View.CurrentShowPosition;
                 if (SlideWindow == null)
                 {
                     ppt.SlideShowSettings.ShowType = PpSlideShowType.ppShowTypeKiosk;
@@ -675,7 +681,10 @@ namespace BibleProjector_WPF
                         currentSlide = 2;
                     }
                     else
+                    {
                         SlideWindow = ppt.SlideShowSettings.Run();
+                        currentSlide = 1;
+                    }
                 }
                 SlideShowHideInTaskbar(SlideWindow.HWND);
 
@@ -976,6 +985,7 @@ namespace BibleProjector_WPF
                 try
                 {
                     SlideWindow.View.Exit();
+                    SlideWindow = null;
                 }
                 catch { }
                 try
@@ -1074,10 +1084,12 @@ namespace BibleProjector_WPF
 
             public void SlideShowRun()
             {
-                int currentSlide = 1;
+                int currentSlide = -1;
 
                 // 슬라이드쇼 점검하는부분 좀 더 개선
                 // 슬라이드쇼 끄면 ppt도 꺼지기 때문
+                if (SlideWindow != null)
+                    currentSlide = SlideWindow.View.CurrentShowPosition;
                 if (SlideWindow == null)
                 {
                     ppt.SlideShowSettings.ShowType = PpSlideShowType.ppShowTypeKiosk;
@@ -1089,7 +1101,10 @@ namespace BibleProjector_WPF
                         currentSlide = 2;
                     }
                     else
+                    {
                         SlideWindow = ppt.SlideShowSettings.Run();
+                        currentSlide = 1;
+                    }
                 }
                 SlideShowHideInTaskbar(SlideWindow.HWND);
 
@@ -1224,6 +1239,18 @@ namespace BibleProjector_WPF
                 return null;
             }
 
+            /// <summary>
+            /// 기존 파일이 변경되었는지를 검사해, 자동으로 새로고침합니다.
+            /// </summary>
+            static public void fetchUpdateFile(string fullPath)
+            {
+                int index;
+                if ((index = pptFinder_fullPath(fullPath)) != -1)
+                {
+                    ppt[index].fetchUpdateFile();
+                }
+            }
+
             static public void TopMost(string fullPath)
             {
                 int index;
@@ -1268,7 +1295,6 @@ namespace BibleProjector_WPF
         {
             // ============================================ 필요 변수 ============================================ 
 
-            public string FullPath;
             public string OriginalFullPath;
             public string PPTName;
 
@@ -1288,24 +1314,62 @@ namespace BibleProjector_WPF
                 setPresentation(path);
             }
 
-            public void setPresentation(string path)
+            // ============ File Checker ============
+
+            private static System.Security.Cryptography.MD5CryptoServiceProvider fileHasher = new System.Security.Cryptography.MD5CryptoServiceProvider();
+            private byte[] fileHash = null;
+
+            private void assignFileHash()
             {
-                string tempPath = EXTERN_TEMP_DIRECTORY + System.IO.Path.GetFileName(path);
-                string newPath = System.IO.Path.GetFullPath(tempPath);
-                string originalPath = path;
-                System.IO.File.Copy(originalPath, newPath, true);
-
-                this.FullPath = System.IO.Path.GetFullPath(newPath);
-                this.OriginalFullPath = originalPath;
-                this.PPTName = System.IO.Path.GetFileName(newPath);
-
-                ppt = app.Presentations.Open(newPath, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
-                checkValidPPT();
-
-                SetThumbNailImages(newPath);
+                fileHash = getFileHash();
             }
 
-            void SetThumbNailImages(string fullPath)
+            private byte[] getFileHash()
+            {
+                return fileHasher.ComputeHash(new System.IO.FileStream(OriginalFullPath, System.IO.FileMode.Open, System.IO.FileAccess.Read));
+            }
+
+            /// <summary>
+            /// 파일을 해싱해 변경되었는지를 검사합니다.
+            /// <br/> 파일이 없을 경우 예외가 발생합니다.
+            /// </summary>
+            /// <returns></returns>
+            private bool hasFileChanged()
+            {
+                byte[] newHash = getFileHash();
+
+                if (newHash.Length == fileHash.Length)
+                {
+                    int i = 0;
+                    while ((i < newHash.Length) && (newHash[i] == fileHash[i]))
+                    {
+                        i += 1;
+                    }
+                    if (i == newHash.Length)
+                    {
+                        // equal hash
+                        return false;
+                    }
+                }
+                // not equal hash
+                return true;
+            }
+
+            // ======================================
+
+            public void setPresentation(string path)
+            {
+                this.OriginalFullPath = path;
+                this.PPTName = System.IO.Path.GetFileName(path);
+
+                ppt = app.Presentations.Open(path, Untitled: Microsoft.Office.Core.MsoTriState.msoTrue, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
+                checkValidPPT();
+                assignFileHash();
+
+                SetThumbNailImages();
+            }
+
+            void SetThumbNailImages()
             {
                 this.ThumbnailGenerator();
 
@@ -1369,21 +1433,9 @@ namespace BibleProjector_WPF
                     SlideShowWindow lastShowWindow = SlideWindow;
                     SlideWindow = null;
 
-                    ppt = app.Presentations.Open(path, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
-                    checkValidPPT();
-                    goToSlide(currentSlideNum);
-                    SlideShowRun();
-
-                    lastShowWindow.View.Exit();
-                    checkAndClose(lastppt);
-
-                    lastppt = ppt;
-                    lastShowWindow = SlideWindow;
-                    SlideWindow = null;
-
                     setPresentation(path);
                     goToSlide(currentSlideNum);
-                    SlideShowRun();
+                    SlideShowRun(false, lastShowWindow);
 
                     lastShowWindow.View.Exit();
                     checkAndClose(lastppt);
@@ -1397,6 +1449,7 @@ namespace BibleProjector_WPF
                 try
                 {
                     SlideWindow.View.Exit();
+                    SlideWindow = null;
                 }
                 catch { }
                 try
@@ -1423,7 +1476,7 @@ namespace BibleProjector_WPF
             void makeThumbNail()
             {
                 deleteThumbNail();
-                ppt.SaveAs(System.IO.Path.GetFullPath(EXTERN_THUMBNAIL_DIRECTORY+ppt.Name), PpSaveAsFileType.ppSaveAsJPG);
+                ppt.SaveAs(System.IO.Path.GetFullPath(EXTERN_THUMBNAIL_DIRECTORY + this.PPTName), PpSaveAsFileType.ppSaveAsJPG);
             }
 
             // ============================================ 메소드 ============================================
@@ -1441,13 +1494,30 @@ namespace BibleProjector_WPF
             {
                 return System.IO.Path.GetFullPath(
                     EXTERN_THUMBNAIL_DIRECTORY 
-                    + System.IO.Path.GetFileNameWithoutExtension(ppt.Name)
+                    + System.IO.Path.GetFileNameWithoutExtension(this.PPTName)
                     );
             }
 
             public System.Windows.Media.Imaging.BitmapImage[] getThumbnailImages()
             {
                 return thumbnails;
+            }
+
+            /// <summary>
+            /// 기존 파일이 변경되었는지를 검사해, 자동으로 새로고침합니다.
+            /// </summary>
+            public void fetchUpdateFile()
+            {
+                if (new System.IO.FileInfo(OriginalFullPath).Exists
+                    && hasFileChanged())
+                {
+                    refreshPresentation(OriginalFullPath);
+                }
+            }
+
+            private void orderBeforeWindow(SlideShowWindow newShowWin, SlideShowWindow lastShowWin)
+            {
+                SetWindowPos(newShowWin.HWND, GetWindow(lastShowWin.HWND, GW_HWNDPREV), 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
             }
 
             public void TopMost()
@@ -1460,7 +1530,7 @@ namespace BibleProjector_WPF
                 }
             }
 
-            public void SlideShowRun()
+            public void SlideShowRun(bool setTop = true, SlideShowWindow front = null)
             {
                 // 슬라이드쇼 점검하는부분 좀 더 개선
                 // 슬라이드쇼 끄면 ppt도 꺼지기 때문
@@ -1471,10 +1541,16 @@ namespace BibleProjector_WPF
                     {
                         ppt.Slides[currentSlideNum].MoveTo(1);
                         SlideWindow = ppt.SlideShowSettings.Run();
+                        if (front != null)
+                            orderBeforeWindow(SlideWindow, front);
                         ppt.Slides[1].MoveTo(currentSlideNum);
                     }
                     else
+                    {
                         SlideWindow = ppt.SlideShowSettings.Run();
+                        if (front != null)
+                            orderBeforeWindow(SlideWindow, front);
+                    }
                 }
                 SlideShowHideInTaskbar(SlideWindow.HWND);
 
@@ -1484,7 +1560,8 @@ namespace BibleProjector_WPF
                 SlideWindow.View.GotoSlide(currentSlideNum);
 
                 pptState = PptSlideState.WindowShow;
-                TopMost();
+                if (setTop)
+                    TopMost();
             }
 
             public void goToSlide(int slideIndex)
@@ -1505,33 +1582,47 @@ namespace BibleProjector_WPF
             // 이때, 빠르게 UI를 조작하면 이상한 번호로 슬라이드가 이동되는 문제가 발생함.
             // 따라서 비동기 로직으로 구성하기 위해, 실제 슬라이드의 이동은 스레딩을 통해 처리함.
 
-            System.Threading.Mutex slideControlMutex = new System.Threading.Mutex();
-            private (bool isRequested, int slideIndex) slideMoveRequest = NULL_REQUEST;
-            private System.Threading.Thread slideControlThread = null;
+            private static System.Threading.Mutex slideControlMutex = new System.Threading.Mutex();
+            private static (bool isRequested, ExternPPT requester, int slideIndex) slideMoveRequest = NULL_REQUEST;
+            private static System.Threading.Thread slideControlThread = null;
 
-            private static readonly (bool, int) NULL_REQUEST = (false, -1);
+            private static readonly (bool, ExternPPT requester, int) NULL_REQUEST = (false, null, -1);
 
-            private void slideMoveThreadFunc()
+            private static void slideMoveThreadFunc()
             {
-                (bool isRequested, int slideIndex) readData;
+                (bool isRequested, ExternPPT requester, int slideIndex) readData;
                 while (true)
                 {
                     readData = NULL_REQUEST;
                     slideControlMutex.WaitOne();
 
-                    if (slideMoveRequest.isRequested
-                        && SlideWindow != null)
+                    if (slideMoveRequest.isRequested)
                     {
-                        readData = slideMoveRequest;
+                        if (slideMoveRequest.requester.SlideWindow != null)
+                            readData = slideMoveRequest;
                         slideMoveRequest = NULL_REQUEST;
                     }
 
                     slideControlMutex.ReleaseMutex();
 
-                    if (readData.isRequested) { 
-                        SlideWindow.View.GotoSlide(readData.slideIndex);
+                    if (readData.isRequested) {
+                        try
+                        {
+                            readData.requester.SlideWindow.View.GotoSlide(readData.slideIndex);
+                        }
+                        catch (Exception e)
+                        {
+                            slideControlMutex.WaitOne();
+
+                            if (!slideMoveRequest.isRequested)
+                                slideMoveRequest = readData;
+
+                            slideControlMutex.ReleaseMutex();
+                        }
                         readData = NULL_REQUEST;
                     }
+
+                    System.Threading.Thread.Sleep(10);
                 }
             }
 
@@ -1544,7 +1635,7 @@ namespace BibleProjector_WPF
                 }
 
                 slideControlMutex.WaitOne();
-                slideMoveRequest = (true, slideIdx);
+                slideMoveRequest = (true, this, slideIdx);
                 slideControlMutex.ReleaseMutex();
             }
 
