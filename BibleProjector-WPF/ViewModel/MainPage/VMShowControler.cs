@@ -248,7 +248,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public void newShowStart(module.Data.ShowData data)
         {
             dataSetter(data);
-            MovePage(0);
+            MovePage(0, true);
             TextVisibility(true);
             DisplayVisibility(true);
             SetDisplayTopMost();
@@ -327,14 +327,14 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             removeMoveNumber(true);
         }
 
-        void MovePage(int pageIdx)
+        void MovePage(int pageIdx, bool doSilent = false)
         {
             if (pageIdx >= -1 && pageIdx < Pages.Count)
             {
                 _CurrentPageIndex = pageIdx;
                 OnPropertyChanged("CurrentPageIndex");
                 if (pageIdx != -1)
-                    Powerpoint.setPageData(currentData, pageIdx);
+                    Powerpoint.setPageData(currentData, pageIdx, doSilent);
             }
         }
 

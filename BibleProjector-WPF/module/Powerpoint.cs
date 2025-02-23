@@ -26,6 +26,7 @@ namespace BibleProjector_WPF
         const int SWP_NOMOVE = 0x0002;
         const int SWP_NOSIZE = 0x0001;
         const int SWP_NOACTIVATE = 0x0010;
+        const int SWP_NOZORDER = 0x0004;
 
         [System.Runtime.InteropServices.DllImport("user32")]
         public static extern Int32 SetWindowLong(int hWnd, Int32 nIndex, Int32 dwNewLong);
@@ -43,16 +44,28 @@ namespace BibleProjector_WPF
         const uint GW_HWNDNEXT = 2;
         const uint GW_HWNDPREV = 3;
 
-        protected static void SlideShowHideInTaskbar(int windowHWND)
+        /// <summary>
+        /// 기본 자막화면 표시 정책에 따라 슬라이드 쇼 Window를 재설정 및 표시합니다.
+        /// <br/> 정책 :
+        /// <br/>- 작업표시줄에 Windows를 표시하지 않습니다.
+        /// <br/>- 기존 위치를 유지하거나, <paramref name="frontWindowHWND"/>의 바로 뒤로 위치시킬 수 있습니다.
+        /// </summary>
+        /// <param name="windowHWND"></param>
+        /// <param name="frontWindowHWND"></param>
+        protected static void ReshowSlideWindow(int windowHWND, int? frontWindowHWND = null)
         {
             Int32 style = GetWindowLong(windowHWND, GWL_STYLE);
-
+            
             style |= WS_VISIBLE;
             style &= ~(WS_EX_APPWINDOW);
             style |= WS_EX_TOOLWINDOW;
             style |= WS_EX_NOACTIVATE;
 
             ShowWindow(windowHWND, SW_HIDE);
+            if (frontWindowHWND == null)
+                SetWindowPos(windowHWND, 0, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE | SWP_NOZORDER);
+            else
+                SetWindowPos(windowHWND, (int)frontWindowHWND, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
             SetWindowLong(windowHWND, GWL_STYLE, style);
         }
 
@@ -111,7 +124,7 @@ namespace BibleProjector_WPF
 
         // ========================================== 제공하는 기능 =======================================
 
-        static public void setPageData(module.Data.ShowData Data, int PageIndex)
+        static public void setPageData(module.Data.ShowData Data, int PageIndex, bool setSilentTransition = false)
         {
             if (Data.getDataType() == ShowContentType.Bible)
             {
@@ -129,7 +142,7 @@ namespace BibleProjector_WPF
             }
             else if (Data.getDataType() == ShowContentType.PPT)
             {
-                ExternPPTs.goToSlide(((module.Data.ExternPPTData)Data).fileFullPath, PageIndex + 1);
+                ExternPPTs.goToSlide(((module.Data.ExternPPTData)Data).fileFullPath, PageIndex + 1, setSilentTransition);
             }
         }
 
@@ -428,7 +441,7 @@ namespace BibleProjector_WPF
                         currentSlide = 1;
                     }
                 }
-                SlideShowHideInTaskbar(SlideWindow.HWND);
+                ReshowSlideWindow(SlideWindow.HWND);
 
                 // Taskbar에서 powerpoint 앱을 숨기는 window api를 사용하면
                 // powerpoint show 화면이 꺼졌다 켜질 때 종종 검정화면으로 돌아가는 문제가 있어
@@ -686,7 +699,7 @@ namespace BibleProjector_WPF
                         currentSlide = 1;
                     }
                 }
-                SlideShowHideInTaskbar(SlideWindow.HWND);
+                ReshowSlideWindow(SlideWindow.HWND);
 
                 // Taskbar에서 powerpoint 앱을 숨기는 window api를 사용하면
                 // powerpoint show 화면이 꺼졌다 켜질 때 종종 검정화면으로 돌아가는 문제가 있어
@@ -1106,7 +1119,7 @@ namespace BibleProjector_WPF
                         currentSlide = 1;
                     }
                 }
-                SlideShowHideInTaskbar(SlideWindow.HWND);
+                ReshowSlideWindow(SlideWindow.HWND);
 
                 // Taskbar에서 powerpoint 앱을 숨기는 window api를 사용하면
                 // powerpoint show 화면이 꺼졌다 켜질 때 종종 검정화면으로 돌아가는 문제가 있어
@@ -1186,11 +1199,11 @@ namespace BibleProjector_WPF
                 ppt.Add(new ExternPPT(path));
             }
 
-            static public void refreshPresentation(string path)
+            static public void refreshPresentation(string path, bool maintainTopMost = false, bool setFirstSlide = false)
             {
                 ExternPPT findedExternPPT = ppt.Find(x => x.PPTName.CompareTo(System.IO.Path.GetFileName(path)) == 0);
                 if (findedExternPPT != null)
-                    findedExternPPT.refreshPresentation(path);
+                    findedExternPPT.refreshPresentation(path, maintainTopMost, setFirstSlide);
             }
 
             static public void closeSingle(string path)
@@ -1240,15 +1253,16 @@ namespace BibleProjector_WPF
             }
 
             /// <summary>
-            /// 기존 파일이 변경되었는지를 검사해, 자동으로 새로고침합니다.
+            /// 기존 파일이 변경되었는지를 검사해 결과를 반환합니다.
             /// </summary>
-            static public void fetchUpdateFile(string fullPath)
+            static public bool hasFileUpdated(string fullPath)
             {
                 int index;
                 if ((index = pptFinder_fullPath(fullPath)) != -1)
                 {
-                    ppt[index].fetchUpdateFile();
+                    return ppt[index].hasFileUpdated();
                 }
+                return false;
             }
 
             static public void TopMost(string fullPath)
@@ -1272,12 +1286,12 @@ namespace BibleProjector_WPF
                 }
             }
 
-            static public void goToSlide(string fullPath, int slideIndex)
+            static public void goToSlide(string fullPath, int slideIndex, bool doIgnoreTransition)
             {
                 int index;
                 if ((index = pptFinder_fullPath(fullPath)) != -1)
                 {
-                    ppt[index].goToSlide(slideIndex);
+                    ppt[index].goToSlide(slideIndex, doIgnoreTransition);
                 }
             }
 
@@ -1302,6 +1316,8 @@ namespace BibleProjector_WPF
             SlideShowWindow SlideWindow = null;
             System.Windows.Media.Imaging.BitmapImage[] thumbnails;
             int currentSlideNum = 1;
+
+            private Dictionary<int, (bool ignoreInSlideMove, float duration)> excludedTrasitions = new Dictionary<int, (bool, float)>();
 
             bool isNeedMakeThumbnail = true;
 
@@ -1406,7 +1422,9 @@ namespace BibleProjector_WPF
                     }
             }
 
-            public void refreshPresentation(string path)
+            // 추후 file refresh와 display 기능을 역할 분리해야 할 것임.
+            // file refresh에서 slide show까지 함께 처리하는 것은 복잡성을 높임.
+            public void refreshPresentation(string path, bool setTopMost = false, bool setFirstSlide = false)
             {
                 isNeedMakeThumbnail = true;
                 Presentation lastppt = ppt;
@@ -1434,8 +1452,8 @@ namespace BibleProjector_WPF
                     SlideWindow = null;
 
                     setPresentation(path);
-                    goToSlide(currentSlideNum);
-                    SlideShowRun(false, lastShowWindow);
+                    goToSlide((setFirstSlide ? 1 : currentSlideNum));
+                    SlideShowRun((setTopMost ? null : lastShowWindow));
 
                     lastShowWindow.View.Exit();
                     checkAndClose(lastppt);
@@ -1504,20 +1522,15 @@ namespace BibleProjector_WPF
             }
 
             /// <summary>
-            /// 기존 파일이 변경되었는지를 검사해, 자동으로 새로고침합니다.
+            /// 기존 파일이 변경되었는지를 검사해 결과를 반환합니다.
             /// </summary>
-            public void fetchUpdateFile()
+            public bool hasFileUpdated()
             {
-                if (new System.IO.FileInfo(OriginalFullPath).Exists
-                    && hasFileChanged())
+                if (new System.IO.FileInfo(OriginalFullPath).Exists)
                 {
-                    refreshPresentation(OriginalFullPath);
+                    return hasFileChanged();
                 }
-            }
-
-            private void orderBeforeWindow(SlideShowWindow newShowWin, SlideShowWindow lastShowWin)
-            {
-                SetWindowPos(newShowWin.HWND, GetWindow(lastShowWin.HWND, GW_HWNDPREV), 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
+                return false;
             }
 
             public void TopMost()
@@ -1530,8 +1543,16 @@ namespace BibleProjector_WPF
                 }
             }
 
-            public void SlideShowRun(bool setTop = true, SlideShowWindow front = null)
+            /// <summary>
+            /// 슬라이드 쇼를 표시합니다.
+            /// <br/>- <paramref name="front"/>가 제시되면 <paramref name="front"/> 창의 바로 앞에 표시합니다.
+            /// <br/>- <paramref name="front"/>가 제시되지 않으면 가장 앞 화면에 표시합니다.
+            /// </summary>
+            /// <param name="front"></param>
+            public void SlideShowRun(SlideShowWindow front = null)
             {
+                turnOffTransition(currentSlideNum, false, false);
+
                 // 슬라이드쇼 점검하는부분 좀 더 개선
                 // 슬라이드쇼 끄면 ppt도 꺼지기 때문
                 if (SlideWindow == null)
@@ -1541,18 +1562,23 @@ namespace BibleProjector_WPF
                     {
                         ppt.Slides[currentSlideNum].MoveTo(1);
                         SlideWindow = ppt.SlideShowSettings.Run();
-                        if (front != null)
-                            orderBeforeWindow(SlideWindow, front);
+                        if (front == null)
+                            ReshowSlideWindow(SlideWindow.HWND, null);
+                        else
+                            ReshowSlideWindow(SlideWindow.HWND, GetWindow(front.HWND, GW_HWNDPREV));
                         ppt.Slides[1].MoveTo(currentSlideNum);
                     }
                     else
                     {
                         SlideWindow = ppt.SlideShowSettings.Run();
-                        if (front != null)
-                            orderBeforeWindow(SlideWindow, front);
+                        if (front == null)
+                            ReshowSlideWindow(SlideWindow.HWND, null);
+                        else
+                            ReshowSlideWindow(SlideWindow.HWND, GetWindow(front.HWND, GW_HWNDPREV));
                     }
                 }
-                SlideShowHideInTaskbar(SlideWindow.HWND);
+                else if (pptState != PptSlideState.WindowShow)
+                    ReshowSlideWindow(SlideWindow.HWND);
 
                 // Taskbar에서 powerpoint 앱을 숨기는 window api를 사용하면
                 // powerpoint show 화면이 꺼졌다 켜질 때 종종 검정화면으로 돌아가는 문제가 있어
@@ -1560,12 +1586,15 @@ namespace BibleProjector_WPF
                 SlideWindow.View.GotoSlide(currentSlideNum);
 
                 pptState = PptSlideState.WindowShow;
-                if (setTop)
+                if (front == null)
                     TopMost();
             }
 
-            public void goToSlide(int slideIndex)
+            public void goToSlide(int slideIndex, bool doIgnoreTransition = false)
             {
+                if (slideIndex == currentSlideNum)
+                    return;
+
                 if (slideIndex < 1)
                     currentSlideNum = 1;
                 else if (slideIndex > ppt.Slides.Count)
@@ -1573,7 +1602,56 @@ namespace BibleProjector_WPF
                 else
                     currentSlideNum = slideIndex;
 
+                if (doIgnoreTransition)
+                    turnOffTransition(currentSlideNum, true, true);
+
                 requestMovingSlide(currentSlideNum);
+            }
+
+            private static System.Threading.Mutex transitonControlMutex = new System.Threading.Mutex();
+
+            /// <summary>
+            /// 전환 애니메이션을 제거합니다.
+            /// <br/>- <paramref name="ignoreInSlideMove"/>는 제거된 애니메이션을 다음 슬라이드 이동시에도 무시할지를 결정합니다.
+            /// <br/>- <paramref name="doOverwrite"/>는 기존 <paramref name="slideIdx"/>의 전환 애니메이션 제거 요청을 새로 덮어쓸지를 결정합니다.
+            /// </summary>
+            /// <param name="slideIdx"></param>
+            /// <param name="ignoreInSlideMove"></param>
+            /// <param name="doOverwrite"></param>
+            public void turnOffTransition(int slideIdx, bool ignoreInSlideMove, bool doOverwrite)
+            {
+                transitonControlMutex.WaitOne();
+
+                if (!excludedTrasitions.ContainsKey(slideIdx))
+                    excludedTrasitions.Add(slideIdx, (ignoreInSlideMove, ppt.Slides[slideIdx].SlideShowTransition.Duration));
+                else if (doOverwrite)
+                    excludedTrasitions[slideIdx] = (ignoreInSlideMove, excludedTrasitions[slideIdx].duration);
+                ppt.Slides[slideIdx].SlideShowTransition.Duration = 0.0f;
+
+                transitonControlMutex.ReleaseMutex();
+            }
+
+            /// <summary>
+            /// 전환 애니메이션을 복구합니다.
+            /// <br/>제거 요청에 ignoreInSlideMove가 <see langword="true"/>로 설정되어 있으면 복구 요청은 1회 무시됩니다.
+            /// </summary>
+            /// <param name="slideIdx"></param>
+            public void turnOnTransition(int slideIdx)
+            {
+                transitonControlMutex.WaitOne();
+
+                if (excludedTrasitions.ContainsKey(slideIdx))
+                {
+                    if (excludedTrasitions[slideIdx].ignoreInSlideMove)
+                        excludedTrasitions[slideIdx] = (false, excludedTrasitions[slideIdx].duration);
+                    else
+                    {
+                        ppt.Slides[slideIdx].SlideShowTransition.Duration = excludedTrasitions[slideIdx].duration;
+                        excludedTrasitions.Remove(slideIdx);
+                    }
+                }
+
+                transitonControlMutex.ReleaseMutex();
             }
 
             // ========================== Threaded Slide Moving ==========================
@@ -1608,6 +1686,7 @@ namespace BibleProjector_WPF
                     if (readData.isRequested) {
                         try
                         {
+                            readData.requester.turnOnTransition(readData.slideIndex);
                             readData.requester.SlideWindow.View.GotoSlide(readData.slideIndex);
                         }
                         catch (Exception e)
