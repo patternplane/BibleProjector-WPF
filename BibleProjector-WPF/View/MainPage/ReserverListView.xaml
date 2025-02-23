@@ -73,6 +73,7 @@
                             <Setter Property="Margin" Value="0,0,0,2"/>
                             <Setter Property="Padding" Value="0"/>
                             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <EventSetter Event="RequestBringIntoView" Handler="EH_ListBoxItem_Focus_RequestBringIntoView"/>
                             <EventSetter Event="MouseMove" Handler="EH_GetMouseMove"/>
                             <EventSetter Event="PreviewMouseDown" Handler="EH_ItemDoubleClick_Trigger"/>
                             <EventSetter Event="PreviewMouseUp" Handler="EH_ItemDoubleClick_Performer"/>
