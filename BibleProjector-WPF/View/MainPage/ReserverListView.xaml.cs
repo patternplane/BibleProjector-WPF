@@ -421,6 +421,10 @@ namespace BibleProjector_WPF.View.MainPage
             allowSelect = true;
         }
 
+        /*=======================================================
+         *                 UI Focusing Process
+         =======================================================*/
+
         private void EH_ReserveListBox_Focus_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
             if (ignoreFocusing)
@@ -453,7 +457,24 @@ namespace BibleProjector_WPF.View.MainPage
             }
 
             if (mustFocusedItem != null)
+            {
+                // 기능 설명 :
+                //   기본적으로 포커싱이 적용되면 스크롤은 자동으로 이동함.
+                //   그러나 종종 다른 작업 중 마우스를 사용하여
+                //   예약창의 스크롤 바를 이동하고자 할 때,
+                //   스크롤이 자동으로 이동되어 의도치 않은 스크롤 튐 현상이 발생함.
+                //  
+                //   이 현상을 막기 위해 도입.
+                doNotBringIntoView = true;
                 mustFocusedItem.Focus();
+            }
+        }
+
+        private bool doNotBringIntoView = false;
+        private void EH_ListBoxItem_Focus_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e)
+        {
+            e.Handled = doNotBringIntoView;
+            doNotBringIntoView = false;
         }
     }
 }
