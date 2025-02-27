@@ -301,6 +301,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         private void verseSelector(int verseNumber)
         {
             setVerse(verseNumber);
+            showPreviewItemEventManager.InvokeShowPreviewItem(new module.Data.BibleData(bookNumber, chapterNumber, verseNumber));
         }
 
         private void startShow()
