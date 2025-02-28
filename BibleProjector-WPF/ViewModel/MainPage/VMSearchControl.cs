@@ -14,9 +14,12 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         public string SearchText { get; set; }
         public bool ResultPopupOpen { get; set; }
-        public ICollection<VMSearchResult> SearchResultList { get; set; }
-        VMSearchResult _SelectionItem;
-        public VMSearchResult SelectionItem { get { return _SelectionItem; } set { _SelectionItem = value; OnPropertyChanged("SelectionItem"); } }
+        public ICollection<VMPreviewData> SearchResultList { get; set; }
+        VMPreviewData _SelectionItem;
+        public VMPreviewData SelectionItem { get { return _SelectionItem; } set { _SelectionItem = value; OnPropertyChanged("SelectionItem"); } }
+
+        public IVMPreviewData PreviewData { get; private set; }
+        private VMPreviewData defaultPreviewDataFrame = new VMPreviewData(null);
 
         public ICommand CSearchStart { get; set; }
         public ICommand CPopupHide { get; set; }
@@ -40,8 +43,6 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         module.ShowStarter showStarter;
         Event.BibleSelectionEventManager bibleSelectionEventManager;
 
-        private VMSearchResult editingData;
-
         // ========== Gen ==========
 
         public VMSearchControl(
@@ -49,12 +50,13 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             module.ReserveDataManager reserveManager, 
             module.ShowStarter showStarter,
             Event.BibleSelectionEventManager bibleSelectionEventManager,
+            Event.ShowPreviewItemEventManager showPreviewItemEventManager,
             module.Data.SongManager songManager)
         {
             CSearchStart = new RelayCommand(obj => SearchStart());
             CPopupHide = new RelayCommand(obj => PopupHide());
             CLastestResultShow = new RelayCommand(obj => PopupShow());
-            CItemSelected = new RelayCommand(obj => ItemSelected((VMSearchResult)obj));
+            CItemSelected = new RelayCommand(obj => ItemSelected((VMPreviewData)obj));
             CStartShow = new RelayCommand((obj) => StartShow());
             CReserveThis = new RelayCommand((obj) => ReserveThis());
             COpenEditor = new RelayCommand((obj) => OpenEditor());
@@ -64,6 +66,9 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             this.reserveManager = reserveManager;
             this.showStarter = showStarter;
             this.bibleSelectionEventManager = bibleSelectionEventManager;
+
+            showPreviewItemEventManager.showPreviewItemEvent += (data) => displayItemPreview(data);
+            showPreviewItemEventManager.showPreviewItemDefaultEvent += (data) => displayItemPreview(data);
 
             this.VM_Modify = new VMModify(songManager);
             VM_Modify.CloseEventHandler += (sender, e) => displayModifyView(false);
@@ -85,12 +90,12 @@ namespace BibleProjector_WPF.ViewModel.MainPage
                 return;
             }
 
-            ObservableCollection<VMSearchResult> newResults = new ObservableCollection<VMSearchResult>();
+            ObservableCollection<VMPreviewData> newResults = new ObservableCollection<VMPreviewData>();
 
             foreach (module.SearchData data in searcher.getSearchResult(SearchText))
-                newResults.Add(new VMSearchResult(data));
-            
-            this.SearchResultList = newResults;
+                newResults.Add(new VMPreviewData(data));
+
+            this.SearchResultList = newResults; 
             OnPropertyChanged("SearchResultList");
 
             if (SearchResultList.Count > 0)
@@ -101,6 +106,9 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         {
             ResultPopupOpen = true;
             OnPropertyChanged("ResultPopupOpen");
+
+            if (SelectionItem != null && SelectionItem != PreviewData)
+                ItemSelected(SelectionItem);
         }
 
         void PopupHide()
@@ -109,11 +117,36 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             OnPropertyChanged("ResultPopupOpen");
         }
 
-        void ItemSelected(VMSearchResult item)
+        void ItemSelected(VMPreviewData item)
         {
             if (item.getData().isAvailData())
             {
                 this.SelectionItem = item;
+                displayItemPreview(item);
+
+                if (item.getData() is module.Data.BibleData)
+                {
+                    module.Data.BibleData data = (module.Data.BibleData)item.getData();
+                    bibleSelectionEventManager.InvokeBibleSelection(data.book, data.chapter, data.verse);
+                }
+            }
+        }
+
+        private void displayItemPreview(module.Data.IPreviewData data, bool isAdded = false)
+        {
+            if (data.getData().isAvailData())
+            {
+                defaultPreviewDataFrame.setData(data, isAdded, false);
+                displayItemPreview(defaultPreviewDataFrame);
+            }
+        }
+
+        private void displayItemPreview(IVMPreviewData item)
+        {
+            if (item.getData().isAvailData())
+            {
+                PreviewData = item;
+                OnPropertyChanged(nameof(PreviewData));
 
                 if (item.Type == ShowContentType.Bible
                     || item.Type == ShowContentType.Song)
@@ -126,41 +159,34 @@ namespace BibleProjector_WPF.ViewModel.MainPage
                     CanOpenEditor = false;
                     OnPropertyChanged(nameof(CanOpenEditor));
                 }
-
-                if (item.getData() is module.Data.BibleData)
-                {
-                    module.Data.BibleData data = (module.Data.BibleData)item.getData();
-                    bibleSelectionEventManager.InvokeBibleSelection(data.book, data.chapter, data.verse);
-                }
             }
         }
 
         void StartShow()
         {
-            if (SelectionItem == null)
+            if (PreviewData == null)
                 return;
 
-            showStarter.Show(SelectionItem.getData());
+            showStarter.Show(PreviewData.getData());
         }
 
         void ReserveThis()
         {
-            if (SelectionItem == null)
+            if (PreviewData == null)
                 return;
 
-            reserveManager.AddReserveItem(this, SelectionItem.getData());
+            reserveManager.AddReserveItem(this, PreviewData.getData());
         }
 
         private void OpenEditor()
         {
-            editingData = SelectionItem;
-            VM_Modify.setupData(SelectionItem.getData());
+            VM_Modify.setupData(PreviewData.getData());
             displayModifyView(true);
         }
 
         private void updateSelectedItem()
         {
-            editingData.update();
+            PreviewData.update();
         }
 
         private void displayModifyView(bool visible)
@@ -179,17 +205,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             if (newSong == null)
                 return;
 
-            // ● 추후 리팩토링 요구됨 :
-            //   미리보기 화면이 검색결과 항목만 받도록 되어있어
-            //   불필요하게 검색 결과로 Wrapping하는 과정이 발생하고 있음.
-            ItemSelected(
-                new VMSearchResult(
-                    new module.Data.SongSearchData(
-                        newSong,
-                        "(추가됨) " + newSong.songTitle, 
-                        0)
-                    )
-                );
+            displayItemPreview(newSong, true);
         }
 
         private void displayAddView(bool visible)

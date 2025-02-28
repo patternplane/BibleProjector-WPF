@@ -103,7 +103,7 @@
                     </Grid.RowDefinitions>
                     <Border Grid.Row="0" BorderBrush="LightGray" BorderThickness="0,0,0,1">
                         <Grid>
-                            <TextBlock Margin="5,0,1,0" FontSize="15" Text="{Binding SelectionItem.DisplayTitle}" VerticalAlignment="Center" FontWeight="Bold"/>
+                            <TextBlock Margin="5,0,1,0" FontSize="15" Text="{Binding PreviewData.DisplayTitle}" VerticalAlignment="Center" FontWeight="Bold"/>
                             <DockPanel>
                                 <Button Margin="3,3"
                                     DockPanel.Dock="Right"
@@ -169,13 +169,13 @@
                                     <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
                                     <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding SelectionItem.Type}" Value="{x:Static rootns:ShowContentType.Bible}">
+                                        <DataTrigger Binding="{Binding PreviewData.Type}" Value="{x:Static rootns:ShowContentType.Bible}">
                                             <Setter Property="HorizontalScrollBarVisibility" Value="Disabled"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </ScrollViewer.Style>
-                            <TextBlock FontSize="15" Margin="3" Text="{Binding SelectionItem.PreviewContent}" TextWrapping="Wrap"/>
+                            <TextBlock FontSize="15" Margin="3" Text="{Binding PreviewData.PreviewContent}" TextWrapping="Wrap"/>
                         </ScrollViewer>
                     </Grid>
                 </Grid>

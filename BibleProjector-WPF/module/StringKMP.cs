@@ -194,6 +194,78 @@ namespace BibleProjector_WPF.module
         }
 
         /// <summary>
+        /// KMP 검색<br/>
+        /// 모든 검색 성공 영역을 반환합니다.
+        /// <br/>각 영역은 (시작인덱스, 마지막인덱스) 쌍으로 반환됩니다.
+        /// </summary>
+        /// <param name="origin">
+        /// 원본 문자열
+        /// </param>
+        /// <param name="sample">
+        /// 찾을 문자열
+        /// </param>
+        /// <param name="compareFunc">
+        /// 비교함수
+        /// </param>
+        /// <param name="doCareBlank">
+        /// 공백을 신경쓸지 여부, 공백도 고려하여 검색하려면 true
+        /// </param>
+        /// <returns>
+        /// 모든 발견위치를 반환합니다.<br/>
+        /// 오류시 null을 반환
+        /// </returns>
+        static public (int, int)[] FindPatternRange(string origin, string sample, StringCompare compareFunc, bool doCareBlank = true)
+        {
+            if (!doCareBlank)
+                sample = Regex.Replace(sample, "\\s", "");
+
+            if (MakeTable(sample, compareFunc) == -1)
+                return null;
+
+            int o_len = origin.Length;
+            int s_len = sample.Length;
+            int lastStartIdx = -1;
+            int o_i = 0;
+            int s_i = 0;
+
+            List<(int firstIdx, int lastIdx)> positions = new List<(int, int)>(50);
+
+            if (!doCareBlank)
+                while (o_i < o_len && char.IsWhiteSpace(origin[o_i]))
+                    o_i++;
+            while (o_i < o_len)
+            {
+                if (compareFunc(origin[o_i], sample[s_i]))
+                {
+                    if (lastStartIdx == -1)
+                        lastStartIdx = o_i;
+                    o_i++;
+                    s_i++;
+
+                    if (s_i == s_len)
+                    {
+                        positions.Add((lastStartIdx, o_i - 1));
+                        lastStartIdx = -1;
+                        s_i = 0;
+                    }
+                }
+                else
+                {
+                    lastStartIdx = -1;
+                    if (s_i == 0)
+                        o_i++;
+                    else
+                        s_i = patternTable[s_i - 1];
+                }
+                if (!doCareBlank)
+                    while (o_i < o_len && char.IsWhiteSpace(origin[o_i]))
+                        o_i++;
+            }
+
+            return positions.ToArray();
+        }
+
+        /// <summary>
         /// 공백을 제외하고 검색된 KMP 검색 결과의 인덱스를 원래 문자열에서의 검색위치로 변경해줍니다.
         /// </summary>
         /// <param name="originalStr">원본 문자열</param>

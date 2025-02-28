@@ -11,12 +11,15 @@
             <RowDefinition Height="37"/>
             <RowDefinition Height="35"/>
             <RowDefinition/>
+            <RowDefinition Height="4"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="4"/>
             <RowDefinition Height="43"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150"/>
-            <ColumnDefinition Width="70"/>
-            <ColumnDefinition Width="70"/>
+            <ColumnDefinition Width="145"/>
+            <ColumnDefinition Width="72.5"/>
+            <ColumnDefinition Width="72.5"/>
         </Grid.ColumnDefinitions>
 
         <Border Grid.Row="0" Grid.ColumnSpan="3" Background="#FFF7F7F7" CornerRadius="8" Margin="1,1,1,5" BorderBrush="Black" BorderThickness="1">
@@ -177,12 +180,125 @@
             </ListBox.ItemContainerStyle>
         </ListBox>
 
-        <Button Grid.Row="3" Grid.Column="0"
+        <Grid Grid.Row="4" Grid.ColumnSpan="3" Margin="2,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="68"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" BorderBrush="black" BorderThickness="1,1,0,1">
+                <Grid>
+                    <TextBox
+                        x:Name="SearchTextBox"
+                        Padding="0"
+                        VerticalContentAlignment="Center"
+                        FontSize="15"
+                        Text="{Binding SearchText}"
+                        
+                        PreviewKeyUp="EH_TextBoxKeyUp"
+                        PreviewKeyDown="EH_TextBoxKeyDown"
+                        PreviewMouseDown="EH_TextBoxClick"
+                        PreviewMouseDoubleClick="EH_TextBoxDoubleClick"
+                        GotFocus="EH_TextBoxGotFocus"
+                        LostFocus="EH_TextBoxLostFocus"/>
+                    <Popup 
+                        x:Name="SearchResultPopup"
+                        StaysOpen="False"
+                        IsOpen="{Binding ResultPopupOpen}"
+                        Opened="EH_SearchResultPopup_Opened"
+                        PopupAnimation="Scroll"
+                        AllowsTransparency="true"
+                        MaxWidth="550">
+                        <Border
+                            Background="#FFF5FFF4"
+                            BorderBrush="LightGray"
+                            BorderThickness="1">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                    <StackPanel.Style>
+                                        <Style TargetType="StackPanel">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsMultiPage}" Value="false">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </StackPanel.Style>
+                                    <Button Width="50" Content="&lt;" FontSize="20" FontWeight="Bold" Margin="2" Padding="0,0,0,2"
+                                            Background="#00000000" BorderThickness="0" Click="EH_PrevPageButton_Click" Focusable="False"/>
+                                    <TextBlock Text="{Binding PagePosition}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Margin="10,0,0,0"/>
+                                    <TextBlock Text="/" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20"/>
+                                    <TextBlock Text="{Binding MaxPagePosition}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Margin="0,0,10,0"/>
+                                    <Button Width="50" Content=">" FontSize="20" FontWeight="Bold" Margin="2" Padding="0,0,0,2"
+                                            Background="#00000000" BorderThickness="0" Click="EH_NextPageButton_Click" Focusable="False"/>
+                                    <Grid Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                        <TextBox MinWidth="50" Padding="3,3,0,3"
+                                                 Text="{Binding MovePageNumber, UpdateSourceTrigger=Explicit}"
+                                                 VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14" 
+                                                 PreviewKeyDown="EH_PageTextBox_KeyDown" PreviewKeyUp="EH_PageTextBox_KeyUp"
+                                                 GotFocus="EH_PageTextBox_GotFocus" LostFocus="EH_PageTextBox_LostFocus"/>
+                                        <Label Name="PageMoveTextBoxHint" Content="페이지" Foreground="Gray" FontWeight="Bold" FontSize="14" IsHitTestVisible="False"/>
+                                    </Grid>
+                                </StackPanel>
+                                <ListBox
+                                    x:Name="ResultListBox"
+                                    MaxHeight="230"
+                                    ItemsSource="{Binding SearchResultList, Mode=TwoWay}"
+                                    SelectedItem="{Binding SelectedSearchItem}"
+                                    PreviewKeyDown="EH_ListBoxKeyDown"
+                                    BorderThickness="0"
+                                    ScrollViewer.CanContentScroll="False"
+                                    ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <DockPanel>
+                                                <Border DockPanel.Dock="Bottom" BorderThickness="0.7" BorderBrush="DarkGray" Margin="5,8,5,0"/>
+                                                <TextBlock DockPanel.Dock="Left" Text="{Binding address}" FontSize="14" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                                                <TextBlock DockPanel.Dock="Left" local:TextHighlighter.TextInfo="{Binding contentInfo}" FontSize="15" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                                            </DockPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="ListBoxItem">
+                                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                            <Setter Property="Margin" Value="0,0,0,7"/>
+                                            <EventSetter Event="PreviewMouseUp" Handler="EH_ListBoxItem_MouseClick"/>
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
+                                </ListBox>
+                            </StackPanel>
+                        </Border>
+                    </Popup>
+                    <Label Name="SearchTextBoxHint" Content="구절 검색" Foreground="Gray" FontWeight="Bold" FontSize="14" IsHitTestVisible="False"/>
+                    <Button Content="˅" FontWeight="Bold" FontSize="16" Foreground="DimGray" HorizontalAlignment="Right" Width="22" Background="White" Click="EH_DropDownButton_Click"/>
+                </Grid>
+            </Border>
+            <Button Grid.Column="1" BorderBrush="Black"
+                    Click="EH_SearchButton_Click">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Content" Value="검 색"/>
+                        <Setter Property="FontSize" Value="16"/>
+                        <Setter Property="Background" Value="#FF0272AA"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsSecondSearchButton}" Value="true">
+                                <Setter Property="Content" Value="입력대로"/>
+                                <Setter Property="FontSize" Value="14.5"/>
+                                <Setter Property="Background" Value="#FFFFBD5D"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Grid>
+
+        <Button Grid.Row="6" Grid.Column="0"
                 Margin="2,0,2,0" Background="#FF72E172"
                 FontSize="17"
                 Content="출   력"
                 Click="EH_ShowBibleButtonClick"/>
-        <Button Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"
+        <Button Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2"
                 Margin="2,0,2,0" Background="#FF02AAAA"
                 FontSize="17"
                 Content="예   약"

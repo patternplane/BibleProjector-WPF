@@ -17,10 +17,10 @@ namespace BibleProjector_WPF.module.Data
             this.searchDistance = searchDistance;
         }
 
-        public override string getdisplayName()
+        public override string getdisplayName(bool isModified)
         {
             if (isModified)
-                return "[수정됨] " + data.getTitle2();
+                return data.getTitle2();
             else
                 return displayName;
         }

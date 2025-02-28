@@ -35,10 +35,67 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public ICommand CShowBible { get; }
         public ICommand CReserveBible { get; }
 
+        // ========= bible search bindings =========
+
+        public bool ResultPopupOpen { get; set; } = false;
+        public string SearchText { get; set; } = "";
+        public bool IsSecondSearchButton { get; set; } = false;
+
+        public bool IsMultiPage { get; set; } = false;
+        public int PagePosition { get; set; }
+        public int MaxPagePosition { get; set; }
+        public string MovePageNumber
+        {
+            get { return ""; }
+            set
+            {
+                int newVal;
+                if (int.TryParse(value, out newVal) && newVal != currentPage
+                    && newVal >= 1 && newVal <= lastPage)
+                        setPage(newVal);
+            }
+        }
+
+        public BindingList<VMBiblePhraseSearchData> SearchResultList { get; set; } = new BindingList<VMBiblePhraseSearchData>() { };
+        private VMBiblePhraseSearchData _SelectedSearchItem = null;
+        public VMBiblePhraseSearchData SelectedSearchItem 
+        { 
+            get { return _SelectedSearchItem; }
+            set 
+            { 
+                _SelectedSearchItem = value;
+                if (SelectedSearchItem != null)
+                {
+                    module.Data.BibleData data = (module.Data.BibleData)_SelectedSearchItem.getData();
+                    selectBible(data.book, data.chapter, data.verse);
+                    showPreviewItemEventManager.InvokeShowPreviewItem(_SelectedSearchItem);
+                }
+            } 
+        }
+
+        public ICommand CSearchBible { get; }
+        public ICommand CMoveToPrevPage { get; }
+        public ICommand CMoveToNextPage { get; }
+
+        private VMBiblePhraseSearchData[] totalSearchResults;
+        private int currentPage;
+        private int lastPage;
+        private static readonly int MAX_PAGE_SIZE = 100;
+
+        // ========= fields =========
+
         private module.ReserveDataManager reserveDataManager;
         private module.ShowStarter showStarter;
+        private module.BibleSearcher bibleSearcher;
+        private Event.ShowPreviewItemEventManager showPreviewItemEventManager;
 
-        public VMBibleSeletion(module.ReserveDataManager reserveDataManager, module.ShowStarter showStarter, Event.BibleSelectionEventManager bibleSelectionEventManager)
+        public VMBibleSeletion(
+            module.ReserveDataManager reserveDataManager,
+            module.ShowStarter showStarter,
+            Event.BibleSelectionEventManager bibleSelectionEventManager,
+            Event.ShowPreviewItemEventManager showPreviewItemEventManager,
+            Event.KeyInputEventManager keyInputEventManager,
+            module.BibleSearcher bibleSearcher)
         {
             this.CBookSelection = new RelayCommand(obj => bookSelector((int)obj));
             this.CChapterSelection = new RelayCommand(obj => chapterSelector((int)obj));
@@ -46,10 +103,18 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             this.CShowBible = new RelayCommand(obj => startShow());
             this.CReserveBible = new RelayCommand(obj => reserveThis());
 
+            this.CSearchBible = new RelayCommand(obj => searchBible());
+            this.CMoveToPrevPage = new RelayCommand(obj => setPage(currentPage - 1));
+            this.CMoveToNextPage = new RelayCommand(obj => setPage(currentPage + 1));
+
             this.reserveDataManager = reserveDataManager;
             this.showStarter = showStarter;
+            this.bibleSearcher = bibleSearcher;
+
+            this.showPreviewItemEventManager = showPreviewItemEventManager;
 
             bibleSelectionEventManager.BibleSelectionEvent += EH_BibleSelection;
+            keyInputEventManager.KeyDown += keyInput;
 
             string[] ts = Database.getBibleTitles_string();
             this.OldBookList = new BindingList<string>();
@@ -170,6 +235,81 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             }
         }
 
+        // ========== search bible ==========
+
+        private string previousSearchText = "";
+        private bool previousSearchHasBlank = false;
+        private void searchBible()
+        {
+            if (SearchText == null || SearchText.Length < 1)
+                return;
+            if (previousSearchText.CompareTo(SearchText) != 0
+                || previousSearchHasBlank != IsSecondSearchButton)
+            {
+                previousSearchText = SearchText;
+                previousSearchHasBlank = IsSecondSearchButton;
+
+                (string kjjeul, string content, (int startIdx, int lastIdx)[] pos)[] rawResult = bibleSearcher.getSearchResultbyPhrase(SearchText, !previousSearchHasBlank);
+                totalSearchResults = new VMBiblePhraseSearchData[rawResult.Length];
+                for (int i = 0; i < rawResult.Length; i++)
+                    totalSearchResults[i] = new VMBiblePhraseSearchData(rawResult[i].kjjeul, rawResult[i].content, rawResult[i].pos);
+                lastPage = (totalSearchResults.Length + MAX_PAGE_SIZE - 1) / MAX_PAGE_SIZE;
+
+                setPage(1);
+
+                MaxPagePosition = lastPage;
+                OnPropertyChanged(nameof(MaxPagePosition));
+                IsMultiPage = (lastPage > 1);
+                OnPropertyChanged(nameof(IsMultiPage));
+            }
+            if (SearchResultList.Count > 0)
+            {
+                ResultPopupOpen = true;
+                OnPropertyChanged(nameof(ResultPopupOpen));
+            }
+        }
+
+        /// <summary>
+        /// 검색 페이지를 이동합니다.
+        /// <br/><paramref name="page"/>는 1부터 시작하는 범위를 갖습니다.
+        /// </summary>
+        /// <param name="page"></param>
+        private void setPage(int page)
+        {
+            if (page > lastPage)
+                page = lastPage;
+            if (page < 1)
+                page = 1;
+
+            int firstIdx = (page - 1) * MAX_PAGE_SIZE;
+            int lastIdx = Math.Min(totalSearchResults.Length - 1, page * MAX_PAGE_SIZE - 1);
+            SearchResultList.Clear();
+            while (firstIdx <= lastIdx)
+                SearchResultList.Add(totalSearchResults[firstIdx++]);
+
+            currentPage = page;
+            PagePosition = page;
+            OnPropertyChanged(nameof(PagePosition));
+        }
+
+        private void keyInput(Key key, bool isDown)
+        {
+            if (isDown
+                && (key == Key.LeftShift
+                || key == Key.RightShift))
+            {
+                IsSecondSearchButton = true;
+                OnPropertyChanged(nameof(IsSecondSearchButton));
+            }
+            if (!isDown
+                && (key == Key.LeftShift
+                || key == Key.RightShift))
+            {
+                IsSecondSearchButton = false;
+                OnPropertyChanged(nameof(IsSecondSearchButton));
+            }
+        }
+
         // ========== Bible Selection Event Handler ==========
 
         private void EH_BibleSelection(int book, int chapter, int verse)
@@ -191,6 +331,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         private void verseSelector(int verseNumber)
         {
             setVerse(verseNumber);
+            showPreviewItemEventManager.InvokeShowPreviewItem(new module.Data.BibleData(bookNumber, chapterNumber, verseNumber));
         }
 
         private void startShow()

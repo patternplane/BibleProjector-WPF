@@ -68,7 +68,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="HighlightedText.cs" />
+    <Compile Include="HighlightType.cs" />
     <Compile Include="Event\FrameDeleted.cs" />
+    <Compile Include="Event\ShowPreviewItemEventManager.cs" />
     <Compile Include="Event\ShowStart.cs" />
     <Compile Include="Event\WindowActivateChangedEventManager.cs" />
     <Compile Include="module\BibleDataManager.cs" />
@@ -76,6 +79,7 @@
     <Compile Include="module\Data\BibleSearchData.cs" />
     <Compile Include="module\Data\ExternPPTData.cs" />
     <Compile Include="module\Data\ExternPPTSearchData.cs" />
+    <Compile Include="module\Data\IPreviewData.cs" />
     <Compile Include="module\Data\MultiSearcher.cs" />
     <Compile Include="module\Data\ShowContentData.cs" />
     <Compile Include="module\Data\ShowData.cs" />
@@ -100,13 +104,15 @@
     <Compile Include="ShowContentType.cs" />
     <Compile Include="Event\BibleSelectionEventManager.cs" />
     <Compile Include="Event\KeyInputEventManager.cs" />
+    <Compile Include="ViewModel\MainPage\IVMPreviewData.cs" />
+    <Compile Include="ViewModel\MainPage\VMBiblePhraseSearchData.cs" />
     <Compile Include="ViewModel\MainPage\VMBibleSeletion.cs" />
     <Compile Include="ViewModel\MainPage\VMExternPPTEditButton.cs" />
     <Compile Include="ViewModel\MainPage\VMLyricAdd.cs" />
     <Compile Include="ViewModel\MainPage\VMModify.cs" />
+    <Compile Include="ViewModel\MainPage\VMPreviewData.cs" />
     <Compile Include="ViewModel\MainPage\VMReserveData.cs" />
     <Compile Include="ViewModel\MainPage\VMReserveList.cs" />
-    <Compile Include="ViewModel\MainPage\VMSearchResult.cs" />
     <Compile Include="ViewModel\MainPage\VMControlPage.cs" />
     <Compile Include="ViewModel\MainPage\VMOptionBar.cs" />
     <Compile Include="ViewModel\MainPage\VMSearchControl.cs" />
@@ -160,6 +166,7 @@
     <Compile Include="View\MainPage\ShowControllerBrush2Converter.cs" />
     <Compile Include="View\MainPage\ShowControllerBrushConverter.cs" />
     <Compile Include="View\MainPage\ShowItemColor.cs" />
+    <Compile Include="View\MainPage\TextHighlighter.cs" />
     <Compile Include="View\MainPage\VisibilityConverter.cs" />
     <Compile Include="View\ManualTab.xaml.cs">
       <DependentUpon>ManualTab.xaml</DependentUpon>
