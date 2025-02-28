@@ -389,6 +389,11 @@ namespace BibleProjector_WPF.View.MainPage
 
         private void EH_SearchResultPopup_Opened(object sender, EventArgs e)
         {
+            focusPopupInnerContent();
+        }
+
+        private void focusPopupInnerContent()
+        {
             if (ResultListBox.SelectedIndex >= 0)
                 ((ListBoxItem)ResultListBox.ItemContainerGenerator.ContainerFromIndex(ResultListBox.SelectedIndex)).Focus();
             else
@@ -446,7 +451,7 @@ namespace BibleProjector_WPF.View.MainPage
         private void EH_PageTextBox_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Down)
-                ResultListBox.Focus();
+                focusPopupInnerContent();
         }
 
         // ======================= 페이지 이동 텍스트 힌트 표시 =======================
