@@ -17,7 +17,7 @@ namespace BibleProjector_WPF.module.Data
             this.searchDistance = searchDistance;
         }
 
-        public override string getdisplayName()
+        public override string getdisplayName(bool isModified)
         {
             string displayName;
             BibleData typedData = (BibleData)data;
@@ -32,10 +32,7 @@ namespace BibleProjector_WPF.module.Data
             if (typedData.verse != -1)
                 displayName += $"{typedData.verse}절";
 
-            if (isModified)
-                return "[수정됨] " + displayName;
-            else
-                return displayName;
+            return displayName;
         }
 
         public override string getPreviewContent()

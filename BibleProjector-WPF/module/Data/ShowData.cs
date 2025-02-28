@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace BibleProjector_WPF.module.Data
 {
-    public abstract class ShowData
+    public abstract class ShowData : IPreviewData
     {
+        public abstract string getdisplayName(bool isModified);
+        public abstract string getPreviewContent();
+        public ShowData getData() { return this; }
         abstract public string getTitle2();
         abstract public string getTitle1();
         abstract public ShowContentData[] getContents();
