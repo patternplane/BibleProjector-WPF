@@ -75,6 +75,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
                 }
             } 
         }
+        public bool PopupListInitializing { get; set; }
 
         public ICommand CSearchBible { get; }
         public ICommand CMoveToPrevPage { get; }
@@ -259,6 +260,11 @@ namespace BibleProjector_WPF.ViewModel.MainPage
                 lastPage = (totalSearchResults.Length + MAX_PAGE_SIZE - 1) / MAX_PAGE_SIZE;
 
                 setPage(1, true);
+
+                PopupListInitializing = true;
+                OnPropertyChanged(nameof(PopupListInitializing));
+                PopupListInitializing = false;
+                OnPropertyChanged(nameof(PopupListInitializing));
 
                 MaxPagePosition = lastPage;
                 OnPropertyChanged(nameof(MaxPagePosition));

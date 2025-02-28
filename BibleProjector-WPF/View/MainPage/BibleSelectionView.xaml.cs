@@ -33,6 +33,7 @@ namespace BibleProjector_WPF.View.MainPage
             SetBinding(CSearchBibleProperty, new Binding("CSearchBible"));
             SetBinding(CMoveToPrevPageProperty, new Binding("CMoveToPrevPage"));
             SetBinding(CMoveToNextPageProperty, new Binding("CMoveToNextPage"));
+            SetBinding(PopupListInitializingProperty, new Binding("PopupListInitializing") { Mode = BindingMode.TwoWay });
 
             SetBinding(SetBookSelectionProperty, new Binding("BookSetter") { Mode = BindingMode.TwoWay });
             SetBinding(SetChapterSelectionProperty, new Binding("ChapterSetter") { Mode = BindingMode.TwoWay });
@@ -175,6 +176,18 @@ namespace BibleProjector_WPF.View.MainPage
             get => (int)GetValue(SetVerseSelectionProperty);
             set => SetValue(SetVerseSelectionProperty, value);
         }
+
+        public static readonly DependencyProperty PopupListInitializingProperty =
+            DependencyProperty.Register(
+                name: "PopupListInitializing",
+                propertyType: typeof(bool),
+                ownerType: typeof(BibleSelectionView),
+                new PropertyMetadata((d, e) =>
+                {
+                    if (e.NewValue is bool isInitializing 
+                    && isInitializing)
+                        ((BibleSelectionView)d).initializePopupList();
+                }));
 
         // ========== Event Handling ==========
 
@@ -379,7 +392,6 @@ namespace BibleProjector_WPF.View.MainPage
                 ((ListBoxItem)ResultListBox.ItemContainerGenerator.ContainerFromIndex(ResultListBox.SelectedIndex)).Focus();
             else
                 ResultListBox.Focus();
-            // ResultListBox.ScrollIntoView(ResultListBox.Items[0]); // 데이터 초기화 시점에만 적용되도록 수정 필요.
         }
 
         private void EH_ListBoxItem_Selected(object sender, RoutedEventArgs e)
@@ -387,6 +399,12 @@ namespace BibleProjector_WPF.View.MainPage
             if (sender is ListBoxItem listboxitem)
                 if (!listboxitem.IsFocused)
                     listboxitem.Focus();
+        }
+
+        private void initializePopupList()
+        {
+            if (ResultListBox.Items.Count > 0)
+                ResultListBox.ScrollIntoView(ResultListBox.Items[0]);
         }
 
         private void closePopup(bool forceRefresh = false)
