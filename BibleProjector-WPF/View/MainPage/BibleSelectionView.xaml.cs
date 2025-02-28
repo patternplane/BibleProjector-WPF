@@ -379,6 +379,13 @@ namespace BibleProjector_WPF.View.MainPage
                 ((ListBoxItem)ResultListBox.ItemContainerGenerator.ContainerFromIndex(ResultListBox.SelectedIndex)).Focus();
         }
 
+        private void EH_ListBoxItem_Selected(object sender, RoutedEventArgs e)
+        {
+            if (sender is ListBoxItem listboxitem)
+                if (!listboxitem.IsFocused)
+                    listboxitem.Focus();
+        }
+
         private void EH_SearchResultPopup_Opened(object sender, EventArgs e)
         {
             ResultListBox.Focus();

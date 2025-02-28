@@ -264,6 +264,7 @@
                                             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                                             <Setter Property="Margin" Value="0,0,0,7"/>
                                             <EventSetter Event="PreviewMouseUp" Handler="EH_ListBoxItem_MouseClick"/>
+                                            <EventSetter Event="Selected" Handler="EH_ListBoxItem_Selected"/>
                                         </Style>
                                     </ListBox.ItemContainerStyle>
                                 </ListBox>
