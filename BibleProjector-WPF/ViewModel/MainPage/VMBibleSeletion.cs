@@ -233,23 +233,28 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         // ========== search bible ==========
 
+        private string previousSearchText = "";
         private void searchBible()
         {
-            if (SearchText == null || SearchText.Length < 2)
+            if (SearchText == null || SearchText.Length < 1)
                 return;
+            if (previousSearchText.CompareTo(SearchText) != 0)
+            {
+                previousSearchText = SearchText;
 
-            (string kjjeul, string content, (int startIdx, int lastIdx)[] pos)[] rawResult = bibleSearcher.getSearchResultbyPhrase(SearchText, true);
-            totalSearchResults = new VMBiblePhraseSearchData[rawResult.Length];
-            for (int i = 0; i < rawResult.Length; i++)
-                totalSearchResults[i] = new VMBiblePhraseSearchData(rawResult[i].kjjeul, rawResult[i].content, rawResult[i].pos);
-            lastPage = (totalSearchResults.Length + MAX_PAGE_SIZE - 1) / MAX_PAGE_SIZE;
-            
-            setPage(1);
+                (string kjjeul, string content, (int startIdx, int lastIdx)[] pos)[] rawResult = bibleSearcher.getSearchResultbyPhrase(SearchText, true);
+                totalSearchResults = new VMBiblePhraseSearchData[rawResult.Length];
+                for (int i = 0; i < rawResult.Length; i++)
+                    totalSearchResults[i] = new VMBiblePhraseSearchData(rawResult[i].kjjeul, rawResult[i].content, rawResult[i].pos);
+                lastPage = (totalSearchResults.Length + MAX_PAGE_SIZE - 1) / MAX_PAGE_SIZE;
 
-            MaxPagePosition = lastPage;
-            OnPropertyChanged(nameof(MaxPagePosition));
-            IsMultiPage = (lastPage > 1);
-            OnPropertyChanged(nameof(IsMultiPage));
+                setPage(1);
+
+                MaxPagePosition = lastPage;
+                OnPropertyChanged(nameof(MaxPagePosition));
+                IsMultiPage = (lastPage > 1);
+                OnPropertyChanged(nameof(IsMultiPage));
+            }
             if (SearchResultList.Count > 0)
             {
                 ResultPopupOpen = true;

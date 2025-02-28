@@ -270,7 +270,7 @@
                             </StackPanel>
                         </Border>
                     </Popup>
-                    <Label Name="SearchTextBoxHint" Content="구절 검색 (2자 이상)" Foreground="Gray" FontWeight="Bold" FontSize="14" IsHitTestVisible="False"/>
+                    <Label Name="SearchTextBoxHint" Content="구절 검색" Foreground="Gray" FontWeight="Bold" FontSize="14" IsHitTestVisible="False"/>
                     <Button Content="˅" FontWeight="Bold" FontSize="16" Foreground="DimGray" HorizontalAlignment="Right" Width="22" Background="White" Click="EH_DropDownButton_Click"/>
                 </Grid>
             </Border>

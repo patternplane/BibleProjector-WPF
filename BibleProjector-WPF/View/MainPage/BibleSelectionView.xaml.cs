@@ -398,8 +398,8 @@ namespace BibleProjector_WPF.View.MainPage
         private void searchBible()
         {
             CSearchBible.Execute(null);
-            if (SearchTextBox.Text == null || SearchTextBox.Text.Length < 2)
-                MessageBox.Show("검색 문구를 2자 이상 입력하세요!", "검색 문구가 짧아요", MessageBoxButton.OK, MessageBoxImage.Error);
+            if (SearchTextBox.Text == null || SearchTextBox.Text.Length < 1)
+                MessageBox.Show("검색 문구를 입력하세요!", "검색 문구가 짧아요", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         // ======================= 검색 결과 페이지 이동 =======================
