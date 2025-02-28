@@ -58,6 +58,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         public BindingList<VMBiblePhraseSearchData> SearchResultList { get; set; } = new BindingList<VMBiblePhraseSearchData>() { };
         private VMBiblePhraseSearchData _SelectedSearchItem = null;
+        private VMBiblePhraseSearchData lastSelectedSearchItem = null;
         public VMBiblePhraseSearchData SelectedSearchItem 
         { 
             get { return _SelectedSearchItem; }
@@ -66,6 +67,8 @@ namespace BibleProjector_WPF.ViewModel.MainPage
                 _SelectedSearchItem = value;
                 if (SelectedSearchItem != null)
                 {
+                    lastSelectedSearchItem = SelectedSearchItem;
+
                     module.Data.BibleData data = (module.Data.BibleData)_SelectedSearchItem.getData();
                     selectBible(data.book, data.chapter, data.verse);
                     showPreviewItemEventManager.InvokeShowPreviewItem(_SelectedSearchItem);
@@ -290,6 +293,12 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             SearchResultList.Clear();
             while (firstIdx <= lastIdx)
                 SearchResultList.Add(totalSearchResults[firstIdx++]);
+
+            if (SearchResultList.Contains(lastSelectedSearchItem))
+            {
+                _SelectedSearchItem = lastSelectedSearchItem;
+                OnPropertyChanged(nameof(SelectedSearchItem));
+            }
 
             currentPage = page;
             PagePosition = page;
