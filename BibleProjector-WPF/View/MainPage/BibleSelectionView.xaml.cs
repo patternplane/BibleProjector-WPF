@@ -327,7 +327,8 @@ namespace BibleProjector_WPF.View.MainPage
 
         private void EH_ListBoxKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Up && ResultListBox.SelectedIndex <= 0)
+            if (e.Key == Key.Up && ResultListBox.SelectedIndex <= 0
+                || e.Key == Key.Back)
             {
                 closePopup();
                 e.Handled = true;
