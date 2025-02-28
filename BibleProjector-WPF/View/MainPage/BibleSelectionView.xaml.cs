@@ -335,8 +335,7 @@ namespace BibleProjector_WPF.View.MainPage
             }
             if (e.Key == Key.Enter)
                 closePopup(true);
-            if (e.Key == Key.Escape
-                || e.Key == Key.Back)
+            if (e.Key == Key.Escape)
                 closePopup();
 
             if (e.Key == Key.Left)
@@ -452,6 +451,8 @@ namespace BibleProjector_WPF.View.MainPage
         {
             if (e.Key == Key.Down)
                 focusPopupInnerContent();
+            if (e.Key == Key.Escape)
+                closePopup();
         }
 
         // ======================= 페이지 이동 텍스트 힌트 표시 =======================
