@@ -34,7 +34,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             isModified = true;
             OnPropertyChanged(nameof(DisplayTitle));
             OnPropertyChanged(nameof(PreviewContent));
-            contentInfo = new HighlightedText("[수정됨] " + data.getBibleContent(), new (int, int, HighlightType)[] { (0, 5, HighlightType.SEARCH_RESULT) });
+            contentInfo = new HighlightedText("[수정됨] " + data.getBibleContent(), new (int, int, HighlightType)[] { (0, 4, HighlightType.DEFAULT_HIGHLIGHT) });
             OnPropertyChanged(nameof(contentInfo));
         }
 

@@ -50,6 +50,11 @@ namespace BibleProjector_WPF.View.MainPage
                         highlightedRun.FontWeight = FontWeights.Bold;
                         highlightedRun.TextDecorations = TextDecorations.Underline;
                     }
+                    if (pos.type == HighlightType.DEFAULT_HIGHLIGHT)
+                    {
+                        highlightedRun.Foreground = new SolidColorBrush(Color.FromRgb(168, 30, 30));
+                        highlightedRun.FontWeight = FontWeights.Bold;
+                    }
                     obj.Inlines.Add(highlightedRun);
                     i = pos.lastIdx + 1;
                 }

@@ -8,6 +8,7 @@ namespace BibleProjector_WPF
 {
     public enum HighlightType
     {
-        SEARCH_RESULT
+        SEARCH_RESULT,
+        DEFAULT_HIGHLIGHT
     }
 }
