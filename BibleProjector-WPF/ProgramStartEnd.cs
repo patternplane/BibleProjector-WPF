@@ -108,8 +108,9 @@ namespace BibleProjector_WPF
             module.BibleDataManager bibleMan = new module.BibleDataManager();
             module.ReserveDataManager reserveDataManager = new module.ReserveDataManager(bibleMan, songMan, pptMan);
 
+            module.BibleSearcher bibleSearcher = new module.BibleSearcher();
             module.ISearcher searcher = new module.Data.MultiSearcher(
-                new module.BibleSearcher(),
+                bibleSearcher,
                 new module.Data.SongSearcher(
                     songMan),
                 new module.ExternPPTSearcher(
@@ -146,7 +147,7 @@ namespace BibleProjector_WPF
                     new ViewModel.MainPage.VMMain(
                         new ViewModel.MainPage.VMControlPage(
                             showControlers,
-                            new ViewModel.MainPage.VMBibleSeletion(reserveDataManager, showStarter, bibleSelectionEventManager),
+                            new ViewModel.MainPage.VMBibleSeletion(reserveDataManager, showStarter, bibleSelectionEventManager, showPreviewItemEventManager, bibleSearcher),
                             new ViewModel.MainPage.VMSearchControl(searcher, reserveDataManager, showStarter, bibleSelectionEventManager, showPreviewItemEventManager, songMan),
                             new ViewModel.MainPage.VMReserveList(reserveDataManager, showStarter, bibleSelectionEventManager),
                             buttonVMs,

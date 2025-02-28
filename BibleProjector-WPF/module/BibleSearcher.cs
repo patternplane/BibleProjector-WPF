@@ -92,6 +92,18 @@ namespace BibleProjector_WPF.module
             new BibleTitleInfo("요한계시록","계",66)
         };
 
+        /// <summary>
+        /// 성경구절 검색 결과를 반환합니다.
+        /// <br/>검색 결과는 항상 0 이상의 항목을 가진 배열입니다.
+        /// </summary>
+        /// <param name="searchPhrase"></param>
+        /// <param name="ignoreBlank"></param>
+        /// <returns></returns>
+        public (string kjjeul, string content, (int startIdx, int lastIdx)[] pos)[] getSearchResultbyPhrase(string searchPhrase, bool ignoreBlank)
+        {
+            return Database.findBibleText(searchPhrase, !ignoreBlank);
+        }
+        
         public ICollection<SearchData> getSearchResult(string searchPrase)
         {
             string title;

@@ -103,6 +103,7 @@
     <Compile Include="Event\BibleSelectionEventManager.cs" />
     <Compile Include="Event\KeyInputEventManager.cs" />
     <Compile Include="ViewModel\MainPage\IVMPreviewData.cs" />
+    <Compile Include="ViewModel\MainPage\VMBiblePhraseSearchData.cs" />
     <Compile Include="ViewModel\MainPage\VMBibleSeletion.cs" />
     <Compile Include="ViewModel\MainPage\VMExternPPTEditButton.cs" />
     <Compile Include="ViewModel\MainPage\VMLyricAdd.cs" />
@@ -163,6 +164,7 @@
     <Compile Include="View\MainPage\ShowControllerBrush2Converter.cs" />
     <Compile Include="View\MainPage\ShowControllerBrushConverter.cs" />
     <Compile Include="View\MainPage\ShowItemColor.cs" />
+    <Compile Include="View\MainPage\TextHighlighter.cs" />
     <Compile Include="View\MainPage\VisibilityConverter.cs" />
     <Compile Include="View\ManualTab.xaml.cs">
       <DependentUpon>ManualTab.xaml</DependentUpon>

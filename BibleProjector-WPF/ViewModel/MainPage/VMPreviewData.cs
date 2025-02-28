@@ -36,7 +36,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             return data.getData();
         }
 
-        public void update()
+        public virtual void update()
         {
             isModified = true;
             OnPropertyChanged(nameof(DisplayTitle));
