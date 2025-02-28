@@ -46,7 +46,8 @@ namespace BibleProjector_WPF.View.MainPage
                     obj.Inlines.Add(new Run(textInfo.text.Substring(pos.startIdx, pos.lastIdx - pos.startIdx + 1))
                         {
                             Foreground = new SolidColorBrush(Color.FromRgb(173, 79, 15)),
-                            FontWeight = FontWeights.Bold
+                            FontWeight = FontWeights.Bold,
+                            TextDecorations = TextDecorations.Underline
                         });
                     i = pos.lastIdx + 1;
                 }

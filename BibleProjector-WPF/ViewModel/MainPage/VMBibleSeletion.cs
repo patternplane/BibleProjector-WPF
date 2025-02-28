@@ -39,6 +39,8 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         public bool ResultPopupOpen { get; set; } = false;
         public string SearchText { get; set; } = "";
+        public bool IsSecondSearchButton { get; set; } = false;
+
         public bool IsMultiPage { get; set; } = false;
         public int PagePosition { get; set; }
         public int MaxPagePosition { get; set; }
@@ -92,6 +94,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             module.ShowStarter showStarter,
             Event.BibleSelectionEventManager bibleSelectionEventManager,
             Event.ShowPreviewItemEventManager showPreviewItemEventManager,
+            Event.KeyInputEventManager keyInputEventManager,
             module.BibleSearcher bibleSearcher)
         {
             this.CBookSelection = new RelayCommand(obj => bookSelector((int)obj));
@@ -111,6 +114,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             this.showPreviewItemEventManager = showPreviewItemEventManager;
 
             bibleSelectionEventManager.BibleSelectionEvent += EH_BibleSelection;
+            keyInputEventManager.KeyDown += keyInput;
 
             string[] ts = Database.getBibleTitles_string();
             this.OldBookList = new BindingList<string>();
@@ -234,15 +238,18 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         // ========== search bible ==========
 
         private string previousSearchText = "";
+        private bool previousSearchHasBlank = false;
         private void searchBible()
         {
             if (SearchText == null || SearchText.Length < 1)
                 return;
-            if (previousSearchText.CompareTo(SearchText) != 0)
+            if (previousSearchText.CompareTo(SearchText) != 0
+                || previousSearchHasBlank != IsSecondSearchButton)
             {
                 previousSearchText = SearchText;
+                previousSearchHasBlank = IsSecondSearchButton;
 
-                (string kjjeul, string content, (int startIdx, int lastIdx)[] pos)[] rawResult = bibleSearcher.getSearchResultbyPhrase(SearchText, true);
+                (string kjjeul, string content, (int startIdx, int lastIdx)[] pos)[] rawResult = bibleSearcher.getSearchResultbyPhrase(SearchText, !previousSearchHasBlank);
                 totalSearchResults = new VMBiblePhraseSearchData[rawResult.Length];
                 for (int i = 0; i < rawResult.Length; i++)
                     totalSearchResults[i] = new VMBiblePhraseSearchData(rawResult[i].kjjeul, rawResult[i].content, rawResult[i].pos);
@@ -283,6 +290,24 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             currentPage = page;
             PagePosition = page;
             OnPropertyChanged(nameof(PagePosition));
+        }
+
+        private void keyInput(Key key, bool isDown)
+        {
+            if (isDown
+                && (key == Key.LeftShift
+                || key == Key.RightShift))
+            {
+                IsSecondSearchButton = true;
+                OnPropertyChanged(nameof(IsSecondSearchButton));
+            }
+            if (!isDown
+                && (key == Key.LeftShift
+                || key == Key.RightShift))
+            {
+                IsSecondSearchButton = false;
+                OnPropertyChanged(nameof(IsSecondSearchButton));
+            }
         }
 
         // ========== Bible Selection Event Handler ==========
