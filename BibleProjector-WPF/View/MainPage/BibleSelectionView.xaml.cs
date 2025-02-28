@@ -309,8 +309,7 @@ namespace BibleProjector_WPF.View.MainPage
 
         private void EH_DropDownButton_Click(object sender, RoutedEventArgs e)
         {
-            if (ResultListBox.Items.Count != 0)
-                openPopupAndDisplaySelection();
+            openPopup();
         }
 
         private void EH_ListBoxKeyDown(object sender, KeyEventArgs e)
@@ -359,8 +358,8 @@ namespace BibleProjector_WPF.View.MainPage
             // KeyUp이벤트가 Popup에서 발생하게 되어
             // 의도하지 않은 동작이 발생할 수 있음.
             // 이에 따라, KeyUp 시점에서 Popup으로 포커싱을 이동하도록 함.
-            if (e.Key == Key.Down && ResultListBox.Items.Count != 0)
-                openPopupAndDisplaySelection();
+            if (e.Key == Key.Down)
+                openPopup();
         }
 
         private void EH_SearchButton_Click(object sender, RoutedEventArgs e)
@@ -368,15 +367,19 @@ namespace BibleProjector_WPF.View.MainPage
             searchBible();
         }
 
-        private void openPopupAndDisplaySelection()
+        private void openPopup()
         {
-            if (ResultListBox.Items.Count == 0)
-                return;
+            if (ResultListBox.Items.Count > 0)
+                SearchResultPopup.IsOpen = true;
+        }
 
-            SearchResultPopup.IsOpen = true;
-
+        private void EH_SearchResultPopup_Opened(object sender, EventArgs e)
+        {
             if (ResultListBox.SelectedIndex >= 0)
                 ((ListBoxItem)ResultListBox.ItemContainerGenerator.ContainerFromIndex(ResultListBox.SelectedIndex)).Focus();
+            else
+                ResultListBox.Focus();
+            // ResultListBox.ScrollIntoView(ResultListBox.Items[0]); // 데이터 초기화 시점에만 적용되도록 수정 필요.
         }
 
         private void EH_ListBoxItem_Selected(object sender, RoutedEventArgs e)
@@ -384,14 +387,6 @@ namespace BibleProjector_WPF.View.MainPage
             if (sender is ListBoxItem listboxitem)
                 if (!listboxitem.IsFocused)
                     listboxitem.Focus();
-        }
-
-        private void EH_SearchResultPopup_Opened(object sender, EventArgs e)
-        {
-            ResultListBox.Focus();
-            if (ResultListBox.SelectedIndex < 0
-                && ResultListBox.Items.Count > 0)
-                ResultListBox.ScrollIntoView(ResultListBox.Items[0]);
         }
 
         private void closePopup(bool forceRefresh = false)
