@@ -69,6 +69,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Event\FrameDeleted.cs" />
+    <Compile Include="Event\ShowPreviewItemEventManager.cs" />
     <Compile Include="Event\ShowStart.cs" />
     <Compile Include="Event\WindowActivateChangedEventManager.cs" />
     <Compile Include="module\BibleDataManager.cs" />

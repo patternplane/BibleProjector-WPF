@@ -50,6 +50,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             module.ReserveDataManager reserveManager, 
             module.ShowStarter showStarter,
             Event.BibleSelectionEventManager bibleSelectionEventManager,
+            Event.ShowPreviewItemEventManager showPreviewItemEventManager,
             module.Data.SongManager songManager)
         {
             CSearchStart = new RelayCommand(obj => SearchStart());
@@ -65,6 +66,9 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             this.reserveManager = reserveManager;
             this.showStarter = showStarter;
             this.bibleSelectionEventManager = bibleSelectionEventManager;
+
+            showPreviewItemEventManager.showPreviewItemEvent += (data) => displayItemPreview(data);
+            showPreviewItemEventManager.showPreviewItemDefaultEvent += (data) => displayItemPreview(data);
 
             this.VM_Modify = new VMModify(songManager);
             VM_Modify.CloseEventHandler += (sender, e) => displayModifyView(false);
@@ -102,6 +106,9 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         {
             ResultPopupOpen = true;
             OnPropertyChanged("ResultPopupOpen");
+
+            if (SelectionItem != null && SelectionItem != PreviewData)
+                ItemSelected(SelectionItem);
         }
 
         void PopupHide()

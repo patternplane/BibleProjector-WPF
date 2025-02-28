@@ -118,6 +118,7 @@ namespace BibleProjector_WPF
             Event.KeyInputEventManager keyInputEventManager = new Event.KeyInputEventManager();
             Event.WindowActivateChangedEventManager WACEventManager = new Event.WindowActivateChangedEventManager();
             Event.BibleSelectionEventManager bibleSelectionEventManager = new Event.BibleSelectionEventManager();
+            Event.ShowPreviewItemEventManager showPreviewItemEventManager = new Event.ShowPreviewItemEventManager();
 
             loadingWindow.setLoadingState("UI 로딩중...", 80);
             module.ShowStarter showStarter = new module.ShowStarter();
@@ -146,7 +147,7 @@ namespace BibleProjector_WPF
                         new ViewModel.MainPage.VMControlPage(
                             showControlers,
                             new ViewModel.MainPage.VMBibleSeletion(reserveDataManager, showStarter, bibleSelectionEventManager),
-                            new ViewModel.MainPage.VMSearchControl(searcher, reserveDataManager, showStarter, bibleSelectionEventManager, songMan),
+                            new ViewModel.MainPage.VMSearchControl(searcher, reserveDataManager, showStarter, bibleSelectionEventManager, showPreviewItemEventManager, songMan),
                             new ViewModel.MainPage.VMReserveList(reserveDataManager, showStarter, bibleSelectionEventManager),
                             buttonVMs,
                             keyInputEventManager,
