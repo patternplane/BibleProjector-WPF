@@ -119,9 +119,10 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         void ItemSelected(VMPreviewData item)
         {
+            this.SelectionItem = item;
+
             if (item.getData().isAvailData())
             {
-                this.SelectionItem = item;
                 displayItemPreview(item);
 
                 if (item.getData() is module.Data.BibleData)
