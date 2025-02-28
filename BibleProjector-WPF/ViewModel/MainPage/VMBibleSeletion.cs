@@ -50,9 +50,9 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             set
             {
                 int newVal;
-                if (int.TryParse(value, out newVal) && newVal != currentPage
+                if (int.TryParse(value, out newVal)
                     && newVal >= 1 && newVal <= lastPage)
-                        setPage(newVal);
+                    setPage(newVal);
             }
         }
 
@@ -255,7 +255,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
                     totalSearchResults[i] = new VMBiblePhraseSearchData(rawResult[i].kjjeul, rawResult[i].content, rawResult[i].pos);
                 lastPage = (totalSearchResults.Length + MAX_PAGE_SIZE - 1) / MAX_PAGE_SIZE;
 
-                setPage(1);
+                setPage(1, true);
 
                 MaxPagePosition = lastPage;
                 OnPropertyChanged(nameof(MaxPagePosition));
@@ -271,15 +271,19 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         /// <summary>
         /// 검색 페이지를 이동합니다.
+        /// <br/><paramref name="forceSetup"/>이 <see langword="true"/>이면 이미 해당 페이지여도 강제로 갱신합니다.
         /// <br/><paramref name="page"/>는 1부터 시작하는 범위를 갖습니다.
         /// </summary>
         /// <param name="page"></param>
-        private void setPage(int page)
+        private void setPage(int page, bool forceSetup = false)
         {
             if (page > lastPage)
                 page = lastPage;
             if (page < 1)
                 page = 1;
+
+            if (!forceSetup && page == currentPage)
+                return;
 
             int firstIdx = (page - 1) * MAX_PAGE_SIZE;
             int lastIdx = Math.Min(totalSearchResults.Length - 1, page * MAX_PAGE_SIZE - 1);
