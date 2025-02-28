@@ -10,7 +10,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
     public class VMBiblePhraseSearchData : ViewModel, IVMPreviewData
     {
         public string address { get; set; }
-        public (string text, (int startIdx, int lastIdx)[] highlightPos) contentInfo { get; set; }
+        public HighlightedText contentInfo { get; set; }
 
         public string DisplayTitle { get { return (isModified ? "[수정됨] " : "") + data.getdisplayName(isModified); } }
         public string PreviewContent { get { return data.getBibleContent(); } }
@@ -26,7 +26,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
                 int.Parse(kjjeul.Substring(2, 3)),
                 int.Parse(kjjeul.Substring(5, 3)));
             address = $"{data.getBibleTitle_Abr()} {data.chapter}:{data.verse} ";
-            contentInfo = (content, pos);
+            contentInfo = new HighlightedText(content, pos, HighlightType.SEARCH_RESULT);
         }
 
         public void update()
@@ -34,7 +34,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             isModified = true;
             OnPropertyChanged(nameof(DisplayTitle));
             OnPropertyChanged(nameof(PreviewContent));
-            contentInfo = ("[수정됨] " + data.getBibleContent(), new (int, int)[] { (0, 5) });
+            contentInfo = new HighlightedText("[수정됨] " + data.getBibleContent(), new (int, int, HighlightType)[] { (0, 5, HighlightType.SEARCH_RESULT) });
             OnPropertyChanged(nameof(contentInfo));
         }
 

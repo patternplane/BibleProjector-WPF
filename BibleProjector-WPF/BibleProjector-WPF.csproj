@@ -68,6 +68,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="HighlightedText.cs" />
+    <Compile Include="HighlightType.cs" />
     <Compile Include="Event\FrameDeleted.cs" />
     <Compile Include="Event\ShowPreviewItemEventManager.cs" />
     <Compile Include="Event\ShowStart.cs" />

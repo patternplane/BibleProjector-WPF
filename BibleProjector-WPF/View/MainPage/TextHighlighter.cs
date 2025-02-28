@@ -15,23 +15,23 @@ namespace BibleProjector_WPF.View.MainPage
         public static readonly DependencyProperty TextInfoProperty =
             DependencyProperty.RegisterAttached(
                 "TextInfo",
-                typeof((string text, (int startIdx, int lastIdx)[] highlightPos)),
+                typeof(HighlightedText),
                 typeof(TextHighlighter),
                 new FrameworkPropertyMetadata(propertyChangedCallback: TextInfoChangedCallback)
                 );
 
-        public static (string text, (int startIdx, int lastIdx)[] highlightPos) GetTextInfo(UIElement target) =>
-            ((string text, (int startIdx, int lastIdx)[] highlightPos))target.GetValue(TextInfoProperty);
+        public static HighlightedText GetTextInfo(UIElement target) =>
+            (HighlightedText)target.GetValue(TextInfoProperty);
 
-        public static void SetTextInfo(UIElement target, (string text, (int startIdx, int lastIdx)[] highlightPos) value) =>
+        public static void SetTextInfo(UIElement target, HighlightedText value) =>
             target.SetValue(TextInfoProperty, value);
 
         private static void TextInfoChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is TextBlock obj)
+            if (d is TextBlock obj
+                && e.NewValue is HighlightedText textInfo)
             {
-                (string text, (int startIdx, int lastIdx)[] highlightPos) textInfo = ((string text, (int startIdx, int lastIdx)[] highlightPos))e.NewValue;
-                if (textInfo.highlightPos == null || textInfo.highlightPos.Length == 0)
+                if (textInfo.positions == null || textInfo.positions.Length == 0)
                 {
                     obj.Text = textInfo.text;
                     return;
@@ -39,16 +39,18 @@ namespace BibleProjector_WPF.View.MainPage
 
                 obj.Inlines.Clear();
                 int i = 0;
-                foreach ((int startIdx, int lastIdx) pos in textInfo.highlightPos)
+                foreach ((int startIdx, int lastIdx, HighlightType type) pos in textInfo.positions)
                 {
                     if (i < pos.startIdx)
                         obj.Inlines.Add(new Run(textInfo.text.Substring(i, pos.startIdx - i)));
-                    obj.Inlines.Add(new Run(textInfo.text.Substring(pos.startIdx, pos.lastIdx - pos.startIdx + 1))
-                        {
-                            Foreground = new SolidColorBrush(Color.FromRgb(173, 79, 15)),
-                            FontWeight = FontWeights.Bold,
-                            TextDecorations = TextDecorations.Underline
-                        });
+                    Run highlightedRun = new Run(textInfo.text.Substring(pos.startIdx, pos.lastIdx - pos.startIdx + 1));
+                    if (pos.type == HighlightType.SEARCH_RESULT)
+                    {
+                        highlightedRun.Foreground = new SolidColorBrush(Color.FromRgb(173, 79, 15));
+                        highlightedRun.FontWeight = FontWeights.Bold;
+                        highlightedRun.TextDecorations = TextDecorations.Underline;
+                    }
+                    obj.Inlines.Add(highlightedRun);
                     i = pos.lastIdx + 1;
                 }
                 if (i < textInfo.text.Length)
