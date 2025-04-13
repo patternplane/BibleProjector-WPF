@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using System.IO;
 using System.ComponentModel;
+using BibleProjector_WPF.module.Infrastructure;
 
 namespace BibleProjector_WPF.module
 {

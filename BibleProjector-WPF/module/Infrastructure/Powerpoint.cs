@@ -9,7 +9,7 @@ using Microsoft.Office.Interop.PowerPoint;
 
 
 
-namespace BibleProjector_WPF
+namespace BibleProjector_WPF.module.Infrastructure
 {
     partial class Powerpoint
     {

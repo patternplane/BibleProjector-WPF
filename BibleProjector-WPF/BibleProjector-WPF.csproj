@@ -187,7 +187,7 @@
     <Compile Include="View\LyricControl.xaml.cs">
       <DependentUpon>LyricControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="module\ProgramData.cs" />
+    <Compile Include="module\Infrastructure\ProgramData.cs" />
     <Compile Include="module\StringModifier.cs" />
     <Compile Include="module\StringKMP.cs" />
     <Compile Include="View\ManualContent.xaml.cs">
@@ -278,7 +278,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="module\Database.cs" />
+    <Compile Include="module\Infrastructure\Database.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -289,7 +289,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="module\Powerpoint.cs" />
+    <Compile Include="module\Infrastructure\Powerpoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

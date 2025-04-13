@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BibleProjector_WPF.module.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -69,7 +70,7 @@ namespace BibleProjector_WPF
             loadingWindow.setLoadingState("필수 파일 확인중...", 20);
             try
             {
-                module.ProgramData.Initialize();
+                ProgramData.Initialize();
             }
             catch (Exception e)
             {
@@ -135,11 +136,11 @@ namespace BibleProjector_WPF
             showControlers[2] = new ViewModel.MainPage.VMShowControler(ShowContentType.PPT, showStarter, WACEventManager);
 
             loadingWindow.setLoadingState("UI 로딩중...", 90);
-            module.ProgramData.SaveDataEvent += songMan.saveData_Lyric;
-            module.ProgramData.SaveDataEvent += songMan.saveData_Hymn;
-            module.ProgramData.SaveDataEvent += pptMan.saveData;
-            module.ProgramData.SaveDataEvent += reserveDataManager.saveData;
-            module.ProgramData.SaveDataEvent += module.ProgramOption.saveData;
+            ProgramData.SaveDataEvent += songMan.saveData_Lyric;
+            ProgramData.SaveDataEvent += songMan.saveData_Hymn;
+            ProgramData.SaveDataEvent += pptMan.saveData;
+            ProgramData.SaveDataEvent += reserveDataManager.saveData;
+            ProgramData.SaveDataEvent += module.ProgramOption.saveData;
 
             loadingWindow.setLoadingState("UI 로딩중...", 100);
             ViewModel.VMMainWindow mainViewModel = 
@@ -194,7 +195,7 @@ namespace BibleProjector_WPF
 
         private void postProcess()
         {
-            module.ProgramData.saveProgramData();
+            ProgramData.saveProgramData();
             Powerpoint.FinallProcess();
         }
     }

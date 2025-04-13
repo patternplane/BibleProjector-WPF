@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BibleProjector_WPF.module.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -47,12 +48,12 @@ namespace BibleProjector_WPF
             if (errorInvoked)
             {
                 ignoreAdditionError = true;
-                module.ProgramData.writeErrorLog("● 프로그램 종료 진행 중 에러 (Thread 에러 등의 다른 원인에 의한 에러 중복)", e.Exception);
+                ProgramData.writeErrorLog("● 프로그램 종료 진행 중 에러 (Thread 에러 등의 다른 원인에 의한 에러 중복)", e.Exception);
             }
             else
             {
                 errorInvoked = true;
-                module.ProgramData.writeErrorLog(null, e.Exception);
+                ProgramData.writeErrorLog(null, e.Exception);
                 ProgramStartEnd.getProgramStartEnd().doPostProcess_byError();
             }
         }

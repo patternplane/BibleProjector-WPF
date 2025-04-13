@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
+using BibleProjector_WPF.module.Infrastructure;
 
 namespace BibleProjector_WPF.ViewModel
 {
@@ -270,7 +271,7 @@ namespace BibleProjector_WPF.ViewModel
                     if (HymnSelection.songType == module.Data.SongDataTypeEnum.CCM)
                     {
                         songManager.saveCCMData(false);
-                        module.ProgramData.writeErrorLog("찬송가 수정 메소드 내에서 ccm 데이터가 변경됨! (LyricViewModel.RunApplyHymnModify)");
+                        ProgramData.writeErrorLog("찬송가 수정 메소드 내에서 ccm 데이터가 변경됨! (LyricViewModel.RunApplyHymnModify)");
                     }
                     if (HymnSelection.songType == module.Data.SongDataTypeEnum.HYMN)
                         songManager.saveHymnData(false);

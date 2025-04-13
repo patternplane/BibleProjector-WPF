@@ -5,6 +5,8 @@ using System.Text;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
+using BibleProjector_WPF.module.Infrastructure;
+
 namespace BibleProjector_WPF.ViewModel.MainPage
 {
     public class VMShowControler : ViewModel

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using BibleProjector_WPF.module.Infrastructure;
+
 namespace BibleProjector_WPF.module.Data
 {
     public class ExternPPTData : ShowData

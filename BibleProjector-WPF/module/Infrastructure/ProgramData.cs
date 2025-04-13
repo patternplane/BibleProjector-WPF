@@ -9,7 +9,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Threading;
 
-namespace BibleProjector_WPF.module
+namespace BibleProjector_WPF.module.Infrastructure
 {
     class ProgramData
     {
@@ -48,9 +48,9 @@ namespace BibleProjector_WPF.module
                     di.Create();
             }
 
-                StringBuilder warningPhrase = new StringBuilder("프로그램 실행에 필요한 다음의 파일들이 없습니다!\n");
+            StringBuilder warningPhrase = new StringBuilder("프로그램 실행에 필요한 다음의 파일들이 없습니다!\n");
             bool isFileMissing = false;
-            foreach(string FilePath in fileList)
+            foreach (string FilePath in fileList)
             {
                 DirectoryInfo di = new DirectoryInfo(Path.GetDirectoryName(FilePath));
                 if (!di.Exists)
@@ -121,7 +121,7 @@ namespace BibleProjector_WPF.module
                             doneKey.Add(type);
                         }
                     }
-                    foreach(SaveDataTypeEnum type in doneKey)
+                    foreach (SaveDataTypeEnum type in doneKey)
                         saveList.Remove(type);
                 }
 
@@ -206,13 +206,14 @@ namespace BibleProjector_WPF.module
         /// <param name="exc"></param>
         static public void writeErrorLog(string data, Exception exc = null)
         {
-            string time = (new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds()).ToString();
+            string time = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
             string fileName = ERROR_LOG_OUTPUT + "\\" + time + ".txt";
-            if (new FileInfo(fileName).Exists) {
+            if (new FileInfo(fileName).Exists)
+            {
                 long i = new DirectoryInfo(ERROR_LOG_OUTPUT).GetFiles(time + "*.txt").Length;
                 fileName = ERROR_LOG_OUTPUT + "\\" + time + "_" + i + ".txt";
             }
-            
+
             StreamWriter file = new StreamWriter(
                 fileName,
                 false);
@@ -236,7 +237,7 @@ namespace BibleProjector_WPF.module
             StringBuilder fileContent = new StringBuilder(50);
             fileContent.Clear();
 
-            if ((new FileInfo(filePath)).Exists)
+            if (new FileInfo(filePath).Exists)
             {
                 StreamReader file = new StreamReader(filePath);
                 fileContent.Append(file.ReadToEnd());

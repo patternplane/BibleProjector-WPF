@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 using System.ComponentModel;
 
+using BibleProjector_WPF.module.Infrastructure;
+
 namespace BibleProjector_WPF.ViewModel
 {
     public class OptionViewModel : ViewModel
