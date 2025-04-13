@@ -175,7 +175,7 @@
     <Compile Include="module\KorString.cs" />
     <Compile Include="module\LevenshteinDistance.cs" />
     <Compile Include="module\ManualData.cs" />
-    <Compile Include="module\ProgramOption.cs" />
+    <Compile Include="module\ProgramOptionManager.cs" />
     <Compile Include="module\ShowStarter.cs" />
     <Compile Include="module\CharCompare.cs" />
     <Compile Include="View\Option.xaml.cs">

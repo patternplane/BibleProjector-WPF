@@ -85,7 +85,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
             windowActivateChangedEventManager.windowActivateChanged += UIActiveChanged;
 
-            module.ProgramOption.FrameDeletedEvent += FrameDeleted;
+            module.ProgramOptionManager.FrameDeletedEvent += FrameDeleted;
             showStarter.ShowStartEvent += startShow;
         }
 

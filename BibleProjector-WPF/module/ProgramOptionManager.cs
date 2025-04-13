@@ -28,7 +28,7 @@ namespace BibleProjector_WPF.module
             set
             {
                 _isCCMFrame = value;
-                ProgramOption.setThisFrameToCCM(this,value);
+                ProgramOptionManager.setThisFrameToCCM(this,value);
                 OnPropertyChanged("isCCMFrame");
             }
         }
@@ -39,7 +39,7 @@ namespace BibleProjector_WPF.module
             set
             {
                 _isHymnFrame = value;
-                ProgramOption.setThisFrameToHymn(this,value);
+                ProgramOptionManager.setThisFrameToHymn(this,value);
                 OnPropertyChanged("isHymnFrame");
             }
         }
@@ -53,7 +53,7 @@ namespace BibleProjector_WPF.module
         }
     }
 
-    class ProgramOption
+    class ProgramOptionManager
     {
 
         // ======================================= 옵션값 =======================================
@@ -123,7 +123,7 @@ namespace BibleProjector_WPF.module
         {
             for (int i = itemIndexes_sorted.Length - 1; i >= 0; i--)
             {
-                module.ProgramOption.process_deleteSongFrame(SongFrameFiles[itemIndexes_sorted[i]]);
+                module.ProgramOptionManager.process_deleteSongFrame(SongFrameFiles[itemIndexes_sorted[i]]);
                 Powerpoint.Song.closeSingle(SongFrameFiles[itemIndexes_sorted[i]].Path);
                 SongFrameFiles.RemoveAt(itemIndexes_sorted[i]);
             }

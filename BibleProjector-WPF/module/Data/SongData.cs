@@ -15,7 +15,7 @@ namespace BibleProjector_WPF.module.Data
         public SongDataTypeEnum songType { get; private set; }
         public string pptFrameFullPath = null;
         int _linePerSlide = -1;
-        public int linePerSlide { get { if (_linePerSlide == -1) return ProgramOption.Song_LinePerSlide; else return _linePerSlide; } set { _linePerSlide = value; } }
+        public int linePerSlide { get { if (_linePerSlide == -1) return ProgramOptionManager.Song_LinePerSlide; else return _linePerSlide; } set { _linePerSlide = value; } }
 
         public SongData(string songTitle, SongContent songContent, SongDataTypeEnum songType, string subTitle)
         {
@@ -181,12 +181,12 @@ namespace BibleProjector_WPF.module.Data
         public void checkAndSetFrame()
         {
             if (pptFrameFullPath != null
-                && ProgramOption.canExcutableSongFrame(pptFrameFullPath))
+                && ProgramOptionManager.canExcutableSongFrame(pptFrameFullPath))
                 return;
-            else if (songType == SongDataTypeEnum.CCM && ProgramOption.DefaultCCMFrame != null)
-                pptFrameFullPath = ProgramOption.DefaultCCMFrame.Path;
-            else if (songType == SongDataTypeEnum.HYMN && ProgramOption.DefaultHymnFrame != null)
-                pptFrameFullPath = ProgramOption.DefaultHymnFrame.Path;
+            else if (songType == SongDataTypeEnum.CCM && ProgramOptionManager.DefaultCCMFrame != null)
+                pptFrameFullPath = ProgramOptionManager.DefaultCCMFrame.Path;
+            else if (songType == SongDataTypeEnum.HYMN && ProgramOptionManager.DefaultHymnFrame != null)
+                pptFrameFullPath = ProgramOptionManager.DefaultHymnFrame.Path;
             else
                 pptFrameFullPath = null;
         }

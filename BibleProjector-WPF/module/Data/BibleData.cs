@@ -95,8 +95,8 @@ namespace BibleProjector_WPF.module.Data
         {
             string[] contents = StringModifier.makeStringPage(
                 getBibleContent()
-                , ProgramOption.Bible_CharPerLine
-                , ProgramOption.Bible_LinePerSlide);
+                , ProgramOptionManager.Bible_CharPerLine
+                , ProgramOptionManager.Bible_LinePerSlide);
 
             currentContents = new ShowContentData[contents.Length];
             int i = 0;
@@ -145,7 +145,7 @@ namespace BibleProjector_WPF.module.Data
 
         public override ShowExcuteErrorEnum canExcuteShow()
         {
-            if (ProgramOption.BibleFramePath == null)
+            if (ProgramOptionManager.BibleFramePath == null)
                 return ShowExcuteErrorEnum.NoneFrameFile;
             else if (!isAvailData())
                 return ShowExcuteErrorEnum.InvalidData;

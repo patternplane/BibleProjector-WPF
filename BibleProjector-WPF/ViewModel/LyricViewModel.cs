@@ -62,11 +62,11 @@ namespace BibleProjector_WPF.ViewModel
                 {
                     module.Data.SongDataTypeEnum songType = value.songType;
                     if (songType == module.Data.SongDataTypeEnum.CCM
-                        && module.ProgramOption.DefaultCCMFrame != null)
-                        SongFrameSelection = module.ProgramOption.DefaultCCMFrame;
+                        && module.ProgramOptionManager.DefaultCCMFrame != null)
+                        SongFrameSelection = module.ProgramOptionManager.DefaultCCMFrame;
                     else if (songType == module.Data.SongDataTypeEnum.HYMN
-                        && module.ProgramOption.DefaultHymnFrame != null)
-                        SongFrameSelection = module.ProgramOption.DefaultHymnFrame;
+                        && module.ProgramOptionManager.DefaultHymnFrame != null)
+                        SongFrameSelection = module.ProgramOptionManager.DefaultHymnFrame;
                     else
                         SongFrameSelection = null;
                 }
@@ -290,7 +290,7 @@ namespace BibleProjector_WPF.ViewModel
         // =================================== 출력란
 
         // 슬라이드별 줄 수 
-        private string LinePerSlideText_in = module.ProgramOption.Song_LinePerSlide.ToString();
+        private string LinePerSlideText_in = module.ProgramOptionManager.Song_LinePerSlide.ToString();
         public int LinePerSlide { get; private set; } = 2;
         public string LinePerSlideText { get { return LinePerSlideText_in; } set { LinePerSlideText_in = module.StringModifier.makeOnlyNum(value);
                 if (LinePerSlideText_in.Length == 0)
@@ -303,7 +303,7 @@ namespace BibleProjector_WPF.ViewModel
 
         // ppt 틀
         public BindingList<module.SongFrameFile> SongFrameList { 
-            get { return module.ProgramOption.SongFrameFiles; }
+            get { return module.ProgramOptionManager.SongFrameFiles; }
             set { }
         }
         public module.SongFrameFile SongFrameSelection { get; set; }
