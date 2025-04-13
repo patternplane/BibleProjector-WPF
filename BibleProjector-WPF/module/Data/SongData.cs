@@ -38,6 +38,25 @@ namespace BibleProjector_WPF.module.Data
 
         // ================ ShowData 메소드 ================
 
+        public override string getdisplayName(bool isModified)
+        {
+            return getTitle2();
+        }
+
+        public override string getPreviewContent()
+        {
+            StringBuilder preview = new StringBuilder();
+            string[] lyrics = songContent.getContents();
+            for (int i = 0; i < lyrics.Length; i++)
+            {
+                preview.Append(" [ ").Append(i + 1).Append("절 ]").Append('\n');
+                preview.Append(lyrics[i]);
+                if (i < lyrics.Length - 1)
+                    preview.Append("\n\n");
+            }
+            return preview.ToString();
+        }
+
         public override string getTitle1()
         {
             if (songType == SongDataTypeEnum.CCM)

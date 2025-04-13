@@ -6,17 +6,16 @@ using System.Threading.Tasks;
 
 namespace BibleProjector_WPF.module
 {
-    public abstract class SearchData : IComparable
+    public abstract class SearchData : IComparable, Data.IPreviewData
     {
-        protected bool isModified = false;
-        public abstract string getdisplayName();
+        public abstract string getdisplayName(bool isModified);
         public abstract string getPreviewContent();
         public int searchDistance { get; protected set; }
-        public Data.ShowData data { get; protected set; }
+        protected Data.ShowData data { get; set; }
 
-        public void update()
+        public Data.ShowData getData()
         {
-            isModified = true;
+            return data;
         }
 
         public int CompareTo(object obj)

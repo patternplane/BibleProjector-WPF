@@ -30,6 +30,11 @@ namespace BibleProjector_WPF.View.MainPage
             SetBinding(CShowBibleProperty, new Binding("CShowBible"));
             SetBinding(CReserveBibleProperty, new Binding("CReserveBible"));
 
+            SetBinding(CSearchBibleProperty, new Binding("CSearchBible"));
+            SetBinding(CMoveToPrevPageProperty, new Binding("CMoveToPrevPage"));
+            SetBinding(CMoveToNextPageProperty, new Binding("CMoveToNextPage"));
+            SetBinding(PopupListInitializingProperty, new Binding("PopupListInitializing") { Mode = BindingMode.TwoWay });
+
             SetBinding(SetBookSelectionProperty, new Binding("BookSetter") { Mode = BindingMode.TwoWay });
             SetBinding(SetChapterSelectionProperty, new Binding("ChapterSetter") { Mode = BindingMode.TwoWay });
             SetBinding(SetVerseSelectionProperty, new Binding("VerseSetter") { Mode = BindingMode.TwoWay });
@@ -97,6 +102,42 @@ namespace BibleProjector_WPF.View.MainPage
             set => SetValue(CReserveBibleProperty, value);
         }
 
+        public static readonly DependencyProperty CSearchBibleProperty =
+            DependencyProperty.Register(
+                name: "CSearchBible",
+                propertyType: typeof(ICommand),
+                ownerType: typeof(BibleSelectionView));
+
+        public ICommand CSearchBible
+        {
+            get => (ICommand)GetValue(CSearchBibleProperty);
+            set => SetValue(CSearchBibleProperty, value);
+        }
+
+        public static readonly DependencyProperty CMoveToPrevPageProperty =
+            DependencyProperty.Register(
+                name: "CMoveToPrevPage",
+                propertyType: typeof(ICommand),
+                ownerType: typeof(BibleSelectionView));
+
+        public ICommand CMoveToPrevPage
+        {
+            get => (ICommand)GetValue(CMoveToPrevPageProperty);
+            set => SetValue(CMoveToPrevPageProperty, value);
+        }
+
+        public static readonly DependencyProperty CMoveToNextPageProperty =
+            DependencyProperty.Register(
+                name: "CMoveToNextPage",
+                propertyType: typeof(ICommand),
+                ownerType: typeof(BibleSelectionView));
+
+        public ICommand CMoveToNextPage
+        {
+            get => (ICommand)GetValue(CMoveToNextPageProperty);
+            set => SetValue(CMoveToNextPageProperty, value);
+        }
+
         public static readonly DependencyProperty SetBookSelectionProperty =
             DependencyProperty.Register(
                 name: "SetBookSelection",
@@ -135,6 +176,18 @@ namespace BibleProjector_WPF.View.MainPage
             get => (int)GetValue(SetVerseSelectionProperty);
             set => SetValue(SetVerseSelectionProperty, value);
         }
+
+        public static readonly DependencyProperty PopupListInitializingProperty =
+            DependencyProperty.Register(
+                name: "PopupListInitializing",
+                propertyType: typeof(bool),
+                ownerType: typeof(BibleSelectionView),
+                new PropertyMetadata((d, e) =>
+                {
+                    if (e.NewValue is bool isInitializing 
+                    && isInitializing)
+                        ((BibleSelectionView)d).initializePopupList();
+                }));
 
         // ========== Event Handling ==========
 
@@ -263,6 +316,195 @@ namespace BibleProjector_WPF.View.MainPage
         private void EH_ReserveBibleButtonClick(object sender, RoutedEventArgs e)
         {
             CReserveBible.Execute(null);
+        }
+
+        // ======================= 검색 결과 팝업 표시/조작 =======================
+
+        private void EH_DropDownButton_Click(object sender, RoutedEventArgs e)
+        {
+            openPopup();
+        }
+
+        private void EH_ListBoxKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Up && ResultListBox.SelectedIndex <= 0
+                || e.Key == Key.Back)
+            {
+                closePopup();
+                e.Handled = true;
+            }
+            if (e.Key == Key.Enter)
+                closePopup(true);
+            if (e.Key == Key.Escape)
+                closePopup();
+
+            if (e.Key == Key.Left)
+            {
+                CMoveToPrevPage.Execute(null);
+                e.Handled = true;
+            }
+            if (e.Key == Key.Right)
+            {
+                CMoveToNextPage.Execute(null);
+                e.Handled = true;
+            }
+        }
+
+        private void EH_ListBoxItem_MouseClick(object sender, MouseButtonEventArgs e)
+        {
+            closePopup(true);
+        }
+
+        private void EH_TextBoxKeyDown(object sender, KeyEventArgs e)
+        {
+            ((TextBox)sender).GetBindingExpression(TextBox.TextProperty).UpdateSource();
+
+            if (e.Key == Key.Enter)
+                searchBible();
+            else if (e.Key == Key.Escape)
+                closePopup();
+        }
+
+        private void EH_TextBoxKeyUp(object sender, KeyEventArgs e)
+        {
+            // KeyDown 시점에서 Popup으로 포커싱이 옮겨가면
+            // KeyUp이벤트가 Popup에서 발생하게 되어
+            // 의도하지 않은 동작이 발생할 수 있음.
+            // 이에 따라, KeyUp 시점에서 Popup으로 포커싱을 이동하도록 함.
+            if (e.Key == Key.Down)
+                openPopup();
+        }
+
+        private void EH_SearchButton_Click(object sender, RoutedEventArgs e)
+        {
+            searchBible();
+        }
+
+        private void openPopup()
+        {
+            if (ResultListBox.Items.Count > 0)
+                SearchResultPopup.IsOpen = true;
+        }
+
+        private void EH_SearchResultPopup_Opened(object sender, EventArgs e)
+        {
+            focusPopupInnerContent();
+        }
+
+        private void focusPopupInnerContent()
+        {
+            if (ResultListBox.SelectedIndex >= 0)
+                ((ListBoxItem)ResultListBox.ItemContainerGenerator.ContainerFromIndex(ResultListBox.SelectedIndex)).Focus();
+            else
+                ResultListBox.Focus();
+        }
+
+        private void EH_ListBoxItem_Selected(object sender, RoutedEventArgs e)
+        {
+            if (sender is ListBoxItem listboxitem)
+                if (!listboxitem.IsFocused)
+                    listboxitem.Focus();
+        }
+
+        private void initializePopupList()
+        {
+            if (ResultListBox.Items.Count > 0)
+                ResultListBox.ScrollIntoView(ResultListBox.Items[0]);
+        }
+
+        private void closePopup(bool forceRefresh = false)
+        {
+            SearchResultPopup.IsOpen = false;
+            SearchTextBox.Focus();
+            if (forceRefresh)
+                ResultListBox.GetBindingExpression(ListBox.SelectedItemProperty).UpdateSource();
+        }
+
+        private void searchBible()
+        {
+            CSearchBible.Execute(null);
+            if (SearchTextBox.Text == null || SearchTextBox.Text.Length < 1)
+                MessageBox.Show("검색 문구를 입력하세요!", "검색 문구가 짧아요", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        // ======================= 검색 결과 페이지 이동 =======================
+
+        private void EH_PrevPageButton_Click(object sender, RoutedEventArgs e)
+        {
+            CMoveToPrevPage.Execute(null);
+        }
+
+        private void EH_NextPageButton_Click(object sender, RoutedEventArgs e)
+        {
+            CMoveToNextPage.Execute(null);
+        }
+
+        private void EH_PageTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                ((TextBox)sender).GetBindingExpression(TextBox.TextProperty).UpdateSource();
+            if (e.Key == Key.Up)
+                closePopup();
+        }
+
+        private void EH_PageTextBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Down)
+                focusPopupInnerContent();
+            if (e.Key == Key.Escape)
+                closePopup();
+        }
+
+        // ======================= 페이지 이동 텍스트 힌트 표시 =======================
+
+        private void EH_PageTextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            PageMoveTextBoxHint.Visibility = Visibility.Hidden;
+        }
+
+        private void EH_PageTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (((TextBox)sender).Text == null || ((TextBox)sender).Text.Length == 0)
+                PageMoveTextBoxHint.Visibility = Visibility.Visible;
+            else
+                PageMoveTextBoxHint.Visibility = Visibility.Hidden;
+        }
+
+        // ======================= 검색 텍스트 힌트 표시 =======================
+
+        private void hideHint()
+        {
+            SearchTextBoxHint.Visibility = Visibility.Hidden;
+        }
+
+        private void EH_TextBoxLostFocus(object sender, RoutedEventArgs e)
+        {
+            if (SearchTextBox.Text == null || SearchTextBox.Text.Length == 0)
+                SearchTextBoxHint.Visibility = Visibility.Visible;
+            else
+                SearchTextBoxHint.Visibility = Visibility.Hidden;
+        }
+
+        // ======================= 자동 텍스트 전체선택 =======================
+
+        private void EH_TextBoxGotFocus(object sender, RoutedEventArgs e)
+        {
+            hideHint();
+            SearchTextBox.SelectAll();
+        }
+
+        private void EH_TextBoxClick(object sender, MouseButtonEventArgs e)
+        {
+            if (!SearchTextBox.IsFocused)
+            {
+                SearchTextBox.Focus();
+                e.Handled = true;
+            }
+        }
+
+        private void EH_TextBoxDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            SearchTextBox.SelectAll();
         }
     }
 }

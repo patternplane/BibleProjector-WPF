@@ -8,7 +8,6 @@ namespace BibleProjector_WPF.module
 {
     public class BibleSearcher : ISearcher
     {
-
         // 검색 맵
         struct BibleTitleInfo{
             public string fullName;
@@ -93,19 +92,28 @@ namespace BibleProjector_WPF.module
             new BibleTitleInfo("요한계시록","계",66)
         };
 
-        // 분석값들 및 단계
-        string title;
-        int chapter;
-        int verse;
-
-        const int SEARCH_DISTANCE_LIMIT = 1;
+        /// <summary>
+        /// 성경구절 검색 결과를 반환합니다.
+        /// <br/>검색 결과는 항상 0 이상의 항목을 가진 배열입니다.
+        /// </summary>
+        /// <param name="searchPhrase"></param>
+        /// <param name="ignoreBlank"></param>
+        /// <returns></returns>
+        public (string kjjeul, string content, (int startIdx, int lastIdx)[] pos)[] getSearchResultbyPhrase(string searchPhrase, bool ignoreBlank)
+        {
+            return Database.findBibleText(searchPhrase, !ignoreBlank);
+        }
+        
         public ICollection<SearchData> getSearchResult(string searchPrase)
         {
-            setSearchData(searchPrase);
-            return makeSearchResult();
+            string title;
+            int chapter;
+            int verse;
+            setSearchData(searchPrase, out title, out chapter, out verse);
+            return makeSearchResult(title, chapter, verse);
         }
 
-        void setSearchData(string searchPrase)
+        void setSearchData(string searchPrase, out string title, out int chapter, out int verse)
         {
             string[] prases = new BibleTitleSeparator().trimPrase(searchPrase);
 
@@ -126,7 +134,9 @@ namespace BibleProjector_WPF.module
                 }
         }
 
-        ICollection<SearchData> makeSearchResult()
+        const int SEARCH_DISTANCE_LIMIT = 1;
+
+        ICollection<SearchData> makeSearchResult(string title, int chapter, int verse)
         {
             LevenshteinDistance ld = new LevenshteinDistance();
             KorString ks = new KorString();
@@ -159,7 +169,7 @@ namespace BibleProjector_WPF.module
                 if (searchDis <= ((titleLen / 2.5) * SEARCH_DISTANCE_LIMIT))
                     result.Add(
                         new Data.BibleSearchData(
-                            new Data.BibleData(bibleTitles[i].titleNumber, this.chapter, this.verse)
+                            new Data.BibleData(bibleTitles[i].titleNumber, chapter, verse)
                             , isShort
                             , searchDis));
             }

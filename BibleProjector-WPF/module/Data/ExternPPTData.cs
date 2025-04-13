@@ -52,6 +52,16 @@ namespace BibleProjector_WPF.module.Data
 
         // ================ ShowData 메소드 ================
 
+        public override string getdisplayName(bool isModified)
+        {
+            return getTitle2();
+        }
+
+        public override string getPreviewContent()
+        {
+            return "";
+        }
+
         public override string getTitle1()
         {
             return "PPT";

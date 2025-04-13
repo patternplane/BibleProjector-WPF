@@ -63,6 +63,24 @@ namespace BibleProjector_WPF.module.Data
 
         // ================ ShowData 메소드 ================
 
+        public override string getdisplayName(bool isModified)
+        {
+            string displayName;
+
+            displayName = getBibleTitle();
+            if (chapter != -1)
+                displayName += $" {chapter}장 ";
+            if (verse != -1)
+                displayName += $"{verse}절";
+
+            return displayName;
+        }
+
+        public override string getPreviewContent()
+        {
+            return getBibleContent();
+        }
+
         public override string getTitle1()
         {
             return getBibleTitle();
