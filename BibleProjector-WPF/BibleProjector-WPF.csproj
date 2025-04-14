@@ -91,6 +91,7 @@
     <Compile Include="module\ExternPPTManager.cs" />
     <Compile Include="module\ExternPPTSearcher.cs" />
     <Compile Include="module\ISourceOfReserve.cs" />
+    <Compile Include="module\ProgramOption\SongFrameFile.cs" />
     <Compile Include="module\SaveDataTypeEnum.cs" />
     <Compile Include="module\SearchData.cs" />
     <Compile Include="module\Data\SongData.cs" />

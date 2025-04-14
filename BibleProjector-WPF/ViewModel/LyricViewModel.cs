@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 using BibleProjector_WPF.module.Infrastructure;
+using BibleProjector_WPF.module.ProgramOption;
 
 namespace BibleProjector_WPF.ViewModel
 {
@@ -302,11 +303,11 @@ namespace BibleProjector_WPF.ViewModel
         }
 
         // ppt 틀
-        public BindingList<module.SongFrameFile> SongFrameList { 
+        public BindingList<SongFrameFile> SongFrameList { 
             get { return module.ProgramOptionManager.SongFrameFiles; }
             set { }
         }
-        public module.SongFrameFile SongFrameSelection { get; set; }
+        public SongFrameFile SongFrameSelection { get; set; }
 
         // ============================================ 이벤트에 쓰일 함수 ==============================================
 
@@ -546,7 +547,7 @@ namespace BibleProjector_WPF.ViewModel
             OnPropertyChanged(nameof(isMultiLineDeleteButtonEnable));
         }
 
-        void ShowLyric(module.Data.SongData lyric, module.SongFrameFile FrameFile, int linePerSlide)
+        void ShowLyric(module.Data.SongData lyric, SongFrameFile FrameFile, int linePerSlide)
         {
             if (FrameFile == null)
                 MessageBox.Show("찬양 출력 틀ppt를 등록해주세요!", "ppt 틀 선택되지 않음", MessageBoxButton.OK, MessageBoxImage.Error);
