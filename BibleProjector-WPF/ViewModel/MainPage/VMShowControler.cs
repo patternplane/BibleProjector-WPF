@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 using BibleProjector_WPF.module.Infrastructure;
+using BibleProjector_WPF.module.ProgramOption;
 
 namespace BibleProjector_WPF.ViewModel.MainPage
 {
@@ -85,7 +86,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
             windowActivateChangedEventManager.windowActivateChanged += UIActiveChanged;
 
-            module.ProgramOptionManager.FrameDeletedEvent += FrameDeleted;
+            ProgramOptionManager.FrameDeletedEvent += FrameDeleted;
             showStarter.ShowStartEvent += startShow;
         }
 

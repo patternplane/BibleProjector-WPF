@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 using System.IO;
 using System.ComponentModel;
 using BibleProjector_WPF.module.Infrastructure;
-using BibleProjector_WPF.module.ProgramOption;
 
-namespace BibleProjector_WPF.module
+namespace BibleProjector_WPF.module.ProgramOption
 {
     class ProgramOptionManager
     {
@@ -81,7 +80,7 @@ namespace BibleProjector_WPF.module
         {
             for (int i = itemIndexes_sorted.Length - 1; i >= 0; i--)
             {
-                module.ProgramOptionManager.process_deleteSongFrame(SongFrameFiles[itemIndexes_sorted[i]]);
+                process_deleteSongFrame(SongFrameFiles[itemIndexes_sorted[i]]);
                 Powerpoint.Song.closeSingle(SongFrameFiles[itemIndexes_sorted[i]].Path);
                 SongFrameFiles.RemoveAt(itemIndexes_sorted[i]);
             }

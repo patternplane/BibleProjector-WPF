@@ -1,4 +1,5 @@
 ﻿using BibleProjector_WPF.module.Infrastructure;
+using BibleProjector_WPF.module.ProgramOption;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -93,7 +94,7 @@ namespace BibleProjector_WPF
             }
 
             loadingWindow.setLoadingState("설정값 불러오는 중...", 60);
-            string error = module.ProgramOptionManager.Initialize();
+            string error = ProgramOptionManager.Initialize();
             if (error != null)
                 System.Windows.MessageBox.Show
                     (
@@ -140,7 +141,7 @@ namespace BibleProjector_WPF
             ProgramData.SaveDataEvent += songMan.saveData_Hymn;
             ProgramData.SaveDataEvent += pptMan.saveData;
             ProgramData.SaveDataEvent += reserveDataManager.saveData;
-            ProgramData.SaveDataEvent += module.ProgramOptionManager.saveData;
+            ProgramData.SaveDataEvent += ProgramOptionManager.saveData;
 
             loadingWindow.setLoadingState("UI 로딩중...", 100);
             ViewModel.VMMainWindow mainViewModel = 
