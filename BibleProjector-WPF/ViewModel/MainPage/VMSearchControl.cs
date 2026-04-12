@@ -25,7 +25,8 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public ICommand CPopupHide { get; set; }
         public ICommand CLastestResultShow { get; set; }
         public ICommand CItemSelected { get; set; }
-        public ICommand CStartShow { get; set; }
+        public ICommand CStartShow { get; set; } // Preview 미리보기로 설정된 항목을 출력합니다.
+        public ICommand CStartShowSelection { get; set; } // Selection 검색 결과 선택 항목을 출력합니다.
         public ICommand CReserveThis { get; set; }
         public ICommand COpenEditor { get; set; }
         public ICommand COpenAdder { get; set; }
@@ -58,6 +59,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             CLastestResultShow = new RelayCommand(obj => PopupShow());
             CItemSelected = new RelayCommand(obj => ItemSelected((VMPreviewData)obj));
             CStartShow = new RelayCommand((obj) => StartShow());
+            CStartShowSelection = new RelayCommand(obj => StartShowSelectedItem());
             CReserveThis = new RelayCommand((obj) => ReserveThis());
             COpenEditor = new RelayCommand((obj) => OpenEditor());
             COpenAdder = new RelayCommand((obj) => OpenAdder());
@@ -163,12 +165,30 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             }
         }
 
+        /// <summary>
+        /// Preview 미리보기로 설정된 항목을 표시합니다.
+        /// </summary>
         void StartShow()
         {
             if (PreviewData == null)
                 return;
 
             showStarter.Show(PreviewData.getData());
+        }
+
+        /// <summary>
+        /// Selection 검색된 리스트에서 선택된 항목을 표시합니다.
+        /// </summary>
+        void StartShowSelectedItem()
+        {
+            // 선택값이 없는 경우 미실행
+            if (SelectionItem == null)
+                return;
+            // 유효하지 않은 값일 경우 미실행
+            if (!SelectionItem.getData().isAvailData())
+                return;
+
+            showStarter.Show(SelectionItem.getData());
         }
 
         void ReserveThis()
