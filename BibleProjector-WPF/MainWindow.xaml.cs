@@ -71,7 +71,7 @@ namespace BibleProjector_WPF
 
         private void setMinSize()
         {
-            double ratio = 0.8;
+            double ratio = 0.78;
 
             if (DEFALT_H / DEFALT_W > SystemParameters.PrimaryScreenHeight / SystemParameters.PrimaryScreenWidth)
             {
