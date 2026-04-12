@@ -27,6 +27,8 @@ namespace BibleProjector_WPF.View.MainPage
             this.SetBinding(ItemSelectedCommandProperty, new Binding("CItemSelected"));
             this.SetBinding(OpenEditorCommandProperty, new Binding("COpenEditor"));
             this.SetBinding(OpenAdderCommandProperty, new Binding("COpenAdder"));
+            this.SetBinding(SlideShowStartCommandProperty, new Binding("CStartShowSelection"));
+            
         }
 
         // ========== BindingProperties ==========
@@ -104,6 +106,18 @@ namespace BibleProjector_WPF.View.MainPage
             set => SetValue(OpenAdderCommandProperty, value);
         }
 
+        public static readonly DependencyProperty SlideShowStartCommandProperty =
+        DependencyProperty.Register(
+            name: "SlideShowStartCommand",
+            propertyType: typeof(ICommand),
+            ownerType: typeof(SearchView));
+
+        public ICommand SlideShowStartCommand
+        {
+            get => (ICommand)GetValue(SlideShowStartCommandProperty);
+            set => SetValue(SlideShowStartCommandProperty, value);
+        }
+
         // ========== EventHander ==========
 
         private void EHS_NewResult()
@@ -154,6 +168,8 @@ namespace BibleProjector_WPF.View.MainPage
             {
                 ((ICommand)CPopupHideProperty.GetValue(this.DataContext)).Execute(null);
                 SearchTextBox.Focus();
+                if (e.Key == Key.Enter)
+                    SlideShowStartCommand.Execute(null);
             }
             else if (e.Key == Key.Up
                 && currentSelectedIdx == 0)
