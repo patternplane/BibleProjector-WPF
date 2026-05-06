@@ -109,22 +109,27 @@
                                     DockPanel.Dock="Right"
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Top"
-                                    Width="50"
-                                    Content="➕"
-                                    FontSize="14"
+                                    Background="#00000000"
+                                    BorderThickness="0"
+                                    Width="25"
+                                    Content="📝"
+                                    FontSize="15"
                                     FontWeight="Bold"
-                                    BorderThickness="2"
+                                    OverridesDefaultStyle="True"
                                     Click="EH_Add_Button_Click">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border VerticalAlignment="Center" HorizontalAlignment="Center">
+                                                <ContentPresenter></ContentPresenter>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
                                     <Button.Style>
                                         <Style TargetType="Button">
-                                            <Setter Property="Background" Value="#22C5F76E"/>
-                                            <Setter Property="Foreground" Value="#22005504"/>
-                                            <Setter Property="BorderBrush" Value="#22005504"/>
+                                            <Setter Property="Foreground" Value="#FF222222"/>
                                             <Style.Triggers>
                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter Property="Background" Value="#FFC5F76E"/>
                                                     <Setter Property="Foreground" Value="#FF005504"/>
-                                                    <Setter Property="BorderBrush" Value="#FF005504"/>
                                                 </Trigger>
                                             </Style.Triggers>
                                         </Style>
@@ -134,24 +139,29 @@
                                     DockPanel.Dock="Right"
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Top"
-                                    Width="50"
-                                    Content="✏️"
+                                    Background="#00000000"
+                                    BorderThickness="0"
+                                    Width="25"
+                                    Content="🔧"
                                     FontFamily="Malgun Gothic"
-                                    FontSize="14"
+                                    FontSize="15"
                                     FontWeight="Bold"
-                                    BorderThickness="2"
+                                    OverridesDefaultStyle="True"
                                     Click="EH_Edit_Button_Click"
                                     Visibility="{Binding CanOpenEditor, Converter={StaticResource VisibilityConverter}}">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border VerticalAlignment="Center" HorizontalAlignment="Center">
+                                                <ContentPresenter></ContentPresenter>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
                                     <Button.Style>
                                         <Style TargetType="Button">
-                                            <Setter Property="Background" Value="#22F7BF6E"/>
-                                            <Setter Property="Foreground" Value="#22553600"/>
-                                            <Setter Property="BorderBrush" Value="#22633600"/>
+                                            <Setter Property="Foreground" Value="#FF222222"/>
                                             <Style.Triggers>
                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter Property="Background" Value="#FFF7BF6E"/>
-                                                    <Setter Property="Foreground" Value="#FF553600"/>
-                                                    <Setter Property="BorderBrush" Value="#FF633600"/>
+                                                    <Setter Property="Foreground" Value="#FFAE6F00"/>
                                                 </Trigger>
                                             </Style.Triggers>
                                         </Style>
