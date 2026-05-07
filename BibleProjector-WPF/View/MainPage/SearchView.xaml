@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:BibleProjector_WPF.View.MainPage"
              xmlns:rootns ="clr-namespace:BibleProjector_WPF"
              mc:Ignorable="d" 
-             Height="auto" Width="360">
+             Height="auto" Width="320">
     <UserControl.Resources>
         <local:VisibilityConverter x:Key="VisibilityConverter"/>
     </UserControl.Resources>

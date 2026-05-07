@@ -38,6 +38,7 @@
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
@@ -164,9 +165,30 @@
 
             <!--검색-->
             <ContentControl Grid.Column="2" Margin="5" Content="{Binding VM_SearchControl}"/>
+            
+            <!--추가 자료-->
+            <Border Grid.Column="3" Margin="5" Width="100">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="32"/>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Background="White" CornerRadius="8">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">기타 자료</TextBlock>
+                    </Border>
+
+                    <ListBox Grid.Row="2">
+                        <TextBox>hello</TextBox>
+                        <TextBox>hello</TextBox>
+                        <TextBox>hello</TextBox>
+                    </ListBox>
+                </Grid>
+            </Border>
 
             <!--예약 목록-->
-            <ContentControl Grid.Column="3" Margin="5" Content="{Binding VM_ReserveList}"/>
+            <ContentControl Grid.Column="4" Margin="5" Content="{Binding VM_ReserveList}"/>
         </Grid>
     </Grid>
 </UserControl>
