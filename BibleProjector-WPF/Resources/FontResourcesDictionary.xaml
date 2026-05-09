@@ -1,0 +1,8 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- 폰트 리소스 정의 -->
+    <FontFamily x:Key="FontAwesomeRegular">/Resources/fontawesome-free/otfs/#Font Awesome 7 Free</FontFamily>
+    <FontFamily x:Key="FontAwesomeSolid">/Resources/fontawesome-free/otfs/#Font Awesome 7 Free Solid</FontFamily>
+    <FontFamily x:Key="FontAwesomeBrands">/Resources/fontawesome-free/otfs/#Font Awesome 7 Brands</FontFamily>
+</ResourceDictionary>
