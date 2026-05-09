@@ -104,15 +104,16 @@
                     <Border Grid.Row="0" BorderBrush="LightGray" BorderThickness="0,0,0,1">
                         <Grid>
                             <TextBlock Margin="5,0,1,0" FontSize="15" Text="{Binding PreviewData.DisplayTitle}" VerticalAlignment="Center" FontWeight="Bold"/>
-                            <DockPanel>
+                            <DockPanel MinHeight="30">
                                 <Button Margin="3,3"
                                     DockPanel.Dock="Right"
                                     HorizontalAlignment="Right"
-                                    VerticalAlignment="Top"
+                                    VerticalAlignment="center"
                                     Background="#00000000"
                                     BorderThickness="0"
                                     Width="25"
-                                    Content="📝"
+                                    Content="&#xF31C;"
+                                    FontFamily="{StaticResource FontAwesomeSolid}"
                                     FontSize="15"
                                     FontWeight="Bold"
                                     OverridesDefaultStyle="True"
@@ -129,7 +130,7 @@
                                             <Setter Property="Foreground" Value="#FF222222"/>
                                             <Style.Triggers>
                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter Property="Foreground" Value="#FF005504"/>
+                                                    <Setter Property="Foreground" Value="#FF007606"/>
                                                 </Trigger>
                                             </Style.Triggers>
                                         </Style>
@@ -138,12 +139,12 @@
                                 <Button Margin="3,3"
                                     DockPanel.Dock="Right"
                                     HorizontalAlignment="Right"
-                                    VerticalAlignment="Top"
+                                    VerticalAlignment="Center"
                                     Background="#00000000"
                                     BorderThickness="0"
                                     Width="25"
-                                    Content="🔧"
-                                    FontFamily="Malgun Gothic"
+                                    Content="&#xF0AD;"
+                                    FontFamily="{StaticResource FontAwesomeSolid}"
                                     FontSize="15"
                                     FontWeight="Bold"
                                     OverridesDefaultStyle="True"

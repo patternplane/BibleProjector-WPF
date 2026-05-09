@@ -56,7 +56,7 @@
                         </Style>
                     </TextBox.Style>
                 </TextBox>
-                <Button Margin="3,3"
+                <Button Margin="9,3"
                     Background="#00000000"
                     BorderThickness="0"
                     FontSize="15"
