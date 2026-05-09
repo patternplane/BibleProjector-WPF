@@ -12,7 +12,7 @@
     <!--프로그램 세팅 후 진입 Startup="ProgramStart"-->
     
     <Application.Resources>
-        <ResourceDictionary Source="ViewMapDictionary.xaml"/>
+            <ResourceDictionary Source="/Resources/ViewMapDictionary.xaml"/>
     </Application.Resources>
 </Application>
     

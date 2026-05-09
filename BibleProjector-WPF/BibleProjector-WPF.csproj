@@ -198,9 +198,9 @@
     <Compile Include="ViewModel\ManualTabViewModel.cs" />
     <Compile Include="ViewModel\OptionViewModel.cs" />
     <Compile Include="ViewModel\LyricViewModel.cs" />
-    <Page Include="ViewMapDictionary.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Resources\ViewMapDictionary.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\BibleModifyWindow.xaml">
       <SubType>Designer</SubType>
