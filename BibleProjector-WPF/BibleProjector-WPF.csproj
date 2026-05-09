@@ -312,6 +312,9 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Resource Include="Resources\fontawesome-free\otfs\Font Awesome 7 Brands-Regular-400.otf" />
+    <Resource Include="Resources\fontawesome-free\otfs\Font Awesome 7 Free-Regular-400.otf" />
+    <Resource Include="Resources\fontawesome-free\otfs\Font Awesome 7 Free-Solid-900.otf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
