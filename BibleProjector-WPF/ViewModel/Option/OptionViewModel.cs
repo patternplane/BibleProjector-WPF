@@ -82,7 +82,7 @@ namespace BibleProjector_WPF.ViewModel.Option
                     return System.IO.Path.GetFileName(module.ProgramOption.ReadingFramePath) + " [" + module.ProgramOption.ReadingFramePath + "]";
             }
         }
-        public BindingList<module.SongFrameFile> SongFramePaths_List { get { return module.ProgramOption.SongFrameFiles; } set{}
+        public BindingList<VMSongFrameFile> SongFramePaths_List { get { return module.ProgramOption.SongFrameFiles; } set{}
      }
 
         // ========================================== 프로그램 세팅 ========================================== 

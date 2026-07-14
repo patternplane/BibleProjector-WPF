@@ -119,6 +119,7 @@
     <Compile Include="ViewModel\MainPage\VMShowControler.cs" />
     <Compile Include="ViewModel\MainPage\VMMain.cs" />
     <Compile Include="ViewModel\MainPage\VMShowItem.cs" />
+    <Compile Include="ViewModel\Option\VMSongFrameFile.cs" />
     <Compile Include="ViewModel\ViewModel.cs" />
     <Compile Include="ViewModel\VMMainWindow.cs" />
     <Compile Include="View\BibleModifyWindow.xaml.cs">
