@@ -118,6 +118,8 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         void ItemShowStart(VMReserveData data)
         {
+            if (data.Data is module.Data.SongData songData)
+                songData.pptFrameFullPath = null;
             showStarter.Show(data.Data);
         }
 

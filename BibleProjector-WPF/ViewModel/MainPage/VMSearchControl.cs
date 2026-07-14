@@ -173,6 +173,8 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             if (PreviewData == null)
                 return;
 
+            if (PreviewData.getData() is module.Data.SongData songData)
+                songData.pptFrameFullPath = null;
             showStarter.Show(PreviewData.getData());
         }
 
@@ -188,6 +190,8 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             if (!SelectionItem.getData().isAvailData())
                 return;
 
+            if (SelectionItem.getData() is module.Data.SongData songData)
+                songData.pptFrameFullPath = null;
             showStarter.Show(SelectionItem.getData());
         }
 
