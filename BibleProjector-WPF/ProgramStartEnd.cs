@@ -153,7 +153,7 @@ namespace BibleProjector_WPF
                             buttonVMs,
                             keyInputEventManager,
                             showStarter),
-                        new ViewModel.OptionViewModel(),
+                        new ViewModel.Option.OptionViewModel(),
                         new ViewModel.MainPage.VMOptionBar(),
                         new ViewModel.LyricViewModel(showStarter, songMan, reserveDataManager)),
                     keyInputEventManager,

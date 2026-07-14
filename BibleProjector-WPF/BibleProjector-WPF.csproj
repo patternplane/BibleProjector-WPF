@@ -196,7 +196,7 @@
     <Compile Include="UnitTester\Tester.cs" />
     <Compile Include="ViewModel\BibleModifyViewModel.cs" />
     <Compile Include="ViewModel\ManualTabViewModel.cs" />
-    <Compile Include="ViewModel\OptionViewModel.cs" />
+    <Compile Include="ViewModel\Option\OptionViewModel.cs" />
     <Compile Include="ViewModel\LyricViewModel.cs" />
     <Page Include="ViewMapDictionary.xaml">
       <SubType>Designer</SubType>

@@ -3,6 +3,7 @@
                     xmlns:root="clr-namespace:BibleProjector_WPF"
                     xmlns:vw_mp="clr-namespace:BibleProjector_WPF.View.MainPage"
                     xmlns:vm_mp="clr-namespace:BibleProjector_WPF.ViewModel.MainPage"
+                    xmlns:vm_op="clr-namespace:BibleProjector_WPF.ViewModel.Option"
                     xmlns:vm="clr-namespace:BibleProjector_WPF.ViewModel">
 
     <DataTemplate DataType="{x:Type vm_mp:VMMain}">
@@ -49,7 +50,7 @@
         <vw_mp:MainOption></vw_mp:MainOption>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type vm:OptionViewModel}">
+    <DataTemplate DataType="{x:Type vm_op:OptionViewModel}">
         <root:Option></root:Option>
     </DataTemplate>
 </ResourceDictionary>

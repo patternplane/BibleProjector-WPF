@@ -22,7 +22,7 @@ namespace BibleProjector_WPF
     {
 
         // ViewModel
-        ViewModel.OptionViewModel VM_Option { get { return (ViewModel.OptionViewModel)this.DataContext; } }
+        ViewModel.Option.OptionViewModel VM_Option { get { return (ViewModel.Option.OptionViewModel)this.DataContext; } }
 
         public Option()
         {
