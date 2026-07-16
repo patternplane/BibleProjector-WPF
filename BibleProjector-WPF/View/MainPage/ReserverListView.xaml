@@ -76,7 +76,24 @@
                             <!--우클릭 메뉴 ContextMenu-->
                             <Setter Property="ContextMenu">
                                 <Setter.Value>
-                                    <ContextMenu>
+                                    <ContextMenu 
+                                        rtype:SongFrameMenuGenerator.ItemsSource="{Binding SongFrameFilesSource}"
+                                        rtype:SongFrameMenuGenerator.BindingPath="FileName"
+                                        rtype:SongFrameMenuGenerator.StringFormat="출력: {0}"
+                                        rtype:SongFrameMenuGenerator.Command="{Binding CItemShowWithFrame}"
+                                        rtype:SongFrameMenuGenerator.InsertIndex="0">
+                                        <ContextMenu.Style>
+                                            <Style TargetType="ContextMenu">
+                                                <Setter Property="rtype:SongFrameMenuGenerator.IsEnabled" Value="False"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ContentType}" Value="{x:Static rtype:ShowContentType.Song}">
+                                                        <Setter Property="rtype:SongFrameMenuGenerator.IsEnabled" Value="True"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ContextMenu.Style>
+
+                                        <Separator/>
                                         <MenuItem Header="삭제">
                                             <MenuItem.Style>
                                                 <Style TargetType="MenuItem">

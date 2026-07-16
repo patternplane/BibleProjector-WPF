@@ -104,6 +104,7 @@
     <Compile Include="ShowContentType.cs" />
     <Compile Include="Event\BibleSelectionEventManager.cs" />
     <Compile Include="Event\KeyInputEventManager.cs" />
+    <Compile Include="SongFrameMenuGenerator.cs" />
     <Compile Include="ViewModel\MainPage\IVMPreviewData.cs" />
     <Compile Include="ViewModel\MainPage\VMBiblePhraseSearchData.cs" />
     <Compile Include="ViewModel\MainPage\VMBibleSeletion.cs" />
