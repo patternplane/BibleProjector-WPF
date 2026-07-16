@@ -25,6 +25,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public string DisplayTitle { get { return (isAdded ? "(추가됨) " : "") + (isModified ? "[수정됨] " : "") + data.getdisplayName(isModified); } }
         public string PreviewContent { get { return data.getPreviewContent(); } }
         public ShowContentType Type { get { return data.getData().getDataType(); } }
+        public bool isAvailable { get { return data.getData().isAvailData(); } }
 
         public BindingList<VMSongFrameFile> SongFrameFilesSource { get { return module.ProgramOption.SongFrameFiles; } }
 
