@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,9 +28,12 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public ICommand CItemSelected { get; set; }
         public ICommand CStartShow { get; set; } // Preview 미리보기로 설정된 항목을 출력합니다.
         public ICommand CStartShowSelection { get; set; } // Selection 검색 결과 선택 항목을 출력합니다.
+        public ICommand CStartShowByContextMenu_Preview { get; set; } // [미리보기] 우클릭 메뉴에서 항목을 출력합니다.
         public ICommand CReserveThis { get; set; }
         public ICommand COpenEditor { get; set; }
         public ICommand COpenAdder { get; set; }
+
+        public BindingList<Option.VMSongFrameFile> SongFrameFilesSource { get { return module.ProgramOption.SongFrameFiles; } }
 
         public VMModify VM_Modify { get; private set; }
         public VMLyricAdd VM_LyricAdd { get; private set; }
@@ -60,6 +64,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             CItemSelected = new RelayCommand(obj => ItemSelected((VMPreviewData)obj));
             CStartShow = new RelayCommand((obj) => StartShow());
             CStartShowSelection = new RelayCommand(obj => StartShowSelectedItem());
+            CStartShowByContextMenu_Preview = new RelayCommand(obj => StartShowByContextMenu_Preview((Option.VMSongFrameFile)obj));
             CReserveThis = new RelayCommand((obj) => ReserveThis());
             COpenEditor = new RelayCommand((obj) => OpenEditor());
             COpenAdder = new RelayCommand((obj) => OpenAdder());
@@ -193,6 +198,21 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             if (SelectionItem.getData() is module.Data.SongData songData)
                 songData.pptFrameFullPath = null;
             showStarter.Show(SelectionItem.getData());
+        }
+
+        /// <summary>
+        /// 우클릭 메뉴에서 틀을 선택해 항목을 표시합니다.
+        /// </summary>
+        /// <param name="frameFile"></param>
+        void StartShowByContextMenu_Preview(Option.VMSongFrameFile frameFile)
+        {
+            if (PreviewData == null)
+                return;
+            if (!(PreviewData.getData() is module.Data.SongData songData))
+                return;
+
+            songData.pptFrameFullPath = frameFile.Path;
+            showStarter.Show(songData);
         }
 
         void ReserveThis()

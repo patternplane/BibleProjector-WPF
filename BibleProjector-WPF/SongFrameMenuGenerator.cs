@@ -58,6 +58,18 @@ namespace BibleProjector_WPF
                     OnIsEnabledPropertyChanged));
 
         /// <summary>
+        /// 이 ContextMenu를 사용/사용하지 않음
+        /// </summary>
+        public static readonly DependencyProperty IsActivatedProperty =
+            DependencyProperty.RegisterAttached(
+                "IsActivated",
+                typeof(bool),
+                typeof(SongFrameMenuGenerator),
+                new PropertyMetadata(
+                    true,
+                    OnIsActivatedPropertyChanged));
+
+        /// <summary>
         /// Song Frame 목록을 표시할 인덱스
         /// </summary>
         public static readonly DependencyProperty InsertIndexProperty =
@@ -171,6 +183,19 @@ namespace BibleProjector_WPF
             return (bool)element.GetValue(IsEnabledProperty);
         }
 
+        public static void SetIsActivated(
+            DependencyObject element,
+            bool value)
+        {
+            element.SetValue(IsActivatedProperty, value);
+        }
+
+        public static bool GetIsActivated(
+            DependencyObject element)
+        {
+            return (bool)element.GetValue(IsActivatedProperty);
+        }
+
         public static void SetInsertIndex(
             DependencyObject element,
             int value)
@@ -261,6 +286,29 @@ namespace BibleProjector_WPF
                 removeCollectionBindingHandler(GetItemsSource(contextMenu), contextMenu);
                 RemoveGeneratedItems(contextMenu);
             }
+        }
+
+        private static void ContextMenuDeactivator(object sender, ContextMenuEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private static void OnIsActivatedPropertyChanged(
+            DependencyObject d,
+            DependencyPropertyChangedEventArgs e)
+        {
+            if (!(d is FrameworkElement owner))
+                return;
+            if (!(e.NewValue is bool isActivated))
+                return;
+
+            // 활성화
+            if (isActivated)
+                owner.ContextMenuOpening -= ContextMenuDeactivator;
+
+            // 비활성화
+            else
+                owner.ContextMenuOpening += ContextMenuDeactivator;
         }
 
         private static void OnBehaviorPropertyChanged(

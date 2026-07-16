@@ -184,6 +184,10 @@ namespace BibleProjector_WPF.View.MainPage
 
         private void ListBoxItem_MouseClick(object sender, MouseButtonEventArgs e)
         {
+            // 우클릭 메뉴 표시에 방해되지 않도록 입력 무시
+            if (e.ChangedButton == MouseButton.Right)
+                return;
+
             ((ICommand)CPopupHideProperty.GetValue(this.DataContext)).Execute(null);
             SearchTextBox.Focus();
         }

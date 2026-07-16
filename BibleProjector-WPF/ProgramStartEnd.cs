@@ -133,6 +133,7 @@ namespace BibleProjector_WPF
             showControlers[0] = new ViewModel.MainPage.VMShowControler(ShowContentType.Bible, showStarter, WACEventManager, bibleSelectionEventManager);
             showControlers[1] = new ViewModel.MainPage.VMShowControler(ShowContentType.Song, showStarter, WACEventManager);
             showControlers[2] = new ViewModel.MainPage.VMShowControler(ShowContentType.PPT, showStarter, WACEventManager);
+            ViewModel.MainPage.VMPreviewData.showStarter = showStarter;
             ViewModel.MainPage.VMReserveData.showStarter = showStarter;
 
             loadingWindow.setLoadingState("UI 로딩중...", 90);
