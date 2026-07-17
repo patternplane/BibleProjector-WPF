@@ -99,50 +99,46 @@
                 <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="1,1,0,1">
                     <Label Content="찬양곡 틀 :" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
                 </Border>
-                <ListBox Grid.Column="1" x:Name="SongFramePaths_ListBox" SelectionMode="Extended"
-                         ItemsSource="{Binding SongFramePaths_List}"
-                         KeyDown="SongFrameListBox_KeyDown">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="28"/>
+                        <RowDefinition Height="31"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-                            <StackPanel Orientation="Horizontal">
-                                <Border BorderThickness="1" BorderBrush="Black" Padding="2,2,2,2" VerticalAlignment="Center" Margin="0,0,5,0" >
-                                    <StackPanel Orientation="Horizontal">
-                                        <CheckBox Margin="0,0,5,0" Content="찬송가 틀" IsChecked="{Binding isHymnFrame}">
-                                            <CheckBox.Style>
-                                                <Style TargetType="CheckBox">
-                                                    <Style.Triggers>
-                                                        <Trigger Property="IsChecked" Value="True">
-                                                            <Setter Property="Foreground" Value="#FFE65858"/>
-                                                        </Trigger>
-                                                        <Trigger Property="IsChecked" Value="False">
-                                                            <Setter Property="Foreground" Value="Black"/>
-                                                        </Trigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </CheckBox.Style>
-                                        </CheckBox>
-                                        <CheckBox Content="CCM 틀" IsChecked="{Binding isCCMFrame}">
-                                            <CheckBox.Style>
-                                                <Style TargetType="CheckBox">
-                                                    <Style.Triggers>
-                                                        <Trigger Property="IsChecked" Value="True">
-                                                            <Setter Property="Foreground" Value="#FFE65858"/>
-                                                        </Trigger>
-                                                        <Trigger Property="IsChecked" Value="False">
-                                                            <Setter Property="Foreground" Value="Black"/>
-                                                        </Trigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </CheckBox.Style>
-                                        </CheckBox>
-                                    </StackPanel>
-                                </Border>
-                                <TextBlock VerticalAlignment="Center" Text="{Binding DisplayName}"></TextBlock>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                    <Border Grid.Row="0" BorderBrush="Gray" BorderThickness="0.5,1,1,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Content="CCM 기본:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"/>
+                            <ComboBox Grid.Column="1" Margin="0,1"
+                                ItemsSource="{Binding SongFramePaths_List}"
+                                SelectedItem="{Binding DefaultCCMFrame}"
+                                DisplayMemberPath="DisplayName"/>
+                        </Grid>
+                    </Border>
+
+                    <Border Grid.Row="1" BorderBrush="Gray" BorderThickness="0.5,1,1,3">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Content="찬송가 기본:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"/>
+                            <ComboBox Grid.Column="1" Margin="0,1"
+                            ItemsSource="{Binding SongFramePaths_List}"
+                            SelectedItem="{Binding DefaultHymnFrame}"
+                            DisplayMemberPath="DisplayName"/>
+                        </Grid>
+                    </Border>
+
+                    <ListBox Grid.Row="2" Grid.ColumnSpan="2" x:Name="SongFramePaths_ListBox" SelectionMode="Extended"
+                            ItemsSource="{Binding SongFramePaths_List}"
+                            DisplayMemberPath="DisplayName"
+                            KeyDown="SongFrameListBox_KeyDown"/>
+                </Grid>
                 <Grid Grid.Column="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>

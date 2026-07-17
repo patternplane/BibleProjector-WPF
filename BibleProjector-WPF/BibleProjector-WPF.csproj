@@ -104,6 +104,7 @@
     <Compile Include="ShowContentType.cs" />
     <Compile Include="Event\BibleSelectionEventManager.cs" />
     <Compile Include="Event\KeyInputEventManager.cs" />
+    <Compile Include="SongFrameMenuGenerator.cs" />
     <Compile Include="ViewModel\MainPage\IVMPreviewData.cs" />
     <Compile Include="ViewModel\MainPage\VMBiblePhraseSearchData.cs" />
     <Compile Include="ViewModel\MainPage\VMBibleSeletion.cs" />
@@ -119,6 +120,7 @@
     <Compile Include="ViewModel\MainPage\VMShowControler.cs" />
     <Compile Include="ViewModel\MainPage\VMMain.cs" />
     <Compile Include="ViewModel\MainPage\VMShowItem.cs" />
+    <Compile Include="ViewModel\Option\VMSongFrameFile.cs" />
     <Compile Include="ViewModel\ViewModel.cs" />
     <Compile Include="ViewModel\VMMainWindow.cs" />
     <Compile Include="View\BibleModifyWindow.xaml.cs">
@@ -196,7 +198,7 @@
     <Compile Include="UnitTester\Tester.cs" />
     <Compile Include="ViewModel\BibleModifyViewModel.cs" />
     <Compile Include="ViewModel\ManualTabViewModel.cs" />
-    <Compile Include="ViewModel\OptionViewModel.cs" />
+    <Compile Include="ViewModel\Option\OptionViewModel.cs" />
     <Compile Include="ViewModel\LyricViewModel.cs" />
     <Page Include="ViewMapDictionary.xaml">
       <SubType>Designer</SubType>

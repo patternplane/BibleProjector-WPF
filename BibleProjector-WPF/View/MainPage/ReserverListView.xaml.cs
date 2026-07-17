@@ -216,6 +216,11 @@ namespace BibleProjector_WPF.View.MainPage
          *                   Delete Process
          =======================================================*/
 
+        private void EH_ListBoxItem_Deletion(object sender, RoutedEventArgs e)
+        {
+            DeleteSelections();
+        }
+
         private void EH_ListBoxItem_PreviewKeyUp(object sender, KeyEventArgs e)
         {
             if(e.Key == Key.Delete)

@@ -73,6 +73,37 @@
                             <Setter Property="Margin" Value="0,0,0,2"/>
                             <Setter Property="Padding" Value="0"/>
                             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <!--우클릭 메뉴 ContextMenu-->
+                            <Setter Property="ContextMenu">
+                                <Setter.Value>
+                                    <ContextMenu 
+                                        rtype:SongFrameMenuGenerator.ItemsSource="{Binding SongFrameFilesSource}"
+                                        rtype:SongFrameMenuGenerator.BindingPath="FileName"
+                                        rtype:SongFrameMenuGenerator.StringFormat="출력: {0}"
+                                        rtype:SongFrameMenuGenerator.Command="{Binding CItemShowWithFrame}"
+                                        rtype:SongFrameMenuGenerator.InsertIndex="0">
+                                        <ContextMenu.Style>
+                                            <Style TargetType="ContextMenu">
+                                                <Setter Property="rtype:SongFrameMenuGenerator.IsEnabled" Value="False"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ContentType}" Value="{x:Static rtype:ShowContentType.Song}">
+                                                        <Setter Property="rtype:SongFrameMenuGenerator.IsEnabled" Value="True"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ContextMenu.Style>
+
+                                        <Separator/>
+                                        <MenuItem Header="삭제">
+                                            <MenuItem.Style>
+                                                <Style TargetType="MenuItem">
+                                                    <EventSetter Event="Click" Handler="EH_ListBoxItem_Deletion"/>
+                                                </Style>
+                                            </MenuItem.Style>
+                                        </MenuItem>
+                                    </ContextMenu>
+                                </Setter.Value>
+                            </Setter>
                             <EventSetter Event="RequestBringIntoView" Handler="EH_ListBoxItem_Focus_RequestBringIntoView"/>
                             <EventSetter Event="MouseMove" Handler="EH_GetMouseMove"/>
                             <EventSetter Event="PreviewMouseDown" Handler="EH_ItemDoubleClick_Trigger"/>

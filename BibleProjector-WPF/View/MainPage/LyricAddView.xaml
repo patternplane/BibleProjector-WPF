@@ -36,28 +36,60 @@
                             <StackPanel Orientation="Horizontal"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemContainerStyle>
-                        <Style TargetType="FrameworkElement">
-                            <Setter Property="Margin" Value="7,0,0,0"/>
-                        </Style>
-                    </ItemsControl.ItemContainerStyle>
-                    <Button
-                        Background="#FFC5EABF"
-                        BorderThickness="1"
+                    <!--Background="#FFC5EABF" 기존 버튼 배경 - 초록-->
+                    <Button Margin="4,3"
+                        Background="#00000000"
+                        BorderThickness="0"
                         BorderBrush="DarkGreen"
                         FontSize="15"
                         FontWeight="Bold"
-                        Foreground="Green"
-                        Content="➕"
-                        Click="EH_AddButton_Click"/>
-                    <Button
+                        Content="💾"
+                        Click="EH_AddButton_Click"
+                        OverridesDefaultStyle="True">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <ContentPresenter></ContentPresenter>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Foreground" Value="#FF222222"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Foreground" Value="Green"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <Button Margin="4,3"
                         Background="#00000000"
                         BorderThickness="0"
-                        FontSize="15"
+                        FontSize="13"
                         FontWeight="Bold"
-                        Foreground="Red"
                         Content="❌"
-                        Click="EH_CloseButton_Click"/>
+                        Click="EH_CloseButton_Click"
+                        OverridesDefaultStyle="True">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <ContentPresenter></ContentPresenter>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Foreground" Value="#FF222222"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Foreground" Value="Red"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
                 </ItemsControl>
             </Grid>
         </Border>

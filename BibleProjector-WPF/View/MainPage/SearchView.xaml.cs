@@ -28,7 +28,8 @@ namespace BibleProjector_WPF.View.MainPage
             this.SetBinding(OpenEditorCommandProperty, new Binding("COpenEditor"));
             this.SetBinding(OpenAdderCommandProperty, new Binding("COpenAdder"));
             this.SetBinding(SlideShowStartCommandProperty, new Binding("CStartShowSelection"));
-            
+            this.SetBinding(ReserveThisCommandProperty, new Binding("CReserveThis"));
+
         }
 
         // ========== BindingProperties ==========
@@ -118,6 +119,18 @@ namespace BibleProjector_WPF.View.MainPage
             set => SetValue(SlideShowStartCommandProperty, value);
         }
 
+        public static readonly DependencyProperty ReserveThisCommandProperty =
+        DependencyProperty.Register(
+            name: "ReserveThisCommand",
+            propertyType: typeof(ICommand),
+            ownerType: typeof(SearchView));
+
+        public ICommand ReserveThisCommand
+        {
+            get => (ICommand)GetValue(ReserveThisCommandProperty);
+            set => SetValue(ReserveThisCommandProperty, value);
+        }
+
         // ========== EventHander ==========
 
         private void EHS_NewResult()
@@ -184,8 +197,17 @@ namespace BibleProjector_WPF.View.MainPage
 
         private void ListBoxItem_MouseClick(object sender, MouseButtonEventArgs e)
         {
+            // 우클릭 메뉴 표시에 방해되지 않도록 입력 무시
+            if (e.ChangedButton == MouseButton.Right)
+                return;
+
             ((ICommand)CPopupHideProperty.GetValue(this.DataContext)).Execute(null);
             SearchTextBox.Focus();
+        }
+
+        private void EH_ListBoxItemMenu_Reserve(object sender, RoutedEventArgs e)
+        {
+            ReserveThisCommand.Execute(null);
         }
 
         private void EH_SearchButtonClick(object sender, MouseButtonEventArgs e)

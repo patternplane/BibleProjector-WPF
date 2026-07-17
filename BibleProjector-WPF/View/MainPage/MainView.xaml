@@ -26,7 +26,8 @@
             </TabItem>
 
             <!--자료 수정 페이지-->
-            <TabItem Header="자료 수정">
+            <!-- 26.07.17 더 이상 사용되지 않는 기능으로 폐기 -->
+            <!--<TabItem Header="자료 수정">
                 <Canvas Height="800" Width="1200" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Border Canvas.Left="80" Canvas.Top="80"
                             Padding="15" BorderBrush="gray" BorderThickness="1" HorizontalAlignment="Left" VerticalAlignment="Top">
@@ -35,7 +36,7 @@
                         </Viewbox>
                     </Border>
                 </Canvas>
-            </TabItem>
+            </TabItem>-->
             
             <!--설정 페이지-->
             <TabItem Header="설정">

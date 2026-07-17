@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using System.ComponentModel;
 
-namespace BibleProjector_WPF.ViewModel
+namespace BibleProjector_WPF.ViewModel.Option
 {
     public class OptionViewModel : ViewModel
     {
@@ -82,8 +82,28 @@ namespace BibleProjector_WPF.ViewModel
                     return System.IO.Path.GetFileName(module.ProgramOption.ReadingFramePath) + " [" + module.ProgramOption.ReadingFramePath + "]";
             }
         }
-        public BindingList<module.SongFrameFile> SongFramePaths_List { get { return module.ProgramOption.SongFrameFiles; } set{}
+        public BindingList<VMSongFrameFile> SongFramePaths_List { get { return module.ProgramOption.SongFrameFiles; } set{}
      }
+
+        public VMSongFrameFile DefaultCCMFrame
+        {
+            get { return module.ProgramOption.DefaultCCMFrame; }
+            set
+            {
+                if (value != null)
+                    value.isCCMFrame = true;
+            }
+        }
+
+        public VMSongFrameFile DefaultHymnFrame
+        {
+            get { return module.ProgramOption.DefaultHymnFrame; }
+            set
+            {
+                if (value != null)
+                    value.isHymnFrame = true;
+            }
+        }
 
         // ========================================== 프로그램 세팅 ========================================== 
 

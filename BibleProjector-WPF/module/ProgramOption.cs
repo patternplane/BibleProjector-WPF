@@ -9,49 +9,6 @@ using System.ComponentModel;
 
 namespace BibleProjector_WPF.module
 {
-    public class SongFrameFile : ViewModel.ViewModel
-    {
-        public string DisplayName
-        {
-            get 
-            { 
-                return FileName + " [" + Path + "]";
-            }
-        }
-        public string Path { get; set; }
-        public string FileName { get; set; }
-        bool _isCCMFrame;
-        public bool isCCMFrame
-        {
-            get { return _isCCMFrame; }
-            set
-            {
-                _isCCMFrame = value;
-                ProgramOption.setThisFrameToCCM(this,value);
-                OnPropertyChanged("isCCMFrame");
-            }
-        }
-        bool _isHymnFrame;
-        public bool isHymnFrame
-        {
-            get { return _isHymnFrame; }
-            set
-            {
-                _isHymnFrame = value;
-                ProgramOption.setThisFrameToHymn(this,value);
-                OnPropertyChanged("isHymnFrame");
-            }
-        }
-
-        public SongFrameFile(string path, bool isCCM = false, bool isHymn = false)
-        {
-            this.Path = path;
-            this.FileName = System.IO.Path.GetFileName(path);
-            this.isCCMFrame = isCCM;
-            this.isHymnFrame = isHymn;
-        }
-    }
-
     class ProgramOption
     {
 
@@ -69,12 +26,12 @@ namespace BibleProjector_WPF.module
         static public string BibleFramePath { get { return _BibleFramePath; } set { _BibleFramePath = value; saveData(false); } }
         static public string _ReadingFramePath = null;
         static public string ReadingFramePath { get { return _ReadingFramePath; } set { _ReadingFramePath = value; saveData(false); } }
-        static public BindingList<SongFrameFile> SongFrameFiles { get; set; } = new BindingList<SongFrameFile>();
+        static public BindingList<ViewModel.Option.VMSongFrameFile> SongFrameFiles { get; set; } = new BindingList<ViewModel.Option.VMSongFrameFile>();
 
-        static public SongFrameFile _DefaultCCMFrame = null;
-        static public SongFrameFile DefaultCCMFrame { get { return _DefaultCCMFrame; } set { _DefaultCCMFrame = value; saveData(false); } }
-        static public SongFrameFile _DefaultHymnFrame = null;
-        static public SongFrameFile DefaultHymnFrame { get { return _DefaultHymnFrame; } set { _DefaultHymnFrame = value; saveData(false); } }
+        static public ViewModel.Option.VMSongFrameFile _DefaultCCMFrame = null;
+        static public ViewModel.Option.VMSongFrameFile DefaultCCMFrame { get { return _DefaultCCMFrame; } set { _DefaultCCMFrame = value; saveData(false); } }
+        static public ViewModel.Option.VMSongFrameFile _DefaultHymnFrame = null;
+        static public ViewModel.Option.VMSongFrameFile DefaultHymnFrame { get { return _DefaultHymnFrame; } set { _DefaultHymnFrame = value; saveData(false); } }
 
         // ======================================= PPT 틀 관리 관련 =======================================
 
@@ -85,7 +42,7 @@ namespace BibleProjector_WPF.module
                 return false;
             if (ReadingFramePath != null && Path.GetFileName(ReadingFramePath).CompareTo(fileName) == 0)
                 return false;
-            foreach (SongFrameFile f in SongFrameFiles)
+            foreach (ViewModel.Option.VMSongFrameFile f in SongFrameFiles)
                 if (f.FileName.CompareTo(fileName) == 0)
                     return false;
 
@@ -112,7 +69,7 @@ namespace BibleProjector_WPF.module
 
         static public void setSongFrameFile(string newFilePath, bool isCCM = false, bool isHymn = false)
         {
-            SongFrameFiles.Add(new SongFrameFile(newFilePath, isCCM, isHymn));
+            SongFrameFiles.Add(new ViewModel.Option.VMSongFrameFile(newFilePath, isCCM, isHymn));
             Powerpoint.Song.setPresentation(newFilePath);
 
             saveData(false);
@@ -134,7 +91,7 @@ namespace BibleProjector_WPF.module
 
         static public bool canExcutableSongFrame(string frameFilePath)
         {
-            foreach (SongFrameFile f in SongFrameFiles)
+            foreach (ViewModel.Option.VMSongFrameFile f in SongFrameFiles)
                 if (f.Path.CompareTo(frameFilePath) == 0)
                     return true;
             return false;
@@ -144,7 +101,7 @@ namespace BibleProjector_WPF.module
 
         static public event Event.FrameDeletedEventHandler FrameDeletedEvent;
 
-        static public void process_deleteSongFrame(SongFrameFile item)
+        static public void process_deleteSongFrame(ViewModel.Option.VMSongFrameFile item)
         {
             if (item.isCCMFrame)
                 DefaultCCMFrame = null;
@@ -156,11 +113,11 @@ namespace BibleProjector_WPF.module
 
         // ======================================= 찬양PPT틀 선택가능 판단 =======================================
 
-        static public void setThisFrameToCCM(SongFrameFile thisFrame, bool value)
+        static public void setThisFrameToCCM(ViewModel.Option.VMSongFrameFile thisFrame, bool value)
         {
             if (value)
             {
-                foreach (SongFrameFile file in SongFrameFiles)
+                foreach (ViewModel.Option.VMSongFrameFile file in SongFrameFiles)
                     if (file != thisFrame && file.isCCMFrame)
                         file.isCCMFrame = false;
 
@@ -171,11 +128,11 @@ namespace BibleProjector_WPF.module
                     DefaultCCMFrame = null;
         }
 
-        static public void setThisFrameToHymn(SongFrameFile thisFrame, bool value)
+        static public void setThisFrameToHymn(ViewModel.Option.VMSongFrameFile thisFrame, bool value)
         {
             if (value)
             {
-                foreach (SongFrameFile file in SongFrameFiles)
+                foreach (ViewModel.Option.VMSongFrameFile file in SongFrameFiles)
                     if (file != thisFrame && file.isHymnFrame)
                         file.isHymnFrame = false;
 
@@ -297,7 +254,7 @@ namespace BibleProjector_WPF.module
             str.Append(BibleFramePath);
             str.Append(SEPARATOR);
             str.Append(ReadingFramePath);
-            foreach (SongFrameFile f in SongFrameFiles)
+            foreach (ViewModel.Option.VMSongFrameFile f in SongFrameFiles)
             {
                 str.Append(SEPARATOR);
                 str.Append((f.isCCMFrame ? IS_CCM_FRAME : 0) | (f.isHymnFrame ? IS_HYMN_FRAME : 0));
