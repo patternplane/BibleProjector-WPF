@@ -47,6 +47,13 @@ namespace BibleProjector_WPF.module
         static private int MakeTable(string sample, StringCompare compareFunc)
         {
             int len = sample.Length;
+            /*
+             * 26.07.17
+             * 패턴이 빈 문자열일 경우, 찾지 못하는 것으로 간주합니다.
+             */
+            if (len == 0)
+                return -1;
+
             patternTable = new int[len];
 
             int setter = 0;
