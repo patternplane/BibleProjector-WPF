@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -91,7 +92,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         void SearchStart()
         {
             if (SearchText == null
-                || SearchText.Length < 1)
+                || Regex.Replace(SearchText, "\\s", "").Length < 1)
             {
                 PopupHide();
                 return;
