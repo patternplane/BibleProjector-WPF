@@ -21,7 +21,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public VMPreviewData SelectionItem { get { return _SelectionItem; } set { _SelectionItem = value; OnPropertyChanged("SelectionItem"); } }
 
         public IVMPreviewData PreviewData { get; private set; }
-        private VMPreviewData defaultPreviewDataFrame = new VMPreviewData(null);
+        private VMPreviewData defaultPreviewDataFrame;
 
         public ICommand CSearchStart { get; set; }
         public ICommand CPopupHide { get; set; }
@@ -31,10 +31,25 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public ICommand CStartShowSelection { get; set; } // Selection 검색 결과 선택 항목을 출력합니다.
         public ICommand CStartShowByContextMenu_Preview { get; set; } // [미리보기] 우클릭 메뉴에서 항목을 출력합니다.
         public ICommand CReserveThis { get; set; }
+        public ICommand CReserveThisWithFrame { get; set; }
         public ICommand COpenEditor { get; set; }
         public ICommand COpenAdder { get; set; }
 
         public BindingList<Option.VMSongFrameFile> SongFrameFilesSource { get { return module.ProgramOption.SongFrameFiles; } }
+        public Option.VMSongFrameFile SongFrameFileDefault
+        {
+            get
+            {
+                if (PreviewData?.Type != ShowContentType.Song)
+                    return null;
+                module.Data.SongDataTypeEnum type = ((module.Data.SongData)PreviewData.getData()).songType;
+                if (type == module.Data.SongDataTypeEnum.CCM)
+                    return module.ProgramOption.DefaultCCMFrame;
+                if (type == module.Data.SongDataTypeEnum.HYMN)
+                    return module.ProgramOption.DefaultHymnFrame;
+                return null;
+            }
+        }
 
         public VMModify VM_Modify { get; private set; }
         public VMLyricAdd VM_LyricAdd { get; private set; }
@@ -67,8 +82,11 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             CStartShowSelection = new RelayCommand(obj => StartShowSelectedItem());
             CStartShowByContextMenu_Preview = new RelayCommand(obj => StartShowByContextMenu_Preview((Option.VMSongFrameFile)obj));
             CReserveThis = new RelayCommand((obj) => ReserveThis());
+            CReserveThisWithFrame = new RelayCommand((obj) => ReserveThisWithFrame((Option.VMSongFrameFile)obj));
             COpenEditor = new RelayCommand((obj) => OpenEditor());
             COpenAdder = new RelayCommand((obj) => OpenAdder());
+
+            this.defaultPreviewDataFrame = new VMPreviewData(null, CReserveThisWithFrame);
 
             this.searcher = searcher;
             this.reserveManager = reserveManager;
@@ -101,9 +119,9 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             ObservableCollection<VMPreviewData> newResults = new ObservableCollection<VMPreviewData>();
 
             foreach (module.SearchData data in searcher.getSearchResult(SearchText))
-                newResults.Add(new VMPreviewData(data));
+                newResults.Add(new VMPreviewData(data, CReserveThisWithFrame));
 
-            this.SearchResultList = newResults; 
+        this.SearchResultList = newResults; 
             OnPropertyChanged("SearchResultList");
 
             if (SearchResultList.Count > 0)
@@ -221,7 +239,17 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             if (PreviewData == null)
                 return;
 
-            reserveManager.AddReserveItem(this, PreviewData.getData());
+            reserveManager.AddReserveItem(this, new module.Data.ReserveData(PreviewData.getData(), null));
+        }
+
+        void ReserveThisWithFrame(Option.VMSongFrameFile frameFile)
+        {
+            if (PreviewData == null)
+                return;
+            if (!(PreviewData.getData() is module.Data.SongData songData))
+                return;
+
+            reserveManager.AddReserveItem(this, new module.Data.ReserveData(PreviewData.getData(), frameFile));
         }
 
         private void OpenEditor()

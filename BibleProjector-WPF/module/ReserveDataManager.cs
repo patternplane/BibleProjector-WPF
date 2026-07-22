@@ -8,9 +8,9 @@ namespace BibleProjector_WPF.module
 {
     public class ReserveDataManager
     {
-        List<Data.ShowData> reserveList = new List<Data.ShowData>();
+        List<Data.ReserveData> reserveList = new List<Data.ReserveData>();
 
-        public Data.ShowData[] getReserveList()
+        public Data.ReserveData[] getReserveList()
         {
             return reserveList.ToArray();
         }
@@ -76,8 +76,9 @@ namespace BibleProjector_WPF.module
             StringBuilder str = new StringBuilder(50);
             int type;
             int saveData;
-            foreach (Data.ShowData item in reserveList)
+            foreach (Data.ReserveData reserveData in reserveList)
             {
+                Data.ShowData item = reserveData.data;
                 type = -1;
                 saveData = -1;
                 if (item.getDataType() == ShowContentType.Bible)
@@ -116,9 +117,14 @@ namespace BibleProjector_WPF.module
 
         public void AddReserveItem(object sender, Data.ShowData data)
         {
+            AddReserveItem(sender, new Data.ReserveData(data, null));
+        }
+
+        public void AddReserveItem(object sender, Data.ReserveData data)
+        {
             reserveList.Add(data);
 
-            ListChangedEvent?.Invoke(sender, new Event.ReserveListChangedEventArgs(new Data.ShowData[] { data }));
+            ListChangedEvent?.Invoke(sender, new Event.ReserveListChangedEventArgs(new Data.ReserveData[] { data }));
             saveData(false);
         }
 
@@ -163,7 +169,7 @@ namespace BibleProjector_WPF.module
                     || lastest <= dataIdxs[i])
                     throw new Exception("예약항목 이동 정보가 올바르지 않음");
 
-            Data.ShowData[] moveitems = new Data.ShowData[dataIdxs.Length];
+            Data.ReserveData[] moveitems = new Data.ReserveData[dataIdxs.Length];
             for (int i = 0; i < dataIdxs.Length; i++)
                 moveitems[i] = reserveList[dataIdxs[i]];
             deleteItems(dataIdxs);

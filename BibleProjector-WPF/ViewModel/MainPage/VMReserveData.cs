@@ -50,22 +50,23 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 
         string title;
 
-        private VMReserveData(string title, module.Data.ShowData data, ReserveViewType type)
+        private VMReserveData(string title, module.Data.ShowData data, ReserveViewType type, VMSongFrameFile songFrame)
         {
             this.title = title;
             this.Data = data;
             this.ViewType = type;
+            this.SelectedSongFramePath = songFrame;
 
             updateDisplayTitle();
         }
 
         public VMReserveData(string title, ReserveViewType type)
-            : this(title, null, type)
+            : this(title, null, type, null)
         { 
         }
 
-        public VMReserveData(module.Data.ShowData data, ReserveViewType type = ReserveViewType.NormalItem)
-            : this(data.getTitle1() + " " + data.getTitle2(), data, type)
+        public VMReserveData(module.Data.ShowData data, ReserveViewType type = ReserveViewType.NormalItem, VMSongFrameFile songFrame = null)
+            : this(data.getTitle1() + " " + data.getTitle2(), data, type, songFrame)
         {
         }
 

@@ -205,11 +205,6 @@ namespace BibleProjector_WPF.View.MainPage
             SearchTextBox.Focus();
         }
 
-        private void EH_ListBoxItemMenu_Reserve(object sender, RoutedEventArgs e)
-        {
-            ReserveThisCommand.Execute(null);
-        }
-
         private void EH_SearchButtonClick(object sender, MouseButtonEventArgs e)
         {
             EHS_NewResult();

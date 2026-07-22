@@ -516,25 +516,12 @@ namespace BibleProjector_WPF
 
         private static void SetStringFormatOfMenu(ContextMenu contextMenu, MenuItem menuItem, object defaultValue)
         {
-            string valuePath = GetValuePath(contextMenu);
-            if (defaultValue == null || valuePath == null)
-                return;
-
-            // 기본값 조회
-            PropertyInfo propertyOfDefault = defaultValue.GetType().GetProperty(valuePath);
-            string defaultPathValue = (string)propertyOfDefault?.GetValue(defaultValue);
-
-            // MenuItem 값 조회
-            var dataContext = menuItem.DataContext;
-            PropertyInfo property = dataContext.GetType().GetProperty(valuePath);
-            string itemPathValue = (string)property?.GetValue(dataContext);
+            string stringFormat = GetStringFormat(contextMenu);
+            menuItem.HeaderStringFormat = stringFormat;
 
             // 두 값이 동일할 경우에만 변형포맷 적용
-            string stringFormat = GetStringFormat(contextMenu);
-            if (Equals(defaultPathValue, itemPathValue))
+            if (defaultValue != null && Equals(defaultValue, menuItem.DataContext))
                 menuItem.HeaderStringFormat = "(기본값) " + (string.IsNullOrEmpty(stringFormat) ? "{0}" : stringFormat);
-            else
-                menuItem.HeaderStringFormat = string.IsNullOrEmpty(stringFormat) ? "{0}" : stringFormat;
         }
 
         /// <summary>
@@ -618,7 +605,6 @@ namespace BibleProjector_WPF
         {
             var bindingPath = GetBindingPath(contextMenu);
             var valuePath = GetValuePath(contextMenu);
-            var stringFormat = GetStringFormat(contextMenu);
 
             MenuItem menuItem = new MenuItem{ DataContext = sourceItem };
 
@@ -627,7 +613,6 @@ namespace BibleProjector_WPF
                 menuItem.Header = sourceItem;
             else
             {
-                menuItem.HeaderStringFormat = stringFormat;
                 var headerBinding = new Binding
                 {
                     Path = new PropertyPath(bindingPath),
@@ -638,13 +623,14 @@ namespace BibleProjector_WPF
                     menuItem,
                     HeaderedItemsControl.HeaderProperty,
                     headerBinding);
+
+                object defaultValue = GetDefaultValue(contextMenu);
+                SetStringFormatOfMenu(contextMenu, menuItem, defaultValue);
             }
 
             // 곡 경로 선택 기능 바인딩
             if (!string.IsNullOrWhiteSpace(valuePath))
             {
-                object defaultValue = GetDefaultValue(contextMenu);
-                SetStringFormatOfMenu(contextMenu, menuItem, defaultValue);
                 menuItem.IsCheckable = true;
                 menuItem.IsChecked = Equals(menuItem.DataContext, GetSelectedSongPath(contextMenu));
                 menuItem.Checked += OnMenuItemSelected;

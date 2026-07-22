@@ -77,6 +77,7 @@
     <Compile Include="module\BibleDataManager.cs" />
     <Compile Include="module\Data\BibleData.cs" />
     <Compile Include="module\Data\BibleSearchData.cs" />
+    <Compile Include="module\Data\ReserveData.cs" />
     <Compile Include="module\Data\ExternPPTData.cs" />
     <Compile Include="module\Data\ExternPPTSearchData.cs" />
     <Compile Include="module\Data\IPreviewData.cs" />
