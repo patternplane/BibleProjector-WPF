@@ -48,7 +48,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             ReserveContents.Add(dropPreviewItem);
             ReserveContents.Add(dragPreviewItem);
             foreach (module.Data.ReserveData item in reserveDataManager.getReserveList())
-                ReserveContents.Add(new VMReserveData(item.data, songFrame: item.songFrame));
+                ReserveContents.Add(new VMReserveData(item.data, songFrame: item.songFrame) { reserveData = item });
         }
 
         void OnReserveDataUpdated(object sender, Event.ReserveListChangedEventArgs e)
@@ -57,7 +57,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             {
                 if (e.updateType == Event.ReserveListUpdateType.Add)
                     foreach (module.Data.ReserveData data in (module.Data.ReserveData[])e.updatedObjects)
-                        ReserveContents.Add(new VMReserveData(data.data, songFrame: data.songFrame) { MyIdx = ReserveContents .Count - 1});
+                        ReserveContents.Add(new VMReserveData(data.data, songFrame: data.songFrame) { MyIdx = ReserveContents.Count - 1, reserveData = data });
                 else if (e.updateType == Event.ReserveListUpdateType.Delete)
                 {
                     int dragPreviewIdx = ReserveContents.IndexOf(dragPreviewItem);

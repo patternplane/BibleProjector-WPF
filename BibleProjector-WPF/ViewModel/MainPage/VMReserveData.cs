@@ -31,7 +31,8 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public module.Data.ShowData Data;
         public ShowContentType? ContentType { get { return Data?.getDataType(); } }
 
-        public VMSongFrameFile SelectedSongFramePath { get; set; }
+        public module.Data.ReserveData reserveData;
+        public VMSongFrameFile SelectedSongFramePath { get { return reserveData?.songFrame; } set { if (reserveData != null) reserveData.songFrame = value; } }
 
         public BindingList<VMSongFrameFile> SongFrameFilesSource { get { return module.ProgramOption.SongFrameFiles; } }
         public VMSongFrameFile SongFrameFileDefault
