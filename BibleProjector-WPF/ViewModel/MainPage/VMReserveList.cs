@@ -62,7 +62,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
                 {
                     int dragPreviewIdx = ReserveContents.IndexOf(dragPreviewItem);
                     int dropPreviewIdx = ReserveContents.IndexOf(dropPreviewItem);
-                    
+
                     foreach (int itemIdx in (int[])e.updatedObjects)
                         ReserveContents.RemoveAt(itemIdx + (dragPreviewIdx < itemIdx ? 1 : 0) + (dropPreviewIdx < itemIdx ? 1 : 0));
                 }
@@ -119,7 +119,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         void ItemShowStart(VMReserveData data)
         {
             if (data.Data is module.Data.SongData songData)
-                songData.pptFrameFullPath = null;
+                songData.pptFrameFullPath = data.SelectedSongFramePath?.Path;
             showStarter.Show(data.Data);
         }
 

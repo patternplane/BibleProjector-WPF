@@ -11,6 +11,7 @@ using System.Windows.Data;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Windows.Input;
+using System.Reflection;
 
 namespace BibleProjector_WPF
 {
@@ -94,6 +95,18 @@ namespace BibleProjector_WPF
                     OnItemsSourceChanged));
 
         /// <summary>
+        /// 기본 Song Frame 값
+        /// </summary>
+        public static readonly DependencyProperty DefaultValueProperty =
+            DependencyProperty.RegisterAttached(
+                "DefaultValue",
+                typeof(object),
+                typeof(SongFrameMenuGenerator),
+                new PropertyMetadata(
+                    null,
+                    OnDefaultValueChanged));
+
+        /// <summary>
         /// 메뉴 클릭시 응답할 커맨드
         /// </summary>
         public static readonly DependencyProperty CommandProperty =
@@ -128,6 +141,28 @@ namespace BibleProjector_WPF
                 new PropertyMetadata(
                     null,
                     OnBehaviorPropertyChanged));
+
+        /// <summary>
+        /// 파일경로와 바인딩하는 바인딩 경로
+        /// </summary>
+        public static readonly DependencyProperty ValuePathProperty =
+            DependencyProperty.RegisterAttached(
+                "ValuePath", 
+                typeof(string), 
+                typeof(SongFrameMenuGenerator),
+                new PropertyMetadata(
+                    null, 
+                    OnBehaviorPropertyChanged));
+
+        /// <summary>
+        /// 현재 선택된 경로
+        /// </summary>
+        public static readonly DependencyProperty SelectedSongPathProperty =
+            DependencyProperty.RegisterAttached(
+                "SelectedSongPath", 
+                typeof(object), 
+                typeof(SongFrameMenuGenerator),
+                new PropertyMetadata(null));
 
         // =================== Getter Setter =================== 
 
@@ -216,6 +251,19 @@ namespace BibleProjector_WPF
             element.SetValue(ItemsSourceProperty, value);
         }
 
+        public static void SetDefaultValue(
+            DependencyObject element,
+            object value)
+        {
+            element.SetValue(DefaultValueProperty, value);
+        }
+
+        public static object GetDefaultValue(
+            DependencyObject element)
+        {
+            return (object)element.GetValue(DefaultValueProperty);
+        }
+
         public static IEnumerable GetItemsSource(
             DependencyObject element)
         {
@@ -260,6 +308,32 @@ namespace BibleProjector_WPF
             DependencyObject element)
         {
             return (string)element.GetValue(StringFormatProperty);
+        }
+
+        public static void SetValuePath(
+            DependencyObject element, 
+            string value) 
+        { 
+            element.SetValue(ValuePathProperty, value); 
+        }
+
+        public static string GetValuePath(
+            DependencyObject element) 
+        { 
+            return (string)element.GetValue(ValuePathProperty); 
+        }
+
+        public static void SetSelectedSongPath(
+            DependencyObject element, 
+            object value) 
+        { 
+            element.SetValue(SelectedSongPathProperty, value); 
+        }
+        
+        public static object GetSelectedSongPath(
+            DependencyObject element) 
+        { 
+            return element.GetValue(SelectedSongPathProperty); 
         }
 
         // =================== Events =================== 
@@ -319,6 +393,18 @@ namespace BibleProjector_WPF
                 RefreshGeneratedItems(contextMenu);
         }
 
+        /// <summary>
+        /// 기존 메뉴가 재활용되어, 곡 목록이 올바르게 갱신되지 않는 문제를 방지하기 위해
+        /// 별도의 Opened 시점에서의 추가 처리를 진행합니다.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private static void OnContextMenuOpened(object sender, RoutedEventArgs e)
+        {
+            if (sender is ContextMenu contextMenu && GetIsEnabled(contextMenu))
+                RefreshGeneratedItems(contextMenu);
+        }
+
         private static void OnItemsSourceChanged(
             DependencyObject d,
             DependencyPropertyChangedEventArgs e)
@@ -331,6 +417,59 @@ namespace BibleProjector_WPF
             addCollectionBindingHandler(e.NewValue, contextMenu);
 
             RefreshGeneratedItems(contextMenu);
+        }
+
+        private static void OnDefaultValueChanged(
+            DependencyObject d,
+            DependencyPropertyChangedEventArgs e)
+        {
+            if (d is ContextMenu contextMenu)
+                UpdateDefaultValue(contextMenu, e.NewValue);
+        }
+
+        private static void OnMenuItemSelected(
+            object sender, 
+            RoutedEventArgs e)
+        {
+            if (!(sender is MenuItem menuItem))
+                return;
+
+            ContextMenu contextMenu = ItemsControl.ItemsControlFromItemContainer(menuItem) as ContextMenu;
+            if (contextMenu == null)
+                return;
+
+            // 자신의 값을 선택값으로 등록
+            object newValue = menuItem.DataContext;
+            SetSelectedSongPath(contextMenu, newValue);
+
+            // 다른 선택지는 모두 해제합니다.
+            int start = GetInsertIndex(contextMenu);
+            int count = GetAssignedCount(contextMenu);
+
+            for (int i = 0; i < count; i++)
+            {
+                MenuItem menutemInContextMenu = (MenuItem)contextMenu.Items[start + i];
+                if (menutemInContextMenu != menuItem)
+                    menutemInContextMenu.IsChecked = false;
+            }
+        }
+
+        private static void OnMenuItemUnSelected(
+            object sender,
+            RoutedEventArgs e)
+        {
+            if (!(sender is MenuItem menuItem))
+                return;
+
+            ContextMenu contextMenu = ItemsControl.ItemsControlFromItemContainer(menuItem) as ContextMenu;
+            if (contextMenu == null)
+                return;
+
+            // 자신의 값이 등록되었던 경우에만 삭제할 것.
+            object lastValue = GetSelectedSongPath(contextMenu);
+            object thisValue = menuItem.DataContext;
+            if (lastValue == thisValue)
+                SetSelectedSongPath(contextMenu, null);
         }
 
         // =================== Behavior =================== 
@@ -375,17 +514,62 @@ namespace BibleProjector_WPF
             }
         }
 
+        private static void SetStringFormatOfMenu(ContextMenu contextMenu, MenuItem menuItem, object defaultValue)
+        {
+            string valuePath = GetValuePath(contextMenu);
+            if (defaultValue == null || valuePath == null)
+                return;
+
+            // 기본값 조회
+            PropertyInfo propertyOfDefault = defaultValue.GetType().GetProperty(valuePath);
+            string defaultPathValue = (string)propertyOfDefault?.GetValue(defaultValue);
+
+            // MenuItem 값 조회
+            var dataContext = menuItem.DataContext;
+            PropertyInfo property = dataContext.GetType().GetProperty(valuePath);
+            string itemPathValue = (string)property?.GetValue(dataContext);
+
+            // 두 값이 동일할 경우에만 변형포맷 적용
+            string stringFormat = GetStringFormat(contextMenu);
+            if (Equals(defaultPathValue, itemPathValue))
+                menuItem.HeaderStringFormat = "(기본값) " + (string.IsNullOrEmpty(stringFormat) ? "{0}" : stringFormat);
+            else
+                menuItem.HeaderStringFormat = string.IsNullOrEmpty(stringFormat) ? "{0}" : stringFormat;
+        }
+
+        /// <summary>
+        /// 기본값 변경에 의한 UI 변동 처리
+        /// </summary>
+        /// <param name="contextMenu"></param>
+        /// <param name="value"></param>
+        private static void UpdateDefaultValue(
+            ContextMenu contextMenu,
+            object value)
+        {
+            string stringFormat = GetStringFormat(contextMenu);
+            if (stringFormat == null)
+                return;
+
+            int start = GetInsertIndex(contextMenu);
+            int count = GetAssignedCount(contextMenu);
+
+            for (int i = 0; i < count; i++) {
+                MenuItem menuItem = (MenuItem)contextMenu.Items[start + i];
+                SetStringFormatOfMenu(contextMenu, menuItem, value);
+            }
+        }
+
         private static void RefreshGeneratedItems(
             ContextMenu contextMenu)
         {
+            contextMenu.Opened -= OnContextMenuOpened;
+            contextMenu.Opened += OnContextMenuOpened;
+
             RemoveGeneratedItems(contextMenu);
 
             IEnumerable itemsSource = GetItemsSource(contextMenu);
             if (itemsSource == null)
                 return;
-
-            var bindingPath = GetBindingPath(contextMenu);
-            var stirngFormat = GetStringFormat(contextMenu);
 
             var insertIndex = GetInsertIndex(contextMenu);
             insertIndex = Math.Max(0, insertIndex);
@@ -397,9 +581,8 @@ namespace BibleProjector_WPF
             foreach (var sourceItem in itemsSource)
             {
                 var menuItem = CreateMenuItem(
+                    contextMenu,
                     sourceItem,
-                    bindingPath,
-                    stirngFormat,
                     (sender, e) => {
                         ICommand command = GetCommand(contextMenu);
                         if (command != null)
@@ -429,13 +612,17 @@ namespace BibleProjector_WPF
         }
 
         private static MenuItem CreateMenuItem(
+            ContextMenu contextMenu,
             object sourceItem,
-            string bindingPath,
-            string stringFormat,
             RoutedEventHandler clickEventHandler)
         {
+            var bindingPath = GetBindingPath(contextMenu);
+            var valuePath = GetValuePath(contextMenu);
+            var stringFormat = GetStringFormat(contextMenu);
+
             MenuItem menuItem = new MenuItem{ DataContext = sourceItem };
 
+            // 표시 형식 바인딩
             if (string.IsNullOrWhiteSpace(bindingPath))
                 menuItem.Header = sourceItem;
             else
@@ -451,6 +638,17 @@ namespace BibleProjector_WPF
                     menuItem,
                     HeaderedItemsControl.HeaderProperty,
                     headerBinding);
+            }
+
+            // 곡 경로 선택 기능 바인딩
+            if (!string.IsNullOrWhiteSpace(valuePath))
+            {
+                object defaultValue = GetDefaultValue(contextMenu);
+                SetStringFormatOfMenu(contextMenu, menuItem, defaultValue);
+                menuItem.IsCheckable = true;
+                menuItem.IsChecked = Equals(menuItem.DataContext, GetSelectedSongPath(contextMenu));
+                menuItem.Checked += OnMenuItemSelected;
+                menuItem.Unchecked += OnMenuItemUnSelected;
             }
 
             if (clickEventHandler != null)
