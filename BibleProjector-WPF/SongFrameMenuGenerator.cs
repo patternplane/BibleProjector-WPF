@@ -402,7 +402,11 @@ namespace BibleProjector_WPF
         private static void OnContextMenuOpened(object sender, RoutedEventArgs e)
         {
             if (sender is ContextMenu contextMenu && GetIsEnabled(contextMenu))
+            {
+                // 기본값 데이터는 강제 새로고침 합니다.
+                contextMenu.GetBindingExpression(DefaultValueProperty)?.UpdateTarget();
                 RefreshGeneratedItems(contextMenu);
+            }
         }
 
         private static void OnItemsSourceChanged(
