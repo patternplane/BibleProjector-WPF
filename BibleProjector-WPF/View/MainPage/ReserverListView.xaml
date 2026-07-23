@@ -76,11 +76,13 @@
                             <!--우클릭 메뉴 ContextMenu-->
                             <Setter Property="ContextMenu">
                                 <Setter.Value>
-                                    <ContextMenu 
+                                    <ContextMenu
                                         rtype:SongFrameMenuGenerator.ItemsSource="{Binding SongFrameFilesSource}"
+                                        rtype:SongFrameMenuGenerator.DefaultValue="{Binding SongFrameFileDefault}"
                                         rtype:SongFrameMenuGenerator.BindingPath="FileName"
-                                        rtype:SongFrameMenuGenerator.StringFormat="출력: {0}"
-                                        rtype:SongFrameMenuGenerator.Command="{Binding CItemShowWithFrame}"
+                                        rtype:SongFrameMenuGenerator.ValuePath="Path"
+                                        rtype:SongFrameMenuGenerator.StringFormat="설정: {0}"
+                                        rtype:SongFrameMenuGenerator.SelectedSongPath="{Binding SelectedSongFramePath, Mode=TwoWay}"
                                         rtype:SongFrameMenuGenerator.InsertIndex="0">
                                         <ContextMenu.Style>
                                             <Style TargetType="ContextMenu">

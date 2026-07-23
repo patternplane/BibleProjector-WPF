@@ -77,6 +77,7 @@
     <Compile Include="module\BibleDataManager.cs" />
     <Compile Include="module\Data\BibleData.cs" />
     <Compile Include="module\Data\BibleSearchData.cs" />
+    <Compile Include="module\Data\ReserveData.cs" />
     <Compile Include="module\Data\ExternPPTData.cs" />
     <Compile Include="module\Data\ExternPPTSearchData.cs" />
     <Compile Include="module\Data\IPreviewData.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="module\ExternPPTManager.cs" />
     <Compile Include="module\ExternPPTSearcher.cs" />
     <Compile Include="module\ISourceOfReserve.cs" />
+    <Compile Include="module\Reserve\SaveData.cs" />
     <Compile Include="module\SaveDataTypeEnum.cs" />
     <Compile Include="module\SearchData.cs" />
     <Compile Include="module\Data\SongData.cs" />

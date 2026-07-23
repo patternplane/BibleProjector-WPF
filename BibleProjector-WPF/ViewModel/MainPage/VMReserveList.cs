@@ -47,8 +47,8 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             ReserveContents.Clear();
             ReserveContents.Add(dropPreviewItem);
             ReserveContents.Add(dragPreviewItem);
-            foreach (module.Data.ShowData item in reserveDataManager.getReserveList())
-                ReserveContents.Add(new VMReserveData(item));
+            foreach (module.Data.ReserveData item in reserveDataManager.getReserveList())
+                ReserveContents.Add(new VMReserveData(item.data, songFrame: item.songFrame) { reserveData = item });
         }
 
         void OnReserveDataUpdated(object sender, Event.ReserveListChangedEventArgs e)
@@ -56,13 +56,13 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             if (sender != this)
             {
                 if (e.updateType == Event.ReserveListUpdateType.Add)
-                    foreach (module.Data.ShowData data in (module.Data.ShowData[])e.updatedObjects)
-                        ReserveContents.Add(new VMReserveData(data) { MyIdx = ReserveContents .Count - 1});
+                    foreach (module.Data.ReserveData data in (module.Data.ReserveData[])e.updatedObjects)
+                        ReserveContents.Add(new VMReserveData(data.data, songFrame: data.songFrame) { MyIdx = ReserveContents.Count - 1, reserveData = data });
                 else if (e.updateType == Event.ReserveListUpdateType.Delete)
                 {
                     int dragPreviewIdx = ReserveContents.IndexOf(dragPreviewItem);
                     int dropPreviewIdx = ReserveContents.IndexOf(dropPreviewItem);
-                    
+
                     foreach (int itemIdx in (int[])e.updatedObjects)
                         ReserveContents.RemoveAt(itemIdx + (dragPreviewIdx < itemIdx ? 1 : 0) + (dropPreviewIdx < itemIdx ? 1 : 0));
                 }
@@ -119,7 +119,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         void ItemShowStart(VMReserveData data)
         {
             if (data.Data is module.Data.SongData songData)
-                songData.pptFrameFullPath = null;
+                songData.pptFrameFullPath = data.SelectedSongFramePath?.Path;
             showStarter.Show(data.Data);
         }
 

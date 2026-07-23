@@ -87,7 +87,7 @@
                     <Grid.Style>
                         <Style TargetType="Grid">
                             <Setter Property="Visibility" Value="Visible"/>
-                            <Setter Property="rootns:SongFrameMenuGenerator.IsActivated" Value="True"/>
+                            <Setter Property="rootns:SongFrameMenuGenerator.IsActivated" Value="False"/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding ShowModifyView}" Value="true">
                                     <Setter Property="Visibility" Value="Hidden"/>
@@ -95,8 +95,8 @@
                                 <DataTrigger Binding="{Binding ShowAddView}" Value="true">
                                     <Setter Property="Visibility" Value="Hidden"/>
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding PreviewData.Type}" Value="{x:Null}">
-                                    <Setter Property="rootns:SongFrameMenuGenerator.IsActivated" Value="False"/>
+                                <DataTrigger Binding="{Binding PreviewData.Type}" Value="{x:Static rootns:ShowContentType.Song}">
+                                    <Setter Property="rootns:SongFrameMenuGenerator.IsActivated" Value="True"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -109,22 +109,11 @@
                     <!--우클릭 메뉴-->
                     <Grid.ContextMenu>
                         <ContextMenu rootns:SongFrameMenuGenerator.ItemsSource="{Binding SongFrameFilesSource}"
+                                     rootns:SongFrameMenuGenerator.DefaultValue="{Binding SongFrameFileDefault}"
                                      rootns:SongFrameMenuGenerator.BindingPath="FileName"
-                                     rootns:SongFrameMenuGenerator.StringFormat="출력: {0}"
-                                     rootns:SongFrameMenuGenerator.Command="{Binding CStartShowByContextMenu_Preview}"
+                                     rootns:SongFrameMenuGenerator.StringFormat="예약: {0}"
+                                     rootns:SongFrameMenuGenerator.Command="{Binding CReserveThisWithFrame}"
                                      rootns:SongFrameMenuGenerator.InsertIndex="0">
-                            <ContextMenu.Style>
-                                <Style TargetType="ContextMenu">
-                                    <Setter Property="rootns:SongFrameMenuGenerator.IsEnabled" Value="False"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding PreviewData.Type}" Value="{x:Static rootns:ShowContentType.Song}">
-                                            <Setter Property="rootns:SongFrameMenuGenerator.IsEnabled" Value="True"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </ContextMenu.Style>
-                            <Separator/>
-                            <MenuItem Header="예약" Command="{Binding CReserveThis}"/>
                         </ContextMenu>
                     </Grid.ContextMenu>
 
@@ -272,27 +261,10 @@
                                     <Setter.Value>
                                         <ContextMenu rootns:SongFrameMenuGenerator.ItemsSource="{Binding SongFrameFilesSource}"
                                                      rootns:SongFrameMenuGenerator.BindingPath="FileName"
-                                                     rootns:SongFrameMenuGenerator.StringFormat="출력: {0}"
-                                                     rootns:SongFrameMenuGenerator.Command="{Binding CItemShowWithFrame}"
+                                                     rootns:SongFrameMenuGenerator.StringFormat="예약: {0}"
+                                                     rootns:SongFrameMenuGenerator.Command="{Binding CReserveWithFrame}"
+                                                     rootns:SongFrameMenuGenerator.DefaultValue="{Binding SongFrameFileDefault}"
                                                      rootns:SongFrameMenuGenerator.InsertIndex="0">
-                                            <ContextMenu.Style>
-                                                <Style TargetType="ContextMenu">
-                                                    <Setter Property="rootns:SongFrameMenuGenerator.IsEnabled" Value="False"/>
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Type}" Value="{x:Static rootns:ShowContentType.Song}">
-                                                            <Setter Property="rootns:SongFrameMenuGenerator.IsEnabled" Value="True"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </ContextMenu.Style>
-                                            <Separator/>
-                                            <MenuItem Header="예약">
-                                                <MenuItem.Style>
-                                                    <Style TargetType="MenuItem">
-                                                        <EventSetter Event="Click" Handler="EH_ListBoxItemMenu_Reserve"/>
-                                                    </Style>
-                                                </MenuItem.Style>
-                                            </MenuItem>
                                         </ContextMenu>
                                     </Setter.Value>
                                 </Setter>
@@ -301,6 +273,9 @@
                                 <Setter Property="rootns:SongFrameMenuGenerator.IsActivated" Value="False"/>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding isAvailable}" Value="True">
+                                        <Setter Property="rootns:SongFrameMenuGenerator.IsActivated" Value="True"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Type}" Value="{x:Static rootns:ShowContentType.Song}">
                                         <Setter Property="rootns:SongFrameMenuGenerator.IsActivated" Value="True"/>
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -337,6 +312,7 @@
                 </Button.Style>
                 <Button.ContextMenu>
                     <ContextMenu rootns:SongFrameMenuGenerator.ItemsSource="{Binding SongFrameFilesSource}"
+                                 rootns:SongFrameMenuGenerator.DefaultValue="{Binding SongFrameFileDefault}"
                                  rootns:SongFrameMenuGenerator.BindingPath="FileName"
                                  rootns:SongFrameMenuGenerator.StringFormat="출력: {0}"
                                  rootns:SongFrameMenuGenerator.Command="{Binding CStartShowByContextMenu_Preview}"

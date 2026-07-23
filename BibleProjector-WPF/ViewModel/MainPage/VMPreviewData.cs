@@ -12,11 +12,6 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 {
     public class VMPreviewData : ViewModel, IVMPreviewData
     {
-        // ============ External Dependency ============ 
-
-        public static module.ShowStarter showStarter;
-
-
 
         private IPreviewData data;
         private bool isModified = false;
@@ -28,12 +23,30 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public bool isAvailable { get { return data.getData().isAvailData(); } }
 
         public BindingList<VMSongFrameFile> SongFrameFilesSource { get { return module.ProgramOption.SongFrameFiles; } }
-
-        public ICommand CItemShowWithFrame { get; private set; }
-
-
-        public VMPreviewData(IPreviewData data, bool isAdded = false, bool isModified = false)
+        public VMSongFrameFile SongFrameFileDefault
         {
+            get
+            {
+                if (Type != ShowContentType.Song)
+                    return null;
+                SongDataTypeEnum type = ((SongData)data.getData()).songType;
+                if (type == SongDataTypeEnum.CCM)
+                    return module.ProgramOption.DefaultCCMFrame;
+                if (type == SongDataTypeEnum.HYMN)
+                    return module.ProgramOption.DefaultHymnFrame;
+                return null;
+            }
+        }
+
+        public ICommand CReserveWithFrame { get; private set; }
+
+
+        // handler
+        private ICommand reserveThisWithFrame;
+
+        public VMPreviewData(IPreviewData data, ICommand reserveThisWithFrame, bool isAdded = false, bool isModified = false)
+        {
+            this.reserveThisWithFrame = reserveThisWithFrame;
             setData(data, isAdded, isModified);
         }
 
@@ -42,7 +55,7 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             this.data = data;
             this.isAdded = isAdded;
             this.isModified = isModified;
-            this.CItemShowWithFrame = new RelayCommand(request => showSongDataWithFrame((VMSongFrameFile)request));
+            CReserveWithFrame = new RelayCommand((obj) => ReserveWithFrame((VMSongFrameFile)obj));
             OnPropertyChanged(nameof(DisplayTitle));
             OnPropertyChanged(nameof(PreviewContent));
         }
@@ -52,13 +65,10 @@ namespace BibleProjector_WPF.ViewModel.MainPage
             return data.getData();
         }
 
-        private void showSongDataWithFrame(VMSongFrameFile songFrame)
+        private void ReserveWithFrame(VMSongFrameFile songFrame)
         {
-            if (getData() is SongData songData)
-            {
-                songData.pptFrameFullPath = songFrame.Path;
-                showStarter.Show(songData);
-            }
+            if (getData() is SongData)
+                reserveThisWithFrame?.Execute(songFrame);
         }
 
         public virtual void update()

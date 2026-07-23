@@ -12,11 +12,6 @@ namespace BibleProjector_WPF.ViewModel.MainPage
 {
     public class VMReserveData : ViewModel
     {
-        // ============ External Dependency ============ 
-
-        public static module.ShowStarter showStarter;
-
-
 
         public string DisplayTitle { get; set; } = null;
         int _MyIdx;
@@ -36,42 +31,44 @@ namespace BibleProjector_WPF.ViewModel.MainPage
         public module.Data.ShowData Data;
         public ShowContentType? ContentType { get { return Data?.getDataType(); } }
 
-        public BindingList<VMSongFrameFile> SongFrameFilesSource { get { return module.ProgramOption.SongFrameFiles; } }
+        public module.Data.ReserveData reserveData;
+        public VMSongFrameFile SelectedSongFramePath { get { return reserveData?.songFrame; } set { if (reserveData != null) reserveData.songFrame = value; } }
 
-        public ICommand CItemShowWithFrame { get; private set; }
+        public BindingList<VMSongFrameFile> SongFrameFilesSource { get { return module.ProgramOption.SongFrameFiles; } }
+        public VMSongFrameFile SongFrameFileDefault
+        { 
+            get {
+                if (ContentType != ShowContentType.Song)
+                    return null;
+                module.Data.SongDataTypeEnum type = ((module.Data.SongData)Data).songType;
+                if (type == module.Data.SongDataTypeEnum.CCM)
+                    return module.ProgramOption.DefaultCCMFrame;
+                if (type == module.Data.SongDataTypeEnum.HYMN)
+                    return module.ProgramOption.DefaultHymnFrame;
+                return null;
+            } 
+        }
 
         string title;
 
-        private VMReserveData(string title, module.Data.ShowData data, ReserveViewType type)
+        private VMReserveData(string title, module.Data.ShowData data, ReserveViewType type, VMSongFrameFile songFrame)
         {
             this.title = title;
             this.Data = data;
             this.ViewType = type;
-
-            this.CItemShowWithFrame = new RelayCommand(request => showSongDataWithFrame((VMSongFrameFile)request));
+            this.SelectedSongFramePath = songFrame;
 
             updateDisplayTitle();
         }
 
         public VMReserveData(string title, ReserveViewType type)
-            : this(title, null, type)
+            : this(title, null, type, null)
         { 
         }
 
-        public VMReserveData(module.Data.ShowData data, ReserveViewType type = ReserveViewType.NormalItem)
-            : this(data.getTitle1() + " " + data.getTitle2(), data, type)
+        public VMReserveData(module.Data.ShowData data, ReserveViewType type = ReserveViewType.NormalItem, VMSongFrameFile songFrame = null)
+            : this(data.getTitle1() + " " + data.getTitle2(), data, type, songFrame)
         {
-        }
-
-        // ================ Command ================
-
-        private void showSongDataWithFrame(VMSongFrameFile songFrame)
-        {
-            if (Data is module.Data.SongData songData)
-            {
-                songData.pptFrameFullPath = songFrame.Path;
-                showStarter.Show(songData);
-            }
         }
 
         // ================ Methods ================

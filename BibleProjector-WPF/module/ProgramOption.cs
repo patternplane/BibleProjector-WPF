@@ -35,6 +35,14 @@ namespace BibleProjector_WPF.module
 
         // ======================================= PPT 틀 관리 관련 =======================================
 
+        static public ViewModel.Option.VMSongFrameFile getFrameByPath(string path)
+        {
+            foreach (ViewModel.Option.VMSongFrameFile frame in SongFrameFiles)
+                if (frame.Path.Equals(path))
+                    return frame;
+            return null;
+        }
+
         static public bool isValidFrameFile(string path)
         {
             string fileName = Path.GetFileName(path);

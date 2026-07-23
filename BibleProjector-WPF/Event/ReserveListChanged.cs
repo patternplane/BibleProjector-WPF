@@ -15,7 +15,7 @@ namespace BibleProjector_WPF.Event
 
     public class ReserveListChangedEventArgs : EventArgs
     {
-        public ReserveListChangedEventArgs(module.Data.ShowData[] newData) 
+        public ReserveListChangedEventArgs(module.Data.ReserveData[] newData) 
         {
             this.updateType = ReserveListUpdateType.Add;
             this.updatedObjects = newData;
