@@ -70,12 +70,13 @@ namespace BibleProjector_WPF.External
             style |= WS_EX_TOOLWINDOW;
             style |= WS_EX_NOACTIVATE;
 
-            ShowWindow(windowHWND, SW_HIDE);
             if (frontWindowHWND == null)
                 SetWindowPos(windowHWND, 0, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE | SWP_NOZORDER);
             else
                 SetWindowPos(windowHWND, (int)frontWindowHWND, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
             SetWindowLong(windowHWND, GWL_STYLE, style);
+
+            TaskbarManager.DeleteFromTaskbar(new IntPtr(windowHWND));
         }
 
         /// <summary>

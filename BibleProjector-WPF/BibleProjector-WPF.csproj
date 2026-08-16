@@ -68,6 +68,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="External\TaskbarManager.cs" />
     <Compile Include="External\WindowManager.cs" />
     <Compile Include="HighlightedText.cs" />
     <Compile Include="HighlightType.cs" />
