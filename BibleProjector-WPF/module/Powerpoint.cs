@@ -13,61 +13,6 @@ namespace BibleProjector_WPF
 {
     partial class Powerpoint
     {
-        [System.Runtime.InteropServices.DllImport("user32")]
-        static extern int ShowWindow(int hwnd, int nCmdShow);
-        const int SW_HIDE = 0;
-        const int SW_SHOW = 5;
-
-        [System.Runtime.InteropServices.DllImport("user32")]
-        public static extern int SetWindowPos(int hwnd, int hWndInsertAfter, int x, int y, int cx, int cy, int wFlags);
-        const int HWND_NOTOPMOST = -2;
-        const int HWND_TOPMOST = -1;
-        const int HWND_TOP = 0;
-        const int SWP_NOMOVE = 0x0002;
-        const int SWP_NOSIZE = 0x0001;
-        const int SWP_NOACTIVATE = 0x0010;
-        const int SWP_NOZORDER = 0x0004;
-
-        [System.Runtime.InteropServices.DllImport("user32")]
-        public static extern Int32 SetWindowLong(int hWnd, Int32 nIndex, Int32 dwNewLong);
-
-        [System.Runtime.InteropServices.DllImport("user32")]
-        public static extern Int32 GetWindowLong(int hWnd, Int32 nIndex);
-        const Int32 GWL_STYLE = -16;
-        const Int32 WS_VISIBLE = 0x10000000;
-        const Int32 WS_EX_TOOLWINDOW = 0x00000080;
-        const Int32 WS_EX_APPWINDOW = 0x00040000;
-        const Int32 WS_EX_NOACTIVATE = 0x08000000;
-
-        [System.Runtime.InteropServices.DllImport("user32")]
-        public static extern int GetWindow(int hWnd, uint uCmd);
-        const uint GW_HWNDNEXT = 2;
-        const uint GW_HWNDPREV = 3;
-
-        /// <summary>
-        /// 기본 자막화면 표시 정책에 따라 슬라이드 쇼 Window를 재설정 및 표시합니다.
-        /// <br/> 정책 :
-        /// <br/>- 작업표시줄에 Windows를 표시하지 않습니다.
-        /// <br/>- 기존 위치를 유지하거나, <paramref name="frontWindowHWND"/>의 바로 뒤로 위치시킬 수 있습니다.
-        /// </summary>
-        /// <param name="windowHWND"></param>
-        /// <param name="frontWindowHWND"></param>
-        protected static void ReshowSlideWindow(int windowHWND, int? frontWindowHWND = null)
-        {
-            Int32 style = GetWindowLong(windowHWND, GWL_STYLE);
-            
-            style |= WS_VISIBLE;
-            style &= ~(WS_EX_APPWINDOW);
-            style |= WS_EX_TOOLWINDOW;
-            style |= WS_EX_NOACTIVATE;
-
-            ShowWindow(windowHWND, SW_HIDE);
-            if (frontWindowHWND == null)
-                SetWindowPos(windowHWND, 0, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE | SWP_NOZORDER);
-            else
-                SetWindowPos(windowHWND, (int)frontWindowHWND, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
-            SetWindowLong(windowHWND, GWL_STYLE, style);
-        }
 
         enum PptSlideState
         {
@@ -411,9 +356,7 @@ namespace BibleProjector_WPF
             {
                 if (SlideWindow != null && pptState == PptSlideState.WindowShow)
                 {
-                    SetWindowPos(SlideWindow.HWND, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
-                    SetWindowPos(SlideWindow.HWND, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
-                    //SetWindowPos(SlideWindow.HWND, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+                    External.WindowManager.TopMostWindow(SlideWindow.HWND);
                 }
             }
 
@@ -441,7 +384,7 @@ namespace BibleProjector_WPF
                         currentSlide = 1;
                     }
                 }
-                ReshowSlideWindow(SlideWindow.HWND);
+                External.WindowManager.ReshowWindow(SlideWindow.HWND);
 
                 // Taskbar에서 powerpoint 앱을 숨기는 window api를 사용하면
                 // powerpoint show 화면이 꺼졌다 켜질 때 종종 검정화면으로 돌아가는 문제가 있어
@@ -456,7 +399,7 @@ namespace BibleProjector_WPF
             {
                 if (SlideWindow != null)
                 {
-                    ShowWindow(SlideWindow.HWND, SW_HIDE);
+                    External.WindowManager.hideWindow(SlideWindow.HWND);
                     pptState = PptSlideState.WindowHide;
                 }
             }
@@ -669,9 +612,7 @@ namespace BibleProjector_WPF
             {
                 if (SlideWindow != null && pptState == PptSlideState.WindowShow)
                 {
-                    SetWindowPos(SlideWindow.HWND, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
-                    SetWindowPos(SlideWindow.HWND, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
-                    //SetWindowPos(SlideWindow.HWND, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+                    External.WindowManager.TopMostWindow(SlideWindow.HWND);
                 }
             }
 
@@ -699,7 +640,7 @@ namespace BibleProjector_WPF
                         currentSlide = 1;
                     }
                 }
-                ReshowSlideWindow(SlideWindow.HWND);
+                External.WindowManager.ReshowWindow(SlideWindow.HWND);
 
                 // Taskbar에서 powerpoint 앱을 숨기는 window api를 사용하면
                 // powerpoint show 화면이 꺼졌다 켜질 때 종종 검정화면으로 돌아가는 문제가 있어
@@ -714,7 +655,7 @@ namespace BibleProjector_WPF
             {
                 if (SlideWindow != null)
                 {
-                    ShowWindow(SlideWindow.HWND, SW_HIDE);
+                    External.WindowManager.hideWindow(SlideWindow.HWND);
                     pptState = PptSlideState.WindowHide;
                 }
             }
@@ -1080,9 +1021,7 @@ namespace BibleProjector_WPF
             {
                 if (SlideWindow != null && pptState == PptSlideState.WindowShow)
                 {
-                    SetWindowPos(SlideWindow.HWND, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
-                    SetWindowPos(SlideWindow.HWND, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
-                    //SetWindowPos(SlideWindow.HWND, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+                    External.WindowManager.TopMostWindow(SlideWindow.HWND);
                 }
             }
 
@@ -1119,7 +1058,7 @@ namespace BibleProjector_WPF
                         currentSlide = 1;
                     }
                 }
-                ReshowSlideWindow(SlideWindow.HWND);
+                External.WindowManager.ReshowWindow(SlideWindow.HWND);
 
                 // Taskbar에서 powerpoint 앱을 숨기는 window api를 사용하면
                 // powerpoint show 화면이 꺼졌다 켜질 때 종종 검정화면으로 돌아가는 문제가 있어
@@ -1134,7 +1073,7 @@ namespace BibleProjector_WPF
             {
                 if (SlideWindow != null)
                 {
-                    ShowWindow(SlideWindow.HWND, SW_HIDE);
+                    External.WindowManager.hideWindow(SlideWindow.HWND);
                     pptState = PptSlideState.WindowHide;
                 }
             }
@@ -1537,9 +1476,7 @@ namespace BibleProjector_WPF
             {
                 if (SlideWindow != null && pptState == PptSlideState.WindowShow)
                 {
-                    SetWindowPos(SlideWindow.HWND, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
-                    SetWindowPos(SlideWindow.HWND, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
-                    //SetWindowPos(SlideWindow.HWND, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+                    External.WindowManager.TopMostWindow(SlideWindow.HWND);
                 }
             }
 
@@ -1563,22 +1500,22 @@ namespace BibleProjector_WPF
                         ppt.Slides[currentSlideNum].MoveTo(1);
                         SlideWindow = ppt.SlideShowSettings.Run();
                         if (front == null)
-                            ReshowSlideWindow(SlideWindow.HWND, null);
+                            External.WindowManager.ReshowWindow(SlideWindow.HWND);
                         else
-                            ReshowSlideWindow(SlideWindow.HWND, GetWindow(front.HWND, GW_HWNDPREV));
+                            External.WindowManager.ReshowWindow(SlideWindow.HWND, External.WindowManager.GetFrontWindowOf(front.HWND));
                         ppt.Slides[1].MoveTo(currentSlideNum);
                     }
                     else
                     {
                         SlideWindow = ppt.SlideShowSettings.Run();
                         if (front == null)
-                            ReshowSlideWindow(SlideWindow.HWND, null);
+                            External.WindowManager.ReshowWindow(SlideWindow.HWND);
                         else
-                            ReshowSlideWindow(SlideWindow.HWND, GetWindow(front.HWND, GW_HWNDPREV));
+                            External.WindowManager.ReshowWindow(SlideWindow.HWND, External.WindowManager.GetFrontWindowOf(front.HWND));
                     }
                 }
                 else if (pptState != PptSlideState.WindowShow)
-                    ReshowSlideWindow(SlideWindow.HWND);
+                    External.WindowManager.ReshowWindow(SlideWindow.HWND);
 
                 // Taskbar에서 powerpoint 앱을 숨기는 window api를 사용하면
                 // powerpoint show 화면이 꺼졌다 켜질 때 종종 검정화면으로 돌아가는 문제가 있어
@@ -1724,7 +1661,7 @@ namespace BibleProjector_WPF
             {
                 if (SlideWindow != null)
                 {
-                    ShowWindow(SlideWindow.HWND, SW_HIDE);
+                    External.WindowManager.hideWindow(SlideWindow.HWND);
                     pptState = PptSlideState.WindowHide;
                 }
             }
