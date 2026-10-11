@@ -835,6 +835,7 @@ namespace BibleProjector_WPF
                 public Shape shape;
             }
             List<TextShape> textShapes;
+            List<TextShape> textShapes_overflowFrame; // 오버플로우 검사를 위한 임시 사본 도형입니다.
             string[][] currentData;
             SlideShowWindow SlideWindow = null;
 
@@ -858,6 +859,7 @@ namespace BibleProjector_WPF
                 this.FrameFullPath = newPath;
                 this.FrameOriginFullPath = path;
                 textShapes = new List<TextShape>(5);
+                textShapes_overflowFrame = new List<TextShape>(5);
 
                 ppt = app.Presentations.Open(newPath, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
                 checkValidPPT();
@@ -968,43 +970,75 @@ namespace BibleProjector_WPF
                         getCommand_sub(s);
                     }
                 }
+
+                
+                // 오버플로우 처리를 위한 임시 도형 생성
+                foreach (TextShape shape in textShapes)
+                {
+                    shape.shape.Copy();
+                    ShapeRange range = ppt.Slides[1].Shapes.Paste();
+
+                    // 복사 실패시 해당 도형은 빈 도형으로 채울 것
+                    if (range.Count < 1)
+                    {
+                        textShapes_overflowFrame.Add(null);
+                        continue;
+                    }
+
+                    Shape pastedShape = range[1];
+                    pastedShape.Top = 10_000; // 추후 해상도의 3배와 같이 조정할 것
+
+                    TextShape newShape = new TextShape();
+                    newShape.Format = shape.Format;
+                    newShape.shape = pastedShape;
+
+                    textShapes_overflowFrame.Add(newShape);
+                }
             }
 
-            void getCommand_sub(Shape s)
+            /// <summary>
+            /// 하나의 도형에서 텍스트 포맷을 처리합니다 <br>
+            /// 포맷 도형으로 등록에 성공할 경우에만 true를 반환합니다.
+            /// </summary>
+            /// <param name="s"></param>
+            /// <returns></returns>
+            bool getCommand_sub(Shape s)
             {
                 int[] index = module.StringKMP.FindPattern(s.TextFrame.TextRange.Text, "{", module.StringKMP.DefaultStringCompaerFunc);
-                if (index.Length != 0)
+                if (index.Length == 0)
+                    return false;
+
+                string shapeText = s.TextFrame.TextRange.Text;
+                List<string> format = new List<string>(5);
+
+                int startIndex = 0;
+                int endIndex = 0;
+                int i = 0;
+                for (; i < index.Length; i++)
                 {
-                    string shapeText = s.TextFrame.TextRange.Text;
-                    List<string> format = new List<string>(5);
-
-                    int startIndex = 0;
-                    int endIndex = 0;
-                    int i = 0;
-                    for (; i < index.Length; i++)
-                    {
-                        endIndex = index[i];
-                        if (startIndex != endIndex)
-                            format.Add(shapeText.Substring(startIndex, endIndex - startIndex));
-
-                        for (startIndex = endIndex; endIndex < shapeText.Length && shapeText[endIndex] != '}'; endIndex++) ;
-                        if (endIndex == shapeText.Length)
-                            break;
-                        endIndex++;
-
+                    endIndex = index[i];
+                    if (startIndex != endIndex)
                         format.Add(shapeText.Substring(startIndex, endIndex - startIndex));
-                        startIndex = endIndex;
-                    }
-                    if (i != index.Length)
-                        return;
-                    else if (startIndex != shapeText.Length)
-                        format.Add(shapeText.Substring(startIndex, shapeText.Length - startIndex));
 
-                    TextShape ts = new TextShape();
-                    ts.shape = s;
-                    ts.Format = format;
-                    textShapes.Add(ts);
+                    for (startIndex = endIndex; endIndex < shapeText.Length && shapeText[endIndex] != '}'; endIndex++) ;
+                    if (endIndex == shapeText.Length)
+                        break;
+                    endIndex++;
+
+                    format.Add(shapeText.Substring(startIndex, endIndex - startIndex));
+                    startIndex = endIndex;
                 }
+                if (i != index.Length)
+                    return false;
+                else if (startIndex != shapeText.Length)
+                    format.Add(shapeText.Substring(startIndex, shapeText.Length - startIndex));
+
+                TextShape ts = new TextShape();
+                ts.shape = s;
+                ts.Format = format;
+                textShapes.Add(ts);
+
+                return true;
             }
 
             void checkValidPPT()
@@ -1078,12 +1112,22 @@ namespace BibleProjector_WPF
                 }
             }
 
+            // 오버플로우 중복 처리 방지용 캐싱
+            // shape 인덱스 - string 매핑
+            Dictionary<int, string> overflowTextCache = new Dictionary<int, string>();
+
             public void ChangeApply(string[][] SongData)
             {
                 int index;
                 StringBuilder str = new StringBuilder(50);
                 for (int i = 0; i < textShapes.Count; i++)
                 {
+
+                    // 오버플로우 처리
+                    // -> 현재 {t} 규격에 대해서만 처리합니다.
+                    bool checkOverflow = false;
+
+
                     str.Clear();
                     foreach (string s in textShapes[i].Format)
                     {
@@ -1092,12 +1136,59 @@ namespace BibleProjector_WPF
                             if ((index = findChangeTableIndex(s, SongData)) == -1)
                                 str.Append("");
                             else
+                            {
+                                // 오버플로우 처리
+                                if (s[1] == 't')
+                                    checkOverflow = true;
+
+
                                 str.Append(SongData[index][1]);
+                            }
                         }
                         else
                             str.Append(s);
                     }
-                    textShapes[i].shape.TextFrame.TextRange.Text = str.ToString();
+
+                    string content = str.ToString();
+                    if (!checkOverflow)
+                        textShapes[i].shape.TextFrame.TextRange.Text = content;
+
+                    // 오버플로우 처리 불가 - 사본 도형 생성 실패의 경우
+                    else if (textShapes_overflowFrame[i] == null)
+                        textShapes[i].shape.TextFrame.TextRange.Text = content;
+
+                    // 오버플로우 처리
+                    // -> 현재 {t} 규격에 대해서만 처리합니다.
+                    else
+                    {
+                        // 캐싱 확인
+                        if (overflowTextCache.ContainsKey(i) &&
+                            content.Equals(overflowTextCache[i]))
+                            continue;
+                        overflowTextCache[i] = content;
+
+                        // 처리
+                        Shape shape = textShapes_overflowFrame[i].shape;
+                        TextFrame2 frame = shape.TextFrame2;
+                        frame.TextRange.Text = content;
+
+                        // 최소 1개 문자까지만 축약합니다.
+                        string shortContent = content;
+                        for (int nextSize = content.Length - 1; 0 < nextSize; nextSize--)
+                        {
+                            float availableWidth = shape.Width - frame.MarginLeft - frame.MarginRight;
+                            float textWidth = frame.TextRange.BoundWidth;
+
+                            // 오버플로 발생하지 않음
+                            if (availableWidth >= textWidth)
+                                break;
+
+                            shortContent = content.Substring(0, nextSize) + "...";
+                            frame.TextRange.Text = shortContent;
+                        }
+
+                        textShapes[i].shape.TextFrame.TextRange.Text = shortContent;
+                    }
                 }
             }
 
