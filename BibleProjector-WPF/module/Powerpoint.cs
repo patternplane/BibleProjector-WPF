@@ -970,41 +970,49 @@ namespace BibleProjector_WPF
                 }
             }
 
-            void getCommand_sub(Shape s)
+            /// <summary>
+            /// 하나의 도형에서 텍스트 포맷을 처리합니다 <br>
+            /// 포맷 도형으로 등록에 성공할 경우에만 true를 반환합니다.
+            /// </summary>
+            /// <param name="s"></param>
+            /// <returns></returns>
+            bool getCommand_sub(Shape s)
             {
                 int[] index = module.StringKMP.FindPattern(s.TextFrame.TextRange.Text, "{", module.StringKMP.DefaultStringCompaerFunc);
-                if (index.Length != 0)
+                if (index.Length == 0)
+                    return false;
+
+                string shapeText = s.TextFrame.TextRange.Text;
+                List<string> format = new List<string>(5);
+
+                int startIndex = 0;
+                int endIndex = 0;
+                int i = 0;
+                for (; i < index.Length; i++)
                 {
-                    string shapeText = s.TextFrame.TextRange.Text;
-                    List<string> format = new List<string>(5);
-
-                    int startIndex = 0;
-                    int endIndex = 0;
-                    int i = 0;
-                    for (; i < index.Length; i++)
-                    {
-                        endIndex = index[i];
-                        if (startIndex != endIndex)
-                            format.Add(shapeText.Substring(startIndex, endIndex - startIndex));
-
-                        for (startIndex = endIndex; endIndex < shapeText.Length && shapeText[endIndex] != '}'; endIndex++) ;
-                        if (endIndex == shapeText.Length)
-                            break;
-                        endIndex++;
-
+                    endIndex = index[i];
+                    if (startIndex != endIndex)
                         format.Add(shapeText.Substring(startIndex, endIndex - startIndex));
-                        startIndex = endIndex;
-                    }
-                    if (i != index.Length)
-                        return;
-                    else if (startIndex != shapeText.Length)
-                        format.Add(shapeText.Substring(startIndex, shapeText.Length - startIndex));
 
-                    TextShape ts = new TextShape();
-                    ts.shape = s;
-                    ts.Format = format;
-                    textShapes.Add(ts);
+                    for (startIndex = endIndex; endIndex < shapeText.Length && shapeText[endIndex] != '}'; endIndex++) ;
+                    if (endIndex == shapeText.Length)
+                        break;
+                    endIndex++;
+
+                    format.Add(shapeText.Substring(startIndex, endIndex - startIndex));
+                    startIndex = endIndex;
                 }
+                if (i != index.Length)
+                    return false;
+                else if (startIndex != shapeText.Length)
+                    format.Add(shapeText.Substring(startIndex, shapeText.Length - startIndex));
+
+                TextShape ts = new TextShape();
+                ts.shape = s;
+                ts.Format = format;
+                textShapes.Add(ts);
+
+                return true;
             }
 
             void checkValidPPT()
