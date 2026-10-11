@@ -1084,6 +1084,12 @@ namespace BibleProjector_WPF
                 StringBuilder str = new StringBuilder(50);
                 for (int i = 0; i < textShapes.Count; i++)
                 {
+
+                    // 오버플로우 처리
+                    // -> 현재 {t} 규격에 대해서만 처리합니다.
+                    bool checkOverflow = false;
+
+
                     str.Clear();
                     foreach (string s in textShapes[i].Format)
                     {
@@ -1092,12 +1098,42 @@ namespace BibleProjector_WPF
                             if ((index = findChangeTableIndex(s, SongData)) == -1)
                                 str.Append("");
                             else
+                            {
+                                // 오버플로우 처리
+                                if (s[1] == 't')
+                                    checkOverflow = true;
+
+
                                 str.Append(SongData[index][1]);
+                            }
                         }
                         else
                             str.Append(s);
                     }
-                    textShapes[i].shape.TextFrame.TextRange.Text = str.ToString();
+
+                    string content = str.ToString();
+                    textShapes[i].shape.TextFrame.TextRange.Text = content;
+
+                    // 오버플로우 처리
+                    // -> 현재 {t} 규격에 대해서만 처리합니다.
+                    if (!checkOverflow)
+                        continue;
+
+                    Shape shape = textShapes[i].shape;
+                    TextFrame2 frame = shape.TextFrame2;
+
+                    // 최소 1개 문자까지만 축약합니다.
+                    for (int nextSize = content.Length - 1; 0 < nextSize; nextSize--)
+                    {
+                        float availableWidth = shape.Width - frame.MarginLeft - frame.MarginRight;
+                        float textWidth = frame.TextRange.BoundWidth;
+
+                        // 오버플로 발생하지 않음
+                        if (availableWidth >= textWidth)
+                            break;
+
+                        frame.TextRange.Text = content.Substring(0, nextSize) + "...";
+                    }
                 }
             }
 
