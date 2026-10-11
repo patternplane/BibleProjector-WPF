@@ -835,6 +835,7 @@ namespace BibleProjector_WPF
                 public Shape shape;
             }
             List<TextShape> textShapes;
+            List<TextShape> textShapes_overflowFrame; // 오버플로우 검사를 위한 임시 사본 도형입니다.
             string[][] currentData;
             SlideShowWindow SlideWindow = null;
 
@@ -858,6 +859,7 @@ namespace BibleProjector_WPF
                 this.FrameFullPath = newPath;
                 this.FrameOriginFullPath = path;
                 textShapes = new List<TextShape>(5);
+                textShapes_overflowFrame = new List<TextShape>(5);
 
                 ppt = app.Presentations.Open(newPath, WithWindow: Microsoft.Office.Core.MsoTriState.msoFalse);
                 checkValidPPT();
@@ -967,6 +969,30 @@ namespace BibleProjector_WPF
                     {
                         getCommand_sub(s);
                     }
+                }
+
+                
+                // 오버플로우 처리를 위한 임시 도형 생성
+                foreach (TextShape shape in textShapes)
+                {
+                    shape.shape.Copy();
+                    ShapeRange range = ppt.Slides[1].Shapes.Paste();
+
+                    // 복사 실패시 해당 도형은 빈 도형으로 채울 것
+                    if (range.Count < 1)
+                    {
+                        textShapes_overflowFrame.Add(null);
+                        continue;
+                    }
+
+                    Shape pastedShape = range[1];
+                    pastedShape.Top = 10_000; // 추후 해상도의 3배와 같이 조정할 것
+
+                    TextShape newShape = new TextShape();
+                    newShape.Format = shape.Format;
+                    newShape.shape = pastedShape;
+
+                    textShapes_overflowFrame.Add(newShape);
                 }
             }
 
@@ -1086,6 +1112,10 @@ namespace BibleProjector_WPF
                 }
             }
 
+            // 오버플로우 중복 처리 방지용 캐싱
+            // shape 인덱스 - string 매핑
+            Dictionary<int, string> overflowTextCache = new Dictionary<int, string>();
+
             public void ChangeApply(string[][] SongData)
             {
                 int index;
@@ -1120,27 +1150,44 @@ namespace BibleProjector_WPF
                     }
 
                     string content = str.ToString();
-                    textShapes[i].shape.TextFrame.TextRange.Text = content;
+                    if (!checkOverflow)
+                        textShapes[i].shape.TextFrame.TextRange.Text = content;
+
+                    // 오버플로우 처리 불가 - 사본 도형 생성 실패의 경우
+                    else if (textShapes_overflowFrame[i] == null)
+                        textShapes[i].shape.TextFrame.TextRange.Text = content;
 
                     // 오버플로우 처리
                     // -> 현재 {t} 규격에 대해서만 처리합니다.
-                    if (!checkOverflow)
-                        continue;
-
-                    Shape shape = textShapes[i].shape;
-                    TextFrame2 frame = shape.TextFrame2;
-
-                    // 최소 1개 문자까지만 축약합니다.
-                    for (int nextSize = content.Length - 1; 0 < nextSize; nextSize--)
+                    else
                     {
-                        float availableWidth = shape.Width - frame.MarginLeft - frame.MarginRight;
-                        float textWidth = frame.TextRange.BoundWidth;
+                        // 캐싱 확인
+                        if (overflowTextCache.ContainsKey(i) &&
+                            content.Equals(overflowTextCache[i]))
+                            continue;
+                        overflowTextCache[i] = content;
 
-                        // 오버플로 발생하지 않음
-                        if (availableWidth >= textWidth)
-                            break;
+                        // 처리
+                        Shape shape = textShapes_overflowFrame[i].shape;
+                        TextFrame2 frame = shape.TextFrame2;
+                        frame.TextRange.Text = content;
 
-                        frame.TextRange.Text = content.Substring(0, nextSize) + "...";
+                        // 최소 1개 문자까지만 축약합니다.
+                        string shortContent = content;
+                        for (int nextSize = content.Length - 1; 0 < nextSize; nextSize--)
+                        {
+                            float availableWidth = shape.Width - frame.MarginLeft - frame.MarginRight;
+                            float textWidth = frame.TextRange.BoundWidth;
+
+                            // 오버플로 발생하지 않음
+                            if (availableWidth >= textWidth)
+                                break;
+
+                            shortContent = content.Substring(0, nextSize) + "...";
+                            frame.TextRange.Text = shortContent;
+                        }
+
+                        textShapes[i].shape.TextFrame.TextRange.Text = shortContent;
                     }
                 }
             }
