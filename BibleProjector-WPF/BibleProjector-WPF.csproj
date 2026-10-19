@@ -70,8 +70,8 @@
     </ApplicationDefinition>
     <Compile Include="External\TaskbarManager.cs" />
     <Compile Include="External\WindowManager.cs" />
-    <Compile Include="HighlightedText.cs" />
-    <Compile Include="HighlightType.cs" />
+    <Compile Include="Ui\Utility\HighlightedText.cs" />
+    <Compile Include="Ui\Utility\HighlightType.cs" />
     <Compile Include="Event\FrameDeleted.cs" />
     <Compile Include="Event\ShowPreviewItemEventManager.cs" />
     <Compile Include="Event\ShowStart.cs" />
@@ -101,80 +101,80 @@
     <Compile Include="module\Data\SongContent.cs" />
     <Compile Include="module\ISearcher.cs" />
     <Compile Include="module\ReserveDataManager.cs" />
-    <Compile Include="ProgramStartEnd.cs" />
-    <Compile Include="RelayCommand.cs" />
-    <Compile Include="ReserveType.cs" />
-    <Compile Include="ReserveViewType.cs" />
-    <Compile Include="ShowContentType.cs" />
+    <Compile Include="Application\ProgramStartEnd.cs" />
+    <Compile Include="Ui\Utility\RelayCommand.cs" />
+    <Compile Include="Application\Type\ReserveType.cs" />
+    <Compile Include="Application\Type\ReserveViewType.cs" />
+    <Compile Include="Application\Type\ShowContentType.cs" />
     <Compile Include="Event\BibleSelectionEventManager.cs" />
     <Compile Include="Event\KeyInputEventManager.cs" />
-    <Compile Include="SongFrameMenuGenerator.cs" />
-    <Compile Include="ViewModel\MainPage\IVMPreviewData.cs" />
-    <Compile Include="ViewModel\MainPage\VMBiblePhraseSearchData.cs" />
-    <Compile Include="ViewModel\MainPage\VMBibleSeletion.cs" />
-    <Compile Include="ViewModel\MainPage\VMExternPPTEditButton.cs" />
-    <Compile Include="ViewModel\MainPage\VMLyricAdd.cs" />
-    <Compile Include="ViewModel\MainPage\VMModify.cs" />
-    <Compile Include="ViewModel\MainPage\VMPreviewData.cs" />
-    <Compile Include="ViewModel\MainPage\VMReserveData.cs" />
-    <Compile Include="ViewModel\MainPage\VMReserveList.cs" />
-    <Compile Include="ViewModel\MainPage\VMControlPage.cs" />
-    <Compile Include="ViewModel\MainPage\VMOptionBar.cs" />
-    <Compile Include="ViewModel\MainPage\VMSearchControl.cs" />
-    <Compile Include="ViewModel\MainPage\VMShowControler.cs" />
-    <Compile Include="ViewModel\MainPage\VMMain.cs" />
-    <Compile Include="ViewModel\MainPage\VMShowItem.cs" />
-    <Compile Include="ViewModel\Option\VMSongFrameFile.cs" />
-    <Compile Include="ViewModel\ViewModel.cs" />
-    <Compile Include="ViewModel\VMMainWindow.cs" />
-    <Compile Include="View\BibleModifyWindow.xaml.cs">
+    <Compile Include="Ui\Utility\SongFrameMenuGenerator.cs" />
+    <Compile Include="Ui\Feature\Search\IVMPreviewData.cs" />
+    <Compile Include="Ui\Feature\Bible\VMBiblePhraseSearchData.cs" />
+    <Compile Include="Ui\Feature\Bible\VMBibleSeletion.cs" />
+    <Compile Include="Ui\Feature\FramelessPpt\VMExternPPTEditButton.cs" />
+    <Compile Include="Ui\Feature\Search\VMLyricAdd.cs" />
+    <Compile Include="Ui\Feature\Search\VMModify.cs" />
+    <Compile Include="Ui\Feature\Search\VMPreviewData.cs" />
+    <Compile Include="Ui\Feature\Reserve\VMReserveData.cs" />
+    <Compile Include="Ui\Feature\Reserve\VMReserveList.cs" />
+    <Compile Include="Ui\MainFrame\VMControlPage.cs" />
+    <Compile Include="Ui\MainFrame\VMOptionBar.cs" />
+    <Compile Include="Ui\Feature\Search\VMSearchControl.cs" />
+    <Compile Include="Ui\Feature\ShowControl\VMShowControler.cs" />
+    <Compile Include="Ui\MainFrame\VMMain.cs" />
+    <Compile Include="Ui\Feature\ShowControl\VMShowItem.cs" />
+    <Compile Include="Ui\Feature\Option\VMSongFrameFile.cs" />
+    <Compile Include="Ui\Utility\ViewModel.cs" />
+    <Compile Include="Ui\Application\VMMainWindow.cs" />
+    <Compile Include="Ui\Feature\Bible\BibleModifyWindow.xaml.cs">
       <DependentUpon>BibleModifyWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Event\ReserveListChanged.cs" />
-    <Compile Include="View\MainPage\AdditionalContentButton.xaml.cs">
+    <Compile Include="Ui\Feature\AdditionalContent\AdditionalContentButton.xaml.cs">
       <DependentUpon>AdditionalContentButton.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\MainPage\LyricAddView.xaml.cs">
+    <Compile Include="Ui\Feature\Search\LyricAddView.xaml.cs">
       <DependentUpon>LyricAddView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\MainPage\BibleSelectionView.xaml.cs">
+    <Compile Include="Ui\Feature\Bible\BibleSelectionView.xaml.cs">
       <DependentUpon>BibleSelectionView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\MainPage\ControlView.xaml.cs">
+    <Compile Include="Ui\MainFrame\ControlView.xaml.cs">
       <DependentUpon>ControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\MainPage\ExternPPTFileDialog.cs" />
-    <Compile Include="View\MainPage\ExternPPTSetter.xaml.cs">
+    <Compile Include="Ui\Feature\FramelessPpt\ExternPPTFileDialog.cs" />
+    <Compile Include="Ui\Feature\FramelessPpt\ExternPPTSetter.xaml.cs">
       <DependentUpon>ExternPPTSetter.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\MainPage\MainOption.xaml.cs">
+    <Compile Include="Ui\MainFrame\MainOption.xaml.cs">
       <DependentUpon>MainOption.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\MainPage\MainView.xaml.cs">
+    <Compile Include="Ui\MainFrame\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\MainPage\ModifyView.xaml.cs">
+    <Compile Include="Ui\Feature\Search\ModifyView.xaml.cs">
       <DependentUpon>ModifyView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\MainPage\ReserveItem.xaml.cs">
+    <Compile Include="Ui\Feature\Reserve\ReserveItem.xaml.cs">
       <DependentUpon>ReserveItem.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\MainPage\ReserveItemTemplateSelector.cs" />
-    <Compile Include="View\MainPage\ReserverListView.xaml.cs">
+    <Compile Include="Ui\Feature\Reserve\ReserveItemTemplateSelector.cs" />
+    <Compile Include="Ui\Feature\Reserve\ReserverListView.xaml.cs">
       <DependentUpon>ReserverListView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\MainPage\SearchView.xaml.cs">
+    <Compile Include="Ui\Feature\Search\SearchView.xaml.cs">
       <DependentUpon>SearchView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\MainPage\ShowControler.xaml.cs">
+    <Compile Include="Ui\Feature\ShowControl\ShowControler.xaml.cs">
       <DependentUpon>ShowControler.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\MainPage\ShowControllerBrush2Converter.cs" />
-    <Compile Include="View\MainPage\ShowControllerBrushConverter.cs" />
-    <Compile Include="View\MainPage\ShowItemColor.cs" />
-    <Compile Include="View\MainPage\TextHighlighter.cs" />
-    <Compile Include="View\MainPage\VisibilityConverter.cs" />
-    <Compile Include="View\ManualTab.xaml.cs">
+    <Compile Include="Ui\Feature\ShowControl\ShowControllerBrush2Converter.cs" />
+    <Compile Include="Ui\Feature\ShowControl\ShowControllerBrushConverter.cs" />
+    <Compile Include="Ui\Feature\ShowControl\ShowItemColor.cs" />
+    <Compile Include="Ui\Utility\TextHighlighter.cs" />
+    <Compile Include="Ui\Utility\VisibilityConverter.cs" />
+    <Compile Include="Ui\Feature\Manual\ManualTab.xaml.cs">
       <DependentUpon>ManualTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="module\BibleSearcher.cs" />
@@ -184,99 +184,99 @@
     <Compile Include="module\ProgramOption.cs" />
     <Compile Include="module\ShowStarter.cs" />
     <Compile Include="module\CharCompare.cs" />
-    <Compile Include="View\Option.xaml.cs">
+    <Compile Include="Ui\Feature\Option\Option.xaml.cs">
       <DependentUpon>Option.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ProgramStartLoading.xaml.cs">
+    <Compile Include="Ui\Application\ProgramStartLoading.xaml.cs">
       <DependentUpon>ProgramStartLoading.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\LyricControl.xaml.cs">
+    <Compile Include="Ui\Feature\LegacyLyricEditor\LyricControl.xaml.cs">
       <DependentUpon>LyricControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="module\ProgramData.cs" />
     <Compile Include="module\StringModifier.cs" />
     <Compile Include="module\StringKMP.cs" />
-    <Compile Include="View\ManualContent.xaml.cs">
+    <Compile Include="Ui\Feature\Manual\ManualContent.xaml.cs">
       <DependentUpon>ManualContent.xaml</DependentUpon>
     </Compile>
     <Compile Include="UnitTester\Tester.cs" />
-    <Compile Include="ViewModel\BibleModifyViewModel.cs" />
-    <Compile Include="ViewModel\ManualTabViewModel.cs" />
-    <Compile Include="ViewModel\Option\OptionViewModel.cs" />
-    <Compile Include="ViewModel\LyricViewModel.cs" />
-    <Page Include="ViewMapDictionary.xaml">
+    <Compile Include="Ui\Feature\Bible\BibleModifyViewModel.cs" />
+    <Compile Include="Ui\Feature\Manual\ManualTabViewModel.cs" />
+    <Compile Include="Ui\Feature\Option\OptionViewModel.cs" />
+    <Compile Include="Ui\Feature\LegacyLyricEditor\LyricViewModel.cs" />
+    <Page Include="Ui\Utility\ViewMapDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\BibleModifyWindow.xaml">
+    <Page Include="Ui\Feature\Bible\BibleModifyWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\MainPage\AdditionalContentButton.xaml">
+    <Page Include="Ui\Feature\AdditionalContent\AdditionalContentButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\MainPage\LyricAddView.xaml">
+    <Page Include="Ui\Feature\Search\LyricAddView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\MainPage\BibleSelectionView.xaml">
+    <Page Include="Ui\Feature\Bible\BibleSelectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\MainPage\ControlView.xaml">
+    <Page Include="Ui\MainFrame\ControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\MainPage\ExternPPTSetter.xaml">
+    <Page Include="Ui\Feature\FramelessPpt\ExternPPTSetter.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\MainPage\MainOption.xaml">
+    <Page Include="Ui\MainFrame\MainOption.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\MainPage\MainView.xaml">
+    <Page Include="Ui\MainFrame\MainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\MainPage\ModifyView.xaml">
+    <Page Include="Ui\Feature\Search\ModifyView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\MainPage\ReserveItem.xaml">
+    <Page Include="Ui\Feature\Reserve\ReserveItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\MainPage\ReserverListView.xaml">
+    <Page Include="Ui\Feature\Reserve\ReserverListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\MainPage\SearchView.xaml">
+    <Page Include="Ui\Feature\Search\SearchView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\MainPage\ShowControler.xaml">
+    <Page Include="Ui\Feature\ShowControl\ShowControler.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\ManualTab.xaml">
+    <Page Include="Ui\Feature\Manual\ManualTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Option.xaml">
+    <Page Include="Ui\Feature\Option\Option.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\ProgramStartLoading.xaml">
+    <Page Include="Ui\Application\ProgramStartLoading.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\LyricControl.xaml">
+    <Page Include="Ui\Feature\LegacyLyricEditor\LyricControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="Ui\Application\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -285,11 +285,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="module\Database.cs" />
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Ui\Application\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="View\ManualContent.xaml">
+    <Page Include="Ui\Feature\Manual\ManualContent.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -325,5 +325,6 @@
   <ItemGroup>
     <Resource Include="1.1.1.0 아이콘.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
